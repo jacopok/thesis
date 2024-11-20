@@ -1,0 +1,23 @@
+[project]
+name = "thesis"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "h5py>=3.12.1",
+    "ipyleaflet>=0.19.2",
+    "jupyter-cache>=1.0.1",
+    "jupyter>=1.1.1",
+    "matplotlib>=3.9.2",
+    "numpy>=1.26.4",
+    "scipy>=1.13.1",
+    "thesis-scripts",
+]
+
+[tool.uv.workspace]
+members = ["thesis_scripts/thesis_scripts"]
+
+[tool.uv.sources]
+thesis-scripts = { path = "thesis_scripts" }
+
