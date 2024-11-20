@@ -1949,6 +1949,17 @@ wheels = [
 ]
 
 [[package]]
+name = "quarto-cli"
+version = "1.5.57"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "jupyter" },
+    { name = "nbclient" },
+    { name = "wheel" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/21/10/df19cb383f92e50c00ccae17749d08f297e16512f1f5c267549d50e89c0a/quarto_cli-1.5.57.tar.gz", hash = "sha256:13a2198cc8f1c57b0ec0a8c325c3bec805fc5b98b53f9664aaba3bfaebe0f447", size = 4608 }
+
+[[package]]
 name = "referencing"
 version = "0.35.1"
 source = { registry = "https://pypi.org/simple" }
@@ -2275,6 +2286,7 @@ dependencies = [
     { name = "jupyter-cache" },
     { name = "matplotlib" },
     { name = "numpy" },
+    { name = "quarto-cli" },
     { name = "scipy" },
     { name = "thesis-scripts" },
 ]
@@ -2287,6 +2299,7 @@ requires-dist = [
     { name = "jupyter-cache", specifier = ">=1.0.1" },
     { name = "matplotlib", specifier = ">=3.9.2" },
     { name = "numpy", specifier = ">=1.26.4" },
+    { name = "quarto-cli", specifier = ">=1.5.57" },
     { name = "scipy", specifier = ">=1.13.1" },
     { name = "thesis-scripts", directory = "thesis_scripts" },
 ]
@@ -2438,6 +2451,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/e6/30/fba0d96b4b5fbf5948ed3f4681f7da2f9f64512e1d303f94b4cc174c24a5/websocket_client-1.8.0.tar.gz", hash = "sha256:3239df9f44da632f96012472805d40a23281a991027ce11d2f45a6f24ac4c3da", size = 54648 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/5a/84/44687a29792a70e111c5c477230a72c4b957d88d16141199bf9acb7537a3/websocket_client-1.8.0-py3-none-any.whl", hash = "sha256:17b44cc997f5c498e809b22cdf2d9c7a9e71c02c8cc2b6c56e7c2d1239bfa526", size = 58826 },
+]
+
+[[package]]
+name = "wheel"
+version = "0.45.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/e7/52/fd4516fb8f7d11a08e3f9cd69eb1558f098ab67e79f32d920c4974ee550f/wheel-0.45.0.tar.gz", hash = "sha256:a57353941a3183b3d5365346b567a260a0602a0f8a635926a7dede41b94c674a", size = 107426 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/92/81/65ae90d584a73ca976d8f1eb83e2f58447a4055a9fb3ae69b28721070bdf/wheel-0.45.0-py3-none-any.whl", hash = "sha256:52f0baa5e6522155090a09c6bd95718cc46956d1b51d537ea5454249edb671c7", size = 72497 },
 ]
 
 [[package]]

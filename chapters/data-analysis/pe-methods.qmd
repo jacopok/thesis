@@ -110,8 +110,12 @@ $$
 The integral is computed according to this prescription. 
 
 If $k$ points are uniformly distributed in an interval $[0, \xi^*]$, then the largest of them will have a $\xi$ coordinate distributed as $\xi _\text{max} / \xi^* \equiv t \sim \text{beta}(n, 1) = n t^{n-1}$,[^2] where we defined the _compression ratio_ $t$: when we discard the lowest-likelihood point with $\xi _\text{max}$, we will have contracted the prior volume by a factor $t$.
+This distibution is shown in @fig-nested-sampling-volume-compression.
 
 ```{python}
+#| label: fig-nested-sampling-volume-compression
+#| fig-cap: "Volume compression"
+
 from matplotlib.ticker import FixedLocator, FixedFormatter
 import numpy as np
 import matplotlib.pyplot as plt

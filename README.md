@@ -1,13 +1,20 @@
 Thesis being written using quarto, documentation [here](https://quarto.org/docs/guide/).
 
-To compile:
-```bash
-make preview
+
+### Usage tricks
+
+A figure can be made like:
+
+```{python}
+#| label: fig-my-figure
+#| fig-cap: "Caption"
+
+# Matplotlib calls
 ```
 
-or `quarto preview --to pdf` to get pdf output. 
+Execution can be controlled with the [freeze](https://quarto.org/docs/projects/code-execution.html) argument.
 
-Known issues:
+### Known issues
 
 - even when activating the `link-citations: true` option in the 
     document yaml, the citations do not appear as links in the pdf output
