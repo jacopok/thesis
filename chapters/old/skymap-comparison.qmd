@@ -1,0 +1,262 @@
+---
+format:
+    html:
+        code-fold: true
+
+    pdf:
+        execute:
+            echo: false
+---
+
+# Skymap comparison
+
+```{python}
+# Some imports and definitions which will be used throughout
+import matplotlib.pyplot as plt
+import numpy as np
+
+cmap = plt.get_cmap('plasma')
+def get_n_colors(n):
+    return [cmap(number) for number in np.linspace(0., 0.9, num=n)]
+
+```
+
+## Fisher localization {#sec-fisher-localization}
+
+In the Fisher approximation, everything's Gaussian. 
+
+We compute the network Fisher matrix $\Gamma_{ij}$, invert it to get
+$C_{ij}$, and look at the block 
+
+$$ \left[\begin{array}{cc}
+C_{\theta \theta} & C_{\theta \phi} \\ 
+C_{\theta \phi} & C_{\phi \phi}
+\end{array}\right]
+$$
+
+where $\theta$ is the declination, while $\phi$ is the right ascension.
+
+An analysis from @barackLISACaptureSources2004 (referencing @cutlerAngularResolutionLISA1998):
+if we define $\Delta \Omega_0 = |\cos \theta| \sqrt{C_{\theta \theta} C_{\phi \phi}- C_{\theta \phi}^2}$, 
+and from that $\Delta \Omega _S = 2 \pi \Delta \Omega_0$,
+then the probability of the source lying in a given ellipse (centered around the maximum likelihood value) 
+of area $\Delta \Omega$ is $P(\Delta \Omega) = 1 - e^{-\Delta \Omega / \Delta \Omega _S}$.
+
+A common quantity to compute is the area corresponding to a certain percentile $X$, say $X=90\%=0.9$:
+this can be computed by inverting the formula above (see e.g. @iacovelliForecastingDetectionCapabilities2022 --- 
+note however that the $\theta$ used here is declination, i.e. $0$ at the equator, $\pm \pi/2$ at the poles,
+while the one they use is colatitude, $0$ at the north pole and $\pi$ at the south pole), 
+so that we obtain @eq-fisher-sky-area-by-percentile:
+
+$$ \Delta \Omega_X = - \Delta \Omega_S \log(1-X)
+$$ {#eq-fisher-sky-area-by-percentile}
+
+### Probability by sky area plot
+
+Let us look at the function $P( \Delta \Omega)$. We will set the $x$ axis in units of square degrees for 
+clarity; the conversion factor to steradians is $\text{sr} = (180 / \pi)^2 \text{deg}^2$.
+The whole sphere covers a solid angle of $4 \pi\ \text{sr} \approx 41253 \ \text{deg}^2$.
+
+```{python}
+#| label: fig-cumulative-probability-gaussian
+#| fig-cap: "Cumulative probability for various subtended areas in the Gaussian approximation"
+
+delta_omega_sqdeg_list = [200, 2000, 2e4, 2e5]
+delta_omega = np.geomspace(1e-4, 4 * np.pi, num=200)
+colors = get_n_colors(len(delta_omega_sqdeg_list))
+
+for delta_omega_sqdeg, color in zip(delta_omega_sqdeg_list, colors):
+    delta_omega_s = delta_omega_sqdeg * (np.pi/180)**2
+    plt.semilogx(
+        delta_omega * (180 / np.pi)**2, 
+        1 - np.exp(- delta_omega / delta_omega_s), 
+        label=f'90\% area: {delta_omega_sqdeg * (- np.log(1-0.90)):.0f} deg$^2$',
+        color=color,
+    )
+
+plt.plot(
+    delta_omega* (180 / np.pi)**2, 
+    delta_omega / (4 * np.pi), 
+    c='black', 
+    ls='--',
+    label='Uniform on the sky'
+)
+
+plt.xlabel('Area [square degrees]')
+plt.ylabel('Probability the source lies within the area')
+plt.legend()
+plt.show()
+```
+
+It is apparent that the Gaussian approximation breaks down when the areas become
+comparable to the full sky.
+Formally speaking, at no point is the Gaussian one a proper probability distribution
+on the sky: the probability that the source is _somewhere_ in the sky, 
+$P(4 \pi) = 1 - e^{- 4 \pi / \Delta \Omega_S}$, will be very close to 1 if 
+$\Delta \Omega_S \ll 4 \pi$, but it will never reach it.
+
+
+## BAYESTAR localization
+
+BAYESTAR (@singerRapidBayesianPosition2016, @singerGOINGDISTANCEMAPPING2016) is a piece of 
+software able to do rapid reconstruction of the Bayesian posterior distribution
+on the sky position of a gravitational wave source.
+
+This is accomplished by making some simplifying assumptions (such as that the 
+intrinsic source parameters are uncorrelated from the extrinsic ones), 
+and performing numerical integrals in a very optimized way.
+
+The pipeline only interacts with the signal through a small selection of parameters for each detector,
+instead of the full timeseries; however these are formally enough for a full Bayesian
+position reconstruction under the aforementioned assumptions: the maximum-likelihood values of 
+
+- phase $\hat{\gamma}_i$ at detector $i$;
+- time shift $\hat{\tau}_i$;
+- signal-to-noise statistic $\hat{\rho}_i$;
+- signal-to-noise ratio series $z_i(\tau_i)$;
+- (intrinsic parameters $\hat{\theta}_i$);
+
+These allow for the computation of a probability density at any given sky location
+$\theta, \phi$; the task to explore this is then handled by a pipeline which 
+successively narrows down an [adptive HEALPix grid](https://emfollow.docs.ligo.org/userguide/tutorial/multiorder_skymaps.html).
+
+The distance posterior, as described by @singerGOINGDISTANCEMAPPING2016, 
+is approximated as a Gaussian modulated by a power of $r$:
+
+$$ p(r | \mathbf{n}) = \frac{\hat{N}(\mathbf{n})}{\sqrt{2 \pi} \hat{\sigma}(\mathbf{n})}
+\exp \left[ - \frac{(r - \hat{\mu}(\mathbf{n}))^2}{2 \hat{\sigma}(\mathbf{n})^2}\right] r^m \qquad (\text{for } r \geq 0)
+$$
+
+where the power $m$ can be varied, but is typically set to $2$, which corresponds to
+a flat-in-volume prior.
+
+### Inclination angle
+
+Biswajit's idea @ the ET symposium, 12th of May 2023.
+
+Can we also give some information about the inclination angle
+to EM observatories? It's marginalized over within BAYESTAR, 
+but it's a very useful piece of information for the choice of
+whether to follow up a BNS-like event looking for prompt
+emission --- in the perspective of next-generation detectors, 
+when observatories might be swamped with GCNs, it would be nice
+to communicate a quantity like $p(\iota < 15 \text{deg})$^[Or larger than $\pi \text{rad} - 15\text{deg}$; I will just the former this for simplicity.] --- if it 
+is high enough, it makes sense for an observatory to follow up.
+Computing this should not significantly slow down BAYESTAR:
+when integrating over $\iota$ we can split over the regions
+above and below 15 degrees, and provide two unnormalized sky "posteriors"
+$p(\alpha, \delta | \iota < 15 \text{deg})$ and $p(\alpha, \delta | \iota \geq 15 \text{deg})$. They will add up to the full posterior, but we can also 
+compute their integral 
+
+$$ \int p(\alpha, \delta, \iota < 15 \text{deg}) \text{d}\Omega = p(\iota < 15 \text{deg}) \,.
+$$
+
+
+## Localization dependence on the number of detectors
+
+```{python}
+# Some imports and definitions which will be used throughout
+import matplotlib.pyplot as plt
+import numpy as np
+
+cmap = plt.get_cmap('plasma')
+def get_n_colors(n):
+    return [cmap(number) for number in np.linspace(0., 0.9, num=n)]
+
+```
+
+It appears that ET+LVKI has much better sky localization than ET alone
+at high redshift (up to $\sim 0.8$).
+Does this make sense? Should we not expect these detectors to not 
+contribute if the single-detector SNR is very low (how low is it?).
+
+### Injections
+
+[pycbc](https://pycbc.org/pycbc/latest/html/_modules/pycbc/inject/inject.html#IncoherentFromFileHDFInjectionSet.make_strain_from_inj_object)
+
+### Coherence
+
+BAYESTAR yields two Bayes factors, one for signal vs noise (so, just 
+the evidence corresponding to the likelihood) and one for coherent vs incoherent.
+
+How are these defined and computed?
+It seems that the "incoherence evidence" is computed inside `bayestar_sky_map_toa_phoa_snr_pixel`, and its integrand is in its fourth argument.
+
+Ultimately, this is the integral of
+
+```{C++}
+accum[iint][itwopsi][iu][isample] = u_points_weights[iu][1] + log_radial_integrator_eval(integrators[iint], p[itwopsi][iu], b[itwopsi][iu][isample], log_p[itwopsi][iu], log_b[itwopsi][iu][isample]);
+```
+
+What are these quantities? How do they quantify coherence?
+It's all explained in a paper by [@veitchBayesianCoherentAnalysis2010].
+
+### Other low latency questions
+
+Why are two BAYESTAR skymaps generated? 
+For [this event](https://gracedb.ligo.org/api/superevents/S230605o/) they differ quite a bit.
+
+### Numerical experiment
+
+Take a BNS seen by a network like:
+
+- ET (SNR = 100)
+- LHV (SNR ~ 5)
+
+Then, artificially modify the LHV PSDs to change their SNR, and plot:
+
+- Network SNR (should approach the ET one as LHV become useless)
+- Sky localization (should approach the ET one as LHV become useless)
+- The Fisher matrix component $\sigma_t^2 = \mathcal{F}^{-1}_{tt}$ for the _single_ LHV detectors (so we need to invert the single-detector Fishers, not just the overall one)
+
+The "triangulation" section of the localization works when $\sigma_t \ll d_\parallel / c$, where $d_\parallel$ is the component of the distance between detectors along the signal's propagation direction.
+So, in order to test the claim that this triangulation is the thing that's making 
+the sky localizations small for the ET+LVKI case even when the individual-detector
+SNRs are smaller than the threshold, we should verify that:
+
+> When $\sigma _t$ for the single detectors becomes comparable to $d_\parallel / c$, the sky localization error for ET+LVKI and ET alone will also become very similar.
+
+### Results
+
+I found an event at the very edge of the low-localization, high-redshift ones; 
+the parameters are as follows.
+
+```{python}
+parameters = {
+    'mass_1': np.array([2.4671544785]), 
+    'mass_2': np.array([2.354623315]), 
+    'redshift': np.array([0.73045]),
+    'luminosity_distance': np.array([4618.502419231323]),
+    'theta_jn': np.array([3.043239256800267]),
+    'ra': np.array([4.003147582824123]), 
+    'dec': np.array([0.8316808895262269]),
+    'psi': np.array([0.7056077940404817]),
+    'phase': np.array([5.494841110329259]),
+    'geocent_time': np.array([1605672318.4511275]),
+    'lambda_1':np.array([381.66124987937286]), 
+    'lambda_2':np.array([521.3057617221209])}
+```
+
+We're using the model `IMRPhenomD_NRTidalv2`.
+
+The two detector networks to compare are: 
+
+- ET alone
+- ET plus Ligo (Livingston, Hanford), Virgo, Kagra, Ligo India
+
+The SNR of the signal is completely dominated by ET, and comes out to just over 20 in both cases.
+
+However, the sky localization is very different! $28 \text{deg}^2$ for ET+LVKI, against
+$2626 \text{deg}^2$ for ET alone.
+This can be traced back to $\sigma _{\text{ra}}$ and $\sigma _{\text{dec}}$,
+which are of order 30 to 40 degrees for ET alone, against
+1.5 to 2 degrees for ET+LVKI.
+
+The network Fishers were identical within a few percentage points!
+
+So, hypothesis 1 is that this is a problem with the Fisher matrix pseudo-inversion.
+The below-threshold parameters were $t_\oplus$, $\Lambda_1 $ and $\Lambda_2$.
+
+In order to test this, I removed the tidal parameters, and lowered the threshold
+to $10^{-13}$ so that $t _\oplus$ was not subthreshold anymore.
+

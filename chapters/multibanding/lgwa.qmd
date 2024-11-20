@@ -1,0 +1,12 @@
+---
+format:
+    html:
+        code-fold: true
+        bibliography: ../../rehear.bib
+    pdf:
+        execute:
+            echo: false
+        bibliography: ../../rehear.bib
+---
+# The Lunar Gravitational Wave Antenna
+

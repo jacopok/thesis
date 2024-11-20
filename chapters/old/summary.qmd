@@ -1,0 +1,60 @@
+---
+format:
+  html:
+    code-fold: true
+---
+
+# Summary
+
+The pre-merger localization of neutron star mergers is very important.
+
+## Communication
+
+- [IGWN docs](https://computing.docs.ligo.org/guide/)
+
+## PE advancements
+
+
+### BAYESTAR localization
+
+It can happen quite fast, and we only need the SNR timeseries @singerGOINGDISTANCEMAPPING2016.
+
+For ET: 
+
+- Samaya Nissanke's group might be working on it
+- we need SNR timeseries for all higher order modes
+
+### ML localization
+
+- [CBC-SkyNet](https://github.com/chayanchatterjee/GW-SkyLocator)
+
+### Premerger
+
+Early warning works, see e.g. @mageeFirstDemonstrationEarly2021.
+
+The results from @sachdevEarlywarningSystemElectromagnetic2020
+are available at [this link](https://gstlal.docs.ligo.org/ewgw-data-release/data.html#data).
+
+Download them with
+`wget -m -c ftp://data1.commons.psu.edu/pub/commons/physics/jfs6271/`.
+
+A MDC injection with very nice EW coverage: https://gracedb-playground.ligo.org/superevents/S230417cp/view/
+
+### Acceleration of full PE
+
+For the acceleration of likelihood evaluation:
+
+- fast waveform evaluation @tissinoCombiningEffectiveonebodyAccuracy2022
+- reduced order quadratures
+- likelihood heterodyning
+
+For the enhancement of the sample efficiency: 
+
+- Fisher-informed MCMC (Iacovelli...?) (needs $\partial_i h$!)
+- Hamiltonian MC @betancourtConceptualIntroductionHamiltonian2017 (needs $\partial_i h$!)
+- Neural posterior estimation + importance sampling @daxNeuralImportanceSampling2022
+
+Real-time PE (only ideas at the moment); 
+
+- [Kalman filters](https://en.wikipedia.org/wiki/Kalman_filter)
+- [Long-short term memory](https://en.wikipedia.org/wiki/Long_short-term_memory)

@@ -1,0 +1,44 @@
+---
+format:
+    html:
+        code-fold: true
+        bibliography: ../../rehear.bib
+    pdf:
+        execute:
+            echo: false
+        bibliography: ../../rehear.bib
+---
+
+# Time complexity and acceleration techniques
+
+The time complexity scales as 
+
+$$
+T \propto n_{\text{live}} \times \langle t_{\text{like}} \rangle \times \langle n_{\text{replace}}\rangle \times  D_{\pi}  
+$$
+
+where
+
+- $n_\text{live}$ is the number of live points used
+- $\langle t_{\text{like}} \rangle$ is the average likelihood evaluation time
+- $\langle n_\text{replace} \rangle$ is the average number of likelihood evaluations required to find a replacement
+- $D_{\pi} = KL(p \parallel \pi)$ is the KL divergence between posterior and prior, i.e. the volumetric compression between the posterior typical region and the prior
+
+The KL divergence is defined as 
+
+$$ KL(p \parallel \pi) = \int p(\theta ) \log \left( \frac{ p( \theta )}{\pi (\theta )}\right) \text{d}\theta \,.
+$$
+
+This quantity can be understood as a "volumetric compression" from the prior to the posterior.
+If the distributions are flat, this intuition is exact [@petrosyanSuperNestAcceleratedNested2022]: suppose we have $\pi (\theta) \equiv [\theta \in V_{\pi}] / V_{\pi}$ and $p(\theta) \equiv [\theta \in V_{p}] / V_{p}$, where the two volumes are such that $V_{p} \subset V_{\pi}$. Then,  
+$$
+KL (p \parallel \pi) = \int_{V_{\pi}} \frac{[\theta \in V_{p}]}{V_{p}} \log \frac{V_{\pi}}{V_{p}} \text{d}\theta = \log \frac{V_{\pi}}{V_{p}},
+$$
+
+since the integral can be restricted to the $V_{p}$ volume directly.
+
+Based on this equation, we can directly think of several ways to accelerate sampling [@rouletInferringBinaryProperties2024].
+
+## Likelihood acceleration
+
+A direct way to speed up the 

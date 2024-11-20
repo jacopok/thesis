@@ -1,0 +1,152 @@
+---
+format:
+    html:
+        code-fold: true
+        bibliography: ../../rehear.bib
+    pdf:
+        execute:
+            echo: false
+        bibliography: ../../rehear.bib
+---
+# Parameter estimation
+
+When performing the analysis of some data $d$ according to some model $M$ parameterized by some finite number of parameters $\theta$, we employ Bayes' theorem, which is derived by expressing the joint probability $\text{prob}(d, \theta | M)$ in two different ways: 
+
+$$ \text{prob}(d, \theta | M) = \mathcal{L}(d | \theta, M) \pi (\theta | M) = p(\theta | d, M) \mathcal{Z}(d | M)\,.
+$$
+
+The entries in this equation are: 
+
+- the _likelihood_ $\mathcal{L}$ of the data given the model and a specific choice of its parameters - it is a probability distribution over the data (i.e. $\int \mathcal{L}(d|\theta, M) \text{d}d = 1$), but we interpret it as a function of the parameters $\theta$ while the data are fixed;
+- the _prior_ $\pi$ - a representation of our beliefs about the model's parameters before seeing the data;
+- the _posterior_ $p$ for the model's parameters - a representation of our updated beliefs about them after seeing the data;
+- the _evidence_ $\mathcal{Z}$ for the model - a normalization constant for the posterior, or the likelihood for the data marginalized over all the model's parameters.
+
+The likelihood and prior are part of the problem definition, and can typically be readily computed at any given value of the parameters.
+What we refer to as "computing the posterior" means obtaining a useful representation for it. 
+If the parameter space is high-dimensional, evaluating the likelihood on a grid quickly becomes unpractical. A common solution to this issue is to use stochastic methods, which allow us to obtain a set of samples $\theta _i$ distributed according to the posterior. 
+This way of representing a posterior is convenient, since we can easily compute summary statistics from it, such as the expectation value of any function $f(\theta)$:
+
+$$ \langle f \rangle \approx \frac{1}{N} \sum _{i=1}^N f(\theta _i) \,.
+$$
+
+## Fisher matrix
+
+In the Fisher matrix approximation, we are considering the 
+gravitational wave likelihood as if it was written like 
+
+$$ \mathcal{L}(d | \theta) \approx \mathcal{N} \exp \left(- \frac{1}{2} \Delta \theta^i \mathcal{F}_{ij} \Delta \theta^j \right)
+$$
+
+for some normalization $\mathcal{N}$, where $\Delta \theta^i = \theta ^i - \langle \theta ^i \rangle$ denotes the deviation of the parameters from their mean values and where we are using the Einstein summation convention.
+
+This is the expression of a multivariate normal distribution, with covariance matrix $\mathcal{C}_{ij} = \mathcal{F}_{ij}^{-1}$.
+
+The Fisher matrix $\mathcal{F}_{ij}$ can be computed as the scalar product
+of the derivatives of waveforms: 
+$$ \mathcal{F}_{ij} = \left.\left\langle \partial_i \partial_j \mathcal{L} \right\rangle \right|_{n = 0,\ \theta = \langle \theta \rangle} =  ( \partial_i h | \partial_j h ) = \Re \int_0^{\infty} \frac{1}{S_n(f)}  \frac{\partial h}{\partial \theta _i} \frac{\partial h^*}{\partial \theta _j}\text{d}f\,.
+$$
+
+These derivatives may be computed numerically or analytically.
+
+### Derivation
+
+For a more in-depth derivation refer to @finnDetectionMeasurementGravitational1992; here we just give a simple argument.
+We can rewrite the derivatives of the log-likelihood as follows:
+
+$$ \begin{aligned}
+\partial_i \partial_j \log \mathcal{L} &= \frac{1}{2} \partial_i \partial_j (d-h|d-h) \\
+&= \frac{1}{2} \partial_i \partial_j \left((d|d) - 2 (d|h) + (h|h)\right) \\
+&=  \partial_i \left(-  (d|\partial_j h) + (\partial_j h|h)\right) \\
+&=  \left(-  (d|\partial_i \partial_j h) + (\partial_i \partial_j h|h) + (\partial_i h | \partial_j h)\right) \\
+&=  -(n|\partial_i \partial_j h)  + (\partial_i h | \partial_j h) 
+\end{aligned}
+$$
+
+and then, since we are evaluating this quantity at the maximum-likelihood realization of the noise $n = 0$, the term $(n|\partial_i \partial_j h)$ is equal to zero.
+
+### Conditioning versus marginalizing
+
+It is important to include all parameters when performing a Fisher matrix analysis.
+This is because not including a parameter which correlates to the one we care about in 
+the Fisher analysis is equivalent to __conditioning__ upon it having that specific value, 
+while the correct operation to be performed is __marginalizing__ over all possible values.
+
+Here is a graphical way to see the difference between conditioning and marginalizing 
+for correlated variables.
+
+```{python}
+from thesis_scripts.multivariate_normal import MultivariateNormal
+n = MultivariateNormal([0, 0], [[1, 0.8], [0.8, 1]])
+n.plot_2d_analytical(0, 0, .9)
+```
+
+When dealing with the _correlation matrix_ marginalizing 
+simply amounts to ignoring some parameters, but crucially
+in the _Fisher matrix_ this is not the case, since the 
+inversion introduces mixing between the parameters.
+
+## Nested sampling
+
+
+Nested sampling, introduced by Skilling in 2006 [@skillingNestedSamplingGeneral2006], is an algorithm designed to compute the _evidence_ $\mathcal{Z}$ as well as the posterior distribution on the parameters. 
+
+The evidence is computed through the integral
+
+$$ \mathcal{Z}(d|M) = \int \mathcal{L}(d | \theta, M) \pi (\theta | M) \text{d}^n\theta \,.
+$$
+
+This integral is in $n$ dimensions (where $n$ is the dimensionality of the parameter space) and therefore difficult to work with. The idea in nested sampling is to rewrite it in terms of the auxiliary variable $\xi$ (employing the notation of @siviaDataAnalysisBayesian2006), defined as the prior volume contained within a likelihood constraint $\mathcal{L} \geq L$:
+
+$$ \xi (L) = \int_{\mathcal{L}(d | \theta, M) \geq L} \pi (\theta | M) \text{d}^n\theta\,.
+$$
+
+Since the prior is a normalized probability distribution and the likelihood ranges from 0 to $L _{\text{max}}$, this variable will range from $\xi(0) = 1$ to $\xi(L _{\text{max}}) = 0$, and it will always be decreasing.[^1]
+We can therefore define its inverse, $L(\xi)$, and rewrite the likelihood integral as 
+
+$$ \mathcal{Z}(d|M) = \int _0^1 L(\xi ) \text{d}\xi 
+$$
+
+The integral is computed according to this prescription. 
+
+If $k$ points are uniformly distributed in an interval $[0, \xi^*]$, then the largest of them will have a $\xi$ coordinate distributed as $\xi _\text{max} / \xi^* \equiv t \sim \text{beta}(n, 1) = n t^{n-1}$,[^2] where we defined the _compression ratio_ $t$: when we discard the lowest-likelihood point with $\xi _\text{max}$, we will have contracted the prior volume by a factor $t$.
+
+```{python}
+from matplotlib.ticker import FixedLocator, FixedFormatter
+import numpy as np
+import matplotlib.pyplot as plt
+
+n = 1
+log_t = np.linspace(-3/n, 0)
+p_of_log_t = n * np.exp( n * log_t)
+
+plt.plot(log_t, p_of_log_t / n)
+_ = plt.xlabel('$\log t$')
+_ = plt.ylabel(r'$\mathrm{d}p / \mathrm{d} \log t$')
+
+plt.xlim(-3/n, 0)
+plt.ylim(0, n)
+
+plt.gca().xaxis.set_major_locator(FixedLocator([-3/n, -2/n, -1/n, 0]))
+plt.gca().xaxis.set_major_formatter(FixedFormatter([
+	'$-3/n$', 
+	'$-2/n$', 
+	'$-1/n$', 
+	'$0$'
+]))
+
+plt.gca().yaxis.set_major_locator(FixedLocator([0, n/4, n/2, 3*n/4, n]))
+plt.gca().yaxis.set_major_formatter(FixedFormatter([
+	'$0$', 
+	'$n/4$', 
+	'$n/2$', 
+	'$3n/4$', 
+	'$n$'
+]))
+```
+
+
+<!-- ## References -->
+
+[^1]: It will not necessarily be _strictly_ decreasing, but that is not a conceptual issue. One can introduce jitter in the likelihood, varying it at each point by an inconsequential amount, in order to ensure that the decreasing condition is verified precisely.
+[^2]: In general, the $k$-th smallest out of $n$ uniform random variates in $[0, 1]$ is distributed according to $\text{beta}(k, n-k+1) \propto x^{k-1}(1-x)^{n-k}$.

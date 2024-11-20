@@ -1,0 +1,115 @@
+---
+format:
+    html:
+        code-fold: true
+        bibliography: ../../rehear.bib
+    pdf:
+        execute:
+            echo: false
+        bibliography: ../../rehear.bib
+---
+# The gravitational wave likelihood
+## Matched filtering
+
+When we measure gravitational wave data $d(t)$, we will have a contribution from noise $n(t)$ and signal
+$h_\theta(t)$, where $\theta$ are the parameters: $d = n + h_\theta$.
+We can estimate the parameters $\theta$ by exploring the posterior distribution 
+
+$$ p(\theta | d) = \mathcal{L}(d | \theta ) \pi (\theta ) = \mathcal{N} \exp \left( (d | h_\theta) - \frac{1}{2} (h_\theta | h_\theta) \right) \pi (\theta )\,,
+$$
+
+where $(\cdot | \cdot)$ is the noise-weighed inner product between waveforms, defined as 
+
+$$ (a | b) = 4 \Re \int_0^\infty \frac{a(f) b^*(f)}{S_n(f)}\text{d}f \,,
+$$
+
+while $\pi (\theta )$ is our prior distribution on the parameters.
+This kind of analysis is assuming that the noise is Gaussian, and described by the power spectral density (PSD) $S_n(f)$.
+
+This posterior, in full generality, is an arbitrary function
+of more than a dozen parameters, making it somewhat difficult to calculate and interpret.
+Typically, the algorithms used to compute it for real signals explore the parameter space in some stochastic manner, and yield a set of some thousands of samples $\lbrace\theta\rbrace_i$. 
+
+This makes it simple to compute summary statistics like the average of a parameter 
+$\langle \theta_i \rangle$, the variance $\sigma_i^2 = \langle (\theta_i- \langle \theta_i\rangle)^2 \rangle$, as 
+well as covariances $\mathcal{C}_{ij} = \langle (\theta_i- \langle \theta_i\rangle) (\theta_j- \langle \theta_j\rangle) \rangle = \langle \Delta \theta^i \Delta \theta^j \rangle$.
+
+At this stage, we are not making any approximation, and the 
+covariance matrix is just a summary tool. 
+
+These quantities give us an estimate of how well any given parameter is constrained, although
+they do not tell the whole story especially in the regime where the error $\sigma$ starts to be comparable 
+with the signal.
+For those cases, in general, if the posterior is available the best idea is to plot it; 
+this is typically done as a corner plot, which shows the correlations among different 
+parameters.
+
+## Signal-to-noise ratio
+
+The signal-to-noise ratio (SNR) statistic $\rho$ for the data $d$, assuming a template $h$, is 
+$\rho = (d | h) / \sqrt{(h|h)}$.
+This is the quantity that matched-filter signal searches attempt to maximize. 
+In general this will be given by $\rho = [(n|h) + (h|h)] / \sqrt{(h|h)}$, but if we are performing a forecast
+we cannot know in advance what the noise realization will be. Fortunately, the average contribution
+of the term $(n|h)$ is zero, so the expectation value is just $\rho \approx \sqrt{(h|h)}$. 
+
+This does not mean that we are neglecting the noise, since its _distribution_ $S_n$ is still taken 
+into account: for example, consider the behaviour under a global rescaling of the noise PSD: $\rho \propto 1 / \sqrt{S_n}$.
+At each frequency $f$ the noise is normally distributed, with variance $S_n(f)$ and mean zero,
+so we are just considering the mean value of the noise distribution. 
+
+### SNR thresholds
+
+If we were searching for a signal without any possible shift in time and with the certainty 
+that the noise did not contain any glitches or non-Gaussianities, then the SNR would simply follow
+a $\chi^2$ distribution with two degrees of freedom [@babakSearchingGravitationalWaves2013], 
+meaning that we could reach "five $\sigma$" significance ($p$-value of $5.7\times 10^{-7}$) 
+with a threshold of $\rho = 5.5$. 
+
+This is not the case in real data, since both the aforementioned assumptions are false:
+the different possible arrival times of a signal are effectively "more trials", but more importantly
+the non-Gaussianity of the noise means that high-SNR triggers in a matched filtering search will
+be much more common than simple Gaussian statistics would indicate.
+Accounting for these factors is tricky, and in real data it is typically accomplished 
+by performing time-slides: taking real detector data, but shifted across detectors by more than $t_{\text{min}} = d/c$, where $d$ is the maximum distance separating them.
+In the assumption that signals are rare (which holds for current detectors, for ET 
+this will have to be challenged), this allows us to generate arbitrary amounts of noise-only 
+realistic data by removing all possible coincidences.
+We can then compute the rate of noise instances surpassing our threshold, even if this rate
+is very low.
+With this, we can compute the false-alarm rate (FAR) associated to a given SNR threshold.
+It should also be noted that real searches also include other vetoes, such as requiring
+that each frequency band contributes appropriately to the SNR [@nitzRapidDetectionGravitational2018], which allows us to discard many loud glitches.
+
+The scaling of the FAR as a function of SNR, in the absence of large outliers, is typically exponential [@lynchObservationalImplicationsLowering2018]:
+$$ \text{FAR} = \text{FAR}_8 \exp \left( - \frac{\rho - 8}{\alpha}\right) \,.
+$$
+
+The specific values for the FAR at $\rho = 8$ and the scaling parameter $\alpha$ 
+are found through a fit, and they depend on the signal template.
+A fit of O1 data found $\alpha = 0.18$ and $\text{FAR}_8 = 5500 \text{yr}^{-1}$ for BBH, 
+and $\alpha = 0.13$ and $\text{FAR}_8 = 30000 \text{yr}^{-1}$ for BNS.
+This value of $\alpha$ means that the exponential cutoff is quite steep: 
+for example, bringing the BNS FAR from 30 thousand per year to just one 
+per year only requires us to raise the threshold to $\rho = 9.4$.
+
+### Forecasting SNR
+
+For the purposes of forecasting, then, what SNR threshold should we consider 
+as the minimum for detectability?
+We cannot know yet which glitches will affect our future detector, but 
+we can safely say that a threshold in the range of 8 to 10 is probably 
+acceptable.
+
+This quantity is easy to estimate and not too dependent on the 
+specifics of the waveform model: for one, it discards all phase information:
+
+$$ \text{SNR} = 2 \sqrt{\int_0^\infty \frac{|h(f)|^2}{S_n(f)} \text{d}f}
+$$
+
+and also waveform models for compact binaries differ significantly only in the 
+high-frequency region; for most of the inspiral the signal is decently
+modelled by a simple powerlaw $h\propto f^{-7/6}$, therefore the overall
+SNR integral is much more stable under changes of model than the parameter
+estimation forecasts we will discuss later.
+

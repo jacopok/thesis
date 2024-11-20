@@ -1,0 +1,305 @@
+---
+format:
+    html:
+        code-fold: true
+        bibliography: ../../rehear.bib
+    pdf:
+        execute:
+            echo: false
+        bibliography: ../../rehear.bib
+---
+
+```{python}
+from pathlib import Path
+import os
+
+data_folder = Path(os.getcwd()).parent.parent / 'data'
+```
+
+## Parameter dependence of CBC signals
+
+The signal $h_\theta(t)$ (or in the Fourier domain, $h_\theta (f)$) depends on several parameters, both intrinsic
+(describing the source itself) and extrinsic (describing the geometrical relation
+between detector and source).
+Here I will describe these parameters and also give an example 
+of the error with which they are measured in the case of GW170817.
+For most of them I will quote the figure $\sigma _x / x$, meaning the 
+standard deviation of the posterior samples normalized to the value of
+the parameter $x$.
+
+For the purposes of this section, I will not show Fisher matrix results 
+but actual variances, covariances et cetera computed from the samples
+of a full parameter estimation of GW170817.
+
+### Intrinsic parameters
+
+We can measure the component __masses__ $m_1$ and $m_2$ with reasonable accuracy ($\sigma _x / x \sim 10\%$), but their combination called _chirp mass_ $\mathcal{M}$ and defined as follows:
+
+$$ \mathcal{M} = \frac{(m_1 m_2 )^{3/5}}{(m_1 + m_2)^{1/5}}
+$$
+
+is measured to much higher accuracy ($\sigma _x / x \sim 0.1\%$).
+This is because it affects the overall phasing of the signal, meaning that 
+small changes in it will bring the signal-to-noise ratio very quickly.
+
+On the other hand, the ratio between the masses, $q = m_1 / m_2$, is measured to worse accuracy than the masses themselves ($\sigma _x / x \sim 20\%$).
+
+The chirp mass we are measuring with such precision is the so-called _detector-frame_ mass,
+which for a source at __redshift__ $z$ corresponds to 
+$$ \mathcal{M} = \mathcal{M}_{\text{source}} ( 1 + z )
+$$
+
+The signal only depends on this combination, and there is no way from the 
+gravitational signal itself to disentangle source-frame mass from redshift.
+
+Higher-order source properties are more difficult to measure: for typical 
+analyses of GW170817, spin and tidal effects were included. 
+
+As for spin, the components of the __spin__ of each star aligned to the orbital angular
+momentum, $\chi _{1z}$ and $\chi _{2z}$ were definitely not well-measured, with $\sigma _x / x \sim 3$ and 10 respectively.
+
+In comparison, the effective spin parameter $\chi _{\text{eff}} = (m_1 \chi _{1z} + m_2 \chi _{2z} )/(m_1 + m_2)$ was 
+better constrained, with $\sigma _x / x \sim 1$ (although quoting this figure is 
+not that meaningful here, since it was found to be compatible with zero [@theligoscientificcollaborationPropertiesBinaryNeutron2019]).
+
+Similarly, the __tidal parameters__ $\Lambda _1$ and $\Lambda _2$, were not as well-constrained ($\sigma _x / x \sim 1.5$)
+as the effective tidal parameter $\widetilde{\Lambda}$ ($\sigma_x / x \sim 0.6$).
+
+### Extrinsic parameters
+
+The signal's overall amplitude depends on the source (luminosity) __distance__ $d_L$
+as $h \propto 1 / d_L$, and because of 
+this we are able to measure it with some accuracy ($\sigma _x / x \sim 20\%$).
+
+This parameter is, however, degenerate with the __inclination__ of the source, $\iota$ ---
+this is the angle between the orbital angular momentum of the binary and the 
+vector connecting detector and source. 
+A source for which $\iota$ is close to zero or to $\pi$ is said to be _face-on_, 
+while a source for which $\iota$ is close to $\pi/2$ is said to be _edge-on_.
+
+This parameter degenerates with the distance since both affect the amplitude;
+for the latter, the two polarizations for the highest-order spherical harmonic of gravitational wave emission scale like $h_+ \propto (1 + \cos^2 \iota)$ and $h_\times \propto \cos \iota$. 
+
+The remaining extrinsic parameters
+are the __arrival time__ at geocenter $t_\oplus$, the overall free __phase__ $\phi$, the __polarization__
+angle $\psi$, and finally the __sky position__ $(\text{ra}, \text{dec})$.
+
+Typically we do not actually care about the error in the sky coordinates themselves but about 
+the area instead: this quantity is the minimal area that can be chosen such that the probability
+that the signal lies in that area is $X$, where $X$ is often conventionally chosen to be $90\%$.
+For GW170817, this area was roughly $\Delta \Omega \approx 28 \text{deg}^2$.
+Since this value is relatively small, it can also be obtained in the Gaussian approximation: 
+$$ \Delta \Omega \approx - 2 \pi \log(1 - 0.9) |\cos(\text{dec})| \sqrt{\sigma _{\text{ra}}^2 \sigma_{\text{dec}}^2 - \text{cov}_{\text{ra, dec}}^2} \times \left( \frac{180\ \text{deg}}{\pi\ \text{rad}}\right)^2
+$$
+
+
+```{python}
+import numpy as np
+
+def ninety_percent_region(sigma_ra, sigma_dec, cov_ra_dec, dec):
+
+    delta_omega = np.abs(np.cos(dec)) * np.sqrt(
+        sigma_ra**2 * sigma_dec**2
+        - cov_ra_dec**2
+    )
+    return - delta_omega * 2 * np.pi * (180/np.pi)**2 * np.log(1 - .9)
+
+sigma_ra = 0.0279
+sigma_dec = 0.0377
+cov_ra_dec = -0.00084
+dec = -0.354
+ra = 3.419
+
+
+print(
+    f'The 90% localization area for GW170817, in the Gaussian approximation, \n'
+    f'is {ninety_percent_region(sigma_ra, sigma_dec, cov_ra_dec, dec):.0f} square degrees')
+```
+
+::: {.callout-note}
+#### GW150914 comparison
+
+The errors given before were for the neutron star binary GW170817,
+but things change somewhat in the case of a black hole binary. 
+Here I show the case of GW150914. One can see that here, due to the much smaller 
+number of cycles in band, the chirp mass is not better-measured than the total mass.
+Also, given the large sky area and the fact that this was a two-detector
+event, the Gaussian approximation fails in computing the sky area.
+
+```{python}
+import h5py
+import numpy as np
+f = h5py.File(data_folder / 'GW150914_data.h5')
+dataset = f['overall_post']
+dataset_dict = {}
+for key in dataset.dtype.fields.keys():
+    dataset_dict[key] = dataset[key]
+
+dataset_dict['mchirp'] = (
+    dataset_dict['mass1_det'] * dataset_dict['mass2_det']
+    )**(3/5) / (dataset_dict['mass1_det'] + dataset_dict['mass2_det'])**(1/5)
+
+dataset_dict['mtot'] = (
+    dataset_dict['mass1_det'] + dataset_dict['mass2_det']
+    )
+
+units_errors = {
+    'time': 's',
+    'right_ascension': 'rad',
+    'declination': 'rad',
+    'theta_jn': 'rad',
+}
+
+for key in dataset_dict:
+    data = dataset_dict[key]
+    if key in units_errors:
+        print(
+            f'sigma_{key}: '
+            f'{np.std(data):.3f} {units_errors[key]}'
+        )
+    else:
+        print(
+            f'sigma_{key} / {key}: '
+            f'{np.std(data) / np.median(data):.3f}'
+        )
+
+region = ninety_percent_region(
+        np.std(dataset_dict["right_ascension"]), 
+        np.std(dataset_dict["declination"]), 
+        np.cov(
+            dataset_dict["right_ascension"],
+            dataset_dict["declination"],
+        )[0, 1], 
+        np.median(dataset_dict["declination"]))
+
+print(
+    f'The 90% localization area for GW150914, in the Gaussian approximation, \n'
+    f'is {region:.0f} square degrees, \n'
+    'while the true one was approximately 600 square degrees'
+)
+```
+
+:::
+
+### Correlation structure
+
+For each pair of parameters $\theta_i$, $\theta_j$ we select after running a parameter estimation job,
+we will be able to compute their correlation coefficient, which is their correlation normalized to their standard deviations:
+$$ \rho_{ij} = \frac{\operatorname{cov}(\theta _i, \theta_j)}{\sigma_i \sigma_j}
+$$
+
+This number will always lie between -1 and 1, with values near these extremes 
+representing near-perfect (anti)correlation, while values near 0 represent uncorrelated
+variables.
+This only captures _linear_ correlations, so it does not tell the whole story, 
+but it is still quite useful in understanding which parameters are generally 
+to be understood as correlated or not.
+
+```{python}
+#| label: fig-correlation-matrix
+#| fig-cap: "Correlations between some measured parameters for GW170817. $c_{AL1}$ and $c_{\\phi L1}$ are two calibration parameters for the Livingston detector, included for reference, out of the $\\sim$ 12 calibration parameters per detector used in real analyses. Arrival time and overall phase are not included since they were analytically marginalized in this particular analysis."
+
+# we start from the covariance matrix for an analysis of GW170817
+# this is included in the auxiliary data for convenience
+
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.colors import Normalize
+from matplotlib.cm import ScalarMappable
+from matplotlib import ticker
+
+def plot_correlations(cov, symbols):
+    n = len(symbols)
+
+    sigmas = np.sqrt(np.diagonal(cov))
+    correlations = cov / np.kron(sigmas, sigmas).reshape(n, n)
+
+    cmap = plt.get_cmap('RdBu')
+    normalization = Normalize(-1, 1)
+    fig, axes = plt.subplots(figsize=(10, 6))
+    axes.matshow(correlations, cmap=cmap, norm=normalization)
+    for axis in [axes.xaxis, axes.yaxis]:
+        axis.set_major_locator(ticker.FixedLocator(np.arange(n)))
+        axis.set_major_formatter(ticker.FixedFormatter(symbols))
+    plt.colorbar(ScalarMappable(cmap=cmap, norm=normalization), ax=axes)
+    plt.show()
+
+symbols = [
+    '$\\mathcal{M}$',
+    '$q$',
+    '$\\chi_1$',
+    '$\\chi_2$',
+    '$\\Lambda_1$',
+    '$\\Lambda_2$',
+    '$d_L$',
+    '$\\cos \\iota$',
+    'ra',
+    'dec',
+    '$\psi$',
+    '$c_{AL1}$',
+    '$c_{\phi L1}$',
+]
+cov = np.loadtxt(data_folder / 'covariance_170817.txt')
+plot_correlations(cov, symbols)
+```
+
+In @fig-correlation-matrix we see the structure of the correlation matrix for an actual analysis of GW170817
+(specifically, the one from @tissinoCombiningEffectiveonebodyAccuracy2023).
+
+Note the important qualitative feature that the extrinsic parameters are overall uncorrelated 
+from the intrinsic ones. 
+This is qualitatively due to the fact that the extrinsic parameters are generally measured by _inter-detector_ amplitude
+and time of arrival _differences_, while intrinsic parameters are generally measured by _averages_ of amplitude
+and phase [@singerRapidBayesianPosition2016].
+
+```{python}
+symbols = np.array([
+    '$\\mathcal{M}$',
+    '$\\eta$',
+    '$d_L$',
+    '$\\theta$',
+    'ra',
+    '$\\iota$',
+    '$\\psi$',
+    '$t_{\\mathrm{coal}}$',
+    '$\\phi_{\\mathrm{coal}}$',
+    '$\\chi_{1z}$',
+    '$\\chi_{2z}$',
+    '$\\widetilde{\\Lambda}$',
+])
+# ['Mc',
+#  'dL',
+#  'theta',
+#  'phi',
+#  'iota',
+#  'psi',
+#  'tcoal',
+#  'eta',
+#  'Phicoal',
+#  'chi1z',
+#  'chi2z',
+#  'Lambda1',
+#  'Lambda2']
+# ['ra', 'dec', 'psi', 'theta_jn', 'luminosity_distance', 'mass_1', 'mass_2', 'geocent_time', 'phase']
+cov = np.loadtxt(data_folder / 'gwfast_covariance.txt')
+
+reshuffle = [0, 1, 9, 10, 11, 2, 5, 3, 4, 6, 7, 8]
+
+plot_correlations(cov[np.ix_(reshuffle, reshuffle)], symbols[reshuffle])
+
+```
+
+### Antenna pattern
+
+The strain at the detector, $h(t)$, depends on the gravitational-wave
+strain $h_{ij}(t)$ through contraction with a __detection tensor__ $D_{ij}$,
+which depends on the orientation and shape of the detector's arms: 
+$$ h(t) = h_{ij} (t) D_{ij}(t)\,.
+$$
+
+For current detectors the time dependence of $D_{ij}$ is negligible, 
+since the signal is in band for minutes at most, while for ET
+this will have to be taken into account.
+The Fisher matrix is typically computed in the frequency domain, which makes 
+the computation trickier, but still feasible (see section 3.2 of
+@iacovelliForecastingDetectionCapabilities2022 for more details).

@@ -1,0 +1,29 @@
+---
+format:
+    html:
+        code-fold: true
+        bibliography: ../../rehear.bib
+    pdf:
+        execute:
+            echo: false
+        bibliography: ../../rehear.bib
+---
+
+## Gamma Ray Burst open questions
+
+When we see a GRB, we typically get two main components: prompt and afterglow.
+
+The *afterglow* comes after, it's not highly time-variable and it's well modelled as synchrotron emission from the non-relativistic shocks of the cooling jet in the ISM.
+
+The *prompt* is a highly time-variable emission (really wobbling up and down), coming before the afterglow, that's much less well understood. It might be due to internal dissipation in the jet.
+Its spectrum in the keV-MeV is typically modelled as two connected powerlaws, which are what one 
+might get with synchrotron emission, but the powerlaw index for the lower part 
+would then be expected to be $\sim -1.5$, while it's measured to be closer to $-1$. 
+This might be related to internal anisotropies in the jet - even if we move to its reference frame, 
+the magnetic fields still determine a preferential direction there.
+
+There is another component in the spectrum, *synchrotron self-Compton*: this is another peak at much higher energies, due to the 
+synchrotron emission from the jet being upscattered by relativistic electrons closer to us. 
+This gets in the GeV-TeV range.
+
+Seeing this component for short GRBs seconds after merger would be quite nice!

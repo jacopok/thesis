@@ -1,0 +1,557 @@
+---
+format:
+    html:
+        code-fold: true
+        embed-resources: true
+    pdf:
+        execute:
+            echo: false
+---
+
+# Real-time updating of skymaps
+
+## Motivation
+
+- Detecting TeV-scale prompt emission from BNS mergers
+- Detecting lower-energy X-ray and gamma emission for (more) BNS mergers
+- Detecting a precursor for GRBs and associating it with the merger time
+    - Maybe a precursor in radio? Re conversation with Eric Burns
+
+Why is it interesting to detect the TeV prompt?
+The origin of the prompt is still quite unknown, it's some sort
+of dissipation in the early stages of the jet, but is it magnetic reconnection or
+shocks? Is the jet itself mostly baryonic of magnetic?
+
+VHE emission would provide very important constraints on parameters such as 
+the strength of the magnetic field, the
+size of the emission region, the bulk Lorentz factor, and the ac-
+celeration process (protons vs electrons energy gain) @banerjeeDetectingVHEPrompt2022.
+
+LHAASO-like observatories, Water Cherenkov and such, have a much larger FoV
+but lower sensitivities. 
+
+## EM detectors
+
+### CTA
+
+- FoV: 5 to 10 degrees in diameter depending on energy @acharyaIntroducingCTAConcept2013
+    - with divergent pointing...?
+- slew speed: 20s (LST), 90s (MST) or 60s (SST) to slew 120 degrees: 1.5 to 6 $\text{deg/s}$ @banerjeeDetectingVHEPrompt2022
+    - probably best to model these independently
+
+But also, the sensitivity quicky drops when getting further away from the center of the FoV.
+In some units, the sensitivity is 0.6 at 0.2 degrees from the center, then increasing exponentially
+when moving away, up to roughly 1.6 at 1.4 degrees from the center [@magiccollaborationMajorUpgradeMAGIC2016].
+I think this matches quite well with the tiling results they get for the divergent-pointing surveys [@dubusSurveysCherenkovTelescope2013], figure 4.
+
+The camera is a collection of many PMTs at the focus of the large dishes. 
+Each of these PMTs are called pixels. 
+When the cherenkov light triggers the pixels, you check if you get the same trigger in both of your cameras. 
+
+If there is a trigger in both of your telescopes you are sure that there is an event. It can be a hadronic shower (background for us). It also can be a gamma-ray shower (our signal). Then we do image parametrization (Hillas parameters to know if this even is hadronic or gamma shower: https://iopscience.iop.org/article/10.1086/525270).
+
+There are three trigger-mode of data taking for the VHE telescopes:
+1. Standard operation: Stereo Mode (you use the information if the )
+https://ieeexplore.ieee.org/document/9427568
+2. non Standard, compromised operation: Mono mode (your telescopes are independent): Important for us. No stereoscopy for poor background rejection
+paper from 2007, when there was only one telescope:
+https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=4155102
+
+3. Sumtrigger: Very specific operation: You can browse Giovanni's thesis: https://mediatum.ub.tum.de/?id=1617483
+this is not urgent and will not help us much.
+
+### Swift/BAT
+
+- Very large field of view: $2 \text{sr} \approx 6500 \deg^2$ 
+- 
+
+### Optical telescopes
+
+LSST? ZTF?
+
+### Radio telescopes
+
+Maybe also them?
+
+## GW detectors
+
+### LVK in O3/4
+
+Using the [MDC](https://gracedb-playground.ligo.org/latest/?query=EARLY_WARNING&query_type=E&get_neighbors=&results_format=),
+where we already have a lot of skymaps, one per G-event.
+In order to see which alerts would have actually been sent out, see the history 
+("Full event log").
+
+Injections from the MDC are [here](https://git.ligo.org/emfollow/mock-data-challenge).
+The injections are repeated several times, the ra/dec are not the same every time:
+the signal in the detectors is the same, but the Earth has a different orientation
+since the repeat time is not a multiple of a day.
+
+### LVK in O5
+
+### ET + whatever
+
+If we want to use ET, it's very important to model the Earth's rotation (see https://arxiv.org/abs/2106.15259 
+--- it's an order of magnitude to move from 5Hz to 2Hz).
+
+## Simulation
+
+The idea here is to try to understand to which extent this technique
+would be useful. 
+
+The procedure is as follows:
+
+- simulate a BNS source
+- discard it if it is not potentially visible by the instrument at hand
+    (e.g. if it is on the other side of the Earth compared to CTA)
+- determine the detection time, when we expect pipelines to give an alert
+    (check against MDC, probably SNR around 10).
+- apply delays, compatible with @mageeFirstDemonstrationEarly2021
+
+From that moment, on some uniform time grid (say, every $1 \text{s}$):
+
+- compute best skymap with all available data (up to that time)
+- apply delay to skymap, smaller than @mageeFirstDemonstrationEarly2021: 
+    here the idea is that we established a rapid connection, not going through
+    GCNs. Overall delay would probably be roughly 5s, accounting for
+    - data transfer from detector site to clusters (4s) - this seems to be 
+        the worst contributor, they say this can be reduced so I'm hoping for that
+    - data transfer inter-cluster (0.1s)
+    - BAYESTAR sky localization (0.5s)
+    - sending the skymap to the EM observatory (<0.4s ?)
+        - send just the sky position?
+- tick down delays
+- "send" skymap to observatory that have passed their delay
+- slew observatory towards center of last-received skymap
+
+At the moment, I am working with the skymaps from the [EWGW data release](https://gstlal.docs.ligo.org/ewgw-data-release/),
+which are described in a study by [@sachdevEarlywarningSystemElectromagnetic2020].
+
+### Parameters to vary
+
+- Which telescopes
+    - FoV
+    - Slew speed
+    - number of telescopes
+    - location
+- initial telescope location (stochastic)
+- gps time (stochastic)
+- skymap latency (5s? 10s? 1s?)
+- skymap evolution properties (require a rerun)
+    - (finer) threshold frequencies (equivalently, temporal resolution)
+    - binary intrinsic (masses, tidal...)
+    - binary extrinsic (sky location, distance) / SNR
+
+We need to make a few scenarios:
+
+- The "current" situation: realistic latencies, currently operating telescopes, only one EW alert + one full-bandwidth (but with O5 sensitivities)
+- The "minor changes" situation: telescopes operating by O5, several EW alerts per event, with the same latencies as now, but perhaps adding a search at ~100Hz.
+
+### Questions
+
+- When the merger time is reached, is the source within the FoV?
+- Does this strategy improve significantly over some simpler one, like
+    "when the sky area becomes smaller than some threshold, send it to 
+    the EM observatory which will just slew once".
+
+We can make some estimates for how often this pipeline would be
+erroneously activated. 
+
+## Divergent pointing
+
+Suppose we have a skymap $p(\alpha, \delta)$ and $N$ Cherenkov telescopes, each with 
+a certain (circular) FoV.
+What is the best way to distribute these telescopes so that we maximize 
+the probability to see something?
+
+This is similar to the tessellation problem that optical telescopes have.
+So, I should read their papers [@salafiaWhereWhenOptimal2017], [@patricelliSearchingGammarayCounterparts2018].
+
+One simplification is that we want to do "full" divergent pointing, i.e.
+we do not care about stacking multiple detectors onto the same skypatch.
+But this might not work so well, see [CTA](#cta).
+
+### Repointing
+
+Suppose we have an algorithm telling us where the best placement for our $N$ telescopes is, 
+such as one of those described in [the section about slewing strategies](#slewing-strategies).
+They are currently pointing somewhere else; how do we figure out which telescope to send where, while
+minimizing the total distance travelled?
+
+More formally, given the distance matrix $d_{ij}$, whose entries tell us the distance from telescope
+$i$ to target position $j$, we want to find a reshuffling (bijection) $S \colon [1 \dots N] \to [1 \dots N]$ that minimizes
+the total distance travelled
+
+$$ d = \sum _{i=1}^N d_{i S(i)}\,.
+$$
+
+This is an instance of the Monge-Kantorovich optimal transport problem, or specifically the [assignment problem](https://en.wikipedia.org/wiki/Assignment_problem).
+It's roughly quadratic in complexity, and there is a convenient scipy function to solve it
+with a linear programming approach, [`scipy.optimize.linear_sum_assignment`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.linear_sum_assignment.html).
+
+Implementing this, all the telescopes are slewing nice and efficiently!
+The slowest part by far is actually the computation of the distance matrix $d_{ij}$, but it's not prohibitive.
+
+### Sensitivity return curve
+
+A curve to quantify how well each region in the skymap is being mapped by the telescopes.
+
+The ingredients are: 
+- the skymap, $p(\alpha , \delta )$, sampled on some grid (specifically,
+    a multiorder skymap so that it's computationally easier);
+- the sensitivity of the telescopes a function of position in the sky.
+
+Now, the latter thing is tricky in general, especially because stereoscopy helps quite a lot
+and we're giving it up if we have certain regions pointed by only one telescope.
+
+While I wait for more information, I implemented a simple model:
+- each telescope has a sensitivity $s(r)$, varying with the radius from the center of the FoV;
+- as a placeholder, this function is set by interpolating the red points in figure 20a of [@magiccollaborationMajorUpgradeMAGIC2016]
+- for each point in the sky, I compute the distance to all telescopes, and if it is within the FoV of multiple I set the sensitivity to 
+
+$$ s = \left( \sum_{i \in \text{FoV}} s(r_i)^{-2}\right)^{- 1/2} \,,
+$$
+
+as if we were adding the source SNRs in quadrature. This will surely need to be fixed,
+accounting for the advantages of stereoscopy!
+
+Once we have this, what I do is to as follows:
+
+- take a pixel $i$, we have its coordinates and the associated GW probability $p_i$ 
+- compute the sensitivity at those coordinates, $s_i$
+- repeat for all pixels
+
+Once I have the arrays $p_i$ and $s_i$, reshuffle them (together, keeping the correspondence)
+so that $s_i$ is increasing.
+Then, I plot $s_i$ on the vertical axis against the cumulative probabilities $P_i = \sum_{j \leq i} p_j$
+on the horizontal axis.
+Each region on the horizontal axis is equally probable (given the skymap), so the "visual"
+average of the sensitivity is accurate to its expected value (given the skymap).
+
+## Technical aspects
+
+### UNIQ pixellation
+
+Rasterized HEALPix skymaps are super inefficient! They sample 
+every region in the sky with the same density, which is actually only needed in the high-probability
+regions. So, we can use multiorder skymaps, that can vary in resolution throughout the sky.
+Here is the [user guide](https://emfollow.docs.ligo.org/userguide/tutorial/multiorder_skymaps.html#).
+
+### Code acceleration
+
+Starting out with the divergent-pointing-repointing code being roughly real-time if the time steps
+are 0.5s.
+
+Profiling with scalene, the slowest bits are:
+
+- computation of sky offsets to find out which telescope to point where (~60% of the time)
+    - we can surely do caching
+- zenith computation (~6% of the time)
+    - we can surely do caching
+- the slew-towards function, specifically computing the spherical offsets (~15% of the time overall)
+    - this one is trickier, can widen the timesteps for sure
+
+## Slewing strategies
+
+### Starting skymap
+
+Here I show a plot of a skymap to be used as a reference.
+This is the skymap obtained at 56Hz, roughly 10 seconds before merger,
+for one of the BNS injections by [@sachdevEarlywarningSystemElectromagnetic2020].
+
+```{python}
+from em_repointing.tiling import rasterize_skymap
+from pathlib import Path
+from ligo.skymap.io.fits import read_sky_map
+import matplotlib.pyplot as plt
+from astropy.coordinates import SkyCoord
+import astropy.units as u
+import ligo.skymap.plot
+
+def plot_skymap(skymap):
+    fig = plt.figure(figsize=(8, 8), dpi=200)
+
+    ax = plt.axes(
+        [0.05, 0.05, 0.9, 0.9],
+        projection='astro globe',
+        center=SkyCoord(310*u.deg, 0*u.deg),
+    )
+
+    ax.grid()
+
+    ax.imshow_hpx(rasterize_skymap(skymap, order=9), cmap='cylon')
+
+    return ax
+
+skymap_path = Path() / '1000000870_56Hz.fits'
+skymap = read_sky_map(skymap_path, moc=True)
+ax = plot_skymap(skymap)
+```
+
+But in a realistic scenario we will not be able to point just anywhere in
+the sky: we need the source to be at most 60 degrees from the zenith
+at the telescope's location.
+
+```{python}
+from em_repointing.em_observatory import CherenkovTelescopeArrayMST
+from em_repointing.injections import mask_skymap
+from astropy.time import Time
+from astropy.visualization.wcsaxes import SphericalCircle
+from ligo.skymap.moc import uniq2pixarea
+
+skymap_path = Path() / '1000000870_56Hz.fits'
+skymap = read_sky_map(skymap_path, moc=True)
+
+# this visualization assumes the location of the MST telescopes
+# is Cascina, Pisa, just 'cause I had the coordinates of that 
+# available. 
+# change the gps_time as required in order to make the skymap 
+obs = CherenkovTelescopeArrayMST(
+    initial_position = SkyCoord(0*u.deg, 0*u.deg),
+    gps_time=Time('2017-08-17T11:00:00.0', format='isot', scale='utc')
+)
+masked_skymap = mask_skymap(skymap, obs)
+
+probability = masked_skymap['PROBDENSITY'] * uniq2pixarea(masked_skymap['UNIQ'])
+
+ax = plot_skymap(masked_skymap)
+
+print(
+f"""
+The probability contained within the sky region
+at most 60 degrees from the zenith is {sum(probability)*100:.1f}%
+"""
+)
+
+# this would be the code to add a circle representing the visible portion
+# of the sky, but that's buggy at the moment, see 
+# https://github.com/astropy/astropy/issues/10780
+
+# circle_view = SphericalCircle(
+#     center=obs.zenith, 
+#     radius=60*u.deg, 
+#     resolution=100, 
+#     transform=ax.get_transform('world'),
+#     color='green',
+#     alpha=.05,
+# )
+# patch = ax.add_patch(circle_view)
+```
+
+### Single-telescope
+
+At the moment, I only implemented the `maximum_posterior` strategy.
+
+- `maximum_posterior`: slew towards the maximum of the posterior, which must be cropped beforehand
+    to exclude regions in the sky that are further than 60 degrees from the zenith at the telescope's location.
+
+```{python}
+from em_repointing.injections import maximum_posterior
+
+position = maximum_posterior(skymap, obs)
+
+ax = plot_skymap(masked_skymap)
+obs.time_interval = 100*u.s
+obs.slew_towards(position)
+obs.plot_fov(ax)
+```
+
+- `center_of_mass`: not currently implemented, slew towards the "center of mass" of the skymap,
+    defined somehow --- it's not a trivial thing to determine, and may be degenerate in some cases,
+    but one can interpret it as: take a swarm of particles on the sphere 
+    distributed according to the skymap, average their 3D positions, reproject on the sphere.
+
+### Divergent pointing
+
+- `maximum_posterior_tiling`, with a simple greedy algorithm I implemented:
+
+1. Point to the highest probability spot in the skymap
+1. Remove all the points in the FoV (concretely, by artificially setting the skymap probability to 0 there)
+1. Repeat
+
+This seems to work decently well. It's not trivial to figure out how to control the "tightness" of the tiling.
+
+An alternative approach is to determine the percentile region we are interested in, 
+and just hexagonally tiling it. Requires a bit more work to implement but it's conceptually nice.
+
+The greedy approach, however, seems to settle automatically into the hexagonal pattern that people
+have manually put in.
+
+```{python}
+from em_repointing.injections import maximum_posterior_tiling
+from em_repointing.em_observatory import CtaDivergentMST
+
+obs = CtaDivergentMST(
+    initial_position = SkyCoord(0*u.deg, 0*u.deg),
+    gps_time=Time('2017-08-17T11:00:00.0', format='isot', scale='utc'),
+    n_telescopes=15,
+)
+
+positions = maximum_posterior_tiling(skymap, obs)
+
+ax = plot_skymap(masked_skymap)
+
+ax_zoom_rect = plt.axes(
+    [0.0, 0.0, 0.5, 0.5],
+    projection='astro degrees zoom',
+    center='287d +0d',
+    radius=10*u.deg)
+ax.mark_inset_axes(ax_zoom_rect)
+ax.connect_inset_axes(ax_zoom_rect, 'upper left')
+ax.connect_inset_axes(ax_zoom_rect, 'lower left')
+
+obs.time_interval = 100*u.s
+obs.slew_towards_multiple(positions)
+obs.plot_fov(ax)
+obs.plot_fov(ax_zoom_rect)
+ax_zoom_rect.grid()
+
+ax_zoom_rect.imshow_hpx(rasterize_skymap(masked_skymap, order=9), cmap='cylon')
+
+```
+
+
+This seems to work really well, but what about when the skymap becomes really small?
+Let's repeat the previous plot, but now with the skymap at 1024Hz.
+
+```{python}
+from em_repointing.injections import maximum_posterior_tiling
+from em_repointing.em_observatory import CtaDivergentMST
+
+def make_1024_Hz_tiling_plot(strategy):
+    skymap_path = Path() / '1000000870_1024Hz.fits'
+    skymap = read_sky_map(skymap_path, moc=True)
+
+    obs = CtaDivergentMST(
+        initial_position = SkyCoord(0*u.deg, 0*u.deg),
+        gps_time=Time('2017-08-17T11:00:00.0', format='isot', scale='utc'),
+        n_telescopes=15,
+    )
+    masked_skymap = mask_skymap(skymap, obs)
+
+    positions = strategy(skymap, obs)
+
+    ax = plot_skymap(masked_skymap)
+
+    ax_zoom_rect = plt.axes(
+        [0.0, 0.0, 0.5, 0.5],
+        projection='astro degrees zoom',
+        center='292d +23d',
+        radius=10*u.deg)
+    ax.mark_inset_axes(ax_zoom_rect)
+    ax.connect_inset_axes(ax_zoom_rect, 'upper left')
+    ax.connect_inset_axes(ax_zoom_rect, 'lower left')
+
+    obs.time_interval = 100*u.s
+    obs.slew_towards_multiple(positions)
+    obs.plot_fov(ax)
+    obs.plot_fov(ax_zoom_rect, alpha=.1)
+    ax_zoom_rect.grid()
+
+    ax_zoom_rect.imshow_hpx(rasterize_skymap(masked_skymap, order=9), cmap='cylon')
+    return ax, ax_zoom_rect
+
+ax, ax_zoom = make_1024_Hz_tiling_plot(maximum_posterior_tiling)
+```
+
+
+- `sometimes_overlapping_tiling`: the idea is, we do `maximum_posterior_tiling` as long as it covers a "small" fraction of
+    the skymap, but as we are doing the greedy algorithm we find we have coverer more than some% of the skymap already
+    we should go back and point in those regions some more.
+
+Set a threshold %coverage, like 95%.
+
+1. Point to the highest probability spot in the skymap
+1. Remove all the points in the FoV (concretely, by artificially setting the skymap probability to 0 there)
+1. Check: have we covered more than the threshold within our FoVs?
+    1. If so, lower the FoV parameter and repeat everything. Specifically, I lower it by a factor
+        $$ \frac{\text{FoV}_{\text{old}}}{\text{FoV}_{\text{new}}} = 2 - \frac{n_{\text{pointings}}}{n_{\text{telescopes}}}
+        $$
+        where $n_{\text{pointings}}$ is the number of telescope pointings that have been computed before the 
+        threshold has been reached. This is a heuristic way to make the search more efficient: if after only one pointing 
+        we are already covering more than the threshold, then we should lower the FoV by a lot; on the other hand, 
+        if we cross it but only at the very end of the tiling we should only lower it by a bit.
+    1. If not, continue
+1. Repeat
+
+These are the results of this algorithm with two different choices of the threshold; 
+the `maximum_posterior_tiling` algorithm from before is equivalent to a target of 100% coverage.
+(Note that in the code the `threshold` parameter is 1 minus the required coverage value).
+
+
+
+```{python}
+from em_repointing.injections import make_tiling_strategy
+
+ax, ax_zoom = make_1024_Hz_tiling_plot(make_tiling_strategy(0.4))
+ax.set_title(r'Threshold = 60% coverage')
+```
+```{python}
+from em_repointing.injections import make_tiling_strategy
+
+ax, ax_zoom = make_1024_Hz_tiling_plot(make_tiling_strategy(0.05))
+ax.set_title(r'Threshold = 95% coverage')
+```
+
+### Ensuring stereoscopy
+
+A single-telescope trigger is __much__ less valuable than a two-telescope one.
+Therefore, it makes sense for us to ensure we will have telescopes overlapping
+over high-probability regions.
+
+For each pixel in the skymap we have a probability, and we know how many telescopes
+are observing it; therefore, we can compute the probabilities $p(n \text{ telescopes})$,
+and we are specifically interested in $n=0$, $1$ and $2$ or more.
+
+With the strategy defined before and the 56Hz skymap, changing the threshold is not a great improvement:
+
+```{python}
+from em_repointing.tiling import sensitivity_by_probability_quantile
+import numpy as np
+
+n_thresholds = 20
+probabilities = np.zeros((n_thresholds, 16))
+thresholds = np.linspace(0.0, 0.6, num=n_thresholds)
+for i, threshold in enumerate(thresholds):
+    skymap_path = Path() / '1000000870_56Hz.fits'
+    skymap = read_sky_map(skymap_path, moc=True)
+
+    obs = CtaDivergentMST(
+        initial_position = SkyCoord(0*u.deg, 0*u.deg),
+        gps_time=Time('2017-08-17T11:00:00.0', format='isot', scale='utc'),
+        n_telescopes=15,
+    )
+    masked_skymap = mask_skymap(skymap, obs)
+
+    strategy = make_tiling_strategy(threshold)
+    positions = strategy(skymap, obs)
+
+    fov = obs.field_of_view_radius.to(u.rad).value
+    sensitivity, sorting_indices = sensitivity_by_probability_quantile(
+        skymap, 
+        positions, 
+        sensitivity_function=lambda distance : np.where(distance<=fov, 1., np.inf)
+        )
+    # sensitivity_function is set to the identity because we do not care about it here
+    for n in np.arange(16):
+        mask = sensitivity['N_TELESCOPES'] == n
+        probabilities[i, n] = sum(sensitivity['PROBABILITY'][mask])
+    
+plt.plot(thresholds, probabilities[:, 0], label='0 telescopes')
+plt.plot(thresholds, probabilities[:, 1], label='1 telescope')
+plt.plot(thresholds, np.sum(probabilities[:, 2:], axis=1), label='2+ telescopes')
+plt.legend()
+```
+
+## Other skymaps
+
+We might be able to combine this information with skymaps coming from a different source, such as Fermi/GBM.
+[2023 triggers page](https://heasarc.gsfc.nasa.gov/FTP/fermi/data/gbm/triggers/2023/).
+
+[Localizations page](https://heasarc.gsfc.nasa.gov/FTP/fermi/data/gbm/triggers/2023/bn230625767/quicklook/glg_healpix_all_bn230625767.fit).
+The names are usually `bn+YYMMDD+"3 unique identifier"`.
+
+Should implement the infrastructure to also read them. 
+When would they come in?
+It seems likely that in a "golden binary" scenario, these would not be a significant 
+improvement over the GW skymap
