@@ -8,6 +8,12 @@ format:
             echo: false
         bibliography: ../../rehear.bib
 ---
+
+```{python}
+import matplotlib.pyplot as plt
+plt.rc('text', usetex=True)
+```
+
 # Parameter estimation
 
 When performing the analysis of some data $d$ according to some model $M$ parameterized by some finite number of parameters $\theta$, we employ Bayes' theorem, which is derived by expressing the joint probability $\text{prob}(d, \theta | M)$ in two different ways: 
@@ -102,18 +108,33 @@ $$ \xi (L) = \int_{\mathcal{L}(d | \theta, M) \geq L} \pi (\theta | M) \text{d}^
 $$
 
 Since the prior is a normalized probability distribution and the likelihood ranges from 0 to $L _{\text{max}}$, this variable will range from $\xi(0) = 1$ to $\xi(L _{\text{max}}) = 0$, and it will always be decreasing.[^1]
-We can therefore define its inverse, $L(\xi)$, and rewrite the likelihood integral as 
-
-$$ \mathcal{Z}(d|M) = \int _0^1 L(\xi ) \text{d}\xi 
+We can define its inverse, $L(\xi)$, 
+and rewrite the likelihood integral through integration by parts: the evidence is the expectation value of the likelihood, therefore 
+$$
+\mathcal{Z}(d|M) = \int_{0}^{L_\text{max}} \xi(L) \text{d}L 
+= \xi L |_{L=0}^{L=L_\text{max}} - \int_{\xi(L=0)}^{\xi(L=L_\text{max})} L(\xi)\text{d}\xi = \int_{0}^{1}L(\xi)\text{d}\xi\,.
 $$
 
-The integral is computed according to this prescription. 
+For a detailed discussion of the mathematical details, also see [@ashtonNestedSamplingPhysical2022].
+Note that, by definition, $\xi$ is directly related to probability mass: the prior probability of an interval $[\xi_{0}, \xi_{1}]$, i.e. the prior mass which has likelihood values $L(\xi_{0}) < \mathcal{L} < L(\xi_{1})$, is 
 
-If $k$ points are uniformly distributed in an interval $[0, \xi^*]$, then the largest of them will have a $\xi$ coordinate distributed as $\xi _\text{max} / \xi^* \equiv t \sim \text{beta}(n, 1) = n t^{n-1}$,[^2] where we defined the _compression ratio_ $t$: when we discard the lowest-likelihood point with $\xi _\text{max}$, we will have contracted the prior volume by a factor $t$.
-This distibution is shown in @fig-nested-sampling-volume-compression.
+$$
+p([\xi_{0}, \xi_{1}]) = \int _{L(\xi_{0}) < \mathcal{L}(d|\theta, M) < L(\xi_{1})} \pi (\theta | M) \text{d}^{n} \theta = \xi_{1} - \xi_{0}\,,
+$$
+
+where we computed the integral on a likelihood "ring" by subtracting the inside volume from the outside one.
+This is useful to us, since it means that if we distribute points uniformly according to the prior their $\xi$ values will also be uniformly distributed in $[0, 1]$.
+
+If $k$ points are uniformly distributed in an interval $[0, \xi^*]$, then the largest of them will have a $\xi$ coordinate distributed as $\xi _\text{max} / \xi^* \equiv t \sim \text{beta}(k, 1) = k t^{k-1}$,[^2] where we defined the _compression ratio_ $t$: when we discard the lowest-likelihood point with $\xi _\text{max}$, we will have contracted the prior volume by a factor $t$.
+In terms of $\log t$, the distribution reads 
+$$
+\frac{\text{d}p}{\text{d}\log t} = t\frac{\text{d}p}{\text{d}t} = k t^{k} = k e^{k \log t}
+$$
+
+This distribution is shown in @fig-nested-sampling-volume-compression-distribution.
 
 ```{python}
-#| label: fig-nested-sampling-volume-compression
+#| label: fig-nested-sampling-volume-compression-distribution
 #| fig-cap: "Volume compression"
 
 from matplotlib.ticker import FixedLocator, FixedFormatter
@@ -149,8 +170,74 @@ plt.gca().yaxis.set_major_formatter(FixedFormatter([
 ]))
 ```
 
+Its mean and standard deviation are: 
+$$
+\begin{align}
+\langle \log t \rangle &= \int_{-\infty}^{0} \log t \frac{\text{d}p}{\text{d}\log t} \text{d}\log t  \\
+&= \int_{-\infty}^{0} \frac{x}{k} k e^{x} \frac{ \text{d}x}{k}  \\ 
+&= \frac{1}{k} \int_{-\infty}^{0} x e^{x} \text{d}x \\
+&= - \frac{1}{k}
+\end{align}
+$$
 
-<!-- ## References -->
+where $x = k \log t$, and
+$$
+\begin{align}
+\left\langle  (\log t)^{2}  \right\rangle - \frac{1}{k^{2}}
+&= \int_{-\infty}^{0} (\log t)^{2} \frac{\text{d}p}{\text{d}\log t} \text{d} \log t - \frac{1}{k^{2}} \\
+&= \int_{-\infty}^{0} \frac{x^{2}}{k^{2}} k e^{x} \frac{\text{d}x}{k} - \frac{1}{k^{2}}  \\
+&= \frac{1}{k^{2}} \int_{-\infty}^{0} x^{2} e^{x} \text{d}x - \frac{1}{k^{2}}  \\
+&= \frac{2-1}{k^{2}} = \frac{1}{k^{2}}\,.
+\end{align}
+$$
+
+Compactly, we can then write $\log t = (-1 \pm 1) / k$. 
+
+### Computing evidence and posterior
+
+If we sample $k$ points from the prior (with total volume $X_{0}$) and remove the one with the worst likelihood, the remaining prior volume will be $X_{1} = t_{1}X_{0}$, where $\log t_{1}$ has an expectation value of $-1 /k$. This will be true at every iteration, so [@skillingNestedSamplingGeneral2006, section 5]
+$$
+\log X_{i} = \sum_{j\leq i} \log t_{j} \approx -\frac{i}{k} \pm \frac{\sqrt{ i }}{k}
+$$
+
+The prior is compressed exponentially, which is desirable since the typical set for the posterior is often several orders of magnitude smaller than the prior.
+
+```{python}
+#| label: fig-nested-sampling-volume-compression-iteration
+#| fig-cap: "Volume compression"
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+rng = np.random.default_rng(seed=1)
+
+n_iterations = 100
+logX_min = -5
+
+for n_live in [50, 100]:
+
+	results = [[] for _ in range(n_iterations)]
+
+	for i in range(n_iterations):
+		points = rng.uniform(size=n_live)
+		points = np.sort(points)
+		logX = 0
+		while logX > logX_min:
+			results[i].append(logX)
+			logX = np.log(points[-1])
+			points[-1] = rng.uniform(0, np.exp(logX))
+			points = np.sort(points)
+
+	min_i = min(len(arr) for arr in results)
+
+	for i in range(n_iterations):
+		plt.plot(results[i], np.arange(len(results[i])), c='black', alpha=.2)
+
+plt.xlim(0, logX_min)
+plt.xlabel(r'$\log \xi$: prior compression')
+plt.ylabel('Iteration number')
+plt.show()
+```
 
 [^1]: It will not necessarily be _strictly_ decreasing, but that is not a conceptual issue. One can introduce jitter in the likelihood, varying it at each point by an inconsequential amount, in order to ensure that the decreasing condition is verified precisely.
-[^2]: In general, the $k$-th smallest out of $n$ uniform random variates in $[0, 1]$ is distributed according to $\text{beta}(k, n-k+1) \propto x^{k-1}(1-x)^{n-k}$.
+[^2]: In general, the $n$-th smallest out of $k$ uniform random variates in $[0, 1]$ is distributed according to $\text{beta}(k, n-k+1) \propto x^{n-1}(1-x)^{k-n}$; here we are looking at the $k$-th smallest (i.e. the largest).

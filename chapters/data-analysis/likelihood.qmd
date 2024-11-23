@@ -9,6 +9,11 @@ format:
         bibliography: ../../rehear.bib
 ---
 # The gravitational wave likelihood
+
+## The Whittle likelihood
+
+
+
 ## Matched filtering
 
 When we measure gravitational wave data $d(t)$, we will have a contribution from noise $n(t)$ and signal
