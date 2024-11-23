@@ -9,7 +9,7 @@ format:
         bibliography: ../../rehear.bib
 ---
 
-# Time complexity and acceleration techniques
+# Acceleration techniques
 
 The time complexity scales as 
 

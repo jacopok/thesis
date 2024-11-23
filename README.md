@@ -14,6 +14,17 @@ A figure can be made like:
 
 Execution can be controlled with the [freeze](https://quarto.org/docs/projects/code-execution.html) argument.
 
+#### References
+
+See [here](https://quarto.org/docs/authoring/citations.html). 
+
+- Section title: `## Title {#sec-title}`
+- Equation: `{#eq-title}` _after_ the final `$$`
+
+#### Bibliography
+
+Generally, `@citekey`, `[@citekey]`, `[@citekey, some page]`
+
 ### Known issues
 
 - even when activating the `link-citations: true` option in the 
