@@ -120,7 +120,7 @@ class MultivariateNormal():
         cx_interval = conditioned_x.analytical_CI(CL)
         cy_interval = conditioned_y.analytical_CI(CL)
         
-        fig = plt.figure(figsize=(9, 9))
+        fig = plt.figure(figsize=(8, 8))
         gs = gridspec.GridSpec(
             2, 2, width_ratios=[2, 1], height_ratios=[1, 2])
 

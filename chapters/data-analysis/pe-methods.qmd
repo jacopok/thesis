@@ -3,6 +3,8 @@ format:
     html:
         code-fold: true
         bibliography: ../../rehear.bib
+        execute:
+            debug: false
     pdf:
         execute:
             echo: false
@@ -10,7 +12,7 @@ format:
 ---
 
 ```{python}
-from thesis_scripts import data_path
+from thesis_scripts import *
 ```
 
 # Parameter estimation
@@ -92,7 +94,6 @@ in the _Fisher matrix_ this is not the case, since the
 inversion introduces mixing between the parameters.
 
 ## Nested sampling {#sec-nested-sampling}
-
 
 Nested sampling, introduced by Skilling in 2006 [@skillingNestedSamplingGeneral2006], is an algorithm designed to compute the _evidence_ $\mathcal{Z}$ as well as the posterior distribution on the parameters. 
 
@@ -284,7 +285,7 @@ Often one is be interested in a set of equally-weighted samples: these can be ob
 ### Commonly used plots
 
 These quantities can be tracked through a Nested Sampling run as a useful diagnostic. 
-Here we show some commonly used plots, based on a two-dimensional run 
+Here we show some commonly used plots, based on a two-dimensional example run with a Gaussian covariance.
 
 ```{python}
 import numpy as np
@@ -295,35 +296,45 @@ from dynesty import NestedSampler
 ndim = 2
 
 # Define our 3-D correlated multivariate normal log-likelihood.
-C = np.identity(ndim)
-C[C==0] = 0.95
+std = 3e-2
+mu = 0.5 * np.ones(ndim)
+C = np.identity(ndim) * std**2
+C[C==0] = 0.95 * std**2
 Cinv = np.linalg.inv(C)
 lnorm = -0.5 * (np.log(2 * np.pi) * ndim +
                 np.log(np.linalg.det(C)))
 
-def loglike(x):
-    return -0.5 * np.dot(x, np.dot(Cinv, x)) + lnorm
+def loglike(x):	
+    return -0.5 * np.dot(x-mu, np.dot(Cinv, x-mu)) + lnorm
 
-# Define our uniform prior via the prior transform.
 def ptform(u):
-    return 20. * u - 10.
+    return u
 
-fname = data_path / 'plotting_example_sampler.pkl'
+fname = data_path / 'cache' / 'plotting_example_sampler.pkl'
 
 if fname.exists():
 	sampler = NestedSampler.restore(str(fname))
 else:
 	sampler = NestedSampler(loglike, ptform, ndim, nlive=400)
-	sampler.run_nested()
+	sampler.run_nested(dlogz=0.01)
 	sampler.save(str(fname))
 ```
 
+The following plots are showing, all as a function of the prior compression $\log X$: 
+
+- the number of live points, which is constant up to the point where the nested sampling run is stopped: then, the remaining points are reused;
+- the likelihood $L_i$, which is strictly increasing as expected;
+- the posterior mass $w_i L_i / Z$, which increases and then decreases: first, the likelihood's increase dominates, but at some point its values start tapering, and the decrease in prior volume $w_i$ dominates;
+- the accumulation
+
 ```{python}
 from dynesty import plotting as dyplot
-lnz_truth = ndim * -np.log(20.)
+lnz_truth = 0
 fig, axes = dyplot.runplot(sampler.results, lnz_truth=lnz_truth)
 fig.set_size_inches(8, 12)
 ```
+
+The following plot is called a _trace plot_: 
 
 ```{python}
 fig, axes = dyplot.traceplot(
@@ -333,14 +344,16 @@ fig, axes = dyplot.traceplot(
 	show_titles=False,
 	trace_cmap='inferno', 
 	connect=True,
-	connect_highlight=range(1)
+	connect_highlight=range(2)
 )
 fig.set_size_inches(8, 6)
 
 ```
 
+Finally, what we often care about: a corner plot of the results:
+
 ```{python}
-dyplot.cornerplot(
+_ = dyplot.cornerplot(
 	sampler.results, 
 	color='blue', 
 	truths=np.zeros(ndim),
@@ -368,6 +381,15 @@ $$
 
 since the integral can be restricted to the $V_{p}$ volume directly.
 
+For the previous example:[^3]
+
+```{python}
+print(f'H = {sampler.results.information[-1]}')
+print(f'theoretical H = {-ndim/2 * (1+np.log(2 * np.pi)) - .5 * np.log(np.linalg.det(C))}')
+```
+
+
 
 [^1]: It will not necessarily be _strictly_ decreasing, but that is not a conceptual issue. One can introduce jitter in the likelihood, varying it at each point by an inconsequential amount, in order to ensure that the decreasing condition is verified precisely.
 [^2]: In general, the $n$-th smallest out of $k$ uniform random variates in $[0, 1]$ is distributed according to $\text{beta}(k, n-k+1) \propto x^{n-1}(1-x)^{k-n}$; here we are looking at the $k$-th smallest (i.e. the largest).
+[^3]: The derivation of the entropy of a Gaussian distribution can be found [here](https://gregorygundersen.com/blog/2020/09/01/gaussian-entropy/), it is computed integrating over all of space but this is not a bad approximation, since our distribution has small width compared to the prior.
