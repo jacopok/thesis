@@ -1,28 +1,3 @@
-project:
-  type: book
-
-book:
-  title: "Rehear"
-  author: "Jacopo Tissino"
-  date: "2025-10-31"
-  chapters:
-    - index.qmd
-    - part: "Gravitational wave data analysis"
-      chapters:
-      - chapters/data-analysis/waveforms.qmd
-      - chapters/data-analysis/likelihood.qmd
-      - chapters/data-analysis/pe-methods.qmd
-      - chapters/data-analysis/acceleration.qmd
-    - part: "Multibanding"
-      chapters:
-      - chapters/multibanding/lgwa.qmd
-      - chapters/multibanding/multibanding.qmd
-      - chapters/multibanding/lgwa-pe.qmd
-    - part: "Multimessenger"
-      chapters:
-      - chapters/multimessenger/inclination.qmd
-      - chapters/multimessenger/early-warning.qmd
-    - chapters/references.qmd
 
 bibliography: rehear.bib
 

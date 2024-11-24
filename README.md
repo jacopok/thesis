@@ -3,6 +3,8 @@ Thesis being written using quarto, documentation [here](https://quarto.org/docs/
 
 ### Usage tricks
 
+#### Figures
+
 A figure can be made like:
 
 ```{python}
@@ -12,7 +14,11 @@ A figure can be made like:
 # Matplotlib calls
 ```
 
-Execution can be controlled with the [freeze](https://quarto.org/docs/projects/code-execution.html) argument.
+Code execution can be controlled with the [freeze](https://quarto.org/docs/projects/code-execution.html) argument.
+
+Figures can be rendered optionally only when making html, see [here](https://quarto.org/docs/authoring/conditional.html#content-visible).
+
+Examples with [figures on the side](https://quarto-dev.github.io/quarto-gallery/page-layout/tufte.html).
 
 #### References
 
@@ -35,3 +41,7 @@ To get aligned multiple lines, use the `aligned` environment instead of `align`.
 - even when activating the `link-citations: true` option in the 
     document yaml, the citations do not appear as links in the pdf output
     (but they do in the html output)
+
+### Useful refs
+
+- [Tips and tricks](https://danielborek.me/2023/pdf-quarto-tips/)
