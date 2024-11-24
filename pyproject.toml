@@ -5,6 +5,8 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
+    "cmcrameri>=1.9",
+    "dynesty>=2.1.4",
     "h5py>=3.12.1",
     "ipyleaflet>=0.19.2",
     "jupyter-cache>=1.0.1",
@@ -20,5 +22,5 @@ dependencies = [
 members = ["thesis_scripts/thesis_scripts"]
 
 [tool.uv.sources]
-thesis-scripts = { path = "thesis_scripts" }
+thesis-scripts = { path = "thesis_scripts", editable = true }
 

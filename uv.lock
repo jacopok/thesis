@@ -329,6 +329,20 @@ wheels = [
 ]
 
 [[package]]
+name = "cmcrameri"
+version = "1.9"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "matplotlib" },
+    { name = "numpy" },
+    { name = "packaging" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/fe/18/61ac7ea74f7c4d82ce3a1d49e9a26492b0df5a8792025066efcb318a88e2/cmcrameri-1.9.tar.gz", hash = "sha256:56faf9b7f53eb03fed450137bec7dc25c1854929d7b841b9c75616fc2c357640", size = 260122 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f9/a2/4c88f17ee50af5093978c4d989936883f959d7d81e1e2fa093863b080c1c/cmcrameri-1.9-py3-none-any.whl", hash = "sha256:daefca10cc405f437ad292bad52f704c2ba8ae692b3e100da8c25f641997e337", size = 277448 },
+]
+
+[[package]]
 name = "colorama"
 version = "0.4.6"
 source = { registry = "https://pypi.org/simple" }
@@ -478,6 +492,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/0f/d5/c66da9b79e5bdb124974bfe172b4daf3c984ebd9c2a06e2b8a4dc7331c72/defusedxml-0.7.1.tar.gz", hash = "sha256:1bb3032db185915b62d7c6209c5a8792be6a32ab2fedacc84e01b52c51aa3e69", size = 75520 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/07/6c/aa3f2f849e01cb6a001cd8554a88d4c77c5c1a31c95bdf1cf9301e6d9ef4/defusedxml-0.7.1-py2.py3-none-any.whl", hash = "sha256:a352e7e428770286cc899e2542b6cdaedb2b4953ff269a210103ec58f6198a61", size = 25604 },
+]
+
+[[package]]
+name = "dynesty"
+version = "2.1.4"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/66/30/39fc3553893a81e14caba6db481523660d52a7d538cf5913d2bf73a692d4/dynesty-2.1.4.tar.gz", hash = "sha256:cd98cfded1af86487b76dba2bd89824c803f1e0c451fcb14a0b208c5ca1a8004", size = 129150 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/bd/05/14ff4092df9e4937b5944c0f6cca461c5a211435f6eed1af0a76bc6575da/dynesty-2.1.4-py2.py3-none-any.whl", hash = "sha256:110a13ade7323cdfa8dae7faf52d08a1542f8d90c289d549efd4923d9e55dff1", size = 108124 },
 ]
 
 [[package]]
@@ -2280,6 +2303,8 @@ name = "thesis"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "cmcrameri" },
+    { name = "dynesty" },
     { name = "h5py" },
     { name = "ipyleaflet" },
     { name = "jupyter" },
@@ -2293,6 +2318,8 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "cmcrameri", specifier = ">=1.9" },
+    { name = "dynesty", specifier = ">=2.1.4" },
     { name = "h5py", specifier = ">=3.12.1" },
     { name = "ipyleaflet", specifier = ">=0.19.2" },
     { name = "jupyter", specifier = ">=1.1.1" },
@@ -2301,13 +2328,13 @@ requires-dist = [
     { name = "numpy", specifier = ">=1.26.4" },
     { name = "quarto-cli", specifier = ">=1.5.57" },
     { name = "scipy", specifier = ">=1.13.1" },
-    { name = "thesis-scripts", directory = "thesis_scripts" },
+    { name = "thesis-scripts", editable = "thesis_scripts" },
 ]
 
 [[package]]
 name = "thesis-scripts"
 version = "0.1.0"
-source = { directory = "thesis_scripts" }
+source = { editable = "thesis_scripts" }
 dependencies = [
     { name = "matplotlib" },
     { name = "numpy" },
