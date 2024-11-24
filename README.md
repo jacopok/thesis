@@ -25,6 +25,11 @@ See [here](https://quarto.org/docs/authoring/citations.html).
 
 Generally, `@citekey`, `[@citekey]`, `[@citekey, some page]`
 
+
+#### Equations
+
+To get aligned multiple lines, use the `aligned` environment instead of `align`.
+
 ### Known issues
 
 - even when activating the `link-citations: true` option in the 
