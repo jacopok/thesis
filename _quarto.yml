@@ -35,6 +35,9 @@ format:
         [cosmo, theme_dark.css]
   pdf:
     documentclass: scrreprt
+    colorlinks: true
+    linkcolor: blue
+    link-citations: true
 
 execute:
   cache: true
