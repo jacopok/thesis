@@ -10,8 +10,7 @@ format:
 ---
 
 ```{python}
-import matplotlib.pyplot as plt
-plt.rc('text', usetex=True)
+from thesis_scripts import data_path
 ```
 
 # Parameter estimation
@@ -175,23 +174,23 @@ plt.gca().yaxis.set_major_formatter(FixedFormatter([
 
 Its mean and standard deviation are: 
 $$
-\begin{align}
+\begin{aligned}
 \langle \log t \rangle &= \int_{-\infty}^{0} \log t \frac{\text{d}p}{\text{d}\log t} \text{d}\log t  \\
 &= \int_{-\infty}^{0} \frac{x}{k} k e^{x} \frac{ \text{d}x}{k}  \\ 
 &= \frac{1}{k} \int_{-\infty}^{0} x e^{x} \text{d}x \\
 &= - \frac{1}{k}
-\end{align}
+\end{aligned}
 $$
 
 where $x = k \log t$, and
 $$
-\begin{align}
+\begin{aligned}
 \left\langle  (\log t)^{2}  \right\rangle - \frac{1}{k^{2}}
 &= \int_{-\infty}^{0} (\log t)^{2} \frac{\text{d}p}{\text{d}\log t} \text{d} \log t - \frac{1}{k^{2}} \\
 &= \int_{-\infty}^{0} \frac{x^{2}}{k^{2}} k e^{x} \frac{\text{d}x}{k} - \frac{1}{k^{2}}  \\
 &= \frac{1}{k^{2}} \int_{-\infty}^{0} x^{2} e^{x} \text{d}x - \frac{1}{k^{2}}  \\
 &= \frac{2-1}{k^{2}} = \frac{1}{k^{2}}\,.
-\end{align}
+\end{aligned}
 $$
 
 Compactly, we can then write $\log t = (-1 \pm 1) / k$. 
@@ -207,7 +206,7 @@ The prior is compressed exponentially, which is desirable since the typical set 
 
 ```{python}
 #| label: fig-nested-sampling-volume-compression-iteration
-#| fig-cap: "Volume compression by iteration. The number of live points is denoted here as $n_{\\mathrm{live}} = k$. Note how the horizontal slices are thinner when we have more live points: increasing them will decrease the uncertainty on the prior compression obtained at a fixed iteration number."
+#| fig-cap: "Volume compression by iteration. The number of live points is denoted here as $n_{\\mathrm{live}} = k$. Note how the horizontal slices are thinner when we have more live points: increasing them will decrease the uncertainty on the prior compression obtained at a fixed iteration number. After reaching a logarithmic volume compression of $- \\log \\xi = 4$ the runs are truncated, and the remaining points are shown: these are distributed uniformly and not geometrically in $\\xi$, therefore they taper off in this logarithmic plot."
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -217,7 +216,7 @@ rng = np.random.default_rng(seed=1)
 n_iterations = 80
 logX_min = -4
 
-n_live_numbers = [50, 100]
+n_live_numbers = [100, 50]
 colors = ['grey', 'black']
 
 for n_live, color in zip(n_live_numbers, colors):
@@ -233,6 +232,7 @@ for n_live, color in zip(n_live_numbers, colors):
 			logX = np.log(points[-1])
 			points[-1] = rng.uniform(0, np.exp(logX))
 			points = np.sort(points)
+		results[i].extend(np.log(points[::-1]))
 
 	min_i = min(len(arr) for arr in results)
 
@@ -249,7 +249,8 @@ for n_live, color in zip(n_live_numbers, colors):
 			label=label)
 
 plt.legend()
-plt.xlim(0, logX_min)
+plt.axvline(logX_min, ls='--', c='black', lw=1)
+plt.xlim(0, logX_min-6)
 plt.xlabel(r'$\log \xi$: prior compression')
 plt.ylabel('Iteration number')
 plt.show()
@@ -280,10 +281,92 @@ It is readily seen that these weights add to 1, and heuristically they are compu
 
 Often one is be interested in a set of equally-weighted samples: these can be obtained, for example, through density estimation methods.
 
+### Commonly used plots
+
+These quantities can be tracked through a Nested Sampling run as a useful diagnostic. 
+Here we show some commonly used plots, based on a two-dimensional run 
+
+```{python}
+import numpy as np
+from dynesty import NestedSampler
+
+# from the Dynesty quickstart: 
+# https://dynesty.readthedocs.io/en/latest/quickstart.html
+ndim = 2
+
+# Define our 3-D correlated multivariate normal log-likelihood.
+C = np.identity(ndim)
+C[C==0] = 0.95
+Cinv = np.linalg.inv(C)
+lnorm = -0.5 * (np.log(2 * np.pi) * ndim +
+                np.log(np.linalg.det(C)))
+
+def loglike(x):
+    return -0.5 * np.dot(x, np.dot(Cinv, x)) + lnorm
+
+# Define our uniform prior via the prior transform.
+def ptform(u):
+    return 20. * u - 10.
+
+fname = data_path / 'plotting_example_sampler.pkl'
+
+if fname.exists():
+	sampler = NestedSampler.restore(str(fname))
+else:
+	sampler = NestedSampler(loglike, ptform, ndim, nlive=400)
+	sampler.run_nested()
+	sampler.save(str(fname))
+```
+
+```{python}
+from dynesty import plotting as dyplot
+lnz_truth = ndim * -np.log(20.)
+fig, axes = dyplot.runplot(sampler.results, lnz_truth=lnz_truth)
+fig.set_size_inches(8, 12)
+```
+
+```{python}
+fig, axes = dyplot.traceplot(
+	sampler.results, 
+	truths=np.zeros(ndim),
+	truth_color='black', 
+	show_titles=False,
+	trace_cmap='inferno', 
+	connect=True,
+	connect_highlight=range(1)
+)
+fig.set_size_inches(8, 6)
+
+```
+
+```{python}
+dyplot.cornerplot(
+	sampler.results, 
+	color='blue', 
+	truths=np.zeros(ndim),
+	truth_color='black', 
+	show_titles=True,
+	max_n_ticks=3, 
+	quantiles=None,
+)
+```
+
 ### Information gain
 
 The typical set of the posterior is often much smaller than the prior: how can this be quantified?
 
+The KL divergence is defined as 
+
+$$ KL(p \parallel \pi) = \int p(\theta ) \log \left( \frac{ p( \theta )}{\pi (\theta )}\right) \text{d}\theta \,.
+$$
+
+This quantity can be understood as a "volumetric compression" from the prior to the posterior.
+If the distributions are flat, this intuition is exact [@petrosyanSuperNestAcceleratedNested2022]: suppose we have $\pi (\theta) \equiv [\theta \in V_{\pi}] / V_{\pi}$ and $p(\theta) \equiv [\theta \in V_{p}] / V_{p}$, where the two volumes are such that $V_{p} \subset V_{\pi}$. Then,  
+$$
+KL (p \parallel \pi) = \int_{V_{\pi}} \frac{[\theta \in V_{p}]}{V_{p}} \log \frac{V_{\pi}}{V_{p}} \text{d}\theta = \log \frac{V_{\pi}}{V_{p}},
+$$
+
+since the integral can be restricted to the $V_{p}$ volume directly.
 
 
 [^1]: It will not necessarily be _strictly_ decreasing, but that is not a conceptual issue. One can introduce jitter in the likelihood, varying it at each point by an inconsequential amount, in order to ensure that the decreasing condition is verified precisely.
