@@ -1,0 +1,55 @@
+## Fisher matrix
+
+In the Fisher matrix approximation, we are considering the 
+gravitational wave likelihood as if it was written like 
+
+$$ \mathcal{L}(d | \theta) \approx \mathcal{N} \exp \left(- \frac{1}{2} \Delta \theta^i \mathcal{F}_{ij} \Delta \theta^j \right)
+$$
+
+for some normalization $\mathcal{N}$, where $\Delta \theta^i = \theta ^i - \langle \theta ^i \rangle$ denotes the deviation of the parameters from their mean values and where we are using the Einstein summation convention.
+
+This is the expression of a multivariate normal distribution, with covariance matrix $\mathcal{C}_{ij} = \mathcal{F}_{ij}^{-1}$.
+
+The Fisher matrix $\mathcal{F}_{ij}$ can be computed as the scalar product
+of the derivatives of waveforms: 
+$$ \mathcal{F}_{ij} = \left.\left\langle \partial_i \partial_j \mathcal{L} \right\rangle \right|_{n = 0,\ \theta = \langle \theta \rangle} =  ( \partial_i h | \partial_j h ) = \Re \int_0^{\infty} \frac{1}{S_n(f)}  \frac{\partial h}{\partial \theta _i} \frac{\partial h^*}{\partial \theta _j}\text{d}f\,.
+$$
+
+These derivatives may be computed numerically or analytically.
+
+### Derivation
+
+For a more in-depth derivation refer to @finnDetectionMeasurementGravitational1992; here we just give a simple argument.
+We can rewrite the derivatives of the log-likelihood as follows:
+
+$$ \begin{aligned}
+\partial_i \partial_j \log \mathcal{L} &= \frac{1}{2} \partial_i \partial_j (d-h|d-h) \\
+&= \frac{1}{2} \partial_i \partial_j \left((d|d) - 2 (d|h) + (h|h)\right) \\
+&=  \partial_i \left(-  (d|\partial_j h) + (\partial_j h|h)\right) \\
+&=  \left(-  (d|\partial_i \partial_j h) + (\partial_i \partial_j h|h) + (\partial_i h | \partial_j h)\right) \\
+&=  -(n|\partial_i \partial_j h)  + (\partial_i h | \partial_j h) 
+\end{aligned}
+$$
+
+and then, since we are evaluating this quantity at the maximum-likelihood realization of the noise $n = 0$, the term $(n|\partial_i \partial_j h)$ is equal to zero.
+
+### Conditioning versus marginalizing
+
+It is important to include all parameters when performing a Fisher matrix analysis.
+This is because not including a parameter which correlates to the one we care about in 
+the Fisher analysis is equivalent to __conditioning__ upon it having that specific value, 
+while the correct operation to be performed is __marginalizing__ over all possible values.
+
+Here is a graphical way to see the difference between conditioning and marginalizing 
+for correlated variables.
+
+```{python}
+from thesis_scripts.multivariate_normal import MultivariateNormal
+n = MultivariateNormal([0, 0], [[1, 0.8], [0.8, 1]])
+n.plot_2d_analytical(0, 0, .9)
+```
+
+When dealing with the _correlation matrix_ marginalizing 
+simply amounts to ignoring some parameters, but crucially
+in the _Fisher matrix_ this is not the case, since the 
+inversion introduces mixing between the parameters.
