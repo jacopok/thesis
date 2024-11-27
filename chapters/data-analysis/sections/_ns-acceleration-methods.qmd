@@ -32,3 +32,18 @@ A direct way to speed up any likelihood-based approach is to accelerate the eval
 
 ### Replacement efficiency
 
+As discussed in @sec-ns-sampling-options, there are many different ways to solve the likelihood-restricted sampling problem. 
+While there is no panacea here, trying different parameters for the proposal method or switching to a different one altogether is a useful strategy when looking for acceleration.
+
+### Prior deformation
+
+The compression $H$ is a significant determinant of the sampling cost. 
+Often, we want to use wide, uninformative priors, which significantly increases the computational cost, even though it is known that the posterior is contained within a relatively small region within them.
+
+A useful observation [@chenBayesianPosteriorRepartitioning2022, @petrosyanSuperNestAcceleratedNested2022], then, is that when studying an inference problem defined by a likelihood $\mathcal{L}$ and prior $\pi$ we can switch to a different one, defined by $\mathcal{\tilde{L}}$ and $\tilde{\pi}$: as long as at every point
+$$
+\tilde{\mathcal{L}}(\theta) \tilde{\pi}(\theta) = \mathcal{L} (\theta)\pi(\theta)
+$$
+the evidences, as well as the posteriors, will be the same.
+As long as we have some approximate knowledge about the shape of the posterior, then, we can  apply a carefully-chosen shift to the prior which "zooms in" on the region of interest, reducing the compression required.
+If the error in $\log\mathcal{Z}$ is kept constant, reducing $H$ results in a quadratic acceleration of the inference.

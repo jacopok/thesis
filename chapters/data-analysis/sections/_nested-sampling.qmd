@@ -386,7 +386,7 @@ $$
 
 So, for a fixed variance on the evidence, we need to have $n_\text{live} \propto H$; therefore, the number of iterations is approximately $n_\text{iter} \propto n_\text{live}H \propto H^{2}$. 
 
-#### Sampling options
+#### Sampling options {#sec-ns-sampling-options}
 
 Nested sampling is, in a way, a meta-algorithm: the sub-algorithm used to sample a new point from the prior subject to the constraint that its likelihood be higher than the last rejected point is a crucial determinant of the computational complexity and behavior of the implementation.
 This problem is called Likelihood-Restricted Prior Sampling.
