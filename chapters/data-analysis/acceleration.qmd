@@ -9,23 +9,6 @@ format:
         bibliography: ../../rehear.bib
 ---
 
-# Acceleration techniques
+# Acceleration methods
 
-The time complexity scales as 
-
-$$
-T \propto n_{\text{live}} \times \langle t_{\text{like}} \rangle \times \langle n_{\text{replace}}\rangle \times  D_{\pi}  
-$$
-
-where
-
-- $n_\text{live}$ is the number of live points used
-- $\langle t_{\text{like}} \rangle$ is the average likelihood evaluation time
-- $\langle n_\text{replace} \rangle$ is the average number of likelihood evaluations required to find a replacement
-- $D_{\pi} = KL(p \parallel \pi)$ is the KL divergence between posterior and prior, i.e. the volumetric compression between the posterior typical region and the prior
-
-Based on this equation, we can directly think of several ways to accelerate sampling [@rouletInferringBinaryProperties2024].
-
-## Likelihood acceleration
-
-A direct way to speed up the 
+{{< include sections/_ns-acceleration-methods.qmd >}}

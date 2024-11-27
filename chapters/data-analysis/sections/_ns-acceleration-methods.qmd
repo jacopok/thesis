@@ -1,0 +1,26 @@
+## Nested sampling acceleration techniques
+
+The time complexity for nested sampling can be estimated as
+
+$$
+T \propto n_{\text{live}} \times \langle t_{\text{like}} \rangle \times \langle n_{\text{replace}}\rangle \times  H 
+$$
+
+where
+
+- $n_\text{live}$ is the number of live points used;
+- $\langle t_{\text{like}} \rangle$ is the average likelihood evaluation time;
+- $\langle n_\text{replace} \rangle$ is the average number of likelihood evaluations required to find a replacement;
+- $H$ is the information gain between posterior and prior.
+
+Based on this equation, we can think of several ways to accelerate sampling [@rouletInferringBinaryProperties2024].
+
+### Varying the number of live points
+
+The original nested sampling algorithm evolves a fixed number of live points throughout 
+
+### Likelihood acceleration
+
+A direct way to speed up any likelihood-based approach is to accelerate the evaluation of the likelihood, $\langle t_\text{like} \rangle$. 
+
+### 

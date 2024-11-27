@@ -1,0 +1,28 @@
+---
+format:
+    html:
+        code-fold: true
+        bibliography: ../../rehear.bib
+        execute:
+            debug: false
+        toc: true
+        self-contained: true
+    pdf:
+        execute:
+            echo: false
+        bibliography: ../../rehear.bib
+---
+
+```{python}
+from thesis_scripts import *
+```
+
+# Nested sampling for evidence estimation
+
+{{< include sections/_pe-general.qmd >}}
+
+{{< include sections/_nested-sampling.qmd >}}
+
+{{< include sections/_ns-acceleration-methods.qmd >}}
+
+{{< include ../references.qmd >}}
