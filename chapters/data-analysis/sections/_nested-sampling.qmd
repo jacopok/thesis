@@ -376,7 +376,7 @@ print(f'Analytical estimate for H = {-ndim/2 * (1+np.log(2 * np.pi)) - .5 * np.l
 
 #### Exploration time
 
-The information gain provides an estimate of the expected volumetric compression: we expect to be sampling from the bulk of the posterior mass when $\log X = -H$, which will take approximately $n_\text{live}H \pm \sqrt{ n_\text{live}H }$ iterations due to Poisson variability.
+The information gain provides an estimate of the expected volumetric compression: we expect to be sampling from the bulk of the posterior mass when $\log X \sim -H$, which will take approximately $n_\text{live}H \pm \sqrt{ n_\text{live}H }$ iterations due to Poisson variability.
 
 If $n_\text{live}H$ is large, we expect the dominant source of uncertainty to be the one on the compression reached  at that stage - it will be much larger than the uncertainty on the compression in the $\mathcal{O}(\sqrt{ n_\text{live}H })$ iterations required to traverse the posterior mass.
 This leads us to the estimate
@@ -386,7 +386,17 @@ $$
 
 So, for a fixed variance on the evidence, we need to have $n_\text{live} \propto H$; therefore, the number of iterations is approximately $n_\text{iter} \propto n_\text{live}H \propto H^{2}$. 
 
+#### Sampling options
 
+Nested sampling is, in a way, a meta-algorithm: the sub-algorithm used to sample a new point from the prior subject to the constraint that its likelihood be higher than the last rejected point is a crucial determinant of the computational complexity and behavior of the implementation.
+This problem is called Likelihood-Restricted Prior Sampling.
+
+@buchnerNestedSamplingMethods2021 gives a review of several possible options, which we summarize here. 
+
+- MCMC-based methods
+- region-based methods
+- hybrid methods
+- ML-based methods
 
 [^1]: It will not necessarily be _strictly_ decreasing, but that is not a conceptual issue. One can introduce jitter in the likelihood, varying it at each point by an inconsequential amount, in order to ensure that the decreasing condition is verified precisely.
 [^2]: In general, the $n$-th smallest out of $k$ uniform random variates in $[0, 1]$ is distributed according to $\text{beta}(k, n-k+1) \propto x^{n-1}(1-x)^{k-n}$; here we are looking at the $k$-th smallest (i.e. the largest).

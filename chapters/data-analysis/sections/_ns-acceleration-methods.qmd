@@ -10,17 +10,25 @@ where
 
 - $n_\text{live}$ is the number of live points used;
 - $\langle t_{\text{like}} \rangle$ is the average likelihood evaluation time;
-- $\langle n_\text{replace} \rangle$ is the average number of likelihood evaluations required to find a replacement;
+- $\langle n_\text{replace} \rangle$ is the average number of likelihood evaluations required to find a replacement for each dead point;
 - $H$ is the information gain between posterior and prior.
 
 Based on this equation, we can think of several ways to accelerate sampling [@rouletInferringBinaryProperties2024].
 
 ### Varying the number of live points
 
-The original nested sampling algorithm evolves a fixed number of live points throughout 
+The original nested sampling algorithm evolves a fixed number of live points throughout the run. 
+It has since been proposed that it can be more efficient to vary it [@higsonDynamicNestedSampling2019, [@speagleDYNESTYDynamicNested2020]], depending on what is the quantity we are more interested in evaluating.
+
+A nested sampling run gives us estimates for both the evidence and the posterior. If what we are most interested in is precisely computing the evidence, we should allocate more points in the early stages of compression, even though the posterior mass is very low there: this will give us better statistics on the active volume when we reach the posterior bulk.
+
+If we are more interested in the posterior, on the other hand, we can do the initial compression with fewer points and use more once we reach the posterior bulk. 
+
+It turns out [@higsonDynamicNestedSampling2019] that, while both these objectives can be optimized independently, the standard choice of using a constant number of live points is not on the Pareto front for the uncertainties on evidence and posterior: a balanced dynamical allocation of points can improve both compared to the constant case.
 
 ### Likelihood acceleration
 
-A direct way to speed up any likelihood-based approach is to accelerate the evaluation of the likelihood, $\langle t_\text{like} \rangle$. 
+A direct way to speed up any likelihood-based approach is to accelerate the evaluation of the likelihood, $\langle t_\text{like} \rangle$. The way to do so is heavily dependent on the model being considered. 
 
-### 
+### Replacement efficiency
+
