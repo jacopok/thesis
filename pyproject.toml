@@ -7,6 +7,7 @@ requires-python = ">=3.9"
 dependencies = [
     "cmcrameri>=1.9",
     "dynesty>=2.1.4",
+    "emcee>=3.1.6",
     "h5py>=3.12.1",
     "ipyleaflet>=0.19.2",
     "jupyter-cache>=1.0.1",
@@ -16,6 +17,7 @@ dependencies = [
     "quarto-cli>=1.5.57",
     "scipy>=1.13.1",
     "thesis-scripts",
+    "tqdm>=4.67.1",
 ]
 
 [tool.uv.workspace]
