@@ -41,7 +41,7 @@ To get aligned multiple lines, use the `aligned` environment instead of `align`.
 Snippet:
 
 ```quarto
-::: {.callout-note collapse="true"}
+::: {#nte-title .callout-note collapse="true"}
 ##### Title
 
 Text
