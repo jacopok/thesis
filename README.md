@@ -36,11 +36,27 @@ Generally, `@citekey`, `[@citekey]`, `[@citekey, some page]`
 
 To get aligned multiple lines, use the `aligned` environment instead of `align`.
 
+#### Callout blocks
+
+Snippet:
+
+```quarto
+::: {.callout-note collapse="true"}
+##### Title
+
+Text
+:::
+```
+
+where `note` can be substituted by `warning`, `important`, `tip` or `caution`, see the [docs](https://quarto.org/docs/authoring/callouts.html).
+
+
 ### Known issues
 
 - even when activating the `link-citations: true` option in the 
     document yaml, the citations do not appear as links in the pdf output
     (but they do in the html output)
+
 
 ### Useful refs
 
