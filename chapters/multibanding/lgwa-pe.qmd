@@ -18,3 +18,18 @@ One can instead do PE with a time at some fixed frequency, which can be optimize
 Inspiration for a way to do multibanding, perhaps?
 
 Independent group tackling the same problem: [Buscicchio+](https://arxiv.org/pdf/2106.05259.pdf) in Birmingham.
+
+### Results from a BNS run
+
+I performed a zero-noise injection with LGWA, assuming the lunar response is known.
+
+Preliminary info:
+- Mismatch sky localisation shapes
+
+PE results
+
+- amplitude PPD
+- phase PPD
+- SNR integrand
+- sky localisation
+- $\mathcal{M}(f)$ uncertainty
