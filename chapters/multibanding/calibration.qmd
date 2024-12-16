@@ -5,6 +5,8 @@ format:
         bibliography: ../../rehear.bib
         execute:
             debug: false
+        toc: true
+        self-contained: true
     pdf:
         execute:
             echo: false
@@ -15,10 +17,8 @@ format:
 from thesis_scripts import *
 ```
 
-# Parameter estimation
+# LGWA calibration
 
-{{< include sections/_pe-general.qmd >}}
+{{< include sections/_cal-uncertainty.qmd >}}
 
-{{< include sections/_fisher-matrix.qmd >}}
-
-{{< include sections/_nested-sampling.qmd >}}
+{{< include ../references.qmd >}}

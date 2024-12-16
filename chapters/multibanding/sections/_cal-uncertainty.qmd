@@ -1,0 +1,57 @@
+## Lunar response calibration
+
+The detection and parameter estimation of gravitational wave signals from the Moon is strongly dependent on the lunar response. For one, if it is not as strong as expected in the band of interest it will hamper the detection horizon. Also, precise parameter estimation necessitates precise knowledge of the response.
+
+We can try to gain some insights into this problem already, while we wait for lunar measurements.
+The questions we want to answer are:
+
+- how much will response calibration uncertainty impact parameter estimation?
+- can a multi-band gravitational wave detection be used for calibration?
+
+As for the first point, @essickCalibrationUncertaintysImpact2022 discusses how we can parameterize calibration uncertainty as a Gaussian Process  (see e.g. [@rasmussenGaussianProcessesMachine2008]) and marginalize over it, even in the Fisher matrix approach. 
+
+The second point is less explored (novel, as far as I know), and it is specific to a lunar detection. 
+
+Assuming the Stationary Phase Approximation can give us a one-to-one map between time and frequency, $t(f)$, the frequency-domain displacement measured by LGWA will be in the form [@cozzumboOpportunitiesLimitsLunar2024]:
+
+$$
+s(f) = L(f) \times D_{ij}(t(f)) \times h_{ij}(f; \theta),
+$$
+
+where $h_{ij}(f)$ is the frequency-domain strain tensor as measured at the detector location at the time $t(f)$, $D_{ij}$ is the lunar antenna pattern function, and $h_{ij}(f; \theta)$ is the frequency-domain strain tensor.
+With the information given to us from the ground-based side combined with the lunar data, we can do inference on $L(f)$! 
+
+Suppose we find some parametrization of the response, $L(f; \alpha)$ for some set of parameters $\alpha$.
+We can then do simultaneous inference on $\alpha$ and $\theta$.
+That's probably going to lead to very uninformative distributions, especially if the prior on $\alpha$ is very large (i.e. we have little a-priori knowledge about the response).
+
+::: {#nte-response-parameterization .callout-note collapse="true"}
+##### What should the response parameterization be?
+
+Essentially, we'd be doing the same kind of thing that the LVK collaboration does (see [this technical note](https://dcc.ligo.org/DocDB/0116/T1400682/001/calnote.pdf)): like them, we could model the calibration uncertainty as a spline with some fixed frequency nodes.
+
+Maybe some other form is appropriate? We could do parameterized deviations from a fixed model...
+
+What are sensible choices for $L(f; \alpha)$ and corresponding priors $\pi(\alpha)$?
+:::
+
+But suppose there is a signal from a compact binary coalescence, such as a heavy black hole binary, which is observed both by Einstein Telescope and by the Lunar Gravitational Wave Antenna. Let us assume we have already determined that the source is detected by both.
+We expect a detector such as Einstein Telescope to often give us a precise estimate of the source parameters: we will have a sharp posterior distribution $p(\theta | \text{data}_\text{ET})$ over the source parameters.
+
+Then, we can do the same exercise but using the ET posterior distribution as a prior, and hopefully obtain much sharper constraints on $\alpha$.
+
+The first thing to do is to show that this procedure is possible in the simplest case (e.g. taking the ET posterior to be a delta-function).
+
+Then, we want to figure out how sharp it actually needs to be to be useful.
+
+::: {#nte-model-misspecification .callout-note collapse="true"}
+##### What issues can arise?
+
+How does this process go wrong? Some ideas that immediately come to mind are:
+
+- model misspecification: we can simulate the signal with a choice of the response, which is not in the family $L(f; \alpha)$ and see whether we get something sensible (e.g. if the true response is contained in the posterior predictive distribution)
+	- for example, maybe small-scale structure in frequency is important
+	- or, could there be significant 
+- noise (moonquakes and such) - does it screw everything up?
+- data gaps...
+:::

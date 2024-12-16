@@ -36,6 +36,10 @@ Generally, `@citekey`, `[@citekey]`, `[@citekey, some page]`
 
 To get aligned multiple lines, use the `aligned` environment instead of `align`.
 
+All mathjax symbols: see [here](https://www.onemathematicalcat.org/MathJaxDocumentation/TeXSyntax.htm).
+
+Using Unicode characters such as ☾ in equations works for HTML output, but they do not render correctly to LaTeX.
+
 #### Callout blocks
 
 Snippet:

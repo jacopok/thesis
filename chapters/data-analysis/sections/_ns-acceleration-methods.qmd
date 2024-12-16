@@ -105,10 +105,18 @@ We proceed as follows:
 
 - perform a KDE in each dimension
 
+
+
 ```{python}
+#| label: fig-prior-guess-vary-original-fraction
+#| fig-cap: "Prior deformation by "
+
 from scipy.interpolate import PchipInterpolator, make_interp_spline
 from scipy.integrate import trapezoid
 from getdist import MCSamples
+from contextlib import redirect_stdout
+import io
+
 
 def conservative_prior_guess(all_x, all_p, single_dim_fraction):
     """ Given a function p:[0, 1] -> R+, 
@@ -139,17 +147,21 @@ def get_aux_splines(upoints, uweights, volume_contribution=0.5, beta=1.):
     assert uweights.shape == (n_points, )
     single_dim_fraction = volume_contribution**(1/dim)
     
-    mcsamples = MCSamples(
-        samples=upoints, 
-        weights=uweights, 
-        names=[str(i) for i in range(upoints.shape[1])], 
-        ranges={str(i):[0, 1] for i in range(upoints.shape[1])}
-    )
+    f = io.StringIO()
+
+    with redirect_stdout(f):
+        mcsamples = MCSamples(
+            samples=upoints, 
+            weights=uweights, 
+            names=[str(i) for i in range(upoints.shape[1])], 
+            ranges={str(i):[0, 1] for i in range(upoints.shape[1])}
+        )
     
     densities, inverse_cumulatives = [], []
     
     for i in range(dim):
-        density_interior = mcsamples.get1DDensity(str(i))
+        with redirect_stdout(f):
+            density_interior = mcsamples.get1DDensity(str(i))
         
         interior_x = density_interior.x
         
@@ -197,7 +209,7 @@ uweights = np.ones(N)/N
 
 x = np.linspace(0, 1, 10000)
 
-fig, axs = plt.subplots(nrows=2, ncols=1, sharex=True)
+fig, axs = plt.subplots(nrows=2, ncols=1, sharex=True, gridspec_kw={'hspace': 0})
 
 cmap = plt.get_cmap('cividis')
 unif_points = rng.uniform(low=0, high=1, size=100000)
@@ -217,12 +229,51 @@ for volume_contribution in [0.1, 0.25, 0.5, 0.75, 0.9]:
 
 axs[1].set_xlim(0, 1)
 axs[1].set_ylim(0, 1)
+labels = [item.get_text() for item in axs[0].get_yticklabels()]
+labels[0] = ''
+axs[0].set_yticklabels(labels)
+
 axs[1].legend()
 
 axs[1].set_xlabel('$u$ coordinate')
 axs[1].set_ylabel('$v$ coordinate, cumulative distribution')
-axs[0].set_ylabel('auxiliary prior density')
+_ = axs[0].set_ylabel('auxiliary prior density')
+```
 
+```{python}
+x = np.linspace(0, 1, 10000)
+
+fig, axs = plt.subplots(nrows=2, ncols=1, sharex=True, gridspec_kw={'hspace': 0})
+
+cmap = plt.get_cmap('cividis')
+unif_points = rng.uniform(low=0, high=1, size=100000)
+
+axins = axs[0].inset_axes(
+    [0.5, 0.3, 0.45, 0.65],
+    xlim=(0.3, 0.4), ylim=(0, 2)
+)
+axs[0].indicate_inset_zoom(axins, edgecolor='black')
+
+for beta in [0.2, 0.5, 1., 2., 5]:
+    interps, inv_cumulatives = get_aux_splines(upoints, uweights, volume_contribution=0.5, beta=beta)
+    color = cmap(np.log10(beta)/2 + .5)
+    for ax in [axins, axs[0]]:
+        ax.plot(x, interps[0](x), c=color)
+        ax.hist(inv_cumulatives[0](unif_points), bins=200, histtype='step', density=True, color=color)
+    axs[1].plot(inv_cumulatives[0](x), x, label=f'beta: {beta}', c=color)
+
+axs[1].set_xlim(0, 1)
+axs[1].set_ylim(0, 1)
+
+labels = [item.get_text() for item in axs[0].get_yticklabels()]
+labels[0] = ''
+axs[0].set_yticklabels(labels)
+
+axs[1].legend()
+
+axs[1].set_xlabel('$u$ coordinate')
+axs[1].set_ylabel('$v$ coordinate, cumulative distribution')
+_ = axs[0].set_ylabel('auxiliary prior density')
 
 ```
 
