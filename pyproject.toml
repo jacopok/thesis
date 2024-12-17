@@ -5,17 +5,21 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
+    "cartopy>=0.23.0",
     "cmcrameri>=1.9",
     "dynesty>=2.1.4",
     "emcee>=3.1.6",
     "getdist>=1.5.4",
+    "gw-frequencies>=0.1.1",
+    "gwfish",
     "h5py>=3.12.1",
     "ipyleaflet>=0.19.2",
     "jupyter-cache>=1.0.1",
     "jupyter>=1.1.1",
+    "lalsuite>=7.24",
     "matplotlib>=3.9.2",
     "numpy>=1.26.4",
-    "pandas>=2.2.3",
+    "pandas>=1.4.1",
     "quarto-cli>=1.5.57",
     "scipy>=1.13.1",
     "thesis-scripts",
@@ -27,4 +31,5 @@ members = ["thesis_scripts/thesis_scripts"]
 
 [tool.uv.sources]
 thesis-scripts = { path = "thesis_scripts", editable = true }
+gwfish = { path = "../Documents/GWFish" }
 

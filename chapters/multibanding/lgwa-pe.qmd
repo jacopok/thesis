@@ -9,7 +9,11 @@ format:
         bibliography: ../../rehear.bib
 ---
 
-## Multiband parameter estimation
+# Multiband parameter estimation
+
+```{python}
+from thesis_scripts import *
+```
 
 This was already somehow handled for PE with stellar mass binaries with LISA, e.g. [this paper](https://arxiv.org/pdf/2007.08544.pdf) or [this one](https://arxiv.org/pdf/2003.00357.pdf) (Mersat, Baker, Dal Canton).
 The merger time is not a good parameter to do PE, it degenerates with the chirp mass a lot.
@@ -19,17 +23,161 @@ Inspiration for a way to do multibanding, perhaps?
 
 Independent group tackling the same problem: [Buscicchio+](https://arxiv.org/pdf/2106.05259.pdf) in Birmingham.
 
-### Results from a BNS run
+## LGWA parameter estimation
 
 I performed a zero-noise injection with LGWA, assuming the lunar response is known.
 
 Preliminary info:
+
 - Mismatch sky localisation shapes
 
+
+
 PE results
+
+```{python}
+import pandas as pd
+import numpy as np
+from getdist import plots, MCSamples
+fname = data_path / 'gw170817_run' / 'chains' /'weighted_post.txt'
+assert fname.exists()
+post_pandas = pd.read_csv(fname, sep=' ')
+weights = post_pandas['weight']
+
+post_equal = pd.read_csv(fname.parent / 'equal_weighted_post.txt', sep = ' ')
+
+param_names = list(post_pandas.columns)
+param_names.remove('weight')
+param_names.remove('logl')
+param_names.remove('aux_logweight')
+
+total_mass = 2.8
+distance = 50
+t0_moon = 1187008882.4
+
+params = {
+    'chirp_mass': total_mass / 2**(6/5), 
+    'mass_ratio': 0.9,
+    'luminosity_distance': distance,
+    'theta_jn': 2.545065595974997,
+    'psi': np.pi/2,
+    'phase': np.pi,
+    'ra': 3.4461599999999994,
+    'dec': -0.4080839999999999,
+    'geocent_time': t0_moon,
+    'a_1': 0.,
+    'a_2': 0.,
+    'lambda_1': 400,
+    'lambda_2': 400,
+}
+
+
+ranges = {}
+for name in param_names:
+    post = post_pandas[name]
+    avg = np.average(post, weights=weights)
+    std = np.sqrt(np.average((post-avg)**2, weights=weights))
+    lo = max(min(post), avg - 3*std)
+    hi = min(max(post), avg + 3*std)
+    ranges[name] = (lo, hi)
+
+samples_full = MCSamples(
+    samples = post_pandas[param_names].to_numpy(),
+    names = param_names,
+    labels = param_names,
+    ranges = ranges,
+    weights = weights.to_numpy(),
+    sampler='nested'
+)
+
+```
+
+<!-- ```{python}
+g = plots.get_subplot_plotter()
+g.triangle_plot(
+    [samples_full],
+    ['chirp_mass', 'mass_ratio', 'ra', 'dec']
+)
+``` -->
+
+```{python}
+x_param = 'chirp_mass'
+y_param = 'geocent_time'
+
+plt.hist2d(post_pandas[x_param], post_pandas[y_param], weights=weights, range=[ranges[x_param], ranges[y_param]], bins=50)
+plt.axvline(params[x_param], c='white')
+plt.axhline(params[y_param], c='white')
+```
 
 - amplitude PPD
 - phase PPD
 - SNR integrand
 - sky localisation
 - $\mathcal{M}(f)$ uncertainty
+
+```{python}
+c_light = 299792458
+M_sun = 1.9885e30
+G_newton = 6.674e-11
+
+def time_to_merger(mchirp, f=np.inf):
+
+    Mchirp_seconds = mchirp * (M_sun * G_newton / c_light**3)
+    
+    return -5./(256.*np.pi**(8/3))/Mchirp_seconds**(5/3)/f**(8/3)
+
+freqs = np.geomspace(0.5, 10, num=25)
+
+correlations = [
+    np.corrcoef(
+        post_equal['chirp_mass'], 
+        post_equal['geocent_time'] + time_to_merger(post_equal['chirp_mass'], freq)
+        )[0, 1] for freq in freqs]
+
+std0 = np.std(post_equal['geocent_time'])
+stds = [
+    np.std(post_equal['geocent_time'] + time_to_merger(post_equal['chirp_mass'], freq)) / std0 
+    for freq in freqs]
+
+plt.semilogx(freqs, correlations)
+plt.semilogx(freqs, stds)
+
+# plt.semilogx(freqs, [np.average(time_to_merger(post_pandas['chirp_mass'], freq)) for freq in freqs])
+```
+
+```{python}
+from matplotlib.colors import Normalize
+from matplotlib.cm import ScalarMappable
+from cmcrameri import cm
+
+N = 100
+
+fs = np.geomspace(.5, 4, num=N)
+
+cmap = cm.vik
+true_m = params['chirp_mass']
+std = np.std(post_equal['chirp_mass'])
+norm = Normalize(true_m - 3*std, true_m + 3*std)
+
+idx_mass = int(np.where(post_equal.columns == 'chirp_mass')[0][0])
+idx_time = int(np.where(post_equal.columns == 'geocent_time')[0][0])
+
+for sample in post_equal.to_numpy()[:50]:
+    m = sample[idx_mass]
+    time = sample[idx_time]
+    plt.semilogx(fs, 
+                 time_to_merger(m, fs) 
+                 - (time - params['geocent_time']) 
+                 - time_to_merger(params['chirp_mass'], fs)
+                , 
+                 c=cmap(norm(m)),
+                 alpha=.8)
+plt.colorbar(ScalarMappable(cmap=cmap, norm=norm), ax=plt.gca())
+plt.xlabel('Frequency [Hz]')
+plt.ylabel('Time to merger minus reference [signs are strange, s]')
+
+```
+
+```{python}
+plt.scatter(post_equal['chirp_mass'], time_to_merger(post_equal['chirp_mass'], 10))
+```

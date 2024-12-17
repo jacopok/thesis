@@ -1,0 +1,293 @@
+---
+format:
+    html:
+        code-fold: true
+        bibliography: ../../rehear.bib
+    beamer:
+        execute:
+            echo: false
+        bibliography: ../../rehear.bib
+    revealjs:
+        execute:
+            echo: false
+        menu:
+            side: right
+            width: wide
+        bibliography: ../../rehear.bib
+        self-contained: true
+author: Jacopo Tissino
+date: 2024-12-16
+subtitle: GSSI-JHU retreat
+---
+
+# Parameter estimation with the Lunar Gravitational Wave Antenna
+
+```{python}
+from thesis_scripts import *
+```
+
+# What is LGWA?
+
+![](figures/LGWA_crater_lighter.png){height=75% fig-align="center"}
+
+\footnotesize Figure from the LGWA collaboration.
+
+# LGWA payload
+
+![](figures/LGWApayload.png){height=75% fig-align="center"}
+
+\footnotesize Figure from [van Heijningen et al., 2023](https://pubs.aip.org/aip/jap/article/133/24/244501/2899601/The-payload-of-the-Lunar-Gravitational-wave).
+
+# LGWA readout 
+
+![](figures/squid-readout.png){height=75% fig-align="center"}
+
+\footnotesize Figure from [van Heijningen et al., 2023](https://pubs.aip.org/aip/jap/article/133/24/244501/2899601/The-payload-of-the-Lunar-Gravitational-wave).
+
+# Gravitational wave response
+
+How does this readout noise translate to noise on our measurement of gravitational waves?
+
+We assume that the response function from the gravitational polarizations $h_{ij}(t)$ to the
+displacement at the sensor $s(t)$ is _linear_: in the frequency domain,
+
+$$ s(f) = L(f) D_{ij} h_{ij}(f)
+$$
+
+- $L(f)$ is the __response function__: with the dimensions of a length, is the displacement amplitude corresponding 
+to a monochromatic unit strain;
+- $D_{ij} = n_i b_j$ is a __pattern function__, where $b_j$ is a tangent unit vector to the surface while $n_i$ is normal to it.
+
+# Structure of LGWA
+
+LGWA is planned to have:
+
+- 4 __stations__, to reduce overall noise and perform active cancellation;
+- for each station, two orthogonal __horizontal measurement channels__.
+
+# Strain noise
+
+If we have:
+
+- an estimate for the PSD of the detector __displacement noise__, $S_\text{disp}(f)$,
+- an estimate of the lunar __response__ $L(f)$,
+- the number of stations $N$,
+
+we can compute the strain noise as 
+
+$$ S_{\text{strain}} (f) = \frac{S _{\text{disp}}(f)}{N L^2(f)}
+$$
+
+# LGWA estimated noise
+
+![](figures/LGWA_sensitivity.png){height=75% fig-align="center"}
+
+# The multiband concept
+
+![](figures/Multiband_concept.pdf){height=75% fig-align="center"}
+
+# The reference frame problem
+
+The frequency-domain waveform at the detector has a travel time factor from the center of the reference frame:
+
+$$ h(f) \propto \exp( i \vec{k} \cdot (\vec{r} - \vec{r}_0))
+$$
+
+The center $\vec{r}_0$ should be rigidly connected with the SSB, but it can be elsewhere!
+
+# Sky position overlap
+
+```{python}
+from thesis_scripts.mismatch_plots_lgwa import mismatch_plot, Network
+import numpy as np
+from thesis_scripts import *
+
+total_mass = 2.8
+distance = 40
+t0_moon = 1187008882.4
+
+params = {
+    'chirp_mass': total_mass / 2**(6/5), 
+    'mass_ratio': 0.9,
+    'luminosity_distance': distance,
+    'theta_jn': 2.545065595974997,
+    'psi': np.pi/2,
+    'phase': np.pi,
+    'ra': 3.4461599999999994,
+    'dec': -0.4080839999999999,
+    'geocent_time': t0_moon,
+    'a_1': 0.,
+    'a_2': 0.,
+    'lambda_1': 400,
+    'lambda_2': 400,
+}
+
+
+def fig_args(radius, params):
+    return {
+        'ra_lims': (
+            np.rad2deg(params['ra']-radius*16/9), 
+            np.rad2deg(params['ra']+radius*16/9)
+        ),
+        'dec_lims': (
+            np.rad2deg(params['dec']-radius), 
+            np.rad2deg(params['dec']+radius)
+        ),
+        'mollweide': False
+    }
+
+```
+
+```{python}
+mismatch_plot(params, Network(['LGWA']), n_grid=200, n_f=5000, cache_name='bns_recentered', **fig_args(np.deg2rad(3), params))
+```
+
+# Sky position overlap in the SSB
+
+```{python}
+mismatch_plot(params, Network(['LGWA']), n_grid=200, n_f=5000, cache_name='bns_ssb', shift_center=False, **fig_args(np.deg2rad(3), params))
+```
+
+# Sky position overlap (LVK-O5) in the SSB
+
+```{python}
+from thesis_scripts.plotting import make_arcmin_grid
+
+kwargs = fig_args(np.deg2rad(0.08), params)
+mismatch_plot(
+    params, 
+    Network(['LLO', 'LHO', 'VIR']), 
+    n_grid=500, 
+    n_f=200, 
+    cache_name='bns_ssb_et', 
+    shift_center=False, 
+    rad=True, 
+    **kwargs
+)
+make_arcmin_grid(plt.gca(), np.deg2rad(kwargs['ra_lims']), np.deg2rad(kwargs['dec_lims']))
+plt.grid(which='minor', lw=.5)
+plt.grid(which='major', lw=1)
+```
+
+# Parameter estimation: setup
+
+- Parameters: same as GW170817
+- zero-noise
+- observation time: 
+    - 10 years, up to ~3hr before merger
+    - 9.6 years, up to ~4.5 months before merger
+- accelerated nested sampling with Ultranest
+
+# Mass constraints
+
+```{python}
+from thesis_scripts.plotting import plot_contours
+from matplotlib import ticker
+from matplotlib.lines import Line2D
+import pandas as pd
+
+from cmcrameri import cm
+
+cmap_full = cm.lajolla
+cmap_ew = cm.devon
+
+def make_legend():
+
+    custom_lines = [
+        Line2D([0], [0], color=cmap_ew(.5), markersize=10, marker='o', lw=0),
+        Line2D([0], [0], color=cmap_full(.5), markersize=10, marker='o', lw=0),
+    ]
+    
+    plt.legend(
+        custom_lines, 
+        [
+            f'Early warning (4.5 months to merger, SNR 20)',
+            f'Full bandwidth (3 hours to merger, SNR 28)',
+        ]
+    )
+
+post_ew = pd.read_csv(data_path / 'ew_gw170817_run' / 'chains' / 'equal_weighted_post.txt', sep=' ')
+post_full = pd.read_csv(data_path / 'gw170817_run' / 'chains' / 'equal_weighted_post.txt', sep=' ')
+
+# fig = plt.figure(figsize=(5.2, 5.5))
+
+mc = params['chirp_mass']
+# plot_contours(post_ew['chirp_mass']-mc, post_ew['mass_ratio'], ax=plt.gca(), levels=[.9], cmap=cmap_ew)
+plot_contours(post_full['chirp_mass']-mc, post_full['mass_ratio'], ax=plt.gca(), levels=[.9], cmap=cmap_full)
+plt.xlim(-2e-7, 2e-7)
+plt.ylim(0.87, 0.93)
+plt.grid(which='both')
+plt.scatter(0, params['mass_ratio'], marker='x', c='black')
+plt.gca().xaxis.set_major_locator(ticker.FixedLocator(np.arange(-1, 3)*1e-7))
+plt.gca().xaxis.set_major_formatter(ticker.FixedFormatter(
+    [
+        '$-10^{-7}$',
+        '$0$',
+        '$10^{-7}$',
+        '$2 \\times 10^{-7}$',
+    ]
+))
+
+plt.xlabel('$\mathcal{M} - \mathcal{M}_0 [ M_{\odot}]$')
+plt.ylabel('$q = m_2 / m_1$')
+make_legend()
+_ = plt.title(r'90\% mass contours')
+```
+
+# Sky localization
+
+```{python}
+ra_lims = (3.444, 3.448)
+dec_lims = (-0.41, -0.4057)
+# fig=plt.figure(figsize=(5.2, 5.5))
+
+# plot_contours(post_ew['ra'], post_ew['dec'], ax=plt.gca(), levels=[.9], cmap=cmap_ew)
+plot_contours(post_full['ra'], post_full['dec'], ax=plt.gca(), levels=[.9], cmap=cmap_full)
+
+make_arcmin_grid(plt.gca(), ra_lims, dec_lims)
+plt.grid(which='minor', lw=.5)
+plt.grid(which='major', lw=1)
+plt.xlabel('Right ascension')
+plt.ylabel('Declination')
+make_legend()
+_ = plt.title(r'90\% localization contours')
+
+```
+
+# Posterior predictive distribution on phase
+
+```{python}
+from thesis_scripts.lgwa_ppd import phase_ppd, phase_diffs
+
+# from gw_frequencies.multibanding import low_frequency_grid
+# f = np.asarray(low_frequency_grid(0.085, 4, maximum_mass_ratio=2.))[::5000]
+f = np.geomspace(0.085, 4, num=100_000)
+
+t, _, baseline_diffs_phase = phase_diffs(params, Network(['LGWA']), f, post_full, n_samples=2)
+
+diffs = np.load(data_path / 'phase_diffs.npy')
+# np.save(data_path / 'phase_diffs.npy', diffs)
+# np.save(data_path / 't_ppd.npy', t)
+
+phase_ppd(params, diffs, t, baseline_diffs_phase)
+```
+
+# Open problems: noise and moonquakes
+
+- Can we demonstrate active noise cancellation?
+- LGWA data will have gaps when moonquakes get too strong: how much do they impact PE?
+
+# Open problems: response calibration
+
+- We are assuming a known lunar response.
+- How does uncertainty there translate into parameter estimation?
+- Can we demonstrate the "multibanding calibration trick"?
+
+# Open problems: parameter estimation
+
+- likelihood acceleration (relative binning or similar)
+- different sources
+    - IMBH
+    - stellar BBH
+    - DWD
+    - ...
