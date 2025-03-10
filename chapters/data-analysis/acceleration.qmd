@@ -12,3 +12,157 @@ format:
 # Acceleration methods
 
 {{< include sections/_ns-acceleration-methods.qmd >}}
+
+{{< include sections/_nested-importance-sampling.qmd >}}
+
+## Likelihood acceleration
+
+The two terms we need to compute in the likelihood ratio [@eq-likelihood-ratio] are the following integrals
+
+$$
+\mathcal{L}_{hd} = \mathrm{Re}(h(\theta)| d) = 4 \mathrm{Re}\int_{0}^{f_\text{max}} \frac{h(f; \theta) d^*(f)}{S_{n}(f)} \text{d}f\,,
+$$
+and
+
+$$
+\mathcal{L}_{hh} = (h(\theta)| h(\theta)) = 4 \int_{0}^{f_\text{max}} \frac{|h(f; \theta)|^{2}}{S_{n}(f)} \text{d}f\,.
+$$
+
+These are integrals of oscillatory functions, so evaluating them as simple Riemann sums requires a large number of samples to achieve convergence.
+
+### Relative binning
+
+Relative binning [@zackayRelativeBinningFast2018] is a technique to accelerate the evaluation of the integrals in the likelihood.
+
+The idea is that, while the waveform itself may be highly oscillatory, it will generally be close to a reference one.
+
+The two terms are approximated as follows, in terms of a set of frequencies $b = \left\lbrace f_{i}\right\rbrace$:
+
+$$
+ \mathcal{L}_{hd} = \mathrm{Re} \sum_{b} (A_{0}(b) r_{0}^{*}(b) + A_{1}(b) r_{1}^{*} (b))
+$$
+and
+$$
+\mathcal{L}_{hh} = \sum_{b} ( B_{0}(b) |r_{0}(b)|^{2} + 2 B_{1}(b) \mathrm{Re}(r_{0}(b) r_{1}^{*}(b)))
+$$
+Here, the ratio $r(f) = h(f)  / h_{0}(f)$ of the generic waveform $h$ to the reference one $h_{0}$ is expressed to linear order in each bin:
+$$
+r(f) = r_{0}(b) + r_{1}(b) (f-f_{m}(b)),
+$$
+where $f_{m}(b)$ is the central frequency in the bin.
+During likelihood evaluation we can easily compute a set of ratios $r(b)$ at every bin edge, and then we will have
+$$
+r_{0}(b) = \frac{r(b)+r(b+1)}{2}
+\qquad \text{and} \qquad r_{1}(b) = \frac{r(b+1)-r(b)}{\text{d}f(b)}\,.
+$$
+
+Crucially, this depends on the ratio $r(f)$ being relatively smooth across the frequency axis.
+This is expected to be approximately true for all the relevant points in the posterior, potentially not if we stray from its peak.
+
+This formulation holds for the 22 mode, but it is possible to write a more generic one including higher order modes, at the expense of some more digital ink [@narolaRelativeBinningComplete2023].
+
+```{python}
+from thesis_scripts import *
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+from GWFish.modules.detection import projection, Network;
+from GWFish.modules.waveforms import TaylorF2;
+
+post_full = pd.read_csv(data_path / 'gw170817_run' / 'chains' / 'equal_weighted_post.txt', sep=' ')
+
+
+network = Network(['LGWA'])
+detector = network.detectors[0]
+approx = 'TaylorF2'
+f = np.squeeze(detector.frequencyvector)
+
+data_params = {
+    'frequencyvector': f,
+}
+
+distance = 50
+t0_moon = 1187008882.4
+q = 0.9
+params = {
+    # 'chirp_mass': total_mass * q**(3/5) * (1 + q)**(-6/5), 
+    'chirp_mass': 2.8 / 2**(6/5), 
+    'mass_ratio': q,
+    'luminosity_distance': distance,
+    'theta_jn': 2.545065595974997,
+    'psi': np.pi/2,
+    'phase': np.pi,
+    'ra': 3.4461599999999994,
+    'dec': -0.4080839999999999,
+    'geocent_time': t0_moon,
+}
+# new_params = dict(post_full.iloc[1]) | {
+#     'chirp_mass': post_full.iloc[1]['chirp_mass'] + 1e-4
+# }
+
+center = network.coordinate_center(params)
+
+waveform_obj1 = TaylorF2(approx, params, data_params)
+wave1 = waveform_obj1()
+t_of_f1 = waveform_obj1.t_of_f
+
+proj1 = projection(params, detector, wave1, t_of_f1, center)
+
+# new_params = params | {
+#         # 'geocent_time': t0_moon+10,
+#         'chirp_mass': total_mass * q**(3/5) * (1 + q)**(-6/5) + 1e-8,
+#         # 'ra': 3.4461599999999994 + np.deg2rad(1/60),
+#     }
+
+new_params = dict(post_full.iloc[1])
+waveform_obj2 = TaylorF2(
+    approx, 
+    new_params, 
+    data_params
+)
+wave2 = waveform_obj2()
+t_of_f2 = waveform_obj2.t_of_f
+
+proj2 = projection(new_params, detector, wave2, t_of_f2, center)
+
+import warnings
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore")
+    ratio = proj2 / proj1
+
+plt.semilogx(f, np.log(abs(ratio[:, 0])), label='$\\log(A/A_0)$')
+plt.semilogx(f, np.angle(ratio[:, 0]), label='$\\phi - \\phi_0$')
+plt.ylim(-np.pi, np.pi)
+plt.legend()
+_ = plt.xlabel('Frequency [Hz]')
+_ = plt.ylabel('Log amplitude ratio [dimensionless] or phase difference [rad]')
+# plt.show()
+```
+
+The authors use a frequency axis obtained from first-principles arguments. 
+We could run a greedy search here as well...
+
+### Reduced order quadrature
+
+This technique differs from relative binning, in that it employs a greedy algorithm to sample from a given prior space and construct a basis that will represent all waveforms sampled there to within a given tolerance.
+
+The equations are as follows:
+$$
+\mathcal{L}_{dh} \approx \sum_{j=1}^{N_{L}} h(f_{j}, \theta) \omega_{j}
+$$
+$$
+\mathcal{L}_{hh} = \sum_{i=1}^{N_{Q}} \sum_{j=1}^{N_{Q}} h(f_{i}, \theta) h^{*}(f_{j}, \theta) \psi_{i}
+$$
+
+About basis size and storage details: [@morisakiRapidLocalizationInference2023].
+
+Could we not avoid storing the full ROQ basis, if we proceed as follows?
+- determine the sequence of "worst-represented" waveform parameters, $\theta_{i}$, at each iteration
+	- the basis does not simply consist of the waveforms $h(\theta_{i})$, since the procedure also includes orthonormalization
+- iterate through these parameters, constantly updating the subspace projector operator and  as you go
+	- at each iteration, compute $h(\theta_{i})$
+	- project it onto the orthogonal subspace using $\mathcal{P}_{i-1}$
+	- compute the weights $\omega_{i}$ and $\psi_{i}$
+	- update the projector to $\mathcal{P}_{i} = P_{i-1} + e_{i} e_{i}^{\top}$
+- 

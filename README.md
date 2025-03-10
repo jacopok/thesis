@@ -27,6 +27,16 @@ See [here](https://quarto.org/docs/authoring/citations.html).
 - Section title: `## Title {#sec-title}`
 - Equation: `{#eq-title}` _after_ the final `$$`
 
+Example:
+
+```
+$$ 
+e^{i \pi} + 1 = 0
+$$ {#eq-euler-identity}
+```
+
+Reference as `@eq-title` or `[Equation @eq-title]`
+
 #### Bibliography
 
 Generally, `@citekey`, `[@citekey]`, `[@citekey, some page]`

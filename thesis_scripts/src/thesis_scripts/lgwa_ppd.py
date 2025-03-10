@@ -39,7 +39,10 @@ def phase_diffs(params, network, f, post, n_samples=100):
         
         proj = projection(these_params, detector, wave, t_of_f, center)
 
-        return abs(proj[:, 0]) / abs(base_wave[:, 0]), np.unwrap(np.angle(proj[:, 0]) - np.angle(base_wave[:, 0]))
+        return (
+            abs(proj[:, 0]) / abs(base_wave[:, 0]), 
+            np.unwrap(np.angle(proj[:, 0]) - np.angle(base_wave[:, 0]))
+        )
     
     _, baseline_differences_phase = waveform_differences(true_params_array)
 

@@ -18,15 +18,14 @@ format:
 author: Jacopo Tissino
 date: 2024-12-16
 subtitle: GSSI-JHU retreat
+title: Parameter estimation with the Lunar Gravitational Wave Antenna
 ---
 
-# Parameter estimation with the Lunar Gravitational Wave Antenna
+# What is LGWA?
 
 ```{python}
 from thesis_scripts import *
 ```
-
-# What is LGWA?
 
 ![](figures/LGWA_crater_lighter.png){height=75% fig-align="center"}
 
@@ -209,22 +208,42 @@ def make_legend():
 post_ew = pd.read_csv(data_path / 'ew_gw170817_run' / 'chains' / 'equal_weighted_post.txt', sep=' ')
 post_full = pd.read_csv(data_path / 'gw170817_run' / 'chains' / 'equal_weighted_post.txt', sep=' ')
 
+# ra_lims = (3.442, 3.449)
+# dec_lims = (-0.412, -0.405)
+
+# filter_indices = (
+#     (post_ew_pre['ra'] > ra_lims[0]).to_numpy() & 
+#     (post_ew_pre['ra'] < ra_lims[1]).to_numpy() & 
+#     (post_ew_pre['dec'] > dec_lims[0]).to_numpy() & 
+#     (post_ew_pre['dec'] < dec_lims[1]).to_numpy()
+# )
+
+# print(f'Filtering out {len(filter_indices) - sum(filter_indices)} outliers')
+
+# post_ew = post_ew_pre.iloc[filter_indices]
+
+
 # fig = plt.figure(figsize=(5.2, 5.5))
 
 mc = params['chirp_mass']
-# plot_contours(post_ew['chirp_mass']-mc, post_ew['mass_ratio'], ax=plt.gca(), levels=[.9], cmap=cmap_ew)
+
+x = np.linspace(-3e-7, 4e-7, num=100)
+y = np.linspace(0.825, 1, num=100)
+
+plot_contours(post_ew['chirp_mass']-mc, post_ew['mass_ratio'], ax=plt.gca(), levels=[.9], cmap=cmap_ew, x=x, y=y, N=100)
 plot_contours(post_full['chirp_mass']-mc, post_full['mass_ratio'], ax=plt.gca(), levels=[.9], cmap=cmap_full)
-plt.xlim(-2e-7, 2e-7)
-plt.ylim(0.87, 0.93)
 plt.grid(which='both')
 plt.scatter(0, params['mass_ratio'], marker='x', c='black')
-plt.gca().xaxis.set_major_locator(ticker.FixedLocator(np.arange(-1, 3)*1e-7))
+plt.gca().xaxis.set_major_locator(ticker.FixedLocator(np.arange(-3, 4)*1e-7))
 plt.gca().xaxis.set_major_formatter(ticker.FixedFormatter(
     [
+        '$- 3 \\times 10^{-7}$',
+        '$- 2 \\times 10^{-7}$',
         '$-10^{-7}$',
         '$0$',
         '$10^{-7}$',
         '$2 \\times 10^{-7}$',
+        '$3 \\times 10^{-7}$',
     ]
 ))
 
@@ -237,16 +256,18 @@ _ = plt.title(r'90\% mass contours')
 # Sky localization
 
 ```{python}
-ra_lims = (3.444, 3.448)
-dec_lims = (-0.41, -0.4057)
+ra_lims = (3.443, 3.4505)
+dec_lims = (-0.4109, -0.4049)
 # fig=plt.figure(figsize=(5.2, 5.5))
 
-# plot_contours(post_ew['ra'], post_ew['dec'], ax=plt.gca(), levels=[.9], cmap=cmap_ew)
+plot_contours(post_ew['ra'], post_ew['dec'], ax=plt.gca(), levels=[.9], cmap=cmap_ew)
 plot_contours(post_full['ra'], post_full['dec'], ax=plt.gca(), levels=[.9], cmap=cmap_full)
+plt.scatter(params['ra'], params['dec'], marker='x', c='black')
 
 make_arcmin_grid(plt.gca(), ra_lims, dec_lims)
 plt.grid(which='minor', lw=.5)
 plt.grid(which='major', lw=1)
+plt.gca().set_aspect('equal')
 plt.xlabel('Right ascension')
 plt.ylabel('Declination')
 make_legend()
@@ -286,6 +307,7 @@ phase_ppd(params, diffs, t, baseline_diffs_phase)
 # Open problems: parameter estimation
 
 - likelihood acceleration (relative binning or similar)
+- analytical marginalizations (e.g. in phase)
 - different sources
     - IMBH
     - stellar BBH

@@ -1548,6 +1548,21 @@ wheels = [
 ]
 
 [[package]]
+name = "lunarsky"
+version = "0.2.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "astropy" },
+    { name = "jplephem" },
+    { name = "numpy" },
+    { name = "spiceypy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/9c/64/5034a9636e84f579f840818bf0142085823bc97ad82d74b21b54d3533ee1/lunarsky-0.2.1.tar.gz", hash = "sha256:19e0a61acd5ae1b30ed20b891f72f526dae1250beac3831d2440e12802c1e3c6", size = 1722589 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/6f/a6/66e5c71656b18bd0075da02844459c298e7109804f0b864de709f6bf8155/lunarsky-0.2.1-py3-none-any.whl", hash = "sha256:ee2bfa9b1e662fbd2cfe63d7fdd65905378c0cc67c836e6327f1bd829ffb1523", size = 1700567 },
+]
+
+[[package]]
 name = "markupsafe"
 version = "3.0.2"
 source = { registry = "https://pypi.org/simple" }
@@ -2834,6 +2849,22 @@ wheels = [
 ]
 
 [[package]]
+name = "spiceypy"
+version = "6.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/77/21/fa389a42cf2ab1425ef91007e549b7a3e58fe49c6834e687743609fe1386/spiceypy-6.0.0.tar.gz", hash = "sha256:ac27096a12b795898c3a6d1fa1f12a7e4485f480acd2e59fbd3a986cb0ade2be", size = 291180 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2a/97/ccab62d2c0f37c422c75144323aa084f03261740387f48d116904fcbc06b/spiceypy-6.0.0-py3-none-macosx_10_9_x86_64.whl", hash = "sha256:70cda5b057d1b83dd8a4ecd9d4d2823b2f9c263b85fcdcc0df0370ca5b94c74f", size = 1455891 },
+    { url = "https://files.pythonhosted.org/packages/b4/d6/22ccd3631f55e4b2ccc610e988a6ae5f46fa14d7c28eee02a22ef618c6a5/spiceypy-6.0.0-py3-none-macosx_11_0_arm64.whl", hash = "sha256:20d70ce09e6efa78e9e3f2400c6ee85bd7065f19edf2d4ebce257c79eb43e534", size = 1351710 },
+    { url = "https://files.pythonhosted.org/packages/56/68/e4b1c6c7c7f5483ef4667760afdcdf13e45bf10890074b704aa728c0474c/spiceypy-6.0.0-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:22b50777174c6ef61cdb57aac4f4003ab8de69a0c4b0b87f66881f0a9758e9a2", size = 1628204 },
+    { url = "https://files.pythonhosted.org/packages/ce/89/67f98fcfd5e8320a5e39b00d070e9f1ef32e4d9faa1c420b4c894d11b861/spiceypy-6.0.0-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a7da6cdb0eaa1e1a27a2198be58404262c0def0216ad62de7183223461e35aa0", size = 1665804 },
+    { url = "https://files.pythonhosted.org/packages/90/88/ad0e920604097ff649672d5b69737e69373e91a5ab302ce9cce4b961215d/spiceypy-6.0.0-py3-none-win_amd64.whl", hash = "sha256:5737a4e19fb8030916b60d6280358d672330243d5aab6299954346a22c92ce58", size = 1427494 },
+]
+
+[[package]]
 name = "sqlalchemy"
 version = "2.0.36"
 source = { registry = "https://pypi.org/simple" }
@@ -2971,6 +3002,7 @@ name = "thesis"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "astropy" },
     { name = "cartopy" },
     { name = "cmcrameri" },
     { name = "dynesty" },
@@ -2983,6 +3015,7 @@ dependencies = [
     { name = "jupyter" },
     { name = "jupyter-cache" },
     { name = "lalsuite" },
+    { name = "lunarsky" },
     { name = "matplotlib" },
     { name = "numpy" },
     { name = "pandas" },
@@ -2994,6 +3027,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "astropy", specifier = ">=5.3.2" },
     { name = "cartopy", specifier = ">=0.23.0" },
     { name = "cmcrameri", specifier = ">=1.9" },
     { name = "dynesty", specifier = ">=2.1.4" },
@@ -3006,6 +3040,7 @@ requires-dist = [
     { name = "jupyter", specifier = ">=1.1.1" },
     { name = "jupyter-cache", specifier = ">=1.0.1" },
     { name = "lalsuite", specifier = ">=7.24" },
+    { name = "lunarsky", specifier = ">=0.2.1" },
     { name = "matplotlib", specifier = ">=3.9.2" },
     { name = "numpy", specifier = ">=1.26.4" },
     { name = "pandas", specifier = ">=1.4.1" },
@@ -3020,6 +3055,7 @@ name = "thesis-scripts"
 version = "0.1.0"
 source = { editable = "thesis_scripts" }
 dependencies = [
+    { name = "ipython" },
     { name = "matplotlib" },
     { name = "numpy" },
     { name = "scipy" },
@@ -3027,6 +3063,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "ipython", specifier = ">=8.18.1" },
     { name = "matplotlib", specifier = ">=3.9.2" },
     { name = "numpy", specifier = ">=1.22.2" },
     { name = "scipy", specifier = ">=1.13.1" },

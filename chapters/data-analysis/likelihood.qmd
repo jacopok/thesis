@@ -12,6 +12,78 @@ format:
 
 ## The Whittle likelihood
 
+The likelihood expresses the answer to the question:
+
+> How likely are we to have observed the data $d$, under the assumption that this data 
+> can be decomposed as noise $n$ plus a signal $h(\theta)$ with fixed parameters $\theta$?
+
+If we are writing the data as $d = n + h(\theta)$, this is equivalent to asking:
+
+> How likely are we to observe a noise realization equal to $n = d - h(\theta)$?
+
+In order to answer this, we need a model for the noise. 
+In gravitational wave data analysis, it is commonly assumed that the noise
+can be described as a stationary time series, $n(t)$, such that the autocovariance
+$\mathbb{E}[n(t)n(t+\Delta t)] \equiv \gamma(\Delta t)$ can be expressed as a function of $\Delta t$ only [@edwardsBayesianSemiparametricPower2015, section II.C].
+A further assumption made is that the noise has zero mean ($\mathbb{E}[n(t)] = 0$ for any time).
+
+The Fourier transform of the autocovariance $\gamma(\Delta t)$ is called the Power Spectral Density, $S_{n}(f)$. 
+
+With these ingredients, we can write the Whittle approximation to the Gaussian likelihood [@whittleCurvePeriodogramSmoothing1957], [@rouletInferringBinaryProperties2024]:
+
+$$
+\begin{aligned}
+\log \mathcal{L}(n) &= \log \mathcal{N_{1}} + \sum_{m>0} \left[  \log \left(\frac{2}{\pi T S_{n}(f_{m})} \right) - \frac{2 |n(f_{m})|^{2}}{T S_{n}(f_{m})} \right]  \\
+&= \log \mathcal{N_{2}} - \frac{1}{2} \int_{0}^{f_\text{max}} \frac{4 |n(f)|^{2}}{S_{n}(f)} \text{d}f\\
+&= \log \mathcal{N_{2}} - \frac{1}{2} (n|n)\,.
+\end{aligned}
+$$
+
+The normalization terms $\mathcal{N_{1}}$ and $\mathcal{N_{2}}$ are different, but crucially they only depend on the Power Spectral Density, not on the specific noise realization.
+
+In the last equation, we introduced the notation $(\cdot | \cdot)$ for the noise-weighed inner product between waveforms, defined as 
+
+$$ (a | b) = 4 \Re \int_0^\infty \frac{a(f) b^*(f)}{S_n(f)}\text{d}f \,.
+$$
+
+More specifically, this likelihood answers the question: 
+
+> How likely is it that noise distributed according to the PSD $S_{n}(f)$ will have the specific realization $n$?
+
+We can then consider two scenarios, depending on whether we fix the PSD or not.
+
+### Fixed Power Spectral Density
+
+In the data analysis for gravitational wave signals from ground-based interferometers, it is common practice to fix the PSD to an estimate obtained considering data near the event.
+This is acceptable, since variations in the noise distribution happen on much slower time scales than duration of the signal itself [need citations for this!].
+
+In such a case, we can rewrite the likelihood in terms of the signal $h(\theta) = d - n$ as follows:
+
+$$
+\begin{aligned}
+\log \mathcal{L}(d | \theta) &= \log \mathcal{N_{2}} - \frac{1}{2} (d-h(\theta)| d- h(\theta)) \\
+&= \log \mathcal{N_{2}} - \frac{1}{2} (d| d) + \mathrm{Re}(h(\theta)|d) - \frac{1}{2} (h(\theta)|h(\theta))\,.
+\end{aligned}
+$$
+
+We can work around the messy normalization term [@rouletInferringBinaryProperties2024]. Our likelihood is written assuming that a signal is present in the data, but suppose that was not the case: then, we would have $d = n$ and therefore
+
+$$
+\log \mathcal{L}(d | \text{noise only}) = \log \mathcal{N_{2}} - \frac{1}{2} (d|d)\,.
+$$
+
+Since we are assuming the PSD is fixed, this model has zero parameters, and this likelihood can also be interpreted as an evidence: $\log \mathcal{L}(d | \text{noise only}) = Z _\text{noise}$.
+
+Therefore, we can perform parameter estimation using as a "log-likelihood" the likelihood ratio
+
+$$
+\log \mathcal{L}_{r} (d|\theta) = \log \frac{\mathcal{L}(d|h(\theta))}{Z _\text{noise}} = \mathrm{Re}(h(\theta)| d) - \frac{1}{2} (h(\theta)| h(\theta))\,,
+$$ {#eq-likelihood-ratio}
+
+and the "evidence" we will obtain, i.e. the integral of $\mathcal{L}_{r}(d|\theta) \pi(\theta) \text{d}\theta$ over the parameter space, will actually be a Bayes Factor, $Z_\text{signal and model} / Z_\text{noise}$.
+
+### Varied Power Spectral Density
+
 
 
 ## Matched filtering
@@ -23,10 +95,6 @@ We can estimate the parameters $\theta$ by exploring the posterior distribution
 $$ p(\theta | d) = \mathcal{L}(d | \theta ) \pi (\theta ) = \mathcal{N} \exp \left( (d | h_\theta) - \frac{1}{2} (h_\theta | h_\theta) \right) \pi (\theta )\,,
 $$
 
-where $(\cdot | \cdot)$ is the noise-weighed inner product between waveforms, defined as 
-
-$$ (a | b) = 4 \Re \int_0^\infty \frac{a(f) b^*(f)}{S_n(f)}\text{d}f \,,
-$$
 
 while $\pi (\theta )$ is our prior distribution on the parameters.
 This kind of analysis is assuming that the noise is Gaussian, and described by the power spectral density (PSD) $S_n(f)$.

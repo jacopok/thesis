@@ -10,3 +10,90 @@ format:
 ---
 # The Lunar Gravitational Wave Antenna
 
+## Response to gravitational wave
+
+The response to gravitational waves is assumed to be linear, in the form
+$$
+s(t_\text{det}, f) = h_{ij}(t) \hat{D}_{ij}(t_\text{det}) L(f)\,.
+$$
+
+The strain $h_{ij}(t)$ is assumed to be expressed as a time series such that some characteristic event, such as the merger, happens when $t=0$.
+Then, if we denote with $t_{0}$ the time at which this characteristic event reaches the center of the coordinate frame, we will have 
+$$
+t_\text{det} = t + t_{0} + \frac{\vec{n}\cdot \vec{r}(t_\text{det})}{c}\,,
+$$
+where $\vec{n}$ is the propagation direction of the GW, while $\vec{r}$ is the vector denoting the position of the detector as measured from the center of the reference frame.
+
+The detection tensor for one LGWA channel is in the form
+$$
+\hat{D}_{ij}(t) = n_{i}(t) b_{j}(t)\,,
+$$
+where $n_{i}(t)$ is the normal to the lunar surface at the detector location at time $t$, while $b_{j}(t)$ is a vector parallel to the lunar surface and aligned to the measurement channel.
+We obtain these vectors in an ICRS frame with the `lunarsky` package [cit].
+
+The gravitational wave strain tensor is written as 
+$$
+h_{ij}(t) = h_{+}(t) e_{ij}^{+} + h_{\times}(t) e^{\times}_{ij}\,,
+$$
+where the two basis tensor are time-independent since we are working in a frame in which the source is stationary (ICRS).
+The basis tensors are given as 
+$$
+e_{ij}^{+} = u_{i}u_{j} - v_{i}v_{j}
+\qquad \text{and}
+\qquad
+e_{ij}^{\times} = u_{i}v_{j} + v_{i}u_{j}\,.
+$$
+
+The two vectors $u$ and $v$ form, together with the vector $m$ describing the sky position of the source, an orthonormal reference frame.
+The rotation of the $u$ and $v$ vectors along the $m$ axis is determined by the polarization angle $\psi$.
+
+Once we have computed these vectors in ICRS, we can recover the strain as 
+$$
+s(t, f) = [
+h_{+}(t) ((n\cdot u)(b\cdot u)-(n\cdot v)(b\cdot v))+
+h_{\times}(t) ((n\cdot u)(b\cdot v)+(n\cdot v)(b\cdot u)) 
+] L(f)
+$$
+
+The scalar products can be computed from the angles on the sphere:
+$$
+a\cdot b = \cos \theta_{a} \cos\theta_{b} + \sin \theta_{a} \sin \theta_{b} \cos(\phi_{a} - \phi_{b})
+$$
+
+Therefore, to compute the LGWA likelihood we need to be able to compute:
+- the position of LGWA, $\vec{r}(t)$, for all relevant times
+	- this needs to be represented as a vector in 3D space, since its magnitude is not fixed across the year
+- the unit vectors $a$, $b$ and $n$, for all relevant times
+	- these can be represented with angles only, since they are unit vectors, and we do not even need to convert them to Cartesian coordinates
+
+Computing these vectors can be somewhat expensive, and their variation is relatively slow, on the scale of a month.
+Therefore, it is advantageous to pre-compute them on a grid, cache the results and interpolate.
+
+In order to evaluate how dense the interpolation grid must be, we perform the 
+interpolation with different grid sizes, then select uniformly random points in time and locations on the sky and compute the error in the scalar product computed with the correct computation and the interpolated approximation.
+
+As figure @fig-response-interpolation-errors shows, we can achieve errors on the scale of $10^{-4}$ on the scalar products with only $10^{4}$ points, which take about a minute to compute, and adding more as required is easy.
+
+```{python}
+#| label: fig-response-interpolation-errors
+#| fig-cap: "Errors in scalar products computed with an interpolated version of the detector-centric basis vectors. The errors are computed from 400 randomly sampled points in the sky and time. Since the detector is located near the pole (specifically, at 85 degrees of latitude) the normal vector varies less across the month, and is therefore easier to interpolate."
+
+from thesis_scripts.lunar_coordinates import make_response_interpolation_plot
+make_response_interpolation_plot()
+```
+
+We can run a similar test for the computed position of the detector with respect to a fixed reference, 
+which enters the response as a phase term. 
+The results in figure @fig-position-interpolation-errors show that in order to
+achieve an error of $10^{-4}$ radians we need as many as 160 thousand interpolation points for the 10-year span we are considering. 
+
+The maximum phase error is computed by comparing the position error to the angular wavelength corresponding to the maximum frequency in the LGWA band: $c/(2 \pi) / (3 \mathrm{Hz}) \approx 1.6 \times 10^7 \mathrm{m}$.
+
+
+```{python}
+#| label: fig-position-interpolation-errors
+#| fig-cap: "Interpolation errors in position, by the number of interpolation points."
+
+from thesis_scripts.lunar_coordinates import make_position_interpolation_plot
+make_position_interpolation_plot()
+```

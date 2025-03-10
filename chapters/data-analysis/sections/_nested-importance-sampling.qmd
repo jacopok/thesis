@@ -1,0 +1,180 @@
+## Nested importance sampling {#sec-nested-importance-sampling}
+
+Related work: 
+
+- [@daxRealtimeGravitationalwaveScience2021] lays out how DINGO works, with more technical details about GNPS in [@daxGroupEquivariantNeural2023]
+- `nessai` is described in [@williamsImportanceNestedSampling2023] (not the same thing I propose here)
+- DINGO-IS is described in [@daxNeuralImportanceSampling2022]
+- the work in [@salehTemperedMultifidelityImportance2024] may be also relevant, but I think it's not directly the same thing since they still use "regular" IS
+
+### Importance sampling
+
+From appendix A in [@daxNeuralImportanceSampling2022].
+We lay out the same assumptions that will be used later in this demonstration.
+
+We have a posterior function $p(\theta|d)$ we can evaluate, but which is somewhat costly.
+The traditional approach is to explore this with MCMC or NS.
+
+To accelerate inference, we can train a normalizing flow to learn the relation between
+data and parameters. This will directly provide us with a representation of the density $q(\theta|d) \sim p(\theta | d)$, in the form of a normalizing flow (i.e. a mapping $\varphi$ that transforms $n$-dimensional multivariate normal samples into samples distributed according to $q(\theta|d)$).
+The issue is that, while $q(\theta|d)$ is sometimes very close to the true posterior, in some instances it can differ from it significantly.
+
+The importance sampling approach, laid out in [@daxNeuralImportanceSampling2022], allows us to reweight the samples to estimate the evidence and get a better representation for the posterior.
+
+So, we can extract $n$ samples $\theta_{i} \sim q(\theta|d)$, and these weighted by $w_{i} \propto \mathcal{L}(d|\theta_i) \pi(\theta_{i}) / q(\theta_{i}|d)$ will represent the posterior.
+If most of these lie in a low-probability region according to $p(\theta|d)$, however, they might be a coarse representation of it. As an extreme example, suppose that we extract a thousand samples, but the weights are identically zero for 500 of them: then, our effective number of samples will be at most 500, since the other 500 are useless. In general, the number of effective samples will be
+
+$$
+n_\text{eff} = \frac{\left( \sum_{i}w_{i} \right)^{2}}{\sum_{i}w_{i}^{2}}\,,
+$$
+and the sample efficiency is defined as $\epsilon =n_\text{eff} / n$.
+
+Our evidence estimate will be 
+
+$$
+Z(d) \approx \frac{1}{n} \sum_{i} w_{i}
+$$
+with an error
+
+$$
+\sigma_{Z} = Z \sqrt{ \frac{1-\epsilon}{n \epsilon} }
+$$
+
+or equivalently 
+
+$$
+\sigma_{\log Z} = \sqrt{ \frac{1-\epsilon}{n\epsilon} }\,.
+$$
+
+#### Numerical example
+
+We will take the unnormalized posterior to be 
+
+$$
+\mathcal{L}(\theta|d)\pi(\theta) = 100 \mathcal{N}(\theta, \mu=0, \sigma=1)
+$$
+while the neural network guess will be slightly offset from it:
+
+$$
+q(\theta|d) = \mathcal{N}(\theta|\mu=2.5, \sigma=1)
+$$
+
+
+```{python}
+from thesis_scripts import *
+
+from scipy.stats import norm
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+
+post = norm(loc=0, scale=1)
+proposal = norm(loc=2.5, scale=1)
+
+theta = np.linspace(-4, 7)
+
+n = 1_000
+
+samples = proposal.rvs(size=n, random_state=1)
+
+weights = 100 * post.pdf(samples) / proposal.pdf(samples)
+
+neff = np.sum(weights)**2 / np.sum(weights**2)
+
+evidence_estimate = np.average(weights)
+evidence_error = evidence_estimate * np.sqrt((1 -neff/n) / neff)
+
+plt.plot(theta, post.pdf(theta), label='Normalized posterior')
+plt.plot(theta, proposal.pdf(theta), label='Proposal')
+
+for sample, norm_weight in zip(samples, weights / np.max(weights)):
+    if np.isclose(norm_weight, 1):
+        label='Samples by importance weight'
+    else:
+        label=''
+    plt.axvline(x=sample, ymax=.1, alpha=norm_weight, c='black', label=label)
+
+plt.title(f'neff={neff:.0f}, n={n}, Z estimate={evidence_estimate:.1f}$\pm${evidence_error:.1f}')
+plt.legend()
+plt.ylim(0, .5)
+
+
+plt.show()
+```
+
+We can see that, when the sample efficiency is low (i.e. the guess was bad) the evidence errors are large; they can be made smaller by extracting many more sample points, but this gets inefficient quickly.
+
+### Neural nested importance sampling
+
+We propose a technique which is potentially more robust to low sample efficiencies, while retaining fast computational speed in the case of a good neural guess: nested sampling, complemented with prior deformation as discussed in @sec-prior-deformation.
+
+The idea is to perform nested sampling using as a prior distribution $\pi'(\theta) = q(\theta | d)$, and as a likelihood
+
+$$
+\mathcal{L}'(\theta) = \frac{\mathcal{L}(d|\theta) \pi(\theta)}{q(\theta| d)}
+$$
+
+To employ typical nested sampling codes we need a prior transform to represent  $\pi'$, but since $q$ is represented as a normalizing flow this is easy: the prior transform $\phi$ will be
+
+$$
+\phi(u) = \varphi(\text{probit}(u))
+$$
+where $\varphi$ is the normalizing flow transform, while $\text{probit}(u) = \sqrt{2} \text{erf}^{-1}(2u-1)$ is the inverse cumulative function for the standard normal distribution. This can be readily generalized to any number of dimensions: it is no harder to sample from the unit multivariate normal than from the unit hypercube.
+
+#### Numerical example
+
+We consider the same scenario as above, 
+
+```{python}
+from thesis_scripts import *
+
+from scipy.stats import norm
+from scipy.special import erfinv
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+from dynesty import DynamicNestedSampler
+
+post = norm(loc=0, scale=1)
+proposal = norm(loc=2.5, scale=1)
+
+def prior_transform(u):
+    return 2.5 + np.sqrt(2) * erfinv(2*u-1)
+
+def log_likelihood(x):
+    return np.squeeze(np.log(100) - .5 * (x**2 - (x-2.5)**2))
+
+fname = data_path / 'cache' / 'nested_importance_sampling_example.pkl'
+
+if fname.exists():
+	sampler = DynamicNestedSampler.restore(str(fname))
+else:
+    sampler = DynamicNestedSampler(log_likelihood, prior_transform, ndim=1, nlive=500)
+    sampler.run_nested()
+    sampler.save(str(fname))
+
+theta = np.linspace(-4, 7)
+
+plt.plot(theta, post.pdf(theta), label='Normalized posterior')
+plt.plot(theta, proposal.pdf(theta), label='Proposal')
+
+weights = np.exp(sampler.results.logwt)
+for sample, norm_weight in zip(sampler.results.samples[::40], weights[::40] / np.max(weights)):
+    if np.isclose(norm_weight, 1):
+        label='Samples by importance weight'
+    else:
+        label=''
+    plt.axvline(x=sample, ymax=.1, alpha=norm_weight, c='black', label=label)
+
+plt.title(f'NS importance sampling, n={sum(sampler.results.ncall)}, Z estimate={np.exp(sampler.results.logz[-1]):.1f}$\pm${np.exp(sampler.results.logz[-1])*sampler.results.logzerr[-1]:.1f}')
+plt.legend()
+plt.ylim(0, .5)
+plt.show()
+```
+
+```{python}
+from dynesty import plotting as dyplot
+fig, axs = dyplot.traceplot(sampler.results)
+```
