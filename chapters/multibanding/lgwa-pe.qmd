@@ -25,6 +25,9 @@ Independent group tackling the same problem: [Buscicchio+](https://arxiv.org/pdf
 
 ## LGWA parameter estimation
 
+
+### Injection results
+
 I performed a zero-noise injection with LGWA, assuming the lunar response is known.
 
 Preliminary info:

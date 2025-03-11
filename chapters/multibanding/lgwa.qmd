@@ -164,6 +164,10 @@ from astropy.coordinates import get_body_barycentric
 from astropy.time import Time
 import numpy as np
 import matplotlib.pyplot as plt
+import warnings
+
+warnings.filterwarnings('ignore', module='erfa')
+
 
 like = LunarLikelihood()
 t_0 = 1577491218.
@@ -202,7 +206,7 @@ axs[2].plot(times_lunar_months, x-moon.x.si.value, color=x_color)
 axs[2].plot(times_lunar_months, y-moon.y.si.value, color=y_color)
 axs[2].plot(times_lunar_months, z-moon.z.si.value, color=z_color)
 axs[2].set_title('Position from lunar center')
-axs[2].set_xlabel('Time from January 1 2030 (lunar months)')
+_ = axs[2].set_xlabel('Time from January 1 2030 (lunar months)')
 ```
 
 
@@ -229,5 +233,73 @@ plt.plot(times_days, hc2, label='$F_\\times$ response, $y$ channel', color='#882
 plt.legend()
 plt.xlabel('Days from January 1st 2030')
 plt.title('Antenna patterns for a source at declination 90 degrees')
+plt.show()
+```
+
+### The importance of computing time to merger correctly
+
+In the Stationary Phase approximation, the time left until merger for a source whose phase in the frequency domain is given by $\varphi(f)$ can be computed as 
+$$
+t(f) = - \frac{1}{2 \pi} \frac{\text{d}\varphi}{\text{d}f}\,.
+$$
+
+In principle this should be computed using the same expression for $\varphi$ we have in the waveform (i.e. the most accurate one available).
+One may think that, however, this time can be safely approximated by using a low-order expression for $\varphi$, which will only be inaccurate at high frequency, where the time to merger is low and relative errors are less relevant.
+
+In the Post-Newtonian approximation, the phase is given as a series in the form
+$$
+\varphi(f) \propto \frac{1}{\eta v^{5}} \left(
+1+ \sum_{i=2}^{\infty} c_{i} v^{i}
+\right)
+$$
+where $v = (\pi M f)^{1/3}$ and $\eta=\mu / M = m_{1} m_{2} / (m_{1} + m_{2})^{2}$.
+The lowest-order expression, therefore, is $\varphi \propto \eta^{-1}(Mf)^{-5/3} \propto \mathcal{M}_{c}^{-5/3} f^{-5/3}$, where we define the chirp mass $\mathcal{M}_{c} = (m_{1}m_{2})^{3/5} (m_{1}+m_{2})^{1/5}$.
+Reintroducing the relevant constants, this leads to the following expression for the time to merger:
+$$
+t_\text{lowest order}(f) = - \frac{5}{256 \pi^{8/3}} \frac{1}{\mathcal{M}_{c}^{5/3}} \frac{1}{f^{-8/3}}\,.
+$$
+
+The next-order correction to this expression for the phase comes with a factor of $v^{2}\propto f^{2/3}$, which carries over during the differentiation, leading to the error scaling with $f^{-2}$.
+We show this in figure @fig-time-to-merger-error: it leads to errors of several hours to days in the deci-Hertz band for a light source.
+
+```{python}
+#| label: fig-time-to-merger-error
+#| fig-cap: "Error in the time to merger estimation by using the lowest-order Post-Newtonian term only. The source considered here is a neutron star binary with equal components, of 1.4 solar masses each."
+
+import matplotlib.pyplot as plt
+from thesis_scripts.simple_bns_waveforms import time_to_merger, time_to_merger_simple, Phif3hPN, SUN_MASS_SECONDS
+import numpy as np
+
+q = 1
+eta = q / (1+q)**2
+M = 2.8
+
+
+f = np.geomspace(1e-1, 3, num=10_000)
+
+phase = Phif3hPN(
+	f, 
+	M, 
+	eta, 
+	0., 
+	0, 
+	0., 
+	0.
+)
+
+mchirp = M * eta**(3/5) * SUN_MASS_SECONDS
+
+dt = (
+	+time_to_merger_simple(f, mchirp)
+	-time_to_merger(f, phase)
+)
+t = -time_to_merger(f, phase)
+
+plt.loglog(f, t, label='Time to merger', color='#88CCEE')
+plt.loglog(f, dt, label='Error by using the lowest order phase', color='#CC6677')
+plt.xlabel('Frequency [Hz]')
+plt.ylabel('Time [s]')
+plt.legend()
+
 plt.show()
 ```
