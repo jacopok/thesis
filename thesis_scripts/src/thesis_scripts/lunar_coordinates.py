@@ -5,10 +5,33 @@ import numpy as np
 import astropy.units as u
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+from erfa import ufunc
 
 from . import data_path
 
 LOCATION = MoonLocation.from_selenodetic(lon=0, lat=-85)
+
+def wave_frame_basis_cartesian(source_ra, source_dec, polarization_angle):
+    theta = np.pi/2. - source_dec
+    phi = source_ra
+    psi = polarization_angle
+    
+    u = np.asarray([
+        - np.sin(phi) * np.cos(psi) - np.cos(theta) * np.cos(phi) * np.sin(psi),
+        + np.cos(phi) * np.cos(psi) - np.cos(theta) * np.sin(phi) * np.sin(psi),
+        + np.sin(theta) * np.sin(psi)
+    ])
+    
+    v = np.asarray([
+        - np.sin(phi) * np.sin(psi) + np.cos(theta) * np.cos(phi) * np.cos(psi),
+        + np.cos(phi) * np.sin(psi) + np.cos(theta) * np.sin(phi) * np.cos(psi),
+        -np.sin(theta) * np.cos(psi)
+    ])
+    
+    return u, v
+
+def spherical_to_cartesian(ra, dec):
+    return ufunc.s2c(ra, dec)
 
 def scalar_product_spherical(ra1, dec1, ra2, dec2):
     return np.sin(dec1) * np.sin(dec2) + np.cos(dec1) * np.cos(dec2) * np.cos(ra1 - ra2)
@@ -46,10 +69,10 @@ def get_detector_position(time):
         body.z.to(u.m).value
     ))
 
-def generate_data_response(n_points):
+def generate_data_response(n_points, gps_time_start=1577491218., gps_time_end=1893024018.):
 
     # 2030 to 2040
-    times = Time(np.linspace(1577491218., 1893024018., num=n_points), format='gps')
+    times = Time(np.linspace(gps_time_start, gps_time_end, num=n_points), format='gps')
     
     saved_data = np.empty((n_points, 6))
     for i, time in tqdm(enumerate(times)):
@@ -61,10 +84,10 @@ def generate_data_response(n_points):
     
     return times, saved_data
 
-def generate_data_position(n_points):
+def generate_data_position(n_points, gps_time_start=1577491218., gps_time_end=1893024018.):
 
     # 2030 to 2040
-    times = Time(np.linspace(1577491218., 1893024018., num=n_points), format='gps')
+    times = Time(np.linspace(gps_time_start, gps_time_end, num=n_points), format='gps')
     
     saved_data = np.empty((n_points, 3))
     for i, time in tqdm(enumerate(times)):
@@ -82,9 +105,8 @@ def test_interpolation_error_response(dataset_sizes):
 
         times, data = generate_data_response(n_samples)
         
-        
         these_errors = []
-        for i in tqdm(range(400)):
+        for i in tqdm(range(1000)):
             time = Time(rng.uniform(times.value[0], times.value[-1]), format='gps')
             ra = rng.uniform(0, 2*np.pi)
             dec = np.pi/2 - np.arccos(rng.uniform(-1, 1))
@@ -112,7 +134,7 @@ def test_interpolation_error_position(dataset_sizes):
         times, data = generate_data_position(n_samples)
         
         these_errors = []
-        for i in tqdm(range(400)):
+        for i in tqdm(range(1000)):
             time = Time(rng.uniform(times.value[0], times.value[-1]), format='gps')
 
             true_position = get_detector_position(time)
@@ -181,13 +203,24 @@ def make_response_interpolation_plot():
     plt.yscale('log')
     plt.xlabel('Number of ephemeris samples')
     plt.ylabel('Absolute error in scalar product [dimensionless]')
-    plt.title('Quartiles and 5-95\% confidence interval in the interpolation error')
+
+    seconds_ten_years = 315_576_000
+    minutes_ten_years = seconds_ten_years / 60
+
+    durations = minutes_ten_years / np.asarray(dataset_sizes)
+    thirdax = plt.gca().secondary_xaxis('top', functions=(
+        lambda x : x, 
+        lambda x : x)
+    )
+    thirdax.set_xticks(np.arange(1, len(dataset_sizes)+1), labels=[f'{d:.0f}' for d in durations])
+    thirdax.set_xlabel('Sampling interval [minutes]')
+
     plt.legend()
     plt.show()
 
 def make_position_interpolation_plot():
     
-    dataset_sizes = [10_000, 20_000, 40_000, 80_000, 160_000]
+    dataset_sizes = [10_000, 20_000, 40_000, 80_000, 160_000, 320_000]
     file_path = (data_path / 'cache' / f'lunar_position_interpolation_{"_".join(map(str, dataset_sizes))}.npy').with_suffix('.npy')
     if file_path.exists():
         all_errors = np.load(file_path)
@@ -217,7 +250,7 @@ def make_position_interpolation_plot():
     plt.yscale('log')
     plt.xlabel('Number of ephemeris samples')
     plt.ylabel('Absolute error in position [meters]')
-    plt.title('Quartiles and 5-95\% confidence interval in the interpolation error')
+    # plt.title('Quartiles and 5-95%% confidence interval in the interpolation error')
     
     minimum_angular_wavelength = 299_792_458 / 3 / (2*np.pi)
     
@@ -227,12 +260,23 @@ def make_position_interpolation_plot():
     )
     secax.set_ylabel('Equivalent maximum phase error [rad]')
 
+    seconds_ten_years = 315_576_000
+    minutes_ten_years = seconds_ten_years / 60
+
+    durations = minutes_ten_years / np.asarray(dataset_sizes)
+    thirdax = plt.gca().secondary_xaxis('top', functions=(
+        lambda x : x, 
+        lambda x : x)
+    )
+    thirdax.set_xticks(np.arange(1, len(dataset_sizes)+1), labels=[f'{d:.0f}' for d in durations])
+    thirdax.set_xlabel('Sampling interval [minutes]')
+
     plt.legend()
     plt.show()
 
 
 if __name__ == '__main__':
-    # make_response_interpolation_plot()
+    make_response_interpolation_plot()
     make_position_interpolation_plot()
 
     # times, data = generate_data_response(4*240)
