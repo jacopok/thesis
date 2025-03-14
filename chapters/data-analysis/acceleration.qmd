@@ -61,87 +61,105 @@ This is expected to be approximately true for all the relevant points in the pos
 
 This formulation holds for the 22 mode, but it is possible to write a more generic one including higher order modes, at the expense of some more digital ink [@narolaRelativeBinningComplete2023].
 
-```{python}
-from thesis_scripts import *
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
+For a look at how the waveform ratio looks in the LGWA case, see @fig-projected-lgwa-waveforms-ratio.
 
-from GWFish.modules.detection import projection, Network;
-from GWFish.modules.waveforms import TaylorF2;
+The authors of the original paper use a frequency axis obtained from first-principles arguments. However, it is also possible to run a greedy search to optimize it. @leslieModebymodeRelativeBinning2021 did it, by optimizing on a single waveform.
+My attempt is in @sec-greedy-relbin-selection.
 
-post_full = pd.read_csv(data_path / 'gw170817_run' / 'chains' / 'equal_weighted_post.txt', sep=' ')
+#### Greedy relative binning grid selection {#sec-greedy-relbin-selection}
 
+##### Adaptive accuracy requirement
 
-network = Network(['LGWA'])
-detector = network.detectors[0]
-approx = 'TaylorF2'
-f = np.squeeze(detector.frequencyvector)
+Suppose $\varepsilon(\theta)$ is the error in log-likelihood evaluation at point $\theta$.
+The typical requirement, as asked for example in ROQ basis construction, is 
+$$
+\varepsilon(\theta) < \varepsilon_{0} \quad \forall \theta \in \Omega\,.
+$$
 
-data_params = {
-    'frequencyvector': f,
-}
+But we can relax this: we can set
+$$
+\mathbb{E}_{p(\theta|d)}[\varepsilon] < \varepsilon_{0}\,.
+$$
 
-distance = 50
-t0_moon = 1187008882.4
-q = 0.9
-params = {
-    # 'chirp_mass': total_mass * q**(3/5) * (1 + q)**(-6/5), 
-    'chirp_mass': 2.8 / 2**(6/5), 
-    'mass_ratio': q,
-    'luminosity_distance': distance,
-    'theta_jn': 2.545065595974997,
-    'psi': np.pi/2,
-    'phase': np.pi,
-    'ra': 3.4461599999999994,
-    'dec': -0.4080839999999999,
-    'geocent_time': t0_moon,
-}
-# new_params = dict(post_full.iloc[1]) | {
-#     'chirp_mass': post_full.iloc[1]['chirp_mass'] + 1e-4
-# }
+This can be achieved by a $\theta$-dependent requirement. For example, if we set
+$$
+\varepsilon(\theta) \leq \frac{C}{L(d|\theta)\pi(\theta)}
+$$
+then the expectation value reads
+$$
+\mathbb{E}_{p(\theta|d)}[\varepsilon]
+\leq \int \frac{C}{L(d|\theta)\pi(\theta)} p(\theta|d) \text{d}\theta 
+= \int \frac{C}{Z(d)} \text{d}\theta = \frac{C V_{\theta}}{Z(d)}
+$$
 
-center = network.coordinate_center(params)
+Therefore, we need to set
+$$
+C = \varepsilon_{0} \frac{Z(d)}{V_{\theta}}\,.
+$$
 
-waveform_obj1 = TaylorF2(approx, params, data_params)
-wave1 = waveform_obj1()
-t_of_f1 = waveform_obj1.t_of_f
+The quantity
+$$
+\frac{Z}{V_{\theta}} = \langle L(d|\theta) \pi(\theta) \rangle_{\mathcal{U}(\theta)} 
+$$
+can be estimated roughly at the beginning of inference, if we know $L_\text{max}$, I guess?
+Is it related to the ratio between the posterior and prior volumes?
 
-proj1 = projection(params, detector, wave1, t_of_f1, center)
+###### Gaussian example
 
-# new_params = params | {
-#         # 'geocent_time': t0_moon+10,
-#         'chirp_mass': total_mass * q**(3/5) * (1 + q)**(-6/5) + 1e-8,
-#         # 'ra': 3.4461599999999994 + np.deg2rad(1/60),
-#     }
+Let us consider 
 
-new_params = dict(post_full.iloc[1])
-waveform_obj2 = TaylorF2(
-    approx, 
-    new_params, 
-    data_params
-)
-wave2 = waveform_obj2()
-t_of_f2 = waveform_obj2.t_of_f
+##### Ratio bounds
 
-proj2 = projection(new_params, detector, wave2, t_of_f2, center)
+We want to be able to represent waveform ratios to a reference waveform with parameters $\theta_{0}$,
+$$
+r(f; \theta) = \frac{h(f; \theta)}{h(f, \theta_{0})}\,,
+$$
+with the fewest possible frequency grid points.
+We do not need to do this for all points in the parameter space, but only for those which will have a large value of the posterior.
 
-import warnings
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore")
-    ratio = proj2 / proj1
+The problem is that we do not, _a priori_, know what that region is (it is the final result of our computation!).
+So, the hope is to simultaneously run a search over the parameter space (not necessarily with the actual likelihood as the function being explored) and add frequency grid points as needed to decrease the representation error in the new points we are finding.
 
-plt.semilogx(f, np.log(abs(ratio[:, 0])), label='$\\log(A/A_0)$')
-plt.semilogx(f, np.angle(ratio[:, 0]), label='$\\phi - \\phi_0$')
-plt.ylim(-np.pi, np.pi)
-plt.legend()
-_ = plt.xlabel('Frequency [Hz]')
-_ = plt.ylabel('Log amplitude ratio [dimensionless] or phase difference [rad]')
-# plt.show()
-```
+We can get a bound on our likelihood using $r$ only. Let us start with the "injection" loglikelihood ratio, with the noise set to zero:
+$$
+\log \mathcal{L} 
+= - \frac{1}{2} \lVert h - h_{0} \rVert^{2}
+= - \frac{1}{2} \lVert h_{0}(r-1) \rVert^{2} 
+$$
 
-The authors use a frequency axis obtained from first-principles arguments. 
-We could run a greedy search here as well...
+By Jensen's inequality, we can apply the convex function $- \log$ inside and outside the norm, and get the following expression:
+$$
+\lVert -\log h_{0} - \log(r-1) \rVert \geq 
+-\log \lVert h-h_{0} \rVert \,.
+$$
+
+::: {#nte-complex-logs .callout-warning collapse="true"}
+##### On complex logs
+
+Does Jensen's inequality still work if we consider logs of complex numbers? Maybe not...
+This probably need to be handled by separating amplitude and phase.
+
+Or actually - the phase doesn't matter, since we're taking the square norm!
+It should be $\log \lvert r-1 \rvert$.
+
+:::
+
+Then, we can use the triangle inequality:
+$$
+\lVert -\log h_{0} - \log(r-1) \rVert
+= \lVert \log h_{0} +\log(r-1) \rVert
+\leq \lVert \log h_{0} \rVert + \lVert \log (r-1) \rVert 
+$$
+
+So we have our final result:
+$$
+\frac{1}{2} \lVert \log h_{0} \rVert + \frac{1}{2} \lVert \log (r-1) \rVert \geq -\log \sqrt{ -2 \log \mathcal{L} }
+$$
+
+It is then to be seen what we can do with this upper bound.
+The norm of the ratio minus one is greater than some increasing function of the likelihood...  
+
+For $h = h_0$ we get $\infty \geq \infty$...
 
 ### Reduced order quadrature
 
@@ -155,7 +173,7 @@ $$
 \mathcal{L}_{hh} = \sum_{i=1}^{N_{Q}} \sum_{j=1}^{N_{Q}} h(f_{i}, \theta) h^{*}(f_{j}, \theta) \psi_{i}
 $$
 
-About basis size and storage details: [@morisakiRapidLocalizationInference2023].
+About basis size and storage details: [@morisakiRapidLocalizationInference2023]. 
 
 Could we not avoid storing the full ROQ basis, if we proceed as follows?
 - determine the sequence of "worst-represented" waveform parameters, $\theta_{i}$, at each iteration
@@ -165,4 +183,7 @@ Could we not avoid storing the full ROQ basis, if we proceed as follows?
 	- project it onto the orthogonal subspace using $\mathcal{P}_{i-1}$
 	- compute the weights $\omega_{i}$ and $\psi_{i}$
 	- update the projector to $\mathcal{P}_{i} = P_{i-1} + e_{i} e_{i}^{\top}$
+
+Useful references:
+- Antil+13 for the two-step ROQ basis construction
 - 

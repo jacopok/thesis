@@ -6,6 +6,7 @@ import astropy.units as u
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from erfa import ufunc
+from numba import njit
 
 from . import data_path
 
@@ -82,7 +83,7 @@ def generate_data_response(n_points, gps_time_start=1577491218., gps_time_end=18
     for j in range(6):
         saved_data[:, j] = np.unwrap(saved_data[:, j])
     
-    return times, saved_data
+    return times.value, saved_data
 
 def generate_data_position(n_points, gps_time_start=1577491218., gps_time_end=1893024018.):
 
@@ -93,7 +94,7 @@ def generate_data_position(n_points, gps_time_start=1577491218., gps_time_end=18
     for i, time in tqdm(enumerate(times)):
         saved_data[i, :] = get_detector_position(time)
     
-    return times, saved_data
+    return times.value, saved_data
 
 def test_interpolation_error_response(dataset_sizes):
     

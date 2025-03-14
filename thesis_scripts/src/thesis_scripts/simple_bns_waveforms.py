@@ -4,6 +4,8 @@ from numba import njit
 SUN_MASS_SECONDS: float = 4.92549094830932e-6  # M_sun * G / c**3
 EULER_GAMMA = 0.57721566490153286060
 
+TF2_BASE: float = 3.668693487138444e-19
+# ( Msun * G / c**3)**(5/6) * Hz**(-7/6) * c / Mpc / s
 
 
 @njit(cache=True)
@@ -258,8 +260,9 @@ def Af3hPN(
     eps = delta * chia * (502429.0 / 16128.0 - 907.0 / 192.0 * eta) + chis * (
         5.0 / 48.0 * eta2 - 73921.0 / 2016.0 * eta + 502429.0 / 16128.0
     )
+    
 
-    return A0 * (
+    return TF2_BASE * A0 * (
         1.0
         + v2 * (11.0 / 8.0 * eta + 743.0 / 672.0)
         + v3 * (be / 2.0 - 2.0 * np.pi)

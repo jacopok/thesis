@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
     "astropy>=5.3.2",
+    "bilby>=2.3.0",
     "cartopy>=0.23.0",
     "cmcrameri>=1.9",
     "dynesty>=2.1.4",
@@ -16,6 +17,7 @@ dependencies = [
     "h5py>=3.12.1",
     "hypothesis>=6.128.2",
     "ipyleaflet>=0.19.2",
+    "ipython>=8.18.1",
     "jupyter-cache>=1.0.1",
     "jupyter>=1.1.1",
     "lalsuite>=7.24",
@@ -27,8 +29,10 @@ dependencies = [
     "pytest>=8.3.5",
     "quarto-cli>=1.5.57",
     "scipy>=1.13.1",
+    "snakeviz>=2.2.2",
     "thesis-scripts",
     "tqdm>=4.67.1",
+    "ultranest",
 ]
 
 [tool.uv.workspace]
@@ -37,4 +41,5 @@ members = ["thesis_scripts/thesis_scripts"]
 [tool.uv.sources]
 thesis-scripts = { path = "thesis_scripts", editable = true }
 gwfish = { path = "../Documents/GWFish" }
+ultranest = { path = "../Documents/UltraNest", editable = true }
 
