@@ -116,13 +116,15 @@ def relbin_log_likelihood_error_kernel(f_bin, f_mid, r_bin, r_mid, summary_data)
                 r1j_error = r1j_estimate[j] - r1_estimate
                 
                 # dh term, r0 part
-                ll_error_total += summary_data[channel, i_bin, 0] * r0j_error
+                ll_error_total += summary_data[channel, i_bin, 0] * np.conj(r0j_error)
                 # dh term, r1 part
-                ll_error_total += ((summary_data[channel, i_bin, 1]) * r1j_error)
+                ll_error_total += ((summary_data[channel, i_bin, 1]) * np.conj(r1j_error))
                 # hh term, r0 part
                 # we do error propagation on the square of r0
-                # the factor 2 cancels with the 1/2 in front of l_hh
-                ll_error_total -= summary_data[channel, i_bin, 2] * r0j_error * r0j_estimate[j]
+                # we need to remember  the 1/2 in front of l_hh
+                ll_error_total -= .5 * summary_data[channel, i_bin, 2] * (
+                    (r0j_estimate[j]*np.conj(r0j_error)+
+                    (r0j_error)*np.conj(r0j_estimate[j])))
                 # hh term, r1 part
                 # the factor 2 in the term cancels with the 1/2 in front of l_hh
                 ll_error_total -= ((summary_data[channel, i_bin, 3]) * (
