@@ -585,6 +585,9 @@ plt.colorbar(ScalarMappable(cmap=cmap_regular, norm=norm), ax=plt.gca(), label='
 plt.show()
 ```
 
+The following works for 1 midpoint bin, but it stops when the number increases above 1.
+The size and variability of the errors suggests that some array created with numpy empty is not being properly filled (but which? I triple checked the midpoint ratio values...)
+
 ```{python}
 #| label: fig-relative-binning-quick-error-estimation
 #| fig-cap: "Relative binning error estimates obtained by looking at bin midpoints."
@@ -601,7 +604,7 @@ else:
 		like.make_relbin_data(f, parameters)
 		for i, mass in enumerate(masses):
 			mod_parameters = parameters | {'chirp_mass': mass}
-			errors_approx[i, j] = like.relbin_log_likelihood_error(mod_parameters)
+			errors_approx[i, j] = like.relbin_log_likelihood_error(mod_parameters, 1)
 	np.save(path_errors_relbin_approx, errors_approx)
 
 norm_freq = LogNorm(min(freq_numbers), max(freq_numbers[:n_to_plot]))
@@ -612,7 +615,7 @@ plt.yscale('log')
 
 plt.colorbar(ScalarMappable(cmap=cm.imola, norm=norm_freq), label='Frequency nodes used', ax=plt.gca())
 
-plt.xlabel('Loglikelihood error: rough estimate')
+plt.xlabel('Loglikelihood error: rough estimate with 1 midpoint per bin')
 plt.ylabel('Loglikelihood error: comparison with proper likelihood')
 
 r = np.geomspace(1e-6, 1)

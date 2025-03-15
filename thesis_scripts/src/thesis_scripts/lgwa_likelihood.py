@@ -78,14 +78,16 @@ def relbin_log_likelihood_kernel(r0, r1, summary_data):
 
 @njit(float64(
     float64[:],
-    float64[:],
+    float64[:, :],
     complex128[:, :], 
-    complex128[:, :], 
+    complex128[:, :, :], 
     complex128[:, :, :], 
 ))
 def relbin_log_likelihood_error_kernel(f_bin, f_mid, r_bin, r_mid, summary_data):
 
-    ll_square_error_total = 0
+    ll_error_total = 0
+    n_mid = f_mid.shape[1]
+    
     for channel in range(2):
         for i_bin in range(summary_data.shape[1]):
             
@@ -94,39 +96,41 @@ def relbin_log_likelihood_error_kernel(f_bin, f_mid, r_bin, r_mid, summary_data)
             
             # the first index is the original one 
             # (0=constant, 1=linear)
-            # the second index denotes the first or second
-            # halves of the bin
+            # the second index denotes the part of the bin we are considering
             
+            r0j_estimate = np.empty(n_mid+1, dtype=complex128)
+            r1j_estimate = np.empty(n_mid+1, dtype=complex128)
             
-            r00_estimate = (r_mid[channel, i_bin] + r_bin[channel, i_bin])/2. 
-            r01_estimate = (r_bin[channel, i_bin+1] + r_mid[channel, i_bin])/2. 
-            r10_estimate = (r_mid[channel, i_bin] - r_bin[channel, i_bin])/(f_mid[i_bin]-f_bin[i_bin])
-            r11_estimate = (r_bin[channel, i_bin+1] - r_mid[channel, i_bin])/(f_bin[i_bin+1]-f_mid[i_bin])
+            r0j_estimate[0] = (r_mid[channel, i_bin, 0] + r_bin[channel, i_bin])/2. 
+            r0j_estimate[n_mid] = (r_bin[channel, i_bin+1] + r_mid[channel, i_bin, n_mid-1])/2. 
+            r1j_estimate[0] = (r_mid[channel, i_bin, 0] - r_bin[channel, i_bin])/(f_mid[i_bin, 0]-f_bin[i_bin])
+            r1j_estimate[n_mid] = (r_bin[channel, i_bin+1] - r_mid[channel, i_bin, n_mid-1])/(f_bin[i_bin+1]-f_mid[i_bin, n_mid-1])
             
-            error_this_bin = 0
+            for j in range(1, n_mid):
+                r0j_estimate[j] = (r_mid[channel, i_bin, j+1] + r_mid[channel, i_bin, j])/2.
+                r1j_estimate[j] = (r_mid[channel, i_bin, j+1] - r_mid[channel, i_bin, j])/(f_mid[i_bin, j+1]-f_mid[i_bin, j])
             
-            # dh term, r0 part
-            error_this_bin += (summary_data[channel, i_bin, 0]) * (
-                (r00_estimate-r0_estimate) + 
-                (r01_estimate-r0_estimate))
-            # dh term, r1 part
-            error_this_bin += (summary_data[channel, i_bin, 1]) * (
-                (r10_estimate-r1_estimate) + 
-                (r11_estimate-r1_estimate))
-            # hh term, r0 part
-            # we do error propagation on the square of r0
-            # the factor 2 cancels with the 1/2 in front of l_hh
-            error_this_bin -= (summary_data[channel, i_bin, 2]) * (
-                ((r00_estimate-r0_estimate)*r00_estimate) + 
-                ((r01_estimate-r0_estimate)*r01_estimate))
-            # hh term, r1 part
-            error_this_bin -= (summary_data[channel, i_bin, 3]) * (
-                (r00_estimate*np.conj(r10_estimate-r1_estimate)+(r00_estimate-r0_estimate)*np.conj(r10_estimate)) + 
-                (r01_estimate*np.conj(r11_estimate-r1_estimate)+(r01_estimate-r0_estimate)*np.conj(r11_estimate)))
-            
-            ll_square_error_total += error_this_bin
+            for j in range(n_mid+1):
+                
+                r0j_error = r0j_estimate[j] - r0_estimate
+                r1j_error = r1j_estimate[j] - r1_estimate
+                
+                # dh term, r0 part
+                ll_error_total += summary_data[channel, i_bin, 0] * r0j_error
+                # dh term, r1 part
+                ll_error_total += ((summary_data[channel, i_bin, 1]) * r1j_error)
+                # hh term, r0 part
+                # we do error propagation on the square of r0
+                # the factor 2 cancels with the 1/2 in front of l_hh
+                ll_error_total -= summary_data[channel, i_bin, 2] * r0j_error * r0j_estimate[j]
+                # hh term, r1 part
+                # the factor 2 in the term cancels with the 1/2 in front of l_hh
+                ll_error_total -= ((summary_data[channel, i_bin, 3]) * (
+                    (r0j_estimate[j]*np.conj(r1j_error)+
+                    (r0j_error)*np.conj(r1j_estimate[j]))))
 
-    return abs(ll_square_error_total)
+
+    return abs(ll_error_total) / (n_mid+1)
 
 def noise_weighted_inner_product(aa, bb, power_spectral_density, frequencies):
     """
@@ -424,23 +428,23 @@ class LunarLikelihood:
         summary_data = self.relbin_summary_data
         return relbin_log_likelihood_kernel(r0, r1, np.asarray(summary_data, dtype=complex))
 
-    @property
-    def relbin_midpoints(self):
-        return (self.relbin_frequencies[1:] + self.relbin_frequencies[:-1])/2.
 
-    def relbin_log_likelihood_error(self, parameters):
+    def relbin_log_likelihood_error(self, parameters, n_midpoints=1):
         f_bin = self.relbin_frequencies
-        f_mid = self.relbin_midpoints
+        f_mid = np.empty((self.n_bins, n_midpoints))
+        for i in range(self.n_bins):
+            f_mid[i] = np.linspace(f_bin[i], f_bin[i+1], num=n_midpoints+2)[1:-1]
         
         r_bin = self.projected_waveform(f_bin, parameters) / self.h0_bin
-        r_mid = self.projected_waveform(f_mid, parameters) / self.projected_waveform(f_mid, self.h0_parameters)
+        r_mid = (
+            self.projected_waveform(f_mid.flatten(), parameters) /
+            self.projected_waveform(f_mid.flatten(), self.h0_parameters)
+        ).reshape((2, ) + f_mid.shape)
         
-                
         # self.relbin_summary_data has shape [n_channels, n_freqs-1, 4]
         # the last axis contains A0, A1, B0, B1 in this order
-        
-        summary_data = self.relbin_summary_data
-        return relbin_log_likelihood_error_kernel(f_bin, f_mid, r_bin, r_mid, np.asarray(summary_data, dtype=complex))
+
+        return relbin_log_likelihood_error_kernel(f_bin, f_mid, r_bin, r_mid, np.asarray(self.relbin_summary_data, dtype=complex))
 
 
     def optimal_snr(self, f, parameters):
