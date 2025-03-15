@@ -184,5 +184,5 @@ plt.ylabel('Time to merger minus reference [signs are strange, s]')
 ```
 
 ```{python}
-plt.scatter(post_equal['chirp_mass'], time_to_merger(post_equal['chirp_mass'], 10))
+plt.scatter(post_equal['chirp_mass'], time_to_merger(post_equal['chirp_mass'].to_numpy(), post_equal['mass_ratio'].to_numpy(), 0.1))
 ```

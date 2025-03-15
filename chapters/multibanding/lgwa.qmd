@@ -10,6 +10,48 @@ format:
 ---
 # The Lunar Gravitational Wave Antenna
 
+## Displacement noise
+
+```{python}
+#| label: fig-lgwa-soundcheck-displacement-noise
+#| fig-cap: "Displacement noise estimates for LGWA and Soundcheck."
+
+import thesis_scripts
+import numpy as np
+import matplotlib.pyplot as plt
+import astropy.units as u
+import astropy.constants as ac
+
+ff = np.logspace(-3,1,500)
+
+hbar = ac.hbar.si.value
+kB = ac.k_B.si.value
+c = ac.c.si.value
+lambda0 = 1.064e-6
+f0 = 0.1
+
+# there is an extra sqrt(2) in the shot noise, which is explained by the
+# fact that only one the two interferometer arms picks up the signal
+
+def get_noise(ff, n_seis, T, Q0, m, P, dL):
+
+	omega0 = 2*np.pi*c/lambda0
+	n_shot = lambda0/(2*np.pi)*np.sqrt(2*hbar*omega0/P)*np.sqrt((f0**2-ff**2)**2+(f0**2/Q0)**2)/ff**2
+	n_freq = dL*(4e4+5e4*(0.1/ff)**1.2)/omega0*np.sqrt((f0**2-ff**2)**2+(f0**2/Q0)**2)/ff**2
+	n_readout = np.sqrt(n_shot**2 + n_freq**2)/np.sqrt(n_seis)
+	n_therm = np.sqrt(4*kB*T*(2*np.pi*f0)**2/(m*Q0*2*np.pi*ff))/(2*np.pi*ff)**2
+
+	return np.sqrt(n_readout**2 + n_therm**2)/np.sqrt(n_seis)
+
+f_stab = 100
+noise_lgwa = get_noise(ff, n_seis = 4, T = 4, Q0 = 1e5, m = 10, P = 5e-3, dL = 1e-3/f_stab)
+
+noise_soundcheck = get_noise(ff, n_seis = 1, T = 40, Q0 = 1e4, m = 3, P = 5e-9, dL = 1e-3)
+
+plt.loglog(ff, noise_lgwa)
+plt.loglog(ff, noise_soundcheck)
+```
+
 ## Response to gravitational waves
 
 The response to gravitational waves is assumed to be linear, in the form
@@ -323,7 +365,7 @@ t0 = 1893024018.
 
 f = np.geomspace(1e-1, 3, num=100000)
 parameters = {
-	'total_mass': 2.8,
+	'chirp_mass': 1.2,
 	'mass_ratio': 1.,
 	'time_at_center': t0,
 	'inclination': 0.5,
@@ -382,7 +424,7 @@ like = LunarLikelihood((1500000000., 2000000000.))
 t0 = 1893024018.
 
 parameters = {
-	'total_mass': 2.8,
+	'chirp_mass': 1.2,
 	'mass_ratio': 1.,
 	'time_at_center': t0,
 	'inclination': 0.5,
@@ -399,7 +441,7 @@ parameters = {
 
 param_list = [
 	parameters,
-	parameters | {'total_mass': 2.8 * 1.0001},
+	parameters | {'chirp_mass': 1.2 * 1.0001},
 	parameters | {'mass_ratio': 0.99},
 	parameters | {'time_at_center': t0+1.5},
 	parameters | {'right_ascension': np.deg2rad(1/6)},
@@ -407,7 +449,7 @@ param_list = [
 	parameters | {'lambda_eff': 1000},
 	parameters | {'phase': 2},
 	parameters | {'inclination': 2},
-	parameters | {'right_ascension': 1, 'time_at_center': t0+10000, 'total_mass': 4},
+	parameters | {'right_ascension': 1, 'time_at_center': t0+10000, 'chirp_mass': 2},
 ]
 
 like.compute_center(t0)
@@ -543,3 +585,36 @@ plt.colorbar(ScalarMappable(cmap=cmap_regular, norm=norm), ax=plt.gca(), label='
 plt.show()
 ```
 
+```{python}
+#| label: fig-relative-binning-quick-error-estimation
+#| fig-cap: "Relative binning error estimates obtained by looking at bin midpoints."
+
+errors_approx = np.empty_like(errors_relbin)
+n_to_plot = 20
+path_errors_relbin_approx = data_path / 'cache' / 'errors_relbin_approx.npy'
+
+if path_errors_relbin_approx.exists():
+	errors_approx = np.load(path_errors_relbin_approx)
+else:
+	for j, n_freq in enumerate(freq_numbers[:n_to_plot]):
+		f = np.geomspace(1e-1, 3, num=n_freq)
+		like.make_relbin_data(f, parameters)
+		for i, mass in enumerate(masses):
+			mod_parameters = parameters | {'chirp_mass': mass}
+			errors_approx[i, j] = like.relbin_log_likelihood_error(mod_parameters)
+	np.save(path_errors_relbin_approx, errors_approx)
+
+norm_freq = LogNorm(min(freq_numbers), max(freq_numbers[:n_to_plot]))
+
+plt.scatter(errors_approx[:, :n_to_plot].flatten(), errors_relbin[:, :n_to_plot].flatten(), c=cm.imola(norm_freq(np.repeat(freq_numbers[:n_to_plot], n_m).reshape((n_to_plot, n_m)).T.flatten())))
+plt.xscale('log')
+plt.yscale('log')
+
+plt.colorbar(ScalarMappable(cmap=cm.imola, norm=norm_freq), label='Frequency nodes used', ax=plt.gca())
+
+plt.xlabel('Loglikelihood error: rough estimate')
+plt.ylabel('Loglikelihood error: comparison with proper likelihood')
+
+r = np.geomspace(1e-6, 1)
+plt.plot(r, r, c='black', ls='--')
+```

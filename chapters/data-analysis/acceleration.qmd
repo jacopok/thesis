@@ -106,7 +106,34 @@ Is it related to the ratio between the posterior and prior volumes?
 
 ###### Gaussian example
 
-Let us consider 
+Let us consider the problem of sampling the standard normal distribution, with a uniform prior constraint of $x \in [-10, 10]$. 
+The integral is $Z \approx 1$, the prior volume is $V_{\theta}=20$. So, we should set $C = \varepsilon_{0} / 20$.
+
+```{python}
+import matplotlib.pyplot as plt
+import numpy as np
+
+x = np.linspace(-5, 5, num=1000)
+
+def standard_normal(x):
+    return -x**2/2 - np.log(np.sqrt(2*np.pi))
+
+eps_0 = 1e-5
+C = eps_0 / (x[-1]-x[0])
+
+plt.semilogy(x, np.exp(standard_normal(x)), label='PDF')
+plt.semilogy(x, C / np.exp(standard_normal(x)), label='accuracy constraint')
+plt.axhline(eps_0, c='black', ls='--', label='$\\varepsilon_0$')
+plt.legend()
+```
+
+We may want to set a minimum tolerable accuracy requirement, so that 
+$$
+\varepsilon(\theta) = \max\left( \varepsilon _\text{min}, \frac{C}{L(d|\theta)\pi(\theta)} \right)\,.
+$$
+
+How does that complicate things?
+A sensible choice could be $\varepsilon _\text{min} = \varepsilon_{0} / 2$.
 
 ##### Ratio bounds
 
@@ -186,4 +213,33 @@ Could we not avoid storing the full ROQ basis, if we proceed as follows?
 
 Useful references:
 - Antil+13 for the two-step ROQ basis construction
-- 
+
+## Multimodality reduction
+
+The folding algorithm from [@rouletRemovingDegeneracyMultimodality2022].
+
+For LGWA the following symmetries will be preserved, I think:
+$$
+\phi \to \phi + \pi
+$$
+$$
+\psi \to \psi + \frac{\pi}{2}
+$$
+
+also one with $\cos \iota$, but let's see.
+
+Suppose we have a set of quasi-symmetries, denoted by a family of $2^{N}$ transformations $\sigma_{i}$ (the first is the identity). We consider a "folded subset" and only look there, computing the posterior probability of a point $\tilde{\theta}$ as
+$$
+\tilde{P} (\tilde{\theta}) = \sum_{i=1}^{2^{N}} P(\sigma_{i}(\tilde{\theta}))
+$$
+We do need to compute all the $2^{N}$ probabilities, and we should store them (or actually not, since we can recompute them for the relevant posterior samples...)
+
+Then we run our sampler on the folded space, and get a posterior there. 
+We can unfold it by taking each weighted sample $(\tilde{\theta}_{j}, w_{j})$ and splitting it into $2^{N}$ samples:
+$$
+\left(\sigma_{i}(\tilde{\theta}_{j}), \frac{w_{j} P(\sigma_{i}(\tilde{\theta}_{j}))}{\tilde{P}(\tilde{\theta})}\right)\,.
+$$
+These are in principle ratios of posteriors but in practice the prior is invariant under all the symmetries at hand.
+
+The unfolding code by Roulet is [here](https://github.com/jroulet/cogwheel/blob/74c8dc3b122ebea5de99e9007997a0418e450e32/cogwheel/prior.py#L134).
+

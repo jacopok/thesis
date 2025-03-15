@@ -41,8 +41,8 @@ def from_bilby(parameter_dict):
     res['luminosity_distance'] = parameter_dict['luminosity_distance']
     res['time_at_center'] = parameter_dict['time_at_center']
     
-    res['right_ascension'] = parameter_dict['ra']
-    res['declination'] = parameter_dict['dec']
+    res['right_ascension'] = float(parameter_dict['ra'])
+    res['declination'] = float(parameter_dict['dec'])
     res['inclination'] = parameter_dict['theta_jn'] # this is not exactly true but it'll do for now
     res['polarization'] = parameter_dict['psi']
     res['spin_1z'] = parameter_dict['chi_1']
@@ -55,16 +55,18 @@ def from_bilby(parameter_dict):
 def make_analysis_functions(
     injection_parameters: dict, 
     folder_name: str, 
-    priors: PriorDict
+    priors: PriorDict,
+    n_freqs: int = 4000,
     ):
     
     log_dir = data_path / folder_name
     log_dir.mkdir(parents=True, exist_ok=True)
     
-    freq = np.geomspace(2e-1, 3, num=512)
+    freq = np.geomspace(1e-3, 3, num=n_freqs)
     
     like = LunarLikelihood()
-    like.compute_center(from_bilby(injection_parameters)['time_at_center'])
+    like.compute_center(injection_parameters['time_at_center'])
+    
     like.make_relbin_data(freq, from_bilby(injection_parameters))
     
     with open(log_dir / 'injection_parameters.yaml', 'w') as f:
@@ -123,11 +125,11 @@ def run_pe(loglike, prior_transform, inverse_prior_transform, log_dir, param_nam
         
         rng = np.random.default_rng(seed=1)
         u0 = np.asarray(inverse_prior_transform([injection_params[name] for name in param_names]))
-        p0 = rng.normal(loc=0, scale=1e-7, size=(50, len(param_names))) + u0[np.newaxis, :]
+        p0 = rng.normal(loc=0, scale=2e-9, size=(50, len(param_names))) + u0[np.newaxis, :]
         
         mc_sampler.run_mcmc(
             p0,
-            5000,
+            20000,
             progress=True,
             skip_initial_state_check=True,
         )
@@ -143,7 +145,7 @@ def run_pe(loglike, prior_transform, inverse_prior_transform, log_dir, param_nam
         prior_transform, 
         baseline_post_transformed, 
         uweights=weights,
-        beta=0.8
+        beta=1.
     )
 
     sampler = ultranest.ReactiveNestedSampler(
@@ -191,16 +193,16 @@ if __name__ == '__main__':
     }
 
     prior_dict = BNSPriorDict()
-    prior_dict['lambda_1'] = DeltaFunction(injection_params['lambda_1'], name='lambda_1')
-    prior_dict['lambda_2'] = DeltaFunction(injection_params['lambda_2'], name='lambda_2')
-    prior_dict['chi_1'] = DeltaFunction(injection_params['chi_1'], name='chi_1')
-    prior_dict['chi_2'] = DeltaFunction(injection_params['chi_2'], name='chi_2')
+    # prior_dict['lambda_1'] = DeltaFunction(injection_params['lambda_1'], name='lambda_1')
+    # prior_dict['lambda_2'] = DeltaFunction(injection_params['lambda_2'], name='lambda_2')
+    # prior_dict['chi_1'] = DeltaFunction(injection_params['chi_1'], name='chi_1')
+    # prior_dict['chi_2'] = DeltaFunction(injection_params['chi_2'], name='chi_2')
     prior_dict['time_at_center'] = Uniform(t0_moon-1e4, t0_moon+1e4, name='time_at_center', latex_label='$t$', unit='s')
     prior_dict['luminosity_distance'] = UniformSourceFrame(minimum=10.0, maximum=5000.0, cosmology='Planck15', name='luminosity_distance', latex_label='$d_L$', unit='Mpc', boundary=None)
 
-    loglike, prior_transform, inverse_prior_transform, log_dir, param_names = make_analysis_functions(injection_parameters=injection_params, folder_name='test_injection', priors=prior_dict)
+    loglike, prior_transform, inverse_prior_transform, log_dir, param_names = make_analysis_functions(injection_parameters=injection_params, folder_name='bns_test', priors=prior_dict)
 
-    run_pe(loglike, prior_transform, inverse_prior_transform, log_dir, param_names, injection_params)
+    run_pe(loglike, prior_transform, inverse_prior_transform, log_dir, param_names, injection_params, n_live=1000)
 
     sample = prior_dict.sample()
     
