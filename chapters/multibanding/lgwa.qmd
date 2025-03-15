@@ -593,7 +593,7 @@ The size and variability of the errors suggests that some array created with num
 #| fig-cap: "Relative binning error estimates obtained by looking at bin midpoints."
 
 errors_approx = np.empty_like(errors_relbin)
-n_to_plot = 15
+n_to_plot = 20
 path_errors_relbin_approx = data_path / 'cache' / 'errors_relbin_approx.npy'
 
 if path_errors_relbin_approx.exists():
