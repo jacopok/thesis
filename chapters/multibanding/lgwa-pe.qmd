@@ -55,25 +55,25 @@ param_names.remove('logl')
 param_names.remove('aux_logweight')
 
 total_mass = 2.8
-distance = 50
+distance = 40
 t0_moon = 1187008882.4
+q = 0.9
 
 params = {
-    'chirp_mass': total_mass / 2**(6/5), 
-    'mass_ratio': 0.9,
+    'chirp_mass': total_mass * q**(3/5) * (1 + q)**(-6/5), 
+    'mass_ratio': q,
     'luminosity_distance': distance,
     'theta_jn': 2.545065595974997,
     'psi': np.pi/2,
     'phase': np.pi,
     'ra': 3.4461599999999994,
     'dec': -0.4080839999999999,
-    'geocent_time': t0_moon,
-    'a_1': 0.,
-    'a_2': 0.,
-    'lambda_1': 400,
-    'lambda_2': 400,
+    'time_at_center': t0_moon,
+    'chi_1': 0.,
+    'chi_2': 0.,
+    'lambda_1': 400.,
+    'lambda_2': 400.
 }
-
 
 ranges = {}
 for name in param_names:
@@ -105,7 +105,7 @@ g.triangle_plot(
 
 ```{python}
 x_param = 'chirp_mass'
-y_param = 'geocent_time'
+y_param = 'time_at_center'
 
 plt.hist2d(post_pandas[x_param], post_pandas[y_param], weights=weights, range=[ranges[x_param], ranges[y_param]], bins=50)
 plt.axvline(params[x_param], c='white')
@@ -119,31 +119,33 @@ plt.axhline(params[y_param], c='white')
 - $\mathcal{M}(f)$ uncertainty
 
 ```{python}
-c_light = 299792458
-M_sun = 1.9885e30
-G_newton = 6.674e-11
 
-def time_to_merger(mchirp, f=np.inf):
+from thesis_scripts.simple_bns_waveforms import time_to_merger as ttm, Phif3hPN
 
-    Mchirp_seconds = mchirp * (M_sun * G_newton / c_light**3)
-    
-    return -5./(256.*np.pi**(8/3))/Mchirp_seconds**(5/3)/f**(8/3)
+def time_to_merger(mchirp, q, f=np.inf):
 
-freqs = np.geomspace(0.5, 10, num=25)
+    eta = q / (1+q)**2
+    return ttm(f, Phif3hPN(
+            f,
+            mchirp,
+            eta,
+    ))
+
+freqs = np.geomspace(0.5, 10, num=1000)
 
 correlations = [
     np.corrcoef(
         post_equal['chirp_mass'], 
-        post_equal['geocent_time'] + time_to_merger(post_equal['chirp_mass'], freq)
+        post_equal['time_at_center'] + time_to_merger(post_equal['chirp_mass'].to_numpy(), post_equal['mass_ratio'].to_numpy(), freq)
         )[0, 1] for freq in freqs]
 
-std0 = np.std(post_equal['geocent_time'])
-stds = [
-    np.std(post_equal['geocent_time'] + time_to_merger(post_equal['chirp_mass'], freq)) / std0 
-    for freq in freqs]
+# std0 = np.std(post_equal['time_at_center'])
+# stds = [
+#     np.std(post_equal['time_at_center'] + time_to_merger(post_equal['chirp_mass'], post_equal['mass_ratio'], freq)) / std0 
+#     for freq in freqs]
 
 plt.semilogx(freqs, correlations)
-plt.semilogx(freqs, stds)
+# plt.semilogx(freqs, stds)
 
 # plt.semilogx(freqs, [np.average(time_to_merger(post_pandas['chirp_mass'], freq)) for freq in freqs])
 ```
@@ -163,14 +165,14 @@ std = np.std(post_equal['chirp_mass'])
 norm = Normalize(true_m - 3*std, true_m + 3*std)
 
 idx_mass = int(np.where(post_equal.columns == 'chirp_mass')[0][0])
-idx_time = int(np.where(post_equal.columns == 'geocent_time')[0][0])
+idx_time = int(np.where(post_equal.columns == 'time_at_center')[0][0])
 
 for sample in post_equal.to_numpy()[:50]:
     m = sample[idx_mass]
     time = sample[idx_time]
     plt.semilogx(fs, 
                  time_to_merger(m, fs) 
-                 - (time - params['geocent_time']) 
+                 + (time - params['time_at_center']) 
                  - time_to_merger(params['chirp_mass'], fs)
                 , 
                  c=cmap(norm(m)),
