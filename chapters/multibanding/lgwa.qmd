@@ -52,6 +52,18 @@ plt.loglog(ff, noise_lgwa)
 plt.loglog(ff, noise_soundcheck)
 ```
 
+```{python}
+from thesis_scripts import data_path
+
+psd_path = data_path / 'LGWA_Si_psd.txt'
+psd_data = np.loadtxt(psd_path)
+
+displacement_noise = get_noise(psd_data[:, 0], n_seis = 4, T = 4, Q0 = 1e5, m = 10, P = 5e-3, dL = 1e-3/100)
+
+plt.loglog(psd_data[:, 0], displacement_noise / np.sqrt(psd_data[:, 1]))
+plt.show()
+```
+
 ## Response to gravitational waves
 
 The response to gravitational waves is assumed to be linear, in the form
@@ -605,7 +617,7 @@ else:
 		for i, mass in enumerate(masses):
 			mod_parameters = parameters | {'chirp_mass': mass}
 			errors_approx[i, j] = like.relbin_log_likelihood_error(mod_parameters, 1)
-	np.save(path_errors_relbin_approx, errors_approx)
+	# np.save(path_errors_relbin_approx, errors_approx)
 
 norm_freq = LogNorm(min(freq_numbers), max(freq_numbers[:n_to_plot]))
 

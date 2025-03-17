@@ -116,20 +116,21 @@ def relbin_log_likelihood_error_kernel(f_bin, f_mid, r_bin, r_mid, summary_data)
                 r1j_error = r1j_estimate[j] - r1_estimate
                 
                 # dh term, r0 part
-                ll_error_total += summary_data[channel, i_bin, 0] * np.conj(r0j_error)
+                ll_error_total += np.real(summary_data[channel, i_bin, 0] * np.conj(r0j_error))
                 # dh term, r1 part
-                ll_error_total += ((summary_data[channel, i_bin, 1]) * np.conj(r1j_error))
+                ll_error_total += np.real((summary_data[channel, i_bin, 1]) * np.conj(r1j_error))
                 # hh term, r0 part
                 # we do error propagation on the square of r0
                 # we need to remember  the 1/2 in front of l_hh
-                ll_error_total -= .5 * summary_data[channel, i_bin, 2] * (
+                ll_error_total -= .5 * summary_data[channel, i_bin, 2] * np.real(
                     (r0j_estimate[j]*np.conj(r0j_error)+
-                    (r0j_error)*np.conj(r0j_estimate[j])))
+                    r0j_error*np.conj(r0j_estimate[j])))
                 # hh term, r1 part
                 # the factor 2 in the term cancels with the 1/2 in front of l_hh
-                ll_error_total -= ((summary_data[channel, i_bin, 3]) * (
-                    (r0j_estimate[j]*np.conj(r1j_error)+
-                    (r0j_error)*np.conj(r1j_estimate[j]))))
+                ll_error_total -= summary_data[channel, i_bin, 3] * np.real(
+                    r0j_estimate[j]*np.conj(r1j_error)+
+                    r0j_error*np.conj(r1j_estimate[j])
+                )
 
 
     return abs(ll_error_total) / (n_mid+1)
@@ -359,7 +360,7 @@ class LunarLikelihood:
         
         assert np.all(self.h0_bin != 0.)
         
-    def make_relbin_data(self, frequency_grid, parameters_h0):
+    def make_relbin_data(self, frequency_grid, parameters_h0, n_local_grid=2**10):
         
         meta_dict = parameters_h0 | {
                     'n_freqs': len(frequency_grid),
@@ -400,7 +401,7 @@ class LunarLikelihood:
         
         for i, (f_left, f_right) in tqdm(enumerate(zip(self.relbin_frequencies[:-1], self.relbin_frequencies[1:])), total=self.n_bins):
             f_avg = (f_right+f_left) / 2.
-            local_grid = np.geomspace(f_left, f_right, num=2**11)
+            local_grid = np.geomspace(f_left, f_right, num=n_local_grid)
             local_psd = self.psd(local_grid)
             local_h0 = self.projected_waveform(local_grid, parameters_h0)
             for channel in range(2):
