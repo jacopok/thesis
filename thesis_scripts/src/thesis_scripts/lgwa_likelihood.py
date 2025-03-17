@@ -13,7 +13,7 @@ from scipy.interpolate import interp1d
 from scipy.integrate import trapezoid
 from tqdm import tqdm
 import yaml
-from numba import njit, types, float64, complex128
+from numba import njit, types, float64, complex128, int64
 
 SPEED_OF_LIGHT = 299792458.
 DETECTOR_LIFETIME = 10 * 3.16e7
@@ -76,7 +76,7 @@ def relbin_log_likelihood_kernel(r0, r1, summary_data):
 
     return ll_total
 
-@njit(float64(
+@njit(types.Tuple((float64, int64[:]))(
     float64[:],
     float64[:, :],
     complex128[:, :], 
@@ -88,7 +88,10 @@ def relbin_log_likelihood_error_kernel(f_bin, f_mid, r_bin, r_mid, summary_data)
     ll_error_total = 0
     n_mid = f_mid.shape[1]
     
-    for channel in range(2):
+    max_error_bin = np.zeros(r_bin.shape[0], dtype=int64)
+    for channel in range(r_bin.shape[0]):
+        max_error_found = 0.
+        
         for i_bin in range(summary_data.shape[1]):
             
             r0_estimate = (r_bin[channel, i_bin+1] + r_bin[channel, i_bin])/2. 
@@ -107,8 +110,10 @@ def relbin_log_likelihood_error_kernel(f_bin, f_mid, r_bin, r_mid, summary_data)
             r1j_estimate[n_mid] = (r_bin[channel, i_bin+1] - r_mid[channel, i_bin, n_mid-1])/(f_bin[i_bin+1]-f_mid[i_bin, n_mid-1])
             
             for j in range(1, n_mid):
-                r0j_estimate[j] = (r_mid[channel, i_bin, j+1] + r_mid[channel, i_bin, j])/2.
-                r1j_estimate[j] = (r_mid[channel, i_bin, j+1] - r_mid[channel, i_bin, j])/(f_mid[i_bin, j+1]-f_mid[i_bin, j])
+                r0j_estimate[j] = (r_mid[channel, i_bin, j] + r_mid[channel, i_bin, j-1])/2.
+                r1j_estimate[j] = (r_mid[channel, i_bin, j] - r_mid[channel, i_bin, j-1])/(f_mid[i_bin, j]-f_mid[i_bin, j-1])
+            
+            error_this_bin = 0.
             
             for j in range(n_mid+1):
                 
@@ -116,24 +121,26 @@ def relbin_log_likelihood_error_kernel(f_bin, f_mid, r_bin, r_mid, summary_data)
                 r1j_error = r1j_estimate[j] - r1_estimate
                 
                 # dh term, r0 part
-                ll_error_total += np.real(summary_data[channel, i_bin, 0] * np.conj(r0j_error))
+                error_this_bin += np.real(summary_data[channel, i_bin, 0] * np.conj(r0j_error))
                 # dh term, r1 part
-                ll_error_total += np.real((summary_data[channel, i_bin, 1]) * np.conj(r1j_error))
+                error_this_bin += np.real((summary_data[channel, i_bin, 1]) * np.conj(r1j_error))
                 # hh term, r0 part
                 # we do error propagation on the square of r0
                 # we need to remember  the 1/2 in front of l_hh
-                ll_error_total -= .5 * summary_data[channel, i_bin, 2] * np.real(
+                error_this_bin -= .5 * summary_data[channel, i_bin, 2] * np.real(
                     (r0j_estimate[j]*np.conj(r0j_error)+
                     r0j_error*np.conj(r0j_estimate[j])))
                 # hh term, r1 part
                 # the factor 2 in the term cancels with the 1/2 in front of l_hh
-                ll_error_total -= summary_data[channel, i_bin, 3] * np.real(
+                error_this_bin -= summary_data[channel, i_bin, 3] * np.real(
                     r0j_estimate[j]*np.conj(r1j_error)+
                     r0j_error*np.conj(r1j_estimate[j])
                 )
+            ll_error_total += error_this_bin
+            if max_error_found < abs(error_this_bin):
+                max_error_bin[channel] = i_bin
 
-
-    return abs(ll_error_total) / (n_mid+1)
+    return abs(ll_error_total) / (n_mid+1), max_error_bin
 
 def noise_weighted_inner_product(aa, bb, power_spectral_density, frequencies):
     """
@@ -323,6 +330,7 @@ class LunarLikelihood:
         h_x = h_plus * hpx + h_cross * hcx
         h_y = h_plus * hpy + h_cross * hcy
         
+        # returns shape (n_channels, n_frequencies)
         return np.vstack((h_x, h_y))
 
     def compute_center(self, time):
@@ -359,6 +367,30 @@ class LunarLikelihood:
         self.h0_bin = h0[:, h0_mask]
         
         assert np.all(self.h0_bin != 0.)
+        
+    def add_relbin_frequency(self, i_bin, n_local_grid=2**10):
+        
+        f1, f2 = self.relbin_frequencies[i_bin], self.relbin_frequencies[i_bin+1]
+        
+        f_mid = np.sqrt(f1 * f2)
+        freqs = [f1, f_mid, f2]
+        
+        self.relbin_summary_data = np.insert(self.relbin_summary_data, i_bin+1, np.zeros((2, 4)), axis=1)
+        
+        for i, (f_left, f_right) in enumerate(zip(freqs[:-1], freqs[1:])):
+            f_avg = (f_right+f_left) / 2.
+            local_grid = np.geomspace(f_left, f_right, num=n_local_grid)
+            local_psd = self.psd(local_grid)
+            local_h0 = self.projected_waveform(local_grid, self.h0_parameters)
+            for channel in range(2):
+
+                A0 = noise_weighted_inner_product(local_h0[channel], local_h0[channel], local_psd, local_grid)
+                A1 = noise_weighted_inner_product(local_h0[channel], local_h0[channel] * (local_grid - f_avg), local_psd, local_grid)
+
+                self.relbin_summary_data[channel, i+i_bin, 0] = A0
+                self.relbin_summary_data[channel, i+i_bin, 1] = A1
+                self.relbin_summary_data[channel, i+i_bin, 2] = A0
+                self.relbin_summary_data[channel, i+i_bin, 3] = A1
         
     def make_relbin_data(self, frequency_grid, parameters_h0, n_local_grid=2**10):
         
@@ -447,8 +479,8 @@ class LunarLikelihood:
         # self.relbin_summary_data has shape [n_channels, n_freqs-1, 4]
         # the last axis contains A0, A1, B0, B1 in this order
 
-        return relbin_log_likelihood_error_kernel(f_bin, f_mid, r_bin, r_mid, np.asarray(self.relbin_summary_data, dtype=complex))
-
+        error, i_bin = relbin_log_likelihood_error_kernel(f_bin, f_mid, r_bin, r_mid, np.asarray(self.relbin_summary_data, dtype=complex))
+        return error
 
     def optimal_snr(self, f, parameters):
         h = self.projected_waveform(f, parameters)

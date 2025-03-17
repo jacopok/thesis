@@ -16,40 +16,66 @@ format:
 #| label: fig-lgwa-soundcheck-displacement-noise
 #| fig-cap: "Displacement noise estimates for LGWA and Soundcheck."
 
-import thesis_scripts
+from thesis_scripts import *
 import numpy as np
 import matplotlib.pyplot as plt
 import astropy.units as u
 import astropy.constants as ac
 
-ff = np.logspace(-3,1,500)
-
-hbar = ac.hbar.si.value
-kB = ac.k_B.si.value
-c = ac.c.si.value
-lambda0 = 1.064e-6
-f0 = 0.1
-
 # there is an extra sqrt(2) in the shot noise, which is explained by the
 # fact that only one the two interferometer arms picks up the signal
 
-def get_noise(ff, n_seis, T, Q0, m, P, dL):
+def get_noise_asd(ff, n_seismometers, temperature, quality_factor, m, P, dL):
+	hbar = ac.hbar.si.value
+	kB = ac.k_B.si.value
+	c = ac.c.si.value
+	laser_wavelength = 1.064e-6
+	reference_frequency = 0.1
 
-	omega0 = 2*np.pi*c/lambda0
-	n_shot = lambda0/(2*np.pi)*np.sqrt(2*hbar*omega0/P)*np.sqrt((f0**2-ff**2)**2+(f0**2/Q0)**2)/ff**2
-	n_freq = dL*(4e4+5e4*(0.1/ff)**1.2)/omega0*np.sqrt((f0**2-ff**2)**2+(f0**2/Q0)**2)/ff**2
-	n_readout = np.sqrt(n_shot**2 + n_freq**2)/np.sqrt(n_seis)
-	n_therm = np.sqrt(4*kB*T*(2*np.pi*f0)**2/(m*Q0*2*np.pi*ff))/(2*np.pi*ff)**2
+	omega0 = 2*np.pi*c/laser_wavelength
 
-	return np.sqrt(n_readout**2 + n_therm**2)/np.sqrt(n_seis)
+	n_shot = laser_wavelength/(2*np.pi)*np.sqrt(2*hbar*omega0/P)*np.sqrt((reference_frequency**2-ff**2)**2+(reference_frequency**2/quality_factor)**2)/ff**2
+
+	n_freq = dL*(4e4+5e4*(0.1/ff)**1.2)/omega0*np.sqrt((reference_frequency**2-ff**2)**2+(reference_frequency**2/quality_factor)**2)/ff**2
+
+	n_readout = np.sqrt(n_shot**2 + n_freq**2)/np.sqrt(n_seismometers)
+	
+	n_therm = np.sqrt(4*kB*temperature*(2*np.pi*reference_frequency)**2/(m*quality_factor*2*np.pi*ff))/(2*np.pi*ff)**2
+
+	return np.sqrt(n_readout**2 + n_therm**2)/np.sqrt(n_seismometers)
+
+ff = np.logspace(-3,1,500)
 
 f_stab = 100
-noise_lgwa = get_noise(ff, n_seis = 4, T = 4, Q0 = 1e5, m = 10, P = 5e-3, dL = 1e-3/f_stab)
 
-noise_soundcheck = get_noise(ff, n_seis = 1, T = 40, Q0 = 1e4, m = 3, P = 5e-9, dL = 1e-3)
+noise_params_lgwa = {
+	'n_seismometers': 4, 
+	'temperature': 4, 
+	'quality_factor': 1e5, 
+	'm': 10, 
+	'P': 5e-3, 
+	'dL': 1e-3/f_stab
+}
 
-plt.loglog(ff, noise_lgwa)
-plt.loglog(ff, noise_soundcheck)
+noise_params_soundcheck = {
+	'n_seismometers': 1, 
+	'temperature': 40, 
+	'quality_factor': 1e4, 
+	'm': 3, 
+	'P': 5e-9, 
+	'dL': 1e-3
+}
+
+
+noise_lgwa = get_noise_asd(ff, **noise_params_lgwa)
+noise_soundcheck = get_noise_asd(ff, **noise_params_soundcheck)
+
+plt.loglog(ff, noise_lgwa, label='LGWA')
+plt.loglog(ff, noise_soundcheck, label='Soundcheck')
+plt.xlabel('Frequency [Hz]')
+plt.ylabel('Noise ASD $[\\mathrm{{m}} / \\sqrt{{\\mathrm{{Hz}}}}]$')
+plt.legend()
+plt.grid()
 ```
 
 ```{python}
@@ -58,10 +84,30 @@ from thesis_scripts import data_path
 psd_path = data_path / 'LGWA_Si_psd.txt'
 psd_data = np.loadtxt(psd_path)
 
-displacement_noise = get_noise(psd_data[:, 0], n_seis = 4, T = 4, Q0 = 1e5, m = 10, P = 5e-3, dL = 1e-3/100)
+displacement_noise = get_noise_asd(psd_data[:, 0], **noise_params_lgwa)
 
-plt.loglog(psd_data[:, 0], displacement_noise / np.sqrt(psd_data[:, 1]))
+R_moon = 1737.4e3
+lgwa_strain_asd = np.sqrt(psd_data[:, 1])
+
+plt.loglog(psd_data[:, 0], displacement_noise / lgwa_strain_asd)
+plt.ylabel('Response model [m]')
+plt.xlabel('Frequency [Hz]')
 plt.show()
+```
+
+```{python}
+soundcheck_displacement_noise = get_noise_asd(psd_data[:, 0], **noise_params_soundcheck)
+
+soundcheck_psd = np.loadtxt(data_path / 'LGWA_Soundcheck_psd.txt')
+
+plt.loglog(psd_data[:, 0], soundcheck_displacement_noise / (displacement_noise / lgwa_strain_asd), label='Recomputed Soundcheck strain ASD')
+plt.loglog(soundcheck_psd[:, 0], np.sqrt(soundcheck_psd[:, 1]), label='Stored Soundcheck ASD')
+
+plt.ylabel('Strain ASD $[\\mathrm{{m}} / \\sqrt{{\\mathrm{{Hz}}}}]$')
+plt.xlabel('Frequency [Hz]')
+
+plt.legend()
+plt.plot()
 ```
 
 ## Response to gravitational waves
@@ -145,7 +191,7 @@ For the $\psi = 0$ case we recover the standard basis vectors along latitude and
 ##### On the handedness of the basis
 
 I think the orientation of the basis might be flipped compared to the standard case, since we construct it based on the vector $m$ but the real propagation direction is $-m$; this should be perfectly degenerate with a switch $\psi \to - \psi$ so I wouldn't particularly worry about it.
-
+Nb
 :::
 
 Once we have computed these vectors, we can recover the strain as 
@@ -597,8 +643,7 @@ plt.colorbar(ScalarMappable(cmap=cmap_regular, norm=norm), ax=plt.gca(), label='
 plt.show()
 ```
 
-The following works for 1 midpoint bin, but it stops when the number increases above 1.
-The size and variability of the errors suggests that some array created with numpy empty is not being properly filled (but which? I triple checked the midpoint ratio values...)
+
 
 ```{python}
 #| label: fig-relative-binning-quick-error-estimation
@@ -617,7 +662,7 @@ else:
 		for i, mass in enumerate(masses):
 			mod_parameters = parameters | {'chirp_mass': mass}
 			errors_approx[i, j] = like.relbin_log_likelihood_error(mod_parameters, 1)
-	# np.save(path_errors_relbin_approx, errors_approx)
+	np.save(path_errors_relbin_approx, errors_approx)
 
 norm_freq = LogNorm(min(freq_numbers), max(freq_numbers[:n_to_plot]))
 
