@@ -125,7 +125,82 @@ def plot_relbin_error_estimation():
     r = np.geomspace(1e-6, 1)
     plt.plot(r, r, c='black', ls='--')
     plt.show()
+
+def plot_relbin_greedy_vs_geometric():
+
+    rng = np.random.default_rng(seed=1)
+    run_folder = data_path / 'bns_test'
+
+    fname = run_folder / 'chains' /'weighted_post.txt'
+    assert fname.exists()
     
+    injection_params = yaml.safe_load((run_folder / 'injection_parameters.yaml').read_text())
+    post_equal = pd.read_csv(fname.parent / 'equal_weighted_post.txt', sep = ' ')
+    prior = BNSPriorDict({})
+    prior.from_file(run_folder / 'priors.txt.prior')
+
+
+    n_p, n_f = 20, 5
+    random_indices = rng.choice(post_equal.index, size=n_p, replace=False)
+    n_freqs = np.geomspace(1e6, 4e7, num=n_f, dtype=int)
+    accurate_ll_values = np.load(run_folder / 'accurate_ll_values.npy')
+
+    # this plot shows that the "accurate ll values" are accurate to within roughly 1e-5
+    # plt.loglog(n_freqs, abs(accurate_ll_values.T-accurate_ll_values[:, -1]))
+    # plt.show()
+    # plt.close()
+    
+    like = LunarLikelihood()
+    like.compute_center(injection_params['time_at_center'])
+
+    likes_relbin = np.empty((n_p,))
+    # estimated_errors_relbin = np.empty((n_p,))
+    errors_relbin_greedy = np.empty((n_p,))
+    errors_relbin = np.empty((n_p,))
+    
+    greedy_freqs = np.load(run_folder / 'greedy_freqs.npy')
+    
+    f = np.geomspace(greedy_freqs[0], 3, num=len(greedy_freqs))
+    import os
+    os.remove(like.log_dir / 'relbin_metadata.yaml')
+    like.make_relbin_data(f, from_bilby(injection_params))
+    for i, idx in tqdm(enumerate(random_indices)):
+        params = from_bilby(post_equal.iloc[idx].to_dict())
+        errors_relbin[i] = abs(like.relbin_log_likelihood_ratio(params) - accurate_ll_values[i, -1])
+        # errors_relbin[i], _ = like.relbin_log_likelihood_error(params)
+
+    os.remove(like.log_dir / 'relbin_metadata.yaml')
+    like.make_relbin_data(greedy_freqs, from_bilby(injection_params))
+    for i, idx in tqdm(enumerate(random_indices)):
+        params = from_bilby(post_equal.iloc[idx].to_dict())
+        errors_relbin_greedy[i] = abs(like.relbin_log_likelihood_ratio(params) - accurate_ll_values[i, -1])
+        # errors_relbin_greedy[i], _ = like.relbin_log_likelihood_error(params)
+            
+    errors_full_integration = abs(accurate_ll_values[:, -2] - accurate_ll_values[:, -1])
+
+    plt.scatter(
+        x=errors_relbin, 
+        y=errors_relbin_greedy, 
+        )
+    plt.errorbar(
+        x=errors_relbin, 
+        y=errors_relbin_greedy, 
+        yerr=errors_full_integration,
+        xerr=errors_full_integration,
+        c='black',
+        fmt='none',
+    )
+    plt.xscale('log')
+    plt.yscale('log')
+    
+    plt.xlabel('Loglikelihood error: geometric grid')
+    plt.ylabel('Loglikelihood error: greedy grid')
+    # plt.colorbar(ScalarMappable(cmap=cm.imola, norm=norm_freq), label='Frequency nodes used', ax=plt.gca())
+    
+    r = np.geomspace(1e-4, 1e-2)
+    plt.plot(r, r, c='black', ls='--')
+    plt.show()
+
 def plot_all_ll_estimated_errors():
     run_folder = data_path / 'bns_test'
 
@@ -171,4 +246,5 @@ def plot_all_ll_estimated_errors():
     
 if __name__ == '__main__':
     # plot_relbin_error_estimation()
-    plot_all_ll_estimated_errors()
+    # plot_all_ll_estimated_errors()
+    plot_relbin_greedy_vs_geometric()

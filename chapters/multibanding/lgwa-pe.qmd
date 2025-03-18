@@ -42,38 +42,22 @@ PE results
 import pandas as pd
 import numpy as np
 from getdist import plots, MCSamples
-fname = data_path / 'gw170817_run' / 'chains' /'weighted_post.txt'
+import yaml
+
+run_folder = data_path / 'bns_test'
+fname = run_folder / 'chains' /'weighted_post.txt'
 assert fname.exists()
 post_pandas = pd.read_csv(fname, sep=' ')
 weights = post_pandas['weight']
 
 post_equal = pd.read_csv(fname.parent / 'equal_weighted_post.txt', sep = ' ')
 
+injection_params = yaml.safe_load((run_folder / 'injection_parameters.yaml').read_text())
+
 param_names = list(post_pandas.columns)
 param_names.remove('weight')
 param_names.remove('logl')
 param_names.remove('aux_logweight')
-
-total_mass = 2.8
-distance = 40
-t0_moon = 1187008882.4
-q = 0.9
-
-params = {
-    'chirp_mass': total_mass * q**(3/5) * (1 + q)**(-6/5), 
-    'mass_ratio': q,
-    'luminosity_distance': distance,
-    'theta_jn': 2.545065595974997,
-    'psi': np.pi/2,
-    'phase': np.pi,
-    'ra': 3.4461599999999994,
-    'dec': -0.4080839999999999,
-    'time_at_center': t0_moon,
-    'chi_1': 0.,
-    'chi_2': 0.,
-    'lambda_1': 400.,
-    'lambda_2': 400.
-}
 
 ranges = {}
 for name in param_names:
@@ -95,22 +79,14 @@ samples_full = MCSamples(
 
 ```
 
-<!-- ```{python}
+```{python}
 g = plots.get_subplot_plotter()
 g.triangle_plot(
     [samples_full],
     ['chirp_mass', 'mass_ratio', 'ra', 'dec']
 )
-``` -->
-
-```{python}
-x_param = 'chirp_mass'
-y_param = 'time_at_center'
-
-plt.hist2d(post_pandas[x_param], post_pandas[y_param], weights=weights, range=[ranges[x_param], ranges[y_param]], bins=50)
-plt.axvline(params[x_param], c='white')
-plt.axhline(params[y_param], c='white')
 ```
+
 
 - amplitude PPD
 - phase PPD
@@ -119,35 +95,48 @@ plt.axhline(params[y_param], c='white')
 - $\mathcal{M}(f)$ uncertainty
 
 ```{python}
-
-from thesis_scripts.simple_bns_waveforms import time_to_merger as ttm, Phif3hPN
+from thesis_scripts.simple_bns_waveforms import Phif3hPN
+from numdifftools import Derivative
 
 def time_to_merger(mchirp, q, f=np.inf):
-
     eta = q / (1+q)**2
-    return ttm(f, Phif3hPN(
-            f,
-            mchirp,
+    M = mchirp / eta**(3/5)
+    func = lambda freq : Phif3hPN(
+            freq,
+            M,
             eta,
-    ))
+    )
+    return Derivative(func)(f) / (2*np.pi)
 
-freqs = np.geomspace(0.5, 10, num=1000)
+freqs = np.geomspace(0.4, 3, num=100)
+samples_to_use = 1000
+m = post_equal['chirp_mass'].to_numpy()[:samples_to_use]
+q = post_equal['mass_ratio'].to_numpy()[:samples_to_use]
+t = post_equal['time_at_center'].to_numpy()[:samples_to_use]
 
 correlations = [
     np.corrcoef(
-        post_equal['chirp_mass'], 
-        post_equal['time_at_center'] + time_to_merger(post_equal['chirp_mass'].to_numpy(), post_equal['mass_ratio'].to_numpy(), freq)
+        m, 
+        t + time_to_merger(m, q, freq)
         )[0, 1] for freq in freqs]
 
-# std0 = np.std(post_equal['time_at_center'])
-# stds = [
-#     np.std(post_equal['time_at_center'] + time_to_merger(post_equal['chirp_mass'], post_equal['mass_ratio'], freq)) / std0 
-#     for freq in freqs]
+correlations_ttm = [
+    np.corrcoef(
+        m, 
+        time_to_merger(m, q, freq)
+        )[0, 1] for freq in freqs]
 
-plt.semilogx(freqs, correlations)
-# plt.semilogx(freqs, stds)
 
-# plt.semilogx(freqs, [np.average(time_to_merger(post_pandas['chirp_mass'], freq)) for freq in freqs])
+std0 = np.std(t)
+stds = [
+    np.std(t + time_to_merger(m, q, freq)) / std0 
+    for freq in freqs]
+
+plt.plot(freqs, correlations, label='Correlation betwen t(f) and chirp mass')
+plt.plot(freqs, correlations_ttm, label='Correlation betwen time to merger and chirp mass')
+plt.plot(freqs, stds, label='Standard deviation of t(f)')
+plt.legend()
+plt.grid()
 ```
 
 ```{python}
@@ -157,32 +146,36 @@ from cmcrameri import cm
 
 N = 100
 
-fs = np.geomspace(.5, 4, num=N)
+fs = np.geomspace(.5, 10, num=N)
 
 cmap = cm.vik
-true_m = params['chirp_mass']
+true_m = injection_params['chirp_mass']
 std = np.std(post_equal['chirp_mass'])
-norm = Normalize(true_m - 3*std, true_m + 3*std)
+norm = Normalize(- 3*std, + 3*std)
 
 idx_mass = int(np.where(post_equal.columns == 'chirp_mass')[0][0])
+idx_mass_ratio = int(np.where(post_equal.columns == 'mass_ratio')[0][0])
 idx_time = int(np.where(post_equal.columns == 'time_at_center')[0][0])
 
-for sample in post_equal.to_numpy()[:50]:
+for sample in post_equal.to_numpy()[:100]:
     m = sample[idx_mass]
+    q = sample[idx_mass_ratio]
     time = sample[idx_time]
     plt.semilogx(fs, 
-                 time_to_merger(m, fs) 
-                 + (time - params['time_at_center']) 
-                 - time_to_merger(params['chirp_mass'], fs)
-                , 
-                 c=cmap(norm(m)),
-                 alpha=.8)
-plt.colorbar(ScalarMappable(cmap=cmap, norm=norm), ax=plt.gca())
+    time_to_merger(m, q, fs) + time 
+    - (time_to_merger(injection_params['chirp_mass'], injection_params['mass_ratio'], fs)
+    + injection_params['time_at_center']), 
+    c=cmap(norm(m-true_m)),
+    alpha=.8)
+plt.colorbar(ScalarMappable(cmap=cmap, norm=norm), ax=plt.gca(), label='Chirp mass deviation [Msun]')
 plt.xlabel('Frequency [Hz]')
-plt.ylabel('Time to merger minus reference [signs are strange, s]')
-
+plt.ylabel('Time at frequency minus reference [s]')
 ```
 
 ```{python}
-plt.scatter(post_equal['chirp_mass'], time_to_merger(post_equal['chirp_mass'].to_numpy(), post_equal['mass_ratio'].to_numpy(), 0.1))
+m = post_equal['chirp_mass'].to_numpy()[:samples_to_use]
+q = post_equal['mass_ratio'].to_numpy()[:samples_to_use]
+t = post_equal['time_at_center'].to_numpy()[:samples_to_use]
+
+plt.scatter(m, time_to_merger(m, q, 2))
 ```

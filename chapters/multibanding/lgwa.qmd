@@ -44,6 +44,16 @@ def get_noise_asd(ff, n_seismometers, temperature, quality_factor, m, P, dL):
 
 	return np.sqrt(n_readout**2 + n_therm**2)/np.sqrt(n_seismometers)
 
+def get_noise_asd_squid(ff, energy_resolution, critical_frequency, coupling_efficiency, suspended_mass, quality_factor, temperature):
+	hbar = ac.hbar.si.value
+	kB = ac.k_B.si.value
+	c = ac.c.si.value
+
+	n_therm = np.sqrt(4*kB*temperature*(2*np.pi*reference_frequency)**2/(m*quality_factor*2*np.pi*ff))/(2*np.pi*ff)**2
+
+	eA = energy_resolution * hbar
+
+
 ff = np.logspace(-3,1,500)
 
 f_stab = 100
@@ -55,6 +65,10 @@ noise_params_lgwa = {
 	'm': 10, 
 	'P': 5e-3, 
 	'dL': 1e-3/f_stab
+}
+
+noise_params_lgwa_si = {
+	'energy_resolution': 50,
 }
 
 noise_params_soundcheck = {

@@ -24,6 +24,7 @@ dependencies = [
     "lunarsky>=0.2.1",
     "matplotlib>=3.9.2",
     "numba>=0.60.0",
+    "numdifftools>=0.9.41",
     "numpy>=1.26.4",
     "pandas>=1.4.1",
     "pytest>=8.3.5",

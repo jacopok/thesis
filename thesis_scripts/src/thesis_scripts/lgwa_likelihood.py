@@ -82,15 +82,17 @@ def relbin_log_likelihood_kernel(r0, r1, summary_data):
     complex128[:, :], 
     complex128[:, :, :], 
     complex128[:, :, :], 
+    int64
 ))
-def relbin_log_likelihood_error_kernel(f_bin, f_mid, r_bin, r_mid, summary_data):
+def relbin_log_likelihood_error_kernel(f_bin, f_mid, r_bin, r_mid, summary_data, n_to_return):
 
     ll_error_total = 0
     n_mid = f_mid.shape[1]
     
     max_error_bin = np.zeros(r_bin.shape[0], dtype=int64)
+    errors = np.empty((r_bin.shape[0], summary_data.shape[1]), dtype=complex128)
+    
     for channel in range(r_bin.shape[0]):
-        max_error_found = 0.
         
         for i_bin in range(summary_data.shape[1]):
             
@@ -136,11 +138,12 @@ def relbin_log_likelihood_error_kernel(f_bin, f_mid, r_bin, r_mid, summary_data)
                     r0j_estimate[j]*np.conj(r1j_error)+
                     r0j_error*np.conj(r1j_estimate[j])
                 )
-            ll_error_total += error_this_bin
-            if max_error_found < abs(error_this_bin):
-                max_error_bin[channel] = i_bin
-
-    return abs(ll_error_total) / (n_mid+1), max_error_bin
+            errors[channel, i_bin] = error_this_bin
+    
+    # get the indices for which all channels are badly represented
+    error_indices = np.argsort(-np.abs(np.sum(errors, axis=0)))[:n_to_return]
+    
+    return abs(np.sum(errors)) / (n_mid+1), error_indices
 
 def noise_weighted_inner_product(aa, bb, power_spectral_density, frequencies):
     """
@@ -276,8 +279,7 @@ class LunarLikelihood:
         else:
             self.compute_response_interpolant()
 
-    def projected_waveform(self, f, parameters):
-        
+    def amp_phase(self, f, parameters):
         q = parameters['mass_ratio']
         q = max(q, 1/q)
         eta = q / (1+q)**2
@@ -304,7 +306,15 @@ class LunarLikelihood:
             parameters['d_lambda'],
             parameters['luminosity_distance']
         )
+        return amplitude, phase
+    
+    def t_of_f(self, f, parameters):
+        amplitude, phase = self.amp_phase(f, parameters)
+        return time_to_merger(f, phase) + parameters['time_at_center']
+
+    def projected_waveform(self, f, parameters):
         
+        amplitude, phase = self.amp_phase(f, parameters)
         t_of_f = time_to_merger(f, phase) + parameters['time_at_center']
 
         prop_unit_vector = -spherical_to_cartesian(parameters['right_ascension'], parameters['declination'])
@@ -372,10 +382,13 @@ class LunarLikelihood:
         
         f1, f2 = self.relbin_frequencies[i_bin], self.relbin_frequencies[i_bin+1]
         
-        f_mid = np.sqrt(f1 * f2)
-        freqs = [f1, f_mid, f2]
+        f_mid = (f1+f2) / 2.
+        freqs = np.asarray([f1, f_mid, f2])
         
         self.relbin_summary_data = np.insert(self.relbin_summary_data, i_bin+1, np.zeros((2, 4)), axis=1)
+        self.relbin_frequencies = np.insert(self.relbin_frequencies, i_bin+1, f_mid)
+        # compute h0 at three frequencies to allow for t_of_f computation by phase differentiation
+        self.h0_bin = np.insert(self.h0_bin, i_bin+1, self.projected_waveform(freqs, self.h0_parameters)[:,  1], axis=1)
         
         for i, (f_left, f_right) in enumerate(zip(freqs[:-1], freqs[1:])):
             f_avg = (f_right+f_left) / 2.
@@ -420,10 +433,10 @@ class LunarLikelihood:
 
                 return
             
-        with open(fname_meta, 'w') as f:
-            yaml.dump(
-                meta_dict, 
-                f)
+            with open(fname_meta, 'w') as f:
+                yaml.dump(
+                    meta_dict, 
+                    f)
     
         # here we work with an injection, so d == h0
     
@@ -464,7 +477,7 @@ class LunarLikelihood:
         return relbin_log_likelihood_kernel(r0, r1, np.asarray(summary_data, dtype=complex))
 
 
-    def relbin_log_likelihood_error(self, parameters, n_midpoints=1):
+    def relbin_log_likelihood_error(self, parameters, n_midpoints=1, n_to_return=1):
         f_bin = self.relbin_frequencies
         f_mid = np.empty((self.n_bins, n_midpoints))
         for i in range(self.n_bins):
@@ -479,12 +492,13 @@ class LunarLikelihood:
         # self.relbin_summary_data has shape [n_channels, n_freqs-1, 4]
         # the last axis contains A0, A1, B0, B1 in this order
 
-        error, i_bin = relbin_log_likelihood_error_kernel(f_bin, f_mid, r_bin, r_mid, np.asarray(self.relbin_summary_data, dtype=complex))
-        return error
+        error, error_indices = relbin_log_likelihood_error_kernel(f_bin, f_mid, r_bin, r_mid, np.asarray(self.relbin_summary_data, dtype=complex), n_to_return)
+        indices = list(set(error_indices.flatten()))
+        return error, indices
 
     def optimal_snr(self, f, parameters):
         h = self.projected_waveform(f, parameters)
-        return np.sqrt(noise_weighted_inner_product(h, h, self.psd(f), f))
+        return np.sqrt(noise_weighted_inner_product(h, h, self.psd(f), f).sum())
 
 if __name__ == '__main__':
     like = LunarLikelihood()

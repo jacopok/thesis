@@ -42,7 +42,7 @@ def test_grid_refine_grid(injection):
     like2 = LunarLikelihood()
     like2.make_relbin_data(f2, injection)
     
-    breakpoint()
+    # breakpoint()
     # it seems like the whole array is modified - weird!
     
     assert np.allclose(like.relbin_summary_data, like2.relbin_summary_data)
