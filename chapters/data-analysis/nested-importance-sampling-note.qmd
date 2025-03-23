@@ -1,0 +1,16 @@
+---
+format:
+    html:
+        code-fold: true
+        bibliography: ../../rehear.bib
+        execute:
+            debug: false
+        toc: true
+        self-contained: true
+    pdf:
+        execute:
+            echo: false
+        bibliography: ../../rehear.bib
+---
+
+{{< include sections/_nested-importance-sampling.qmd >}}

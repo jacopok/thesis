@@ -15,6 +15,8 @@ format:
 from thesis_scripts import *
 ```
 
+## Literature review
+
 This was already somehow handled for PE with stellar mass binaries with LISA, e.g. [this paper](https://arxiv.org/pdf/2007.08544.pdf) or [this one](https://arxiv.org/pdf/2003.00357.pdf) (Mersat, Baker, Dal Canton).
 The merger time is not a good parameter to do PE, it degenerates with the chirp mass a lot.
 One can instead do PE with a time at some fixed frequency, which can be optimized.
@@ -25,18 +27,216 @@ Independent group tackling the same problem: [Buscicchio+](https://arxiv.org/pdf
 
 ## LGWA parameter estimation
 
+### Source selection
 
-### Injection results
+We elect to start the exploration of the capabilities of the LGWA by injecting into it parameters from the two most famous detectections from the LIGO-Virgo-KAGRA collaboration:
+
+- GW150914, the first detection, a binary of black holes with component masses around $30M_{\odot}$;
+- GW170817, the first neutron star binary detection, with component masses around $1.4M_{\odot}$, whose electromagnetic counterpart was detected from the radio band up to the GigaelectronVolt.
+
+In order to select a single set of parameters from the posterior distributions of these sources, we compute the signal-to-noise ratio they would have if detected by the LGWA for each posterior sample.
+
+We expect the sources detected by the LVK to be typically located in sky directions favorable for it, which will not coincide with those favorable for the LGWA. On the other hand, the intrinsic distribution of the astrophysical population is expected to be roughly isotropic, as all these sources are extragalactic.
+Therefore, we randomize the sky position of the source and perform the same computation, choosing the injection parameters as those yielding the median of this distribution.
+
+
+```{python}
+#| label: fig-gw170817-with-lgwa
+#| fig-cap: "Signal-to-noise ratio for a detection of GW170817 with LGWA. The detector is assumed to run for 10 years, but most of this signal-to-noise ratio is accumulated in the last year. In both scenarios, the phase and polarization parameters are randomized. The true location of the event appeared to be favorable for LGWA, which is why randomizing it leads to SNR loss on average."
+
+import h5py
+import matplotlib.pyplot as plt
+import numpy as np
+from tqdm import tqdm
+from thesis_scripts.lgwa_pe.lgwa_likelihood import LunarLikelihood
+from thesis_scripts.lgwa_pe.lgwa_nested_sampling import from_bilby
+
+like = LunarLikelihood()
+freq = np.geomspace(1e-3, 3, num=10000)
+
+# load GWTC-1 posterior for GW170817
+# from here: https://gwosc.org/eventapi/html/GWTC-1-confident/GW170817/v3/
+gw170817_file = h5py.File(data_path / 'GW170817_GWTC-1.hdf5', 'r')
+
+# keys (gw170817_file['IMRPhenomPv2NRT_lowSpin_posterior'].dtype):
+# dtype([
+# ('costheta_jn', '<f8'), 0
+# ('luminosity_distance_Mpc', '<f8'), 1
+# ('right_ascension', '<f8'), 2
+# ('declination', '<f8'), 3
+# ('m1_detector_frame_Msun', '<f8'), 4
+# ('m2_detector_frame_Msun', '<f8'), 5
+# ('lambda1', '<f8'), 6
+# ('lambda2', '<f8'), 7
+# ('spin1', '<f8'), 8
+# ('spin2', '<f8'), 9
+# ('costilt1', '<f8'), 10
+# ('costilt2', '<f8')]) 11
+
+rng = np.random.default_rng(seed=1)
+
+def params_from_sample_170817(sample):
+    m1, m2 = sample[4], sample[5]
+    return {
+        'theta_jn': np.arccos(sample[0]),
+        'luminosity_distance': sample[1],
+        'ra': sample[2],
+        'dec': sample[3],
+        'chirp_mass': (m1*m2)**(3/5) / (m1+m2)**(1/5),
+        'mass_ratio': m2/m1,
+        'lambda_1': sample[6],
+        'lambda_2': sample[7],
+        'chi_1': sample[8]*sample[10],
+        'chi_2': sample[9]*sample[11],
+        'phase': rng.uniform(0, 2*np.pi),
+        'psi': rng.uniform(0, 2*np.pi),
+        'time_at_center': rng.uniform(1.5e9, 2e9),
+    }
+
+fname_snrs = data_path / 'cache' / 'snrs_170817.npy'
+fname_snrs_random_sky = data_path / 'cache' / 'snrs_170817_random_sky.npy'
+
+if fname_snrs.exists() and fname_snrs_random_sky.exists():
+    snrs = np.load(fname_snrs)
+    snrs_random_sky = np.load(fname_snrs_random_sky)
+else:
+    snrs = []
+    snrs_random_sky = []
+
+    for sample in tqdm(gw170817_file['IMRPhenomPv2NRT_lowSpin_posterior']):
+        params = params_from_sample_170817(sample)
+        snrs.append(
+            like.optimal_snr(freq, from_bilby(params)))
+        snrs_random_sky.append(
+            like.optimal_snr(freq, from_bilby(
+                params | 
+                {
+                    'ra': rng.uniform(0, 2*np.pi),
+                    'dec': np.pi/2 - np.arccos(rng.uniform(-1, 1)),
+                }
+            )
+        ))
+    np.save(fname_snrs, snrs)
+    np.save(fname_snrs_random_sky, snrs_random_sky)
+
+colors = ['#004D40', '#FFC107']
+
+_ = plt.hist(snrs, bins=50, alpha=.5, label='GWTC-1 posterior', density=True, color=colors[1])
+_ = plt.hist(snrs_random_sky, bins=50, alpha=.5, label='GWTC-1 posterior, randomized sky location', density=True, color=colors[0])
+
+i_median = np.argsort(snrs_random_sky)[len(snrs) //2]
+plt.axvline(snrs_random_sky[i_median], c='black', ls='--', label='Selected injection')
+print(params_from_sample_170817(gw170817_file['IMRPhenomPv2NRT_lowSpin_posterior'][i_median]))
+
+_ = plt.xlabel('LGWA SNR')
+_ = plt.ylabel('Probability density')
+_ = plt.legend()
+_ = plt.xlim(0, 35)
+
+_ = plt.title('GW170817')
+```
+
+
+```{python}
+#| label: fig-gw150914-with-lgwa
+#| fig-cap: "Signal-to-noise ratio for a detection of GW150914 with LGWA. The detector is assumed to run for 10 years, but most of this signal-to-noise ratio is accumulated in the last months. In both scenarios, the phase and polarization parameters are randomized. The true location of the event appeared to be unfavorable for LGWA, which is why randomizing it leads to SNR gain on average."
+
+import h5py
+import matplotlib.pyplot as plt
+import numpy as np
+from tqdm import tqdm
+from thesis_scripts.lgwa_pe.lgwa_likelihood import LunarLikelihood
+from thesis_scripts.lgwa_pe.lgwa_nested_sampling import from_bilby
+
+like = LunarLikelihood()
+freq = np.geomspace(1e-3, 3, num=10000)
+
+# load GWTC-1 posterior for GW170817
+# from here: https://gwosc.org/eventapi/html/GWTC-1-confident/GW170817/v3/
+gw150914_file = h5py.File(data_path / 'GW150914_GWTC-1.hdf5', 'r')
+
+# keys (gw150914_file['Overall_posterior'].dtype):
+# dtype([
+# ('costheta_jn', '<f8'), 0
+# ('luminosity_distance_Mpc', '<f8'), 1
+# ('right_ascension', '<f8'), 2
+# ('declination', '<f8'), 3
+# ('m1_detector_frame_Msun', '<f8'), 4
+# ('m2_detector_frame_Msun', '<f8'), 5
+# ('spin1', '<f8'), 6
+# ('spin2', '<f8'), 7
+# ('costilt1', '<f8'), 8
+# ('costilt2', '<f8')]) 9
+
+def params_from_sample_150914(sample):
+    m1, m2 = sample[4], sample[5]
+    return {
+        'theta_jn': np.arccos(sample[0]),
+        'luminosity_distance': sample[1],
+        'ra': sample[2],
+        'dec': sample[3],
+        'chirp_mass': (m1*m2)**(3/5) / (m1+m2)**(1/5),
+        'mass_ratio': m2/m1,
+        'lambda_1': 0.,
+        'lambda_2': 0.,
+        'chi_1': sample[6]*sample[8],
+        'chi_2': sample[7]*sample[9],
+        'phase': rng.uniform(0, 2*np.pi),
+        'psi': rng.uniform(0, 2*np.pi),
+        'time_at_center': rng.uniform(1.5e9, 2e9),
+    }
+
+fname_snrs = data_path / 'cache' / 'snrs_150914.npy'
+fname_snrs_random_sky = data_path / 'cache' / 'snrs_150914_random_sky.npy'
+
+if fname_snrs.exists() and fname_snrs_random_sky.exists():
+    snrs = np.load(fname_snrs)
+    snrs_random_sky = np.load(fname_snrs_random_sky)
+else:
+    rng = np.random.default_rng(seed=1)
+
+    snrs = []
+    snrs_random_sky = []
+
+    for sample in tqdm(gw150914_file['Overall_posterior']):
+        params = params_from_sample_150914(sample)
+        snrs.append(
+            like.optimal_snr(freq, from_bilby(params)))
+        snrs_random_sky.append(
+            like.optimal_snr(freq, from_bilby(
+                params | 
+                {
+                    'ra': rng.uniform(0, 2*np.pi),
+                    'dec': np.pi/2 - np.arccos(rng.uniform(-1, 1)),
+                }
+            )
+        ))
+    np.save(fname_snrs, snrs)
+    np.save(fname_snrs_random_sky, snrs_random_sky)
+
+colors = ['#004D40', '#FFC107']
+
+_ = plt.hist(snrs, bins=50, alpha=.5, label='GWTC-1 posterior', density=True, color=colors[1])
+_ = plt.hist(snrs_random_sky, bins=50, alpha=.5, label='GWTC-1 posterior, randomized sky location', density=True, color=colors[0])
+
+i_median = np.argsort(snrs_random_sky)[len(snrs) //2]
+plt.axvline(snrs_random_sky[i_median], c='black', ls='--', label='Selected injection', ymax=0.75)
+print(params_from_sample_150914(gw150914_file['Overall_posterior'][i_median]))
+
+_ = plt.xlabel('LGWA SNR')
+_ = plt.ylabel('Probability density')
+_ = plt.legend()
+
+_ = plt.xlim(0, 60)
+
+_ = plt.title('GW150914')
+```
+
+
+### General injection results
 
 I performed a zero-noise injection with LGWA, assuming the lunar response is known.
 
-Preliminary info:
-
-- Mismatch sky localisation shapes
-
-
-
-PE results
 
 ```{python}
 import pandas as pd
@@ -74,28 +274,43 @@ samples_full = MCSamples(
     labels = param_names,
     ranges = ranges,
     weights = weights.to_numpy(),
-    sampler='nested'
+    loglikes = post_pandas['logl'].to_numpy(),
+    # sampler='nested'
 )
-
 ```
 
 ```{python}
 g = plots.get_subplot_plotter()
 g.triangle_plot(
     [samples_full],
-    ['chirp_mass', 'mass_ratio', 'ra', 'dec']
+    ['ra', 'dec'],
+    smooth_scale_1d=1.,
+    smooth_scale_2d=1.,
 )
 ```
 
+### Geometry of lunar time measurement
 
-- amplitude PPD
-- phase PPD
-- SNR integrand
-- sky localisation
-- $\mathcal{M}(f)$ uncertainty
+The "time" parameter we use during parameter estimation is the time of merger, computed at a point we choose to be the location of the Moon as it receives the merger signal.
+
+The scale of the uncertainty in merger time is quite small (less than a second), so assuming this to be known is not a significant approximation - even in real PE, we will be able to choose a fiducial reference frame to within a really good approximation.
+
+Our reference frame is a rigid shift of the ICRS frame to the new coordinate center; as the source is for all intents and purposes infinitely far away we can still use right ascension and declination as coordinates.
+
+Let us consider this frame as fixed.
+The other assumption we are making is that the parameter is the time of merger; however, the merger does not actually happen in band for LGWA, therefore we are driven to ask if there is a better way.
+
+We can define the time at frequency $f$ as 
+
+$$
+t(f) = t_\text{mrg} + \underbrace{ \frac{1}{2\pi} \frac{\text{d}\varphi(f; \theta)}{\text{d}f} }_{ \text{time to merger} }\,,
+$$
+
+where the phase $\varphi(f, \theta)$ is the one from the frequency-domain waveform, computed at 3.5PN order.
+Is this parameter better measured than the time of merger for some frequencies? Yes, as the following figure shows: 
 
 ```{python}
-from thesis_scripts.simple_bns_waveforms import Phif3hPN
+from thesis_scripts.lgwa_pe.simple_bns_waveforms import Phif3hPN
 from numdifftools import Derivative
 
 def time_to_merger(mchirp, q, f=np.inf):
@@ -108,7 +323,7 @@ def time_to_merger(mchirp, q, f=np.inf):
     )
     return Derivative(func)(f) / (2*np.pi)
 
-freqs = np.geomspace(0.4, 3, num=100)
+freqs = np.geomspace(0.5, 4, num=100)
 samples_to_use = 1000
 m = post_equal['chirp_mass'].to_numpy()[:samples_to_use]
 q = post_equal['mass_ratio'].to_numpy()[:samples_to_use]
@@ -120,24 +335,53 @@ correlations = [
         t + time_to_merger(m, q, freq)
         )[0, 1] for freq in freqs]
 
+correlations_q = [
+    np.corrcoef(
+        q, 
+        t + time_to_merger(m, q, freq)
+        )[0, 1] for freq in freqs]
+
+
 correlations_ttm = [
     np.corrcoef(
         m, 
         time_to_merger(m, q, freq)
         )[0, 1] for freq in freqs]
 
+correlations_ttm_q = [
+    np.corrcoef(
+        q, 
+        time_to_merger(m, q, freq)
+        )[0, 1] for freq in freqs]
 
-std0 = np.std(t)
+
 stds = [
-    np.std(t + time_to_merger(m, q, freq)) / std0 
+    np.std(t + time_to_merger(m, q, freq)) 
     for freq in freqs]
 
-plt.plot(freqs, correlations, label='Correlation betwen t(f) and chirp mass')
-plt.plot(freqs, correlations_ttm, label='Correlation betwen time to merger and chirp mass')
-plt.plot(freqs, stds, label='Standard deviation of t(f)')
-plt.legend()
+fig, axs = plt.subplots(2, 1, sharex=True)
+
+c_1 = '#117733'
+c_2 = '#DDCC77'
+
+lines = []
+
+lines.append(axs[0].plot(freqs, correlations, label='Correlation betwen t(f) and chirp mass', c=c_1, ls='--')[0])
+lines.append(axs[0].plot(freqs, correlations_q, label='Correlation betwen t(f) and mass ratio', c=c_2, ls='--')[0])
+lines.append(axs[0].plot(freqs, correlations_ttm, label='Correlation betwen time to merger and chirp mass', c=c_1)[0])
+lines.append(axs[0].plot(freqs, correlations_ttm_q, label='Correlation betwen time to merger and mass ratio', c=c_2)[0])
+lines.append(axs[1].plot(freqs, stds, label='Standard deviation of t(f) [s]', c='black')[0])
+axs[1].set_xscale('log')
+axs[1].legend(handles=lines)
+axs[0].set_ylim(-1.1, 1.1)
 plt.grid()
 ```
+
+We can see that the standard deviation of $t(f)$ has a minimum at a frequency within the band of LGWA, below 1Hz. 
+This is also close to where  chirp mass  mass ratio and $t(f)$ be
+
+- CHANGE TERMINOLOGY: f is the "reference frequency", we are looking at the "error in time at the reference frequency"
+- make plot with a small zoom in of t(f) curves?
 
 ```{python}
 from matplotlib.colors import Normalize
@@ -170,12 +414,207 @@ for sample in post_equal.to_numpy()[:100]:
 plt.colorbar(ScalarMappable(cmap=cmap, norm=norm), ax=plt.gca(), label='Chirp mass deviation [Msun]')
 plt.xlabel('Frequency [Hz]')
 plt.ylabel('Time at frequency minus reference [s]')
+plt.show()
 ```
 
 ```{python}
-m = post_equal['chirp_mass'].to_numpy()[:samples_to_use]
-q = post_equal['mass_ratio'].to_numpy()[:samples_to_use]
-t = post_equal['time_at_center'].to_numpy()[:samples_to_use]
+from thesis_scripts.lgwa_pe.lgwa_likelihood import LunarLikelihood
+from thesis_scripts.lgwa_pe.lgwa_nested_sampling import from_bilby
+like = LunarLikelihood()
+like.compute_center(injection_params['time_at_center'])
 
-plt.scatter(m, time_to_merger(m, q, 2))
+f = np.geomspace(0.086816181214, 3, num=2000)
+
+hx_0, hy_0 = like.projected_waveform(f, from_bilby(injection_params))
+
+ratios_to_plot = 5_000
+ratios = np.empty((2, ratios_to_plot, len(f)), dtype=complex)
+
+for i in range(ratios_to_plot):
+    params = from_bilby(post_equal.iloc[i].to_dict())
+    hx, hy = like.projected_waveform(f, params)
+    ratios[0, i, :] = hx/hx_0
+    ratios[1, i, :] = hy/hy_0
+```
+
+```{python}
+cmap = plt.get_cmap('Blues')
+
+abs_ratios = np.sort(abs(ratios), axis=1)
+
+fig, axs = plt.subplots(2, 1, sharex=True)
+
+for percentile in [.5, .9]:
+    for i in range(2):
+        i_1 = int(ratios_to_plot*percentile/2.)
+        i_2 = int(ratios_to_plot*(1-percentile/2.))
+        axs[i].fill_between(f, 
+            abs_ratios[i, i_1],
+            abs_ratios[i, i_2],
+            color=cmap(percentile)
+        )
+        axs[i].plot(f,
+            abs_ratios[i, i_1],
+            c='black', lw=.5
+        )
+        axs[i].plot(f, 
+            abs_ratios[i, i_2],
+            c='black', lw=.5
+        )
+        axs[i].set_xscale('log')
+
+axs[0].set_title('$x$ channel')
+axs[1].set_title('$y$ channel')
+```
+
+```{python}
+cmap = plt.get_cmap('Blues')
+
+phase_diffs = np.sort(np.angle(ratios), axis=1)
+
+fig, axs = plt.subplots(2, 1, sharex=True)
+
+for percentile in [.5, .9]:
+    for i in range(2):
+        i_1 = int(ratios_to_plot*percentile/2.)
+        i_2 = int(ratios_to_plot*(1-percentile/2.))
+        axs[i].fill_between(f, 
+            phase_diffs[i, i_1],
+            phase_diffs[i, i_2],
+            color=cmap(percentile)
+        )
+        axs[i].plot(f,
+            phase_diffs[i, i_1],
+            c='black', lw=.5
+        )
+        axs[i].plot(f, 
+            phase_diffs[i, i_2],
+            c='black', lw=.5
+        )
+        axs[i].set_xscale('log')
+        axs[i].set_ylim(-0.2, 0.2)
+
+axs[0].set_title('$x$ channel')
+axs[1].set_title('$y$ channel')
+```
+
+```{python}
+import astropy.units as u
+month_seconds = (29.5*u.day).si.value
+AU = (1*u.AU).si.value
+t0 = injection_params['time_at_center']
+# construct a plane from three points:
+
+# SSB center
+a = np.zeros(3)
+# lunar position (from SSB center)
+b = like.get_detector_position(t0)
+# lunar position 3 months earlier (from SSB center)
+c = like.get_detector_position(t0 - 3*month_seconds)
+
+# compute plane normal from two vectors in the plane
+normal = np.cross((b-a), (c-a))
+normal /= np.linalg.norm(normal)
+
+# compute two other basis vectors
+n = -np.cross((b-a), normal)
+m = np.cross(n, normal)
+
+n /= np.linalg.norm(n)
+m /= np.linalg.norm(m)
+
+def project(point):
+    return np.array([np.dot(n, point), np.dot(m, point)])
+
+def deproject(n_coords, m_coords):
+    return (
+        np.tensordot(n, n_coords, axes=0) +
+        np.tensordot(m, m_coords, axes=0)
+    )
+
+times = np.linspace(t0-2*month_seconds, t0, num=1000)
+
+detector_motion = project(like.get_detector_position(times))
+plt.plot(*detector_motion/AU, lw=.5, c='black')
+
+```
+
+```{python}
+from thesis_scripts.lgwa_pe.lunar_coordinates import spherical_to_cartesian
+from thesis_scripts.lgwa_pe.lgwa_likelihood import SPEED_OF_LIGHT
+from thesis_scripts import data_path
+from tqdm import tqdm
+
+samples_to_use = 2000
+chirp_mass = post_equal['chirp_mass'].to_numpy()[:samples_to_use]
+q = post_equal['mass_ratio'].to_numpy()[:samples_to_use]
+ra = post_equal['ra'].to_numpy()[:samples_to_use]
+dec = post_equal['dec'].to_numpy()[:samples_to_use]
+t = post_equal['time_at_center'].to_numpy()[:samples_to_use]
+k = spherical_to_cartesian(ra, dec)
+
+center_0 = like.get_detector_position(t0)
+
+def shifted_center_time_std(center, f):
+    time_at_new_center = t + time_to_merger(chirp_mass, q, f) + np.dot(k, center-center_0) / SPEED_OF_LIGHT
+
+    return np.std(time_at_new_center)
+
+```
+
+```{python}
+from cmcrameri import cm
+from matplotlib.colors import Normalize
+
+num_grid = 40
+num_freqs = 40
+freqs = np.geomspace(0.6, 1, num=num_freqs)
+times = injection_params['time_at_center'] + time_to_merger(
+    injection_params['chirp_mass'],
+    injection_params['mass_ratio'], 
+    freqs
+)
+n_range = np.linspace(-1.2, 1.2, num=num_grid)*AU
+m_range = np.linspace(-0.4, 1.5, num=num_grid)*AU
+N, M = np.meshgrid(n_range, m_range)
+
+full_grid = deproject(N, M).reshape((3, num_grid**2)).T
+
+cmap = cm.glasgow
+norm = Normalize(0.05, 0.15, clip=True)
+
+fname = data_path / 'cache' / 'shifted_center_time_stds.npy'
+
+if fname.exists():
+    stds = np.load(fname)
+else:
+    
+    stds = np.empty((num_freqs, num_grid**2))
+    for i, f in enumerate(freqs):
+        stds[i] = np.array([shifted_center_time_std(center, f) for center in tqdm(full_grid)])
+    np.save(fname, stds)
+
+i = 24
+
+
+plt.colorbar(
+    plt.contourf(
+        N/AU, M/AU, 
+        stds[i].reshape((num_grid, num_grid)), 
+        levels=50,
+        cmap=cmap,
+        norm=norm,
+    ), 
+    label='Timing uncertainty [s]')
+plt.plot(*detector_motion/AU, lw=.5, c='white')
+plt.scatter(*project(
+    like.get_detector_position(times[i]))/AU, 
+    c='white', s=10, label='Moon position')
+
+plt.title(f'f={freqs[i]:.2f}, {-(times[i] - injection_params["time_at_center"])/month_seconds:.2f} months to merger')
+
+plt.legend()
+```
+
+```{python}
 ```

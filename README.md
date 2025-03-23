@@ -75,3 +75,6 @@ where `note` can be substituted by `warning`, `important`, `tip` or `caution`, s
 ### Useful refs
 
 - [Tips and tricks](https://danielborek.me/2023/pdf-quarto-tips/)
+
+### Making a single-file PDF
+

@@ -48,5 +48,3 @@ if __name__ == '__main__':
     like.relbin_log_likelihood_ratio(par)
     stats = profile(like.relbin_log_likelihood_ratio, par)
     stats.dump_stats('likelihood_512.prof')
-
-    

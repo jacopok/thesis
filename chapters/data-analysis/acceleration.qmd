@@ -68,6 +68,13 @@ My attempt is in @sec-greedy-relbin-selection.
 
 #### Greedy relative binning grid selection {#sec-greedy-relbin-selection}
 
+In [@zackayRelativeBinningFast2018] they give a rough outline for the functional form of the relative binning loglikelihood errors:
+$$
+\Delta \log \mathcal{L} (\theta) \approx \beta \left( \log \mathcal{L}_\text{max} - \log \mathcal{L}(\theta) \right) 
+$$
+
+In principle, this with a fixed $\beta$ does not give big guarantees on how big the error will be.
+
 ##### Adaptive accuracy requirement
 
 Suppose $\varepsilon(\theta)$ is the error in log-likelihood evaluation at point $\theta$.

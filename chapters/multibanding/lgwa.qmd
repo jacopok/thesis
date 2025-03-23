@@ -49,17 +49,27 @@ def get_noise_asd_squid(ff, energy_resolution, critical_frequency, coupling_effi
 	kB = ac.k_B.si.value
 	c = ac.c.si.value
 
-	n_therm = np.sqrt(4*kB*temperature*(2*np.pi*reference_frequency)**2/(m*quality_factor*2*np.pi*ff))/(2*np.pi*ff)**2
+	n_therm = np.sqrt(
+		4*kB*temperature*(
+		2*np.pi*critical_frequency)**2
+		/(suspended_mass*quality_factor*2*np.pi*ff)
+	) / (2*np.pi*ff)**2
 
 	eA = energy_resolution * hbar
+	omega_0 = 2 * np.pi * critical_frequency
 
+	n_squid = np.sqrt(
+		2*eA*(1+critical_frequency/ff)
+		/ (suspended_mass * omega_0 * coupling_efficiency )
+		)
+	return np.sqrt(n_squid**2 + n_therm**2)
 
 ff = np.logspace(-3,1,500)
 
 f_stab = 100
 
 noise_params_lgwa = {
-	'n_seismometers': 4, 
+	'n_seismometers': 1, 
 	'temperature': 4, 
 	'quality_factor': 1e5, 
 	'm': 10, 
@@ -69,6 +79,11 @@ noise_params_lgwa = {
 
 noise_params_lgwa_si = {
 	'energy_resolution': 50,
+	'suspended_mass': 10, 
+	'quality_factor': 1e6,
+	'critical_frequency': 0.1,
+	'coupling_efficiency': 1,
+	'temperature': 4,
 }
 
 noise_params_soundcheck = {
@@ -82,9 +97,11 @@ noise_params_soundcheck = {
 
 
 noise_lgwa = get_noise_asd(ff, **noise_params_lgwa)
+noise_lgwa_si = get_noise_asd_squid(ff, **noise_params_lgwa_si)
 noise_soundcheck = get_noise_asd(ff, **noise_params_soundcheck)
 
-plt.loglog(ff, noise_lgwa, label='LGWA')
+plt.loglog(ff, noise_lgwa, label='LGWA Nb (1 seismometer)')
+plt.loglog(ff, noise_lgwa_si, label='LGWA Si (1 seismometer)')
 plt.loglog(ff, noise_soundcheck, label='Soundcheck')
 plt.xlabel('Frequency [Hz]')
 plt.ylabel('Noise ASD $[\\mathrm{{m}} / \\sqrt{{\\mathrm{{Hz}}}}]$')
@@ -247,7 +264,7 @@ As figure @fig-response-interpolation-errors shows, we can achieve errors on the
 #| label: fig-response-interpolation-errors
 #| fig-cap: "Errors in scalar products computed with an interpolated version of the detector-centric basis vectors. The errors are computed from 400 randomly sampled points in the sky and time. Since the detector is located near the pole (specifically, at 85 degrees of latitude) the normal vector varies less across the month, and is therefore easier to interpolate."
 
-from thesis_scripts.lunar_coordinates import make_response_interpolation_plot
+from thesis_scripts.lgwa_pe.lunar_coordinates import make_response_interpolation_plot
 make_response_interpolation_plot()
 ```
 
@@ -263,7 +280,7 @@ The maximum phase error is computed by comparing the position error to the angul
 #| label: fig-position-interpolation-errors
 #| fig-cap: "Interpolation errors in position, by the number of interpolation points."
 
-from thesis_scripts.lunar_coordinates import make_position_interpolation_plot
+from thesis_scripts.lgwa_pe.lunar_coordinates import make_position_interpolation_plot
 make_position_interpolation_plot()
 ```
 
@@ -273,7 +290,7 @@ Conveniently, the position interpolation requires about 10 times more points to 
 #| label: fig-position-function-of-time
 #| fig-cap: "Position of the detector as a function of time."
 
-from thesis_scripts.lgwa_likelihood import LunarLikelihood
+from thesis_scripts.lgwa_pe.lgwa_likelihood import LunarLikelihood
 from astropy.coordinates import get_body_barycentric
 from astropy.time import Time
 import numpy as np
@@ -328,7 +345,7 @@ _ = axs[2].set_xlabel('Time from January 1 2030 (lunar months)')
 #| label: fig-response-functions-of-time
 #| fig-cap: "Response functions in terms of time."
 
-from thesis_scripts.lgwa_likelihood import LunarLikelihood
+from thesis_scripts.lgwa_pe.lgwa_likelihood import LunarLikelihood
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -381,7 +398,7 @@ We show this in figure @fig-time-to-merger-error: it leads to errors of several 
 #| fig-cap: "Error in the time to merger estimation by using the lowest-order Post-Newtonian term only. The source considered here is a neutron star binary with equal components, of 1.4 solar masses each."
 
 import matplotlib.pyplot as plt
-from thesis_scripts.simple_bns_waveforms import time_to_merger, time_to_merger_simple, Phif3hPN, SUN_MASS_SECONDS
+from thesis_scripts.lgwa_pe.simple_bns_waveforms import time_to_merger, time_to_merger_simple, Phif3hPN, SUN_MASS_SECONDS
 import numpy as np
 
 q = 1
@@ -428,7 +445,7 @@ plt.show()
 #| label: fig-projected-lgwa-waveforms-ratio
 #| fig-cap: "Ratio of projected waveforms with slightly different declination (difference of 10 arcminutes)."
 
-from thesis_scripts.lgwa_likelihood import LunarLikelihood
+from thesis_scripts.lgwa_pe.lgwa_likelihood import LunarLikelihood
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -487,7 +504,7 @@ This would be the full FFT grid, however we know that
 #| fig-cap: "Error in the likelihood evaluation, computed for points close to the likelihood peak and for a point very far from it (total mass of 4 compared to 2.8 solar masses and completely different time)."
 
 from thesis_scripts import data_path
-from thesis_scripts.lgwa_likelihood import LunarLikelihood
+from thesis_scripts.lgwa_pe.lgwa_likelihood import LunarLikelihood
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
@@ -560,7 +577,7 @@ plt.show()
 #| fig-cap: "Error in the likelihood evaluation for relative binning and Riemann integration."
 
 from thesis_scripts import data_path
-from thesis_scripts.lgwa_likelihood import LunarLikelihood
+from thesis_scripts.lgwa_pe.lgwa_likelihood import LunarLikelihood
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
