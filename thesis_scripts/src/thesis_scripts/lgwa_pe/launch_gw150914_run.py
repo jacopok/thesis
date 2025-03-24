@@ -51,4 +51,9 @@ if __name__ == '__main__':
 
     loglike, prior_transform, inverse_prior_transform, log_dir, param_names = make_analysis_functions(injection_parameters=injection_params, folder_name='gw150914_median_1yr', priors=prior_dict, freq=freq)
 
-    run_pe(loglike, prior_transform, inverse_prior_transform, log_dir, param_names, injection_params, n_live=500)
+    # run_pe(loglike, prior_transform, inverse_prior_transform, log_dir, param_names, injection_params, n_live=500)
+    baseline_post_transformed = np.load(data_path / 'gw150914_median_1yr' / 'baseline_post.npy')
+    for i in range(11):
+        plt.hist(baseline_post_transformed[:, i])
+        plt.show()
+        plt.close()
