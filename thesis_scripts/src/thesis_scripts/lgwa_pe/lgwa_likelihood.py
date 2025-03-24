@@ -5,7 +5,7 @@ from .lunar_coordinates import (
     wave_frame_basis_cartesian
 )
 from .simple_bns_waveforms import Phif3hPN, Af3hPN, time_to_merger
-from . import data_path
+from .. import data_path
 import logging
 import numpy as np
 import matplotlib.pyplot as plt

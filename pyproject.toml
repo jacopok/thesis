@@ -31,6 +31,7 @@ dependencies = [
     "quarto-cli>=1.5.57",
     "scipy>=1.13.1",
     "snakeviz>=2.2.2",
+    "teobresums>=4.4.1",
     "thesis-scripts",
     "tqdm>=4.67.1",
     "ultranest",

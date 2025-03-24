@@ -297,6 +297,10 @@ def time_to_merger_simple(f, mchirp):
 
     return -5./(256.*np.pi**(8/3))/mchirp**(5/3)/f**(8/3)
 
+def time_to_merger_simple_inverse(t, mchirp):
+    # t = -5./(256.*np.pi**(8/3))/mchirp**(5/3)/f**(8/3)
+    # f = ((-5./(256.*np.pi**(8/3))/mchirp**(5/3)) / t)**(3/8)
+    return ((-5./(256.*np.pi**(8/3))/mchirp**(5/3)) / t)**(3/8)
 
 if __name__ == '__main__':
     import matplotlib.pyplot as plt

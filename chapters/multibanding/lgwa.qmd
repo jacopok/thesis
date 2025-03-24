@@ -44,24 +44,28 @@ def get_noise_asd(ff, n_seismometers, temperature, quality_factor, m, P, dL):
 
 	return np.sqrt(n_readout**2 + n_therm**2)/np.sqrt(n_seismometers)
 
-def get_noise_asd_squid(ff, energy_resolution, critical_frequency, coupling_efficiency, suspended_mass, quality_factor, temperature):
+def get_noise_asd_squid(ff, energy_resolution, critical_frequency, coupling_efficiency, suspended_mass, quality_factor, temperature, natural_frequency):
 	hbar = ac.hbar.si.value
 	kB = ac.k_B.si.value
 	c = ac.c.si.value
 
 	n_therm = np.sqrt(
 		4*kB*temperature*(
-		2*np.pi*critical_frequency)**2
+		2*np.pi*natural_frequency)**2
 		/(suspended_mass*quality_factor*2*np.pi*ff)
 	) / (2*np.pi*ff)**2
 
 	eA = energy_resolution * hbar
-	omega_0 = 2 * np.pi * critical_frequency
+	omega_0 = 2 * np.pi * natural_frequency
+	omega = 2 * np.pi * ff
 
 	n_squid = np.sqrt(
 		2*eA*(1+critical_frequency/ff)
 		/ (suspended_mass * omega_0 * coupling_efficiency )
-		)
+		 * (
+			(omega**2-omega_0**2)**2 + omega_0**2 / quality_factor
+		) / omega**4
+	)
 	return np.sqrt(n_squid**2 + n_therm**2)
 
 ff = np.logspace(-3,1,500)
@@ -71,7 +75,7 @@ f_stab = 100
 noise_params_lgwa = {
 	'n_seismometers': 1, 
 	'temperature': 4, 
-	'quality_factor': 1e5, 
+	'quality_factor': 1e4, 
 	'm': 10, 
 	'P': 5e-3, 
 	'dL': 1e-3/f_stab
@@ -79,11 +83,12 @@ noise_params_lgwa = {
 
 noise_params_lgwa_si = {
 	'energy_resolution': 50,
-	'suspended_mass': 10, 
+	'suspended_mass': 10,
 	'quality_factor': 1e6,
 	'critical_frequency': 0.1,
-	'coupling_efficiency': 1,
-	'temperature': 4,
+	'natural_frequency': 0.25,
+	'coupling_efficiency': 0.25,
+	'temperature': 5,
 }
 
 noise_params_soundcheck = {
@@ -95,7 +100,6 @@ noise_params_soundcheck = {
 	'dL': 1e-3
 }
 
-
 noise_lgwa = get_noise_asd(ff, **noise_params_lgwa)
 noise_lgwa_si = get_noise_asd_squid(ff, **noise_params_lgwa_si)
 noise_soundcheck = get_noise_asd(ff, **noise_params_soundcheck)
@@ -106,7 +110,7 @@ plt.loglog(ff, noise_soundcheck, label='Soundcheck')
 plt.xlabel('Frequency [Hz]')
 plt.ylabel('Noise ASD $[\\mathrm{{m}} / \\sqrt{{\\mathrm{{Hz}}}}]$')
 plt.legend()
-plt.grid()
+plt.grid('both')
 ```
 
 ```{python}
@@ -115,12 +119,19 @@ from thesis_scripts import data_path
 psd_path = data_path / 'LGWA_Si_psd.txt'
 psd_data = np.loadtxt(psd_path)
 
-displacement_noise = get_noise_asd(psd_data[:, 0], **noise_params_lgwa)
+displacement_noise = get_noise_asd_squid(psd_data[:, 0], **noise_params_lgwa_si)
 
 R_moon = 1737.4e3
 lgwa_strain_asd = np.sqrt(psd_data[:, 1])
 
 plt.loglog(psd_data[:, 0], displacement_noise / lgwa_strain_asd)
+
+secax = plt.gca().secondary_yaxis('right', functions=(
+	lambda x : x / R_moon, 
+	lambda x : x * R_moon)
+)
+secax.set_ylabel('Response [Moon radii]')
+
 plt.ylabel('Response model [m]')
 plt.xlabel('Frequency [Hz]')
 plt.show()
@@ -222,7 +233,7 @@ For the $\psi = 0$ case we recover the standard basis vectors along latitude and
 ##### On the handedness of the basis
 
 I think the orientation of the basis might be flipped compared to the standard case, since we construct it based on the vector $m$ but the real propagation direction is $-m$; this should be perfectly degenerate with a switch $\psi \to - \psi$ so I wouldn't particularly worry about it.
-Nb
+
 :::
 
 Once we have computed these vectors, we can recover the strain as 

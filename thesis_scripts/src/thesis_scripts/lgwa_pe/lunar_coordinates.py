@@ -8,7 +8,7 @@ from tqdm import tqdm
 from erfa import ufunc
 from numba import njit
 
-from . import data_path
+from .. import data_path
 
 LOCATION = MoonLocation.from_selenodetic(lon=0, lat=-85)
 

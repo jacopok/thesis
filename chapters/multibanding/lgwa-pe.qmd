@@ -50,6 +50,7 @@ import numpy as np
 from tqdm import tqdm
 from thesis_scripts.lgwa_pe.lgwa_likelihood import LunarLikelihood
 from thesis_scripts.lgwa_pe.lgwa_nested_sampling import from_bilby
+import yaml
 
 like = LunarLikelihood()
 freq = np.geomspace(1e-3, 3, num=10000)
@@ -75,7 +76,14 @@ gw170817_file = h5py.File(data_path / 'GW170817_GWTC-1.hdf5', 'r')
 
 rng = np.random.default_rng(seed=1)
 
-def params_from_sample_170817(sample):
+n_post = len(gw170817_file['IMRPhenomPv2NRT_lowSpin_posterior'])
+phase = rng.uniform(0, 2*np.pi, size=n_post)
+psi = rng.uniform(0, 2*np.pi, size=n_post)
+ra = rng.uniform(0, 2*np.pi, size=n_post)
+dec = np.pi/2. - np.arccos(rng.uniform(-1, 1, size=n_post))
+time = rng.uniform(1.5e9, 2e9, size=n_post)
+
+def params_from_sample_170817(i, sample):
     m1, m2 = sample[4], sample[5]
     return {
         'theta_jn': np.arccos(sample[0]),
@@ -88,9 +96,9 @@ def params_from_sample_170817(sample):
         'lambda_2': sample[7],
         'chi_1': sample[8]*sample[10],
         'chi_2': sample[9]*sample[11],
-        'phase': rng.uniform(0, 2*np.pi),
-        'psi': rng.uniform(0, 2*np.pi),
-        'time_at_center': rng.uniform(1.5e9, 2e9),
+        'phase': phase[i],
+        'psi': psi[i],
+        'time_at_center': 1187008882.4,
     }
 
 fname_snrs = data_path / 'cache' / 'snrs_170817.npy'
@@ -103,16 +111,17 @@ else:
     snrs = []
     snrs_random_sky = []
 
-    for sample in tqdm(gw170817_file['IMRPhenomPv2NRT_lowSpin_posterior']):
-        params = params_from_sample_170817(sample)
+    for i, sample in tqdm(enumerate(gw170817_file['IMRPhenomPv2NRT_lowSpin_posterior'])):
+        params = params_from_sample_170817(i, sample)
         snrs.append(
             like.optimal_snr(freq, from_bilby(params)))
         snrs_random_sky.append(
             like.optimal_snr(freq, from_bilby(
                 params | 
                 {
-                    'ra': rng.uniform(0, 2*np.pi),
-                    'dec': np.pi/2 - np.arccos(rng.uniform(-1, 1)),
+                    'ra': ra[i],
+                    'dec': dec[i],
+                    'time_at_center': time[i],
                 }
             )
         ))
@@ -122,11 +131,27 @@ else:
 colors = ['#004D40', '#FFC107']
 
 _ = plt.hist(snrs, bins=50, alpha=.5, label='GWTC-1 posterior', density=True, color=colors[1])
-_ = plt.hist(snrs_random_sky, bins=50, alpha=.5, label='GWTC-1 posterior, randomized sky location', density=True, color=colors[0])
+_ = plt.hist(snrs_random_sky, bins=50, alpha=.5, label='GWTC-1 posterior, randomized time and location', density=True, color=colors[0])
 
 i_median = np.argsort(snrs_random_sky)[len(snrs) //2]
 plt.axvline(snrs_random_sky[i_median], c='black', ls='--', label='Selected injection')
-print(params_from_sample_170817(gw170817_file['IMRPhenomPv2NRT_lowSpin_posterior'][i_median]))
+
+
+
+with open(data_path / 'gw170817_lgwa_median.yaml', 'w') as f:
+
+    params = params_from_sample_170817(i_median, gw170817_file['IMRPhenomPv2NRT_lowSpin_posterior'][i_median])
+    params.update({
+        'ra': ra[i_median],
+        'dec': dec[i_median],
+        'time_at_center': time[i_median],
+    })
+    yaml.dump(
+        {key: float(val) for key, val in 
+            params.items()
+    },
+    f
+    )
 
 _ = plt.xlabel('LGWA SNR')
 _ = plt.ylabel('Probability density')
@@ -168,7 +193,14 @@ gw150914_file = h5py.File(data_path / 'GW150914_GWTC-1.hdf5', 'r')
 # ('costilt1', '<f8'), 8
 # ('costilt2', '<f8')]) 9
 
-def params_from_sample_150914(sample):
+n_post = len(gw150914_file['Overall_posterior'])
+phase = rng.uniform(0, 2*np.pi, size=n_post)
+psi = rng.uniform(0, 2*np.pi, size=n_post)
+ra = rng.uniform(0, 2*np.pi, size=n_post)
+dec = np.pi/2. - np.arccos(rng.uniform(-1, 1, size=n_post))
+time = rng.uniform(1.5e9, 2e9, size=n_post)
+
+def params_from_sample_150914(i, sample):
     m1, m2 = sample[4], sample[5]
     return {
         'theta_jn': np.arccos(sample[0]),
@@ -181,9 +213,9 @@ def params_from_sample_150914(sample):
         'lambda_2': 0.,
         'chi_1': sample[6]*sample[8],
         'chi_2': sample[7]*sample[9],
-        'phase': rng.uniform(0, 2*np.pi),
-        'psi': rng.uniform(0, 2*np.pi),
-        'time_at_center': rng.uniform(1.5e9, 2e9),
+        'phase': phase[i],
+        'psi': psi[i],
+        'time_at_center': 1126259462.4,
     }
 
 fname_snrs = data_path / 'cache' / 'snrs_150914.npy'
@@ -198,16 +230,17 @@ else:
     snrs = []
     snrs_random_sky = []
 
-    for sample in tqdm(gw150914_file['Overall_posterior']):
-        params = params_from_sample_150914(sample)
+    for i, sample in tqdm(enumerate(gw150914_file['Overall_posterior'])):
+        params = params_from_sample_150914(i, sample)
         snrs.append(
             like.optimal_snr(freq, from_bilby(params)))
         snrs_random_sky.append(
             like.optimal_snr(freq, from_bilby(
                 params | 
                 {
-                    'ra': rng.uniform(0, 2*np.pi),
-                    'dec': np.pi/2 - np.arccos(rng.uniform(-1, 1)),
+                    'ra': ra[i],
+                    'dec': dec[i],
+                    'time_at_center': time[i],
                 }
             )
         ))
@@ -217,11 +250,24 @@ else:
 colors = ['#004D40', '#FFC107']
 
 _ = plt.hist(snrs, bins=50, alpha=.5, label='GWTC-1 posterior', density=True, color=colors[1])
-_ = plt.hist(snrs_random_sky, bins=50, alpha=.5, label='GWTC-1 posterior, randomized sky location', density=True, color=colors[0])
+_ = plt.hist(snrs_random_sky, bins=50, alpha=.5, label='GWTC-1 posterior, randomized time and location', density=True, color=colors[0])
 
 i_median = np.argsort(snrs_random_sky)[len(snrs) //2]
 plt.axvline(snrs_random_sky[i_median], c='black', ls='--', label='Selected injection', ymax=0.75)
-print(params_from_sample_150914(gw150914_file['Overall_posterior'][i_median]))
+with open(data_path / 'gw150914_lgwa_median.yaml', 'w') as f:
+
+    params = params_from_sample_150914(i_median, gw150914_file['Overall_posterior'][i_median])
+    params.update({
+        'ra': ra[i_median],
+        'dec': dec[i_median],
+        'time_at_center': time[i_median],
+    })
+    yaml.dump(
+        {key: float(val) for key, val in 
+            params.items()
+    },
+    f
+    )
 
 _ = plt.xlabel('LGWA SNR')
 _ = plt.ylabel('Probability density')
