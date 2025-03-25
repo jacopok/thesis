@@ -91,7 +91,6 @@ def make_analysis_functions(
         param_dict = {
             name: par[i] for i, name in enumerate(param_names)
             } | fixed_params
-
         return like.relbin_log_likelihood_ratio(from_bilby(param_dict))
     
     def prior_transform(u):
