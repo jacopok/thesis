@@ -3244,8 +3244,7 @@ wheels = [
 [[package]]
 name = "teobresums"
 version = "4.4.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/32/ab/9de90fdee4970db80febdacc5839a9a77ccb410d8b61f5c7226288a851e7/teobresums-4.4.1.tar.gz", hash = "sha256:e6359fa6eeb0598f2aace272c6ce22932c980db0cdf90061907801d32c22981c", size = 219438 }
+source = { directory = "../Documents/Dali/Python" }
 
 [[package]]
 name = "terminado"
@@ -3326,7 +3325,7 @@ requires-dist = [
     { name = "quarto-cli", specifier = ">=1.5.57" },
     { name = "scipy", specifier = ">=1.13.1" },
     { name = "snakeviz", specifier = ">=2.2.2" },
-    { name = "teobresums", specifier = ">=4.4.1" },
+    { name = "teobresums", directory = "../Documents/Dali/Python" },
     { name = "thesis-scripts", editable = "thesis_scripts" },
     { name = "tqdm", specifier = ">=4.67.1" },
     { name = "ultranest", editable = "../Documents/UltraNest" },

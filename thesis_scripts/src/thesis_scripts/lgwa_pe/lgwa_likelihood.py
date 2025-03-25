@@ -312,9 +312,11 @@ class LunarLikelihood:
         amplitude, phase = self.amp_phase(f, parameters)
         return time_to_merger(f, phase) + parameters['time_at_center']
 
-    def projected_waveform(self, f, parameters):
+    def projected_waveform(self, f, parameters, parameters_for_amp_phase=None):
         
-        amplitude, phase = self.amp_phase(f, parameters)
+        if parameters_for_amp_phase is None:
+            parameters_for_amp_phase = parameters
+        amplitude, phase = self.amp_phase(f, parameters_for_amp_phase)
         t_of_f = time_to_merger(f, phase) + parameters['time_at_center']
 
         prop_unit_vector = -spherical_to_cartesian(parameters['right_ascension'], parameters['declination'])

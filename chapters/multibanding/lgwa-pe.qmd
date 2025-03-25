@@ -278,6 +278,32 @@ _ = plt.xlim(0, 60)
 _ = plt.title('GW150914')
 ```
 
+### Assumptions
+
+#### Higher order modes
+
+We perform the analysis using only the 22 mode, and the following plot shows this is an excellent approximation for light sources such as these:
+
+```{python}
+#| label: fig-gw150914-modes
+#| fig-cap: "Projected higher order modes for GW150914." 
+
+from thesis_scripts.lgwa_pe.higher_order_modes import make_gw150814_modes_plot
+
+make_gw150814_modes_plot()
+```
+
+For higher masses, we will need them: scaling the total detector frame mass from roughly 70 to 70 thousand we get
+
+```{python}
+#| label: fig-imbh-modes
+#| fig-cap: "Projected higher order modes for an IMBH obtained by scaling GW150914's mass." 
+
+from thesis_scripts.lgwa_pe.higher_order_modes import make_gw150814_modes_plot
+
+make_gw150814_modes_plot(1000)
+```
+
 
 ### General injection results
 

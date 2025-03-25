@@ -31,7 +31,7 @@ dependencies = [
     "quarto-cli>=1.5.57",
     "scipy>=1.13.1",
     "snakeviz>=2.2.2",
-    "teobresums>=4.4.1",
+    "teobresums",
     "thesis-scripts",
     "tqdm>=4.67.1",
     "ultranest",
@@ -44,4 +44,5 @@ members = ["thesis_scripts/thesis_scripts"]
 thesis-scripts = { path = "thesis_scripts", editable = true }
 gwfish = { path = "../Documents/GWFish" }
 ultranest = { path = "../Documents/UltraNest", editable = true }
+teobresums = { path = "../Documents/Dali/Python" }
 
