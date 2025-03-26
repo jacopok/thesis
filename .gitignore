@@ -176,3 +176,7 @@ data
 
 data/gw170817_run/*
 !data/gw170817_run/chains/equal_weighted_post.txt
+
+**/libs/*
+*.js
+*.css

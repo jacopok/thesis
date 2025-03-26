@@ -1,6 +1,6 @@
 from .lgwa_nested_sampling import from_bilby, ensure_float
 from .lgwa_likelihood import time_to_merger, LunarLikelihood
-from .. import data_path
+from .. import data_path, plotting
 import numpy as np
 import matplotlib.pyplot as plt
 import yaml
@@ -70,6 +70,8 @@ def get_teob_modes(freq, params, modes):
         # Output parameters
         'arg_out'            : "yes",      # Request multipoles and dynamics as output of the function call. Default is "no". Allowed values: ["no","yes"].
         'time_shift_FD': "yes",
+        'ode_tmax': 1e11,
+        'ode_reltol': 1e-13,
     }
 
     f, hp_re, hp_im, hc_re, hc_im, hflm, htlm, dyn = EOBRun_module.EOBRunPy(teob_params)
@@ -79,13 +81,14 @@ def get_teob_modes(freq, params, modes):
     # tmax = -time_to_merger_simple(freq[0], params['chirp_mass']*SUN_MASS_SECONDS)
     return amp * pre, phase
 
-def make_gw150814_modes_plot(mass_scale = 1):
+def make_gw150914_modes_plot(mass_scale = 1):
     with open(data_path / 'gw150914_lgwa_median.yaml') as f:
         injection_params = yaml.safe_load(f)
 
     injection_params['chirp_mass'] *= mass_scale
+    injection_params['luminosity_distance'] *= mass_scale
     like = LunarLikelihood()
-    f = np.geomspace(2.5e-2, 3, num=1000)
+    f = np.geomspace(2.5e-2, 3, num=10000)
     
     palette = iter([
         '#882255',
@@ -111,20 +114,12 @@ def make_gw150814_modes_plot(mass_scale = 1):
 
     plt.loglog(f, np.sqrt(f*like.psd(f)), c='grey', lw=3, label='PSD')
 
-    DAY = 3600*24.
-    def forward(x):
-        return -time_to_merger_simple(x, injection_params['chirp_mass']*SUN_MASS_SECONDS) / DAY
-
-    def inverse(x):
-        return time_to_merger_simple_inverse(-x*DAY, injection_params['chirp_mass']*SUN_MASS_SECONDS)
-    
     plt.xlabel('Frequency [Hz]')
     plt.ylabel('Characteristic strain')
     plt.legend()
-    secax = plt.gca().secondary_xaxis('top',
-        functions=(forward, inverse),
-    )
-    secax.set_xlabel('Time to merger [days]')
+
+    plotting.add_time_to_merger_axis(plt.gca(), injection_params['chirp_mass'])
     
 if __name__ == '__main__':
-    make_gw150914_modes_plot()
+    make_gw150914_modes_plot(200)
+    plt.show()

@@ -288,9 +288,9 @@ We perform the analysis using only the 22 mode, and the following plot shows thi
 #| label: fig-gw150914-modes
 #| fig-cap: "Projected higher order modes for GW150914." 
 
-from thesis_scripts.lgwa_pe.higher_order_modes import make_gw150814_modes_plot
+from thesis_scripts.lgwa_pe.higher_order_modes import make_gw150914_modes_plot
 
-make_gw150814_modes_plot()
+make_gw150914_modes_plot()
 ```
 
 For higher masses, we will need them: scaling the total detector frame mass from roughly 70 to 70 thousand we get
@@ -299,9 +299,9 @@ For higher masses, we will need them: scaling the total detector frame mass from
 #| label: fig-imbh-modes
 #| fig-cap: "Projected higher order modes for an IMBH obtained by scaling GW150914's mass." 
 
-from thesis_scripts.lgwa_pe.higher_order_modes import make_gw150814_modes_plot
+from thesis_scripts.lgwa_pe.higher_order_modes import make_gw150914_modes_plot
 
-make_gw150814_modes_plot(1000)
+make_gw150914_modes_plot(200)
 ```
 
 
@@ -568,6 +568,7 @@ for percentile in [.5, .9]:
 
 axs[0].set_title('$x$ channel')
 axs[1].set_title('$y$ channel')
+add_time_
 ```
 
 ```{python}

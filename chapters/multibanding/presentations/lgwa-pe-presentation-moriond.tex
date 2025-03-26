@@ -1,0 +1,371 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  ignorenonframetext,
+]{beamer}
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{part title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{part title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\newif\ifbibliography
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+\usepackage{caption}
+% Make caption package work with longtable
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Parameter estimation with the Lunar Gravitational Wave Antenna},
+  pdfauthor={Jacopo Tissino},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Parameter estimation with the Lunar Gravitational Wave Antenna}
+\subtitle{Moriond 2025}
+\author{Jacopo Tissino}
+\date{2025-03-31}
+
+\begin{document}
+\frame{\titlepage}
+
+
+\begin{frame}{What is LGWA?}
+\phantomsection\label{what-is-lgwa}
+\begin{center}
+\includegraphics[width=\textwidth,height=0.75\textheight]{../figures/LGWA_crater_lighter.png}
+\end{center}
+
+\footnotesize Figure from the LGWA collaboration.
+\end{frame}
+
+\begin{frame}{LGWA payload}
+\phantomsection\label{lgwa-payload}
+\begin{center}
+\includegraphics[width=\textwidth,height=0.75\textheight]{../figures/LGWApayload.png}
+\end{center}
+
+\footnotesize Figure from
+\href{https://pubs.aip.org/aip/jap/article/133/24/244501/2899601/The-payload-of-the-Lunar-Gravitational-wave}{van
+Heijningen et al., 2023}.
+\end{frame}
+
+\begin{frame}{LGWA readout}
+\phantomsection\label{lgwa-readout}
+\begin{center}
+\includegraphics[width=\textwidth,height=0.75\textheight]{../figures/squid-readout.png}
+\end{center}
+
+\footnotesize Figure from
+\href{https://pubs.aip.org/aip/jap/article/133/24/244501/2899601/The-payload-of-the-Lunar-Gravitational-wave}{van
+Heijningen et al., 2023}.
+\end{frame}
+
+\begin{frame}{Gravitational wave response}
+\phantomsection\label{gravitational-wave-response}
+How does this readout noise translate to noise on our measurement of
+gravitational waves?
+
+We assume that the response function from the gravitational
+polarizations \(h_{ij}(t)\) to the displacement at the sensor \(s(t)\)
+is \emph{linear}: in the frequency domain,
+
+\[ s(f) = L(f) D_{ij} h_{ij}(f)
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  \(L(f)\) is the \textbf{response function}: with the dimensions of a
+  length, is the displacement amplitude corresponding to a monochromatic
+  unit strain;
+\item
+  \(D_{ij} = n_i b_j\) is a \textbf{pattern function}, where \(b_j\) is
+  a tangent unit vector to the surface while \(n_i\) is normal to it.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Structure of LGWA}
+\phantomsection\label{structure-of-lgwa}
+LGWA is planned to have:
+
+\begin{itemize}
+\tightlist
+\item
+  4 \textbf{stations}, to reduce overall noise and perform active
+  cancellation;
+\item
+  for each station, two orthogonal \textbf{horizontal measurement
+  channels}.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Strain noise}
+\phantomsection\label{strain-noise}
+If we have:
+
+\begin{itemize}
+\tightlist
+\item
+  an estimate for the PSD of the detector \textbf{displacement noise},
+  \(S_\text{disp}(f)\),
+\item
+  an estimate of the lunar \textbf{response} \(L(f)\),
+\item
+  the number of stations \(N\),
+\end{itemize}
+
+we can compute the strain noise as
+
+\[ S_{\text{strain}} (f) = \frac{S _{\text{disp}}(f)}{N L^2(f)}
+\]
+\end{frame}
+
+\begin{frame}{LGWA estimated noise}
+\phantomsection\label{lgwa-estimated-noise}
+\begin{center}
+\includegraphics[width=\textwidth,height=0.75\textheight]{../figures/LGWA_sensitivity.png}
+\end{center}
+\end{frame}
+
+\begin{frame}{The multiband concept}
+\phantomsection\label{the-multiband-concept}
+\begin{center}
+\includegraphics[width=\textwidth,height=0.75\textheight]{../figures/Multiband_concept.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}{The reference frame problem}
+\phantomsection\label{the-reference-frame-problem}
+The frequency-domain waveform at the detector has a travel time factor
+from the center of the reference frame:
+
+\[ h(f) \propto \exp( i \vec{k} \cdot (\vec{r} - \vec{r}_0))
+\]
+
+The center \(\vec{r}_0\) should be rigidly connected with the SSB, but
+it can be elsewhere!
+\end{frame}
+
+\begin{frame}{Sky position measurement - 1 month of observation}
+\phantomsection\label{sky-position-measurement---1-month-of-observation}
+\includegraphics{lgwa-pe-presentation-moriond_files/figure-beamer/cell-4-output-1.pdf}
+\end{frame}
+
+\begin{frame}{Sky position measurement - 1 year}
+\phantomsection\label{sky-position-measurement---1-year}
+\includegraphics{lgwa-pe-presentation-moriond_files/figure-beamer/cell-5-output-1.pdf}
+\end{frame}
+
+\begin{frame}{Sky position measurement - early warning}
+\phantomsection\label{sky-position-measurement---early-warning}
+\includegraphics{lgwa-pe-presentation-moriond_files/figure-beamer/cell-6-output-1.pdf}
+\end{frame}
+
+\begin{frame}{Mass constraints}
+\phantomsection\label{mass-constraints}
+\includegraphics{lgwa-pe-presentation-moriond_files/figure-beamer/cell-7-output-1.pdf}
+\end{frame}
+
+\begin{frame}{Sky localization}
+\phantomsection\label{sky-localization}
+\includegraphics{lgwa-pe-presentation-moriond_files/figure-beamer/cell-8-output-1.pdf}
+\end{frame}
+
+\begin{frame}{Phase constraints}
+\phantomsection\label{phase-constraints}
+\includegraphics{lgwa-pe-presentation-moriond_files/figure-beamer/cell-10-output-1.pdf}
+\end{frame}
+
+\begin{frame}{Open problems: noise and moonquakes}
+\phantomsection\label{open-problems-noise-and-moonquakes}
+\begin{itemize}
+\tightlist
+\item
+  Can we demonstrate active noise cancellation?
+\item
+  LGWA data will have gaps when moonquakes get too strong: how much do
+  they impact PE?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Open problems: response calibration}
+\phantomsection\label{open-problems-response-calibration}
+\begin{itemize}
+\tightlist
+\item
+  We are assuming a known lunar response.
+\item
+  How does uncertainty there translate into parameter estimation?
+\item
+  Can we demonstrate the ``multibanding calibration trick''?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Open problems: parameter estimation}
+\phantomsection\label{open-problems-parameter-estimation}
+\begin{itemize}
+\tightlist
+\item
+  likelihood acceleration (relative binning or similar)
+\item
+  analytical marginalizations (e.g.~in phase)
+\item
+  different sources
+
+  \begin{itemize}
+  \tightlist
+  \item
+    IMBH
+  \item
+    stellar BBH
+  \item
+    DWD
+  \item
+    \ldots{}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+
+
+
+\end{document}

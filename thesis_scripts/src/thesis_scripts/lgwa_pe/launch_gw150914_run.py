@@ -19,6 +19,9 @@ if __name__ == '__main__':
     with open(data_path / 'gw150914_lgwa_median.yaml') as f:
         injection_params = yaml.safe_load(f)
     
+    folder_name = 'gw150914_median_1yr'
+    prior_file = data_path / folder_name / 'priors.txt.prior'
+    
     prior_dict = BNSPriorDict()
         
     prior_dict['lambda_1'] = DeltaFunction(injection_params['lambda_1'], name='lambda_1')
@@ -39,10 +42,10 @@ if __name__ == '__main__':
     f = np.geomspace(1e-2, 3, num=10000)
     amplitude, phase = like.amp_phase(f, from_bilby(injection_params))
     time_to_merger = time_to_merger(f, phase)
-        
-    # hx, hy = like.projected_waveform(f, from_bilby(injection_params))
-    # plt.loglog(f, abs(hx))
-    # plt.loglog(f, abs(hy))
+
+    hx, hy = like.projected_waveform(f, from_bilby(injection_params))
+    plt.loglog(f, abs(hx))
+    plt.loglog(f, abs(hy))
     
     important_times = {
         # 'minute': 60,
@@ -51,24 +54,20 @@ if __name__ == '__main__':
         'month': 3600*24*29.5,
         'year': 3600*24*365.25,
     }
-    # for name, seconds in important_times.items():
+    for name, seconds in important_times.items():
         
-    #     idx = np.searchsorted(time_to_merger, -seconds)
-    #     plt.axvline(f[idx], color='k', linestyle='--', label=name)
+        idx = np.searchsorted(time_to_merger, -seconds)
+        plt.axvline(f[idx], color='k', linestyle='--', label=name)
 
-    # plt.legend()
-    # plt.show()
-    # plt.close()
+    plt.legend()
+    plt.show()
+    plt.close()
     f0 = f[np.searchsorted(time_to_merger, -important_times['year'])]
     freq = np.geomspace(f0, 3, num=5000)
 
-    loglike, prior_transform, inverse_prior_transform, log_dir, param_names = make_analysis_functions(injection_parameters=injection_params, folder_name='gw150914_median_1yr', priors=prior_dict, freq=freq)
+    loglike, prior_transform, inverse_prior_transform, log_dir, param_names = make_analysis_functions(injection_parameters=injection_params, folder_name=folder_name, priors=prior_dict, freq=freq)
 
-    u0 = np.asarray(inverse_prior_transform([injection_params[name] for name in param_names]))
-    
-    rng=np.random.default_rng(seed=1)
-    
-    p0 = rng.normal(loc=0, scale=2e-9, size=(50, len(param_names))) + u0[np.newaxis, :]
+    print(param_names)
     
     run_pe(loglike, prior_transform, inverse_prior_transform, log_dir, param_names, injection_params, n_live=500)
     
