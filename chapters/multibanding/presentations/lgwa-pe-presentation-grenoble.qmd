@@ -18,6 +18,8 @@ format:
 author: Jacopo Tissino
 date: 2025-03-28
 title: Precision gravitational wave science on the Moon
+subtitle: Grenoble group meeting
+aspectratio: 169
 ---
 
 ```{python}
@@ -107,10 +109,9 @@ from thesis_scripts import *
 
 # Permanently shadowed regions - elevation map
 
-![](../figures/psr-black.png){width=70% fig-align="center"}
+![](../figures/psr-black.png){height=75% fig-align="center"}
 
 \footnotesize Figure from the [Lunar and Planetary Institute](https://www.lpi.usra.edu/).
-Diameter: 600km
 
 # Permanently shadowed regions - temperature
 
@@ -148,27 +149,33 @@ The noise is then:
 $$ \text{strain noise} (f) = \frac{\text{displacement noise} (f)}{\text{baseline length}(f)}
 $$
 
+# Noise and moonquakes
+
+![](../figures/Moon_events.png){height=75% fig-align="center"}
+
 # Lunar response modelling
 
 ![](../figures/LunarModel.png){height=75% fig-align="center"}
+
+\footnotesize Figure from the [LGWA whitepaper (2024)](http://arxiv.org/abs/2404.09181).
 
 # Lunar response results
 
 ![](../figures/response_bi_harms.png){height=75% fig-align="center"}
 
+\footnotesize Figure from Bi and Harms, 2024.
 
-# LGWA estimated noise
+# Multi-band detections
 
-![](../figures/LGWA_sensitivity.png){height=75% fig-align="center"}
+![](../figures/Multiband_concept.pdf){height=75% fig-align="center"}
 
-<!-- # The multiband concept
-
-![](../figures/Multiband_concept.pdf){height=75% fig-align="center"} -->
-
+\footnotesize Figure from the [LGWA whitepaper (2024)](http://arxiv.org/abs/2404.09181).
 
 # Time to merger for stellar-mass sources
 
 ![](../figures/time_to_merger.pdf){height=75% fig-align="center"}
+
+\footnotesize Figure from Cozzumbo et al., 2024.
 
 # Phase constraints for a neutron star binary
 
@@ -193,40 +200,41 @@ for i in range(ratios_to_plot):
 ```
 
 ```{python}
+
 from thesis_scripts.plotting import add_time_to_merger_axis
 cmap = plt.get_cmap('Blues')
 
 phase_diffs = np.sort(np.angle(ratios), axis=1)
 
-fig, axs = plt.subplots(2, 1, sharex=True)
+fig, axs = plt.subplots(1, 1, sharex=True, figsize=(16/2, 7/2))
 
 for percentile in [.5, .9]:
-    for i in range(2):
+    for i in range(1):
         i_1 = int(ratios_to_plot*percentile/2.)
         i_2 = int(ratios_to_plot*(1-percentile/2.))
-        axs[i].fill_between(f, 
+        axs.fill_between(f, 
             phase_diffs[i, i_1],
             phase_diffs[i, i_2],
             color=cmap(percentile)
         )
-        axs[i].plot(f,
+        axs.plot(f,
             phase_diffs[i, i_1],
             c='black', lw=.5
         )
-        axs[i].plot(f, 
+        axs.plot(f, 
             phase_diffs[i, i_2],
             c='black', lw=.5
         )
-        axs[i].set_xscale('log')
-        axs[i].set_ylim(-0.2, 0.2)
+        axs.set_xscale('log')
+        axs.set_ylim(-0.2, 0.2)
 
-axs[0].set_xlim(f[0], f[-1])
-axs[0].set_title('$x$ channel')
-axs[1].set_title('$y$ channel')
-axs[0].set_ylabel('Phase constraint [rad]')
-axs[1].set_ylabel('Phase constraint [rad]')
-axs[1].set_xlabel('Frequency [Hz]')
-add_time_to_merger_axis(axs[0], params['chirp_mass'])
+axs.set_xlim(f[0], f[-1])
+axs.set_title('$x$ channel')
+# axs[1].set_title('$y$ channel')
+axs.set_ylabel('Phase constraint [rad]')
+# axs[1].set_ylabel('Phase constraint [rad]')
+axs.set_xlabel('Frequency [Hz]')
+add_time_to_merger_axis(axs, params['chirp_mass'])
 
 ```
 
@@ -244,14 +252,15 @@ with open(data_path / 'gw170817_lgwa_median.yaml') as f:
 def fig_args(radius, params):
     return {
         'ra_lims': (
-            np.rad2deg(params['ra']-radius), 
-            np.rad2deg(params['ra']+radius)
+            np.rad2deg(params['ra']-radius*16/9), 
+            np.rad2deg(params['ra']+radius*16/9)
         ),
         'dec_lims': (
             np.rad2deg(params['dec']-radius), 
             np.rad2deg(params['dec']+radius)
         ),
-        'mollweide': False
+        'mollweide': False,
+        'figsize': (16/2, 9/2)
     }
 
 ```
@@ -268,7 +277,7 @@ ax = mismatch_plot(
     np.geomspace(fmin, 3, num=200), 
     n_grid=n_grid, 
     cache_name='cache/bns_recentered_2months', 
-    **fig_args(np.deg2rad(2), params)
+    **fig_args(np.deg2rad(1), params)
 )
 ```
 
@@ -282,7 +291,7 @@ ax = mismatch_plot(
     np.geomspace(fmin, 3, num=200), 
     n_grid=n_grid, 
     cache_name='cache/bns_recentered_1year', 
-    **fig_args(np.deg2rad(2), params)
+    **fig_args(np.deg2rad(1), params)
 )
 ```
 
@@ -298,11 +307,15 @@ ax = mismatch_plot(
     n_grid=n_grid, 
     cache_name='cache/bns_recentered_ew', 
     # cache_name=None, 
-    **fig_args(np.deg2rad(2), params)
+    **fig_args(np.deg2rad(1), params)
 )
 ```
 
-# Noise and moonquakes
+# Soundcheck sensitivity
 
-![](../figures/Moon_events.png){height=75% fig-align="center"}
+![](../figures/landscape_lgwa_2.png){height=85% fig-align="center"}
+
+# LGWA sensitivity
+
+![](../figures/landscape_lgwa_3.png){height=85% fig-align="center"}
 
