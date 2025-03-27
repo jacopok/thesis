@@ -17,7 +17,7 @@ from . import data_path
 
 
 
-def mismatch_plot(params, freq, ra_lims, dec_lims, n_grid=80, mollweide=False, shift_center=True, n_f=2000, cache_name=None, rad=False):
+def mismatch_plot(params, freq, ra_lims, dec_lims, n_grid=80, mollweide=False, shift_center=True, n_f=2000, cache_name=None, rad=False, **fig_kwargs):
 
     like = LunarLikelihood()
     
@@ -49,7 +49,7 @@ def mismatch_plot(params, freq, ra_lims, dec_lims, n_grid=80, mollweide=False, s
         if cache_name is not None:
             np.save(file_path, results)
 
-    fig = plt.figure(figsize=(6, 4))
+    fig = plt.figure(**fig_kwargs)
     # fig = plt.figure(figsize=(16*.8, 9*.8))
     if mollweide:
         ax = fig.add_subplot(111, projection=ccrs.Mollweide())

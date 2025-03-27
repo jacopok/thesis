@@ -7,6 +7,8 @@ format:
         execute:
             echo: false
         bibliography: ../../../rehear.bib
+        fig-width: 8
+        fig-height: 4.5
     revealjs:
         execute:
             echo: false
@@ -19,6 +21,7 @@ author: Jacopo Tissino
 date: 2025-03-31
 subtitle: Moriond 2025
 title: Parameter estimation with the Lunar Gravitational Wave Antenna
+aspectratio: 169
 ---
 
 # What is LGWA?
@@ -98,8 +101,8 @@ with open(data_path / 'gw170817_lgwa_median.yaml') as f:
 def fig_args(radius, params):
     return {
         'ra_lims': (
-            np.rad2deg(params['ra']-radius), 
-            np.rad2deg(params['ra']+radius)
+            np.rad2deg(params['ra']-radius*16/9), 
+            np.rad2deg(params['ra']+radius*16/9)
         ),
         'dec_lims': (
             np.rad2deg(params['dec']-radius), 
@@ -115,14 +118,14 @@ from thesis_scripts.mismatch_plots_lgwa import mismatch_plot
 from thesis_scripts.lgwa_pe.simple_bns_waveforms import time_to_merger_simple_inverse, SUN_MASS_SECONDS
 
 fmin = time_to_merger_simple_inverse(-3600*24*60, params['chirp_mass']*SUN_MASS_SECONDS)
-n_grid = 125
+n_grid = 80
 
 ax = mismatch_plot(
     params, 
     np.geomspace(fmin, 3, num=400), 
     n_grid=n_grid, 
     cache_name='cache/bns_recentered_2months', 
-    **fig_args(np.deg2rad(2), params)
+    **fig_args(np.deg2rad(1.), params)
 )
 ```
 
@@ -136,7 +139,7 @@ ax = mismatch_plot(
     np.geomspace(fmin, 3, num=400), 
     n_grid=n_grid, 
     cache_name='cache/bns_recentered_1year', 
-    **fig_args(np.deg2rad(2), params)
+    **fig_args(np.deg2rad(1.), params)
 )
 ```
 
@@ -152,7 +155,7 @@ ax = mismatch_plot(
     n_grid=n_grid, 
     cache_name='cache/bns_recentered_ew', 
     # cache_name=None, 
-    **fig_args(np.deg2rad(2), params)
+    **fig_args(np.deg2rad(1.), params)
 )
 ```
 
@@ -197,7 +200,7 @@ run_folder = data_path / 'bns_test'
 injection_params = yaml.safe_load((run_folder / 'injection_parameters.yaml').read_text())
 
 # post_ew = pd.read_csv(data_path / 'ew_gw170817_run' / 'chains' / 'equal_weighted_post.txt', sep=' ')
-post_full = pd.read_csv(run_folder / 'chains' / 'equal_weighted_post.txt', sep=' ')
+post_full = pd.read_csv(run_folder / 'chains' / 'equal_weighted_post.txt', sep=' ').iloc[:1000]
 
 # ra_lims = (3.442, 3.449)
 # dec_lims = (-0.412, -0.405)
@@ -252,8 +255,8 @@ _ = plt.title('Mass constraints')
 # Sky localization
 
 ```{python}
-ra_lims = np.deg2rad([197+24/60, 197+36/60])
-dec_lims = np.deg2rad([-24+35/60, -24+40/60])
+ra_lims = np.deg2rad([197+24/60, 197+30/60])
+dec_lims = np.deg2rad([-24+35/60, -24+41/60])
 # fig=plt.figure(figsize=(5.2, 5.5))
 
 # plot_contours(post_ew['ra'], post_ew['dec'], ax=plt.gca(), levels=[.9], cmap=cmap_ew)
@@ -283,7 +286,7 @@ f = np.geomspace(0.086816181214, 3, num=2000)
 
 hx_0, hy_0 = like.projected_waveform(f, from_bilby(injection_params))
 
-ratios_to_plot = 2_000
+ratios_to_plot = 1_000
 ratios = np.empty((2, ratios_to_plot, len(f)), dtype=complex)
 
 for i in range(ratios_to_plot):
