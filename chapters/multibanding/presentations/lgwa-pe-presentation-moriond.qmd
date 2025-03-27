@@ -119,7 +119,7 @@ n_grid = 125
 
 ax = mismatch_plot(
     params, 
-    np.geomspace(fmin, 3, num=500), 
+    np.geomspace(fmin, 3, num=400), 
     n_grid=n_grid, 
     cache_name='cache/bns_recentered_2months', 
     **fig_args(np.deg2rad(2), params)
@@ -133,7 +133,7 @@ fmin = time_to_merger_simple_inverse(-3600*24*365.25, params['chirp_mass']*SUN_M
     
 ax = mismatch_plot(
     params, 
-    np.geomspace(fmin, 3, num=500), 
+    np.geomspace(fmin, 3, num=400), 
     n_grid=n_grid, 
     cache_name='cache/bns_recentered_1year', 
     **fig_args(np.deg2rad(2), params)
@@ -148,7 +148,7 @@ fmax = time_to_merger_simple_inverse(-3600*24*30, params['chirp_mass']*SUN_MASS_
     
 ax = mismatch_plot(
     params, 
-    np.geomspace(fmin, fmax, num=500), 
+    np.geomspace(fmin, fmax, num=400), 
     n_grid=n_grid, 
     cache_name='cache/bns_recentered_ew', 
     # cache_name=None, 
@@ -222,13 +222,13 @@ mc = injection_params['chirp_mass']
 
 ```{python}
 
-x = np.linspace(-6e-7, 6e-7, num=500)
-y = np.linspace(0.86, 0.94, num=500)
+x = np.linspace(-6e-7, 6e-7, num=200)
+y = np.linspace(0.86, 0.94, num=200)
 
-# plot_contours(post_ew['chirp_mass']-mc, post_ew['mass_ratio'], ax=plt.gca(), levels=[.9], cmap=cmap_ew, x=x, y=y, N=500)
+# plot_contours(post_ew['chirp_mass']-mc, post_ew['mass_ratio'], ax=plt.gca(), levels=[.9], cmap=cmap_ew, x=x, y=y, N=200)
 plot_contours(
     post_full['chirp_mass']-mc, 
-    post_full['mass_ratio'], ax=plt.gca(), levels=[.5, .9], cmap=cmap_full, x=x, y=y, N=500)
+    post_full['mass_ratio'], ax=plt.gca(), levels=[.5, .9], cmap=cmap_full, x=x, y=y, N=200)
 plt.grid(which='both')
 plt.xlim(-2e-7, 2e-7)
 plt.scatter(0, injection_params['mass_ratio'], marker='x', c='black')
@@ -257,7 +257,7 @@ dec_lims = np.deg2rad([-24+35/60, -24+40/60])
 # fig=plt.figure(figsize=(5.2, 5.5))
 
 # plot_contours(post_ew['ra'], post_ew['dec'], ax=plt.gca(), levels=[.9], cmap=cmap_ew)
-plot_contours(post_full['ra'], post_full['dec'], ax=plt.gca(), levels=[.5, .9], cmap=cmap_full, N=500)
+plot_contours(post_full['ra'], post_full['dec'], ax=plt.gca(), levels=[.5, .9], cmap=cmap_full, N=200)
 plt.scatter(injection_params['ra'], injection_params['dec'], marker='x', c='black')
 
 make_arcmin_grid(plt.gca(), ra_lims, dec_lims)

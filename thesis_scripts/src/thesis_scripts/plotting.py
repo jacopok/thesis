@@ -81,10 +81,10 @@ def plot_contours(x_points, y_points, ax, cmap='Blues', levels=[.5, .9], N=100, 
 def add_time_to_merger_axis(ax, mchirp):
     DAY = 3600*24.
     def forward(x):
-        return -time_to_merger_simple(x, injection_params['chirp_mass']*SUN_MASS_SECONDS) / DAY
+        return -time_to_merger_simple(x, mchirp*SUN_MASS_SECONDS) / DAY
 
     def inverse(x):
-        return time_to_merger_simple_inverse(-x*DAY, injection_params['chirp_mass']*SUN_MASS_SECONDS)
+        return time_to_merger_simple_inverse(-x*DAY, mchirp*SUN_MASS_SECONDS)
 
     secax = ax.secondary_xaxis('top',
         functions=(forward, inverse),
