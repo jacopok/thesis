@@ -12,28 +12,48 @@ import matplotlib.pyplot as plt
 
 from cmcrameri import cm
 
-cmap_full = cm.devon
-cmap_ew = cm.lajolla
+def compare_mcmc_guess(run_folder, prior_transform, param_names):
+    post_full = pd.read_csv(run_folder / 'chains' / 'equal_weighted_post.txt', sep=' ')
+    guess = np.load(run_folder / 'baseline_post.npy')
+    
+    guess_transformed = [prior_transform(row) for row in guess]
+    
+    for idx in len(param_names):
+        plt.hist(post_full[param_names[idx]], alpha=.5, label='posterior', bins=50)
+        plt.hist([row[idx] for row in guess_transformed], alpha=.5, label='initial MCMC run', bins=50)
+        
+        plt.legend()
+        plt.title(param_names[idx])
+        plt.savefig(run_folder / 'plots'/ f'{param_names[idx]}.png')
+        plt.close()
 
-run_folder = data_path / 'bns_test'
+if __name__ == '__main__':
 
-injection_params = yaml.safe_load((run_folder / 'injection_parameters.yaml').read_text())
+    cmap_full = cm.devon
+    cmap_ew = cm.lajolla
 
-# post_ew = pd.read_csv(data_path / 'ew_gw170817_run' / 'chains' / 'equal_weighted_post.txt', sep=' ')
-post_full = pd.read_csv(run_folder / 'chains' / 'equal_weighted_post.txt', sep=' ')
+    run_folder = data_path / 'gw170817_median_1yr_ew_1mo'
 
-color_param = 'phase'
-param_1 = 'chirp_mass'
-param_2 = 'mass_ratio'
+    injection_params = yaml.safe_load((run_folder / 'injection_parameters.yaml').read_text())
 
-norm = Normalize(vmin=min(post_full[color_param]), vmax=max(post_full[color_param]))
+    # post_ew = pd.read_csv(data_path / 'ew_gw170817_run' / 'chains' / 'equal_weighted_post.txt', sep=' ')
+    post_full = pd.read_csv(run_folder / 'chains' / 'equal_weighted_post.txt', sep=' ')
 
-c = plt.scatter(post_full[param_1], post_full[param_2], s=.5, alpha=.5, c=post_full[color_param], cmap=cmap_full, norm=norm)
-plt.scatter(injection_params[param_1], injection_params[param_2], marker='x', c='black')
+    color_param = 'lambda_1'
+    param_1 = 'chirp_mass'
+    param_2 = 'mass_ratio'
 
-plt.colorbar(ScalarMappable(cmap=cmap_full, norm=norm), label=color_param, ax=plt.gca())
+    norm = Normalize(vmin=min(post_full[color_param]), vmax=max(post_full[color_param]))
 
-plt.xlabel(param_1)
-plt.ylabel(param_2)
+    c = plt.scatter(post_full[param_1], post_full[param_2], s=.5, alpha=.5, c=post_full[color_param], cmap=cmap_full, norm=norm)
+    plt.scatter(injection_params[param_1], injection_params[param_2], marker='x', c='black')
 
-plt.show()
+    plt.colorbar(ScalarMappable(cmap=cmap_full, norm=norm), label=color_param, ax=plt.gca())
+
+    plt.xlabel(param_1)
+    plt.ylabel(param_2)
+
+    if param_1 == 'ra' and param_2 == 'dec':
+        make_arcmin_grid(plt.gca(), (min(post_full[param_1]), max(post_full[param_1])), (min(post_full[param_2]), max(post_full[param_2])))
+
+    plt.show()

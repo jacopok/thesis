@@ -18,7 +18,7 @@ format:
 author: Jacopo Tissino
 date: 2025-03-28
 title: Precision gravitational wave science on the Moon
-subtitle: Grenoble group meeting
+subtitle: IPAG - SHERPAS group meeting
 aspectratio: 169
 ---
 
@@ -319,3 +319,12 @@ ax = mismatch_plot(
 
 ![](../figures/landscape_lgwa_3.png){height=85% fig-align="center"}
 
+# LGWA sources
+
+- Internal lunar sources
+- Binaries with stellar-mass black holes and neutron stars (long observations, precise constraints)
+- Binaries with white dwarfs (long observations, ~Mpc horizon)
+- Binaries with intermediate mass black holes (optimum at ~$10^4 M_{\odot}$)
+- Intermediate mass ratio inspirals ($m_1 / m_2 \sim 10^{-2} \div 10^{-5}$)
+- Low-frequency asymmetric neutron stars
+- Bursts from tidal disruption events

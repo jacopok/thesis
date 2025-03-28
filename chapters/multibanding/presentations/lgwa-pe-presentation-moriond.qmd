@@ -17,12 +17,54 @@ format:
             width: wide
         bibliography: ../../../rehear.bib
         self-contained: true
-author: Jacopo Tissino
+author: Jacopo Tissino - Gran Sasso Science Institute
 date: 2025-03-31
-subtitle: Moriond 2025
+subtitle: Moriond Gravitation, 2025
 title: Parameter estimation with the Lunar Gravitational Wave Antenna
 aspectratio: 169
 ---
+
+```{python}
+from thesis_scripts.plotting import plot_contours
+from matplotlib import ticker
+from matplotlib.lines import Line2D
+import pandas as pd
+from thesis_scripts.plotting import make_arcmin_grid
+from thesis_scripts import data_path
+import yaml
+import numpy as np
+import matplotlib.pyplot as plt
+
+from cmcrameri import cm
+
+cmap_full = cm.devon
+cmap_ew = cm.lajolla
+
+def make_legend():
+
+    custom_lines = [
+        Line2D([0], [0], color=cmap_full(.8), markersize=10, marker='o', lw=0),
+        Line2D([0], [0], color=cmap_full(.4), markersize=10, marker='o', lw=0),
+    ]
+    
+    plt.legend(
+        custom_lines, 
+        [
+            '50\% probability contained',
+            '90\% probability contained',
+        ]
+    )
+
+run_folder = data_path / 'bns_test'
+
+injection_params = yaml.safe_load((run_folder / 'injection_parameters.yaml').read_text())
+
+post_full = pd.read_csv(run_folder / 'chains' / 'equal_weighted_post.txt', sep=' ').iloc[:500]
+
+mc = injection_params['chirp_mass']
+
+```
+
 
 # What is LGWA?
 
@@ -88,7 +130,7 @@ $$
 
 ![](../figures/Multiband_concept.pdf){height=75% fig-align="center"}
 
-# Sky position measurement - 1 month of observation
+# Sky position measurement - 1 month
 
 ```{python}
 import numpy as np
@@ -108,9 +150,9 @@ def fig_args(radius, params):
             np.rad2deg(params['dec']-radius), 
             np.rad2deg(params['dec']+radius)
         ),
-        'mollweide': False
+        'mollweide': False,
+        'figsize': (16/2, 9/2)
     }
-
 ```
 
 ```{python}
@@ -139,6 +181,7 @@ ax = mismatch_plot(
     np.geomspace(fmin, 3, num=400), 
     n_grid=n_grid, 
     cache_name='cache/bns_recentered_1year', 
+    # cache_name='cache/bns_recentered_1year', 
     **fig_args(np.deg2rad(1.), params)
 )
 ```
@@ -159,69 +202,8 @@ ax = mismatch_plot(
 )
 ```
 
+
 # Mass constraints
-
-```{python}
-from thesis_scripts.plotting import plot_contours
-from matplotlib import ticker
-from matplotlib.lines import Line2D
-import pandas as pd
-from thesis_scripts.plotting import make_arcmin_grid
-from thesis_scripts import data_path
-import yaml
-import numpy as np
-import matplotlib.pyplot as plt
-
-from cmcrameri import cm
-
-cmap_full = cm.devon
-cmap_ew = cm.lajolla
-
-def make_legend():
-
-    custom_lines = [
-        # Line2D([0], [0], color=cmap_ew(.5), markersize=10, marker='o', lw=0),
-        Line2D([0], [0], color=cmap_full(.8), markersize=10, marker='o', lw=0),
-        Line2D([0], [0], color=cmap_full(.4), markersize=10, marker='o', lw=0),
-    ]
-    
-    plt.legend(
-        custom_lines, 
-        [
-            # f'Early warning (4.5 months to merger, SNR 20)',
-            # f'Full bandwidth (3 hours to merger, SNR 28)',
-            '50\% probability contained',
-            '90\% probability contained',
-        ]
-    )
-
-run_folder = data_path / 'bns_test'
-
-injection_params = yaml.safe_load((run_folder / 'injection_parameters.yaml').read_text())
-
-# post_ew = pd.read_csv(data_path / 'ew_gw170817_run' / 'chains' / 'equal_weighted_post.txt', sep=' ')
-post_full = pd.read_csv(run_folder / 'chains' / 'equal_weighted_post.txt', sep=' ').iloc[:1000]
-
-# ra_lims = (3.442, 3.449)
-# dec_lims = (-0.412, -0.405)
-
-# filter_indices = (
-#     (post_ew_pre['ra'] > ra_lims[0]).to_numpy() & 
-#     (post_ew_pre['ra'] < ra_lims[1]).to_numpy() & 
-#     (post_ew_pre['dec'] > dec_lims[0]).to_numpy() & 
-#     (post_ew_pre['dec'] < dec_lims[1]).to_numpy()
-# )
-
-# print(f'Filtering out {len(filter_indices) - sum(filter_indices)} outliers')
-
-# post_ew = post_ew_pre.iloc[filter_indices]
-
-
-# fig = plt.figure(figsize=(5.2, 5.5))
-
-mc = injection_params['chirp_mass']
-
-```
 
 ```{python}
 
@@ -257,7 +239,7 @@ _ = plt.title('Mass constraints')
 ```{python}
 ra_lims = np.deg2rad([197+24/60, 197+30/60])
 dec_lims = np.deg2rad([-24+35/60, -24+41/60])
-# fig=plt.figure(figsize=(5.2, 5.5))
+fig=plt.figure(figsize=(6, 3))
 
 # plot_contours(post_ew['ra'], post_ew['dec'], ax=plt.gca(), levels=[.9], cmap=cmap_ew)
 plot_contours(post_full['ra'], post_full['dec'], ax=plt.gca(), levels=[.5, .9], cmap=cmap_full, N=200)
@@ -286,7 +268,7 @@ f = np.geomspace(0.086816181214, 3, num=2000)
 
 hx_0, hy_0 = like.projected_waveform(f, from_bilby(injection_params))
 
-ratios_to_plot = 1_000
+ratios_to_plot = len(post_full)
 ratios = np.empty((2, ratios_to_plot, len(f)), dtype=complex)
 
 for i in range(ratios_to_plot):
@@ -297,42 +279,44 @@ for i in range(ratios_to_plot):
 ```
 
 ```{python}
+
 from thesis_scripts.plotting import add_time_to_merger_axis
 cmap = plt.get_cmap('Blues')
 
 phase_diffs = np.sort(np.angle(ratios), axis=1)
 
-fig, axs = plt.subplots(2, 1, sharex=True)
+fig, axs = plt.subplots(1, 1, sharex=True, figsize=(16/2, 7/2))
 
 for percentile in [.5, .9]:
-    for i in range(2):
+    for i in range(1):
         i_1 = int(ratios_to_plot*percentile/2.)
         i_2 = int(ratios_to_plot*(1-percentile/2.))
-        axs[i].fill_between(f, 
+        axs.fill_between(f, 
             phase_diffs[i, i_1],
             phase_diffs[i, i_2],
             color=cmap(percentile)
         )
-        axs[i].plot(f,
+        axs.plot(f,
             phase_diffs[i, i_1],
             c='black', lw=.5
         )
-        axs[i].plot(f, 
+        axs.plot(f, 
             phase_diffs[i, i_2],
             c='black', lw=.5
         )
-        axs[i].set_xscale('log')
-        axs[i].set_ylim(-0.2, 0.2)
+        axs.set_xscale('log')
+        axs.set_ylim(-0.2, 0.2)
 
-axs[0].set_xlim(f[0], f[-1])
-axs[0].set_title('$x$ channel')
-axs[1].set_title('$y$ channel')
-axs[0].set_ylabel('Phase constraint [rad]')
-axs[1].set_ylabel('Phase constraint [rad]')
-axs[1].set_xlabel('Frequency [Hz]')
-add_time_to_merger_axis(axs[0], params['chirp_mass'])
+axs.set_xlim(f[0], f[-1])
+axs.set_title('$x$ channel')
+# axs[1].set_title('$y$ channel')
+axs.set_ylabel('Phase constraint [rad]')
+# axs[1].set_ylabel('Phase constraint [rad]')
+axs.set_xlabel('Frequency [Hz]')
+add_time_to_merger_axis(axs, params['chirp_mass'])
 
 ```
+
 
 # Open problems: noise and moonquakes
 

@@ -12,6 +12,7 @@ from bilby.gw.prior import (
 import numpy as np
 import matplotlib.pyplot as plt
 import yaml
+from pathlib import Path
 from .. import data_path
 
 if __name__ == '__main__':
@@ -59,4 +60,7 @@ if __name__ == '__main__':
 
     loglike, prior_transform, inverse_prior_transform, log_dir, param_names = make_analysis_functions(injection_parameters=injection_params, folder_name='gw170817_median_1yr_ew_1mo', priors=prior_dict, freq=freq)
 
-    run_pe(loglike, prior_transform, inverse_prior_transform, log_dir, param_names, injection_params, n_live=500)
+    # run_pe(loglike, prior_transform, inverse_prior_transform, log_dir, param_names, injection_params, n_live=500)
+    from .explore_strange_posteriors import compare_mcmc_guess
+    
+    compare_mcmc_guess(data_path / 'gw170817_median_1yr_ew_1mo', prior_transform, param_names, 0)

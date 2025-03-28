@@ -19,7 +19,7 @@ from thesis_scripts import *
 
 This was already somehow handled for PE with stellar mass binaries with LISA, e.g. 
 
-- [this paper](https://arxiv.org/pdf/2007.08544.pdf), with a very useful discussion of the $\mathcal{M}_{c}$ - $\eta$ degeneracy.
+- [this paper](https://arxiv.org/pdf/2007.08544.pdf), with a very useful discussion of the $\mathcal{M}_{c}$ - $\eta$ degeneracy, although for them the frequency variation is very small. 
 - or [this one](https://arxiv.org/pdf/2003.00357.pdf) (Mersat, Baker, Dal Canton).
 
 The merger time is not a good parameter to do PE, it degenerates with the chirp mass a lot.
