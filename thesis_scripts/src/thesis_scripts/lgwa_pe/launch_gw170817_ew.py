@@ -63,4 +63,4 @@ if __name__ == '__main__':
     # run_pe(loglike, prior_transform, inverse_prior_transform, log_dir, param_names, injection_params, n_live=500)
     from .explore_strange_posteriors import compare_mcmc_guess
     
-    compare_mcmc_guess(data_path / 'gw170817_median_1yr_ew_1mo', prior_transform, param_names, 0)
+    compare_mcmc_guess(data_path / 'gw170817_median_1yr_ew_1mo', prior_transform, param_names, injection_params)

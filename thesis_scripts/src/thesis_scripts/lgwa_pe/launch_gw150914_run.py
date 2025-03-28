@@ -69,10 +69,13 @@ if __name__ == '__main__':
 
     print(param_names)
     
-    run_pe(loglike, prior_transform, inverse_prior_transform, log_dir, param_names, injection_params, n_live=500)
+    # run_pe(loglike, prior_transform, inverse_prior_transform, log_dir, param_names, injection_params, n_live=500)
     
     # baseline_post_transformed = np.load(data_path / 'gw150914_median_1yr' / 'baseline_post.npy')
     # for i in range(11):
     #     plt.hist(baseline_post_transformed[:, i])
     #     plt.show()
     #     plt.close()
+    from .explore_strange_posteriors import compare_mcmc_guess
+    
+    compare_mcmc_guess(data_path / folder_name, prior_transform, param_names, injection_params)

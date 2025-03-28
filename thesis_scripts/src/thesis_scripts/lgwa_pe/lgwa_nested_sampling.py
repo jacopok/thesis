@@ -133,6 +133,7 @@ def run_pe(loglike, prior_transform, inverse_prior_transform, log_dir, param_nam
         baseline_post_transformed = mc_sampler.get_chain(flat=True, thin=1, discard=1000)
         np.save(baseline_post_fname, baseline_post_transformed)
 
+
     nsamples = baseline_post_transformed.shape[0]
     weights = np.ones(nsamples) / nsamples
     
@@ -160,11 +161,8 @@ def run_pe(loglike, prior_transform, inverse_prior_transform, log_dir, param_nam
         generate_direction=ultranest.stepsampler.generate_mixture_random_direction,
     )
     
-    for result in sampler.run_iter(min_num_live_points=n_live, frac_remain=1e-2):
+    for result in sampler.run_iter(min_num_live_points=n_live, frac_remain=60e-2):
         sampler.plot_run()
         sampler.plot_trace()
 
     return sampler, result
-
-
-

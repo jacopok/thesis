@@ -20,6 +20,10 @@ Figures can be rendered optionally only when making html, see [here](https://qua
 
 Examples with [figures on the side](https://quarto-dev.github.io/quarto-gallery/page-layout/tufte.html).
 
+##### Figures side by side
+
+See the example [here](https://quarto.org/docs/authoring/figures.html#block-layout). Arbitrary-width columns and divs.
+
 #### References
 
 See [here](https://quarto.org/docs/authoring/citations.html). 

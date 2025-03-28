@@ -12,15 +12,18 @@ import matplotlib.pyplot as plt
 
 from cmcrameri import cm
 
-def compare_mcmc_guess(run_folder, prior_transform, param_names):
-    post_full = pd.read_csv(run_folder / 'chains' / 'equal_weighted_post.txt', sep=' ')
+def compare_mcmc_guess(run_folder, prior_transform, param_names, injection_parameters):
+    # post_full = pd.read_csv(run_folder / 'chains' / 'equal_weighted_post.txt', sep=' ')
     guess = np.load(run_folder / 'baseline_post.npy')
     
     guess_transformed = [prior_transform(row) for row in guess]
     
-    for idx in len(param_names):
-        plt.hist(post_full[param_names[idx]], alpha=.5, label='posterior', bins=50)
-        plt.hist([row[idx] for row in guess_transformed], alpha=.5, label='initial MCMC run', bins=50)
+    np.save(run_folder / 'baseline_post_transformed.npy', np.asarray(guess_transformed))
+    
+    for idx in range(len(param_names)):
+        # plt.hist(post_full[param_names[idx]], alpha=.5, label='posterior', bins=50, density=True)
+        plt.hist([row[idx] for row in guess_transformed], alpha=.5, label='initial MCMC run', bins=50, density=True)
+        plt.axvline(injection_parameters[param_names[idx]], c='black', ls='--', label='injected value')
         
         plt.legend()
         plt.title(param_names[idx])

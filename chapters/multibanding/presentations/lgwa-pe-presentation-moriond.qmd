@@ -67,11 +67,11 @@ mc = injection_params['chirp_mass']
 
 # The 2030s GW detection landscape
 
-![](../figures/landscape_lgwa_1.png){height=85% fig-align="center"}
+![](../figures/landscape_lgwa_1.png){height="85%" fig-align="center"}
 
 # Types of detectors
 
-![](../figures/DetectorTypes.png){height=75% fig-align="center"}
+![](../figures/DetectorTypes.png){height="75%" fig-align="center"}
 
 \footnotesize Figure from [Dupletsa et al. (2023)](https://www.sciencedirect.com/science/article/pii/S2213133722000853).
 
@@ -81,80 +81,94 @@ mc = injection_params['chirp_mass']
 from thesis_scripts import *
 ```
 
-![](../figures/LGWA_crater_lighter.png){height=75% fig-align="center"}
+![](../figures/LGWA_crater_lighter.png){height="75%" fig-align="center"}
 
 \footnotesize Figure from the LGWA collaboration.
 
-# Permanently shadowed regions - elevation map
+# Permanently shadowed regions
 
-![](../figures/psr-black.png){height=75% fig-align="center"}
+:::: {.columns}
 
-\footnotesize Figure from the [Lunar and Planetary Institute](https://www.lpi.usra.edu/).
+::: {.column width="50%"}
+![](../figures/psr-black.png){height="70%"}
+:::
 
-# Permanently shadowed regions - temperature
+::: {.column width="50%"}
+![](../figures/south-pole.png){#psr-temperature height="70%"}
+:::
 
-![](../figures/south-pole.png){#psr-temperature height=75% fig-align="center"}
+::::
 
-\footnotesize Figure from the [Lunar and Planetary Institute](https://www.lpi.usra.edu/).
+\footnotesize Figures from the [Lunar and Planetary Institute](https://www.lpi.usra.edu/).
 
 # LGWA payload
 
-![](../figures/LGWApayload.png){height=75% fig-align="center"}
+![](../figures/LGWApayload.png){height="75%" fig-align="center"}
 
 \footnotesize Figure from [van Heijningen et al., 2023](https://pubs.aip.org/aip/jap/article/133/24/244501/2899601/The-payload-of-the-Lunar-Gravitational-wave).
 
-# LGWA readout 
+# LGWA readout
 
-![](../figures/squid-readout.png){height=75% fig-align="center"}
+![](../figures/squid-readout.png){height="75%" fig-align="center"}
 
 \footnotesize Figure from [van Heijningen et al., 2023](https://pubs.aip.org/aip/jap/article/133/24/244501/2899601/The-payload-of-the-Lunar-Gravitational-wave).
 
 # Inertial sensing: Watt's linkage
 
-![](../figures/watts-linkage.png){height=75% fig-align="center"}
+::::: {layout="[ 60, 40 ]"}
+::: {#first-column}
+![](../figures/watts-linkage.png){height="75%" fig-align="left"}
+:::
+
+::: {#second-column}
+$$ \omega_0 \approx \sqrt{ \left( \frac{M_1}{L_1} - \frac{M_2}{L_2 } \right) \frac{g}{M_1 + M_2}}
+$$
 
 \footnotesize Figure from [Bertolini et al. (2005)](https://www.sciencedirect.com/science/article/abs/pii/S0168900205020930)
+:::
+:::::
 
 # Structure of LGWA
 
 LGWA is planned to have:
 
-- 4 __stations__, to reduce overall noise and perform active cancellation;
-- for each station, two orthogonal __horizontal measurement channels__.
+-   4 **stations**, to reduce overall noise and perform active cancellation;
+-   for each station, two orthogonal **horizontal measurement channels**.
 
 # Lunar response to gravitational waves
 
-We want to measure gravitational wave __strain__: $h(t) \sim \delta L (t) / L_0$, where
+We want to measure gravitational wave **strain**: $h(t) \sim \delta L (t) / L_0$, where
 
 $$ L_0(f) = \text{baseline length}(f) = \frac{\text{horizontal motion amplitude}(f)}{\text{monochromatic GW amplitude}(f)}
 $$
+
 # Lunar response to gravitational waves
 
-![](../figures/LunarModel.png){height=75% fig-align="center"}
+![](../figures/LunarModel.png){height="75%" fig-align="center"}
 
 \footnotesize Figure from the [LGWA whitepaper (2024)](http://arxiv.org/abs/2404.09181).
 
 # Lunar response to gravitational waves
 
-![](../figures/response_bi_harms.png){height=75% fig-align="center"}
+![](../figures/response_bi_harms.png){height="75%" fig-align="center"}
 
 \footnotesize Figure from Bi and Harms, 2024.
 
 # Noise and moonquakes
 
-![](../figures/Moon_events.png){height=75% fig-align="center"}
+![](../figures/Moon_events.png){height="75%" fig-align="center"}
 
 # Soundcheck sensitivity
 
-![](../figures/landscape_lgwa_2.png){height=85% fig-align="center"}
+![](../figures/landscape_lgwa_2.png){height="85%" fig-align="center"}
 
 # LGWA sensitivity
 
-![](../figures/landscape_lgwa_3.png){height=85% fig-align="center"}
+![](../figures/landscape_lgwa_3.png){height="85%" fig-align="center"}
 
 # Multi-band detections
 
-![](../figures/Multiband_concept.pdf){height=75% fig-align="center"}
+![](../figures/Multiband_concept.pdf){height="75%" fig-align="center"}
 
 # Sky position measurement - 1 month
 
@@ -228,7 +242,6 @@ ax = mismatch_plot(
 )
 ```
 
-
 # Very precise parameter estimation
 
 ```{python}
@@ -262,7 +275,7 @@ make_legend()
 _ = plt.title('Mass constraints')
 plt.show()
 
-ra_lims = np.deg2rad([197+24/60, 197+30/60])
+ra_lims = np.deg2rad([197+23.2/60, 197+30/60])
 dec_lims = np.deg2rad([-24+34.5/60, -24+41.5/60])
 fig=plt.figure(figsize=(3, 3))
 
@@ -281,7 +294,7 @@ _ = plt.title('Sky location constraints')
 plt.show()
 ```
 
-# Phase constraints
+# Phase constraint by frequency
 
 ```{python}
 from thesis_scripts.lgwa_pe.lgwa_likelihood import LunarLikelihood
@@ -344,19 +357,10 @@ add_time_to_merger_axis(axs, params['chirp_mass'])
 
 # LGWA sources
 
-- Internal lunar sources
-- Binaries with stellar-mass black holes and neutron stars (long observations, precise constraints)
-- Binaries with white dwarfs (long observations, ~Mpc horizon)
-- Binaries with intermediate mass black holes (optimum at ~$10^4 M_{\odot}$)
-- Intermediate mass ratio inspirals ($m_1 / m_2 \sim 10^{-2} \div 10^{-5}$)
-- Low-frequency asymmetric neutron stars
-- Bursts from tidal disruption events
-
-
-# Backup slides
-
-# Time to merger for stellar-mass sources
-
-![](../figures/time_to_merger.pdf){height=75% fig-align="center"}
-
-\footnotesize Figure from Cozzumbo et al., 2024.
+-   Internal lunar sources
+-   Binaries with stellar-mass black holes and neutron stars (long observations, precise constraints)
+-   Binaries with white dwarfs (long observations, \~Mpc horizon)
+-   Binaries with intermediate mass black holes (optimum at \~$10^4 M_{\odot}$)
+-   Intermediate mass ratio inspirals ($m_1 / m_2 \sim 10^{-2} \div 10^{-5}$)
+-   Low-frequency asymmetric neutron stars
+-   Bursts from tidal disruption events
