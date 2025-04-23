@@ -12,6 +12,10 @@ import matplotlib.pyplot as plt
 
 from cmcrameri import cm
 
+from .lgwa_likelihood import LunarLikelihood
+from .lgwa_nested_sampling import from_bilby
+from tqdm import tqdm
+
 def compare_mcmc_guess(run_folder, prior_transform, param_names, injection_parameters):
     # post_full = pd.read_csv(run_folder / 'chains' / 'equal_weighted_post.txt', sep=' ')
     guess = np.load(run_folder / 'baseline_post.npy')
@@ -30,21 +34,16 @@ def compare_mcmc_guess(run_folder, prior_transform, param_names, injection_param
         plt.savefig(run_folder / 'plots'/ f'{param_names[idx]}.png')
         plt.close()
 
-if __name__ == '__main__':
+def make_2d_scatterplot(run_folder, param_1, param_2, color_param):
+
 
     cmap_full = cm.devon
     cmap_ew = cm.lajolla
-
-    run_folder = data_path / 'gw170817_median_1yr_ew_1mo'
 
     injection_params = yaml.safe_load((run_folder / 'injection_parameters.yaml').read_text())
 
     # post_ew = pd.read_csv(data_path / 'ew_gw170817_run' / 'chains' / 'equal_weighted_post.txt', sep=' ')
     post_full = pd.read_csv(run_folder / 'chains' / 'equal_weighted_post.txt', sep=' ')
-
-    color_param = 'lambda_1'
-    param_1 = 'chirp_mass'
-    param_2 = 'mass_ratio'
 
     norm = Normalize(vmin=min(post_full[color_param]), vmax=max(post_full[color_param]))
 
@@ -59,4 +58,35 @@ if __name__ == '__main__':
     if param_1 == 'ra' and param_2 == 'dec':
         make_arcmin_grid(plt.gca(), (min(post_full[param_1]), max(post_full[param_1])), (min(post_full[param_2]), max(post_full[param_2])))
 
+    plt.savefig(run_folder / 'plots'/ f'{param_1}_{param_2}_color_{color_param}.png')
+    plt.close()
+
+def make_loglike_histogram(run_folder, freq):
+    injection_params = yaml.safe_load((run_folder / 'injection_parameters.yaml').read_text())
+
+    # post_ew = pd.read_csv(data_path / 'ew_gw170817_run' / 'chains' / 'equal_weighted_post.txt', sep=' ')
+    post_full = pd.read_csv(run_folder / 'chains' / 'equal_weighted_post.txt', sep=' ')
+
+    like = LunarLikelihood()
+    like.compute_center(injection_params['time_at_center'])
+    like.make_relbin_data(freq, from_bilby(injection_params))
+    
+    lmax = like.relbin_log_likelihood_ratio(from_bilby(injection_params))
+    
+    likes = np.empty_like(post_full[:1000])
+    for i, row in tqdm(post_full.iloc[:1000].iterrows()):
+        print(from_bilby(row.to_dict()))
+        likes[i] = like.relbin_log_likelihood_ratio(from_bilby(row.to_dict())) - lmax
+    
+    print(likes.shape)
+    plt.hist(likes)
     plt.show()
+
+if __name__ == '__main__':
+    run_folder = data_path / 'gw170817_median_1yr_ew_1mo'
+    color_param = 'lambda_1'
+    param_1 = 'ra'
+    param_2 = 'dec'
+
+    # make_2d_scatterplot(run_folder, param_1, param_2, color_param)
+    make_loglike_histogram(run_folder, np.geomspace(0.08681618121461131, 3, num=1000))

@@ -572,7 +572,7 @@ for percentile in [.5, .9]:
 
 axs[0].set_title('$x$ channel')
 axs[1].set_title('$y$ channel')
-add_time_
+# add_time_fr
 ```
 
 ```{python}

@@ -82,7 +82,7 @@ def make_analysis_functions(
         print('Priors and injection parameters keys differ!')
         print(set(priors.keys()).difference(set(injection_parameters.keys())))
     
-    param_names = priors.sorted_keys_without_fixed_parameters
+    param_names = priors.non_fixed_keys
     
     fixed_keys = priors.fixed_keys
     fixed_params = {key: injection_parameters[key] for key in fixed_keys}
@@ -105,6 +105,34 @@ def make_analysis_functions(
         return [ensure_float(u_dict[name]) for name in param_names]
     
     return loglike, prior_transform, inverse_prior_transform, log_dir, param_names
+
+def run_mcmc(loglike, prior_transform, inverse_prior_transform, log_dir, param_names, injection_params, n_chain=1_000_000, baseline_post_fname=None):
+    
+    baseline_post_fname = log_dir / 'baseline_post.npy'
+        
+    def log_prob(par):
+        if np.any(par < 0) or np.any(par > 1):
+            return -np.inf
+        return loglike(prior_transform(par))
+    
+    mc_sampler = emcee.EnsembleSampler(50, len(param_names), log_prob)
+    
+    rng = np.random.default_rng(seed=1)
+    u0 = np.asarray(inverse_prior_transform([injection_params[name] for name in param_names]))
+    p0 = rng.normal(loc=0, scale=2e-9, size=(50, len(param_names))) + u0[np.newaxis, :]
+    
+    mc_sampler.run_mcmc(
+        p0,
+        n_chain,
+        progress=True,
+        skip_initial_state_check=True,
+    )
+    autocorr = mc_sampler.get_autocorr_time(discard=100)
+    print(autocorr)
+    thin = int(np.min(autocorr)) // 2
+    baseline_post_transformed = mc_sampler.get_chain(flat=True, thin=thin, discard=max(100, int(thin*5)))
+    np.save(baseline_post_fname, baseline_post_transformed)
+
 
 def run_pe(loglike, prior_transform, inverse_prior_transform, log_dir, param_names, injection_params, n_live=400, baseline_post_fname=None):
     
