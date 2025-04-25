@@ -20,8 +20,8 @@ if __name__ == '__main__':
     for n_months in range(1, 13):
         with open(data_path / 'gw150914_lgwa_median.yaml') as f:
             injection_params = yaml.safe_load(f)
-    
-        folder_name = f'gw150914_median_mbm_{n_months}'
+
+        folder_name = f'gw150914_median_mbm_year_before_{n_months}'
         prior_file = data_path / folder_name / 'priors.txt.prior'
         
         prior_dict = BNSPriorDict()
@@ -42,7 +42,7 @@ if __name__ == '__main__':
         prior_dict['luminosity_distance'] = UniformSourceFrame(minimum=0.5, maximum=5000.0, cosmology='Planck15', name='luminosity_distance', latex_label='$d_L$', unit='Mpc', boundary=None)
         
         like = LunarLikelihood()
-        f = np.geomspace(1e-2, 3, num=20000)
+        f = np.geomspace(1e-2, 1, num=50000)
         amplitude, phase = like.amp_phase(f, from_bilby(injection_params))
         t = time_to_merger(f, phase)
 
@@ -51,7 +51,7 @@ if __name__ == '__main__':
         plt.loglog(f, 2*f*abs(hy))
         plt.loglog(f, np.sqrt(f*like.psd(f)), lw=.5, c='gray')
         
-        t0 = -3600*24*365.25
+        t0 = -3600*24*365.25*2
         month = 3600*24*365.25 / 12
         i0 = np.searchsorted(t, t0)
         i1 = np.searchsorted(t, t0+month*n_months)
@@ -67,6 +67,8 @@ if __name__ == '__main__':
         for name, seconds in important_times.items():
             
             idx = np.searchsorted(t, -seconds)
+            if idx == len(f):
+                idx = idx-1
             plt.axvline(f[idx], color='k', linestyle='--', label=name)
 
         plt.legend()
@@ -85,7 +87,7 @@ if __name__ == '__main__':
                 param_file)
         new_snr = like.optimal_snr(f[i0:i1], from_bilby(injection_params))
         plt.title(f'dist: {injection_params["luminosity_distance"]:.1f}Mpc, SNR = {new_snr:.1f}')
-        plt.xlim(f[i0]*0.9, f[-1])
+        plt.xlim(f[i0]*0.98, f[i1]*1.02)
         plt.savefig(data_path / folder_name / 'integration_range.png')
         plt.close()
         
