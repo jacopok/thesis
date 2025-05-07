@@ -12,10 +12,10 @@ from bilby.gw.prior import (
 import numpy as np
 import matplotlib.pyplot as plt
 import yaml
-from .. import data_path
+from .. import data_path, plotting
 from .explore_strange_posteriors import compare_mcmc_guess
 
-GENERIC_FNAME = 'gw150914_median_mbm_year_before'
+GENERIC_FNAME = 'gw150914_median_mbm_year_before_flat_response'
 
 def run_postprocessing():
     
@@ -47,12 +47,13 @@ def run_postprocessing():
         
         compare_mcmc_guess(data_path / folder_name, prior_transform, param_names, injection_params)
 
-def plot_trajectories():
+def plot_trajectories(folder_base_name=GENERIC_FNAME):
+    
     
     cmap = plt.get_cmap('magma')
-    for n_months in range(1, 12):
+    for n_months in range(1, 13):
     
-        folder_name = f'{GENERIC_FNAME}_{n_months}'
+        folder_name = f'{folder_base_name}_{n_months}'
         prior_file = data_path / folder_name / 'priors.txt.prior'
         f = np.load(data_path / folder_name / 'frequency_grid.npy')
         with open(data_path / folder_name / 'injection_parameters.yaml') as fi:
@@ -70,9 +71,9 @@ def plot_trajectories():
         
     plt.xlabel('Shifted ICRS $x$ coordinate [AU]')
     plt.ylabel('ICRS $y$ coordinate [AU]')
-    plt.show()
 
 def plot_timing_posteriors():
+    
     
     cmap = plt.get_cmap('magma')
     for n_months in range(1, 12):
@@ -101,7 +102,7 @@ def plot_timing_posteriors():
     plt.xlabel('Time at center [s]')
     plt.show()
 
-def plot_sky_position_posteriors():
+def plot_sky_position_marginals():
     
     cmap = plt.get_cmap('magma')
     
@@ -138,11 +139,45 @@ def plot_sky_position_posteriors():
     axs[1].set_xlabel('declination [deg]')
     plt.show()
 
+def plot_sky_position_2d():
+    
+    cmap = plt.get_cmap('magma')
+    
+    for n_months in range(1, 13):
+    
+        folder_name = f'{GENERIC_FNAME}_{n_months}'
+        prior_file = data_path / folder_name / 'priors.txt.prior'
+        
+        prior_dict = BNSPriorDict({})
+        prior_dict.from_file(prior_file)
+        prior_dict._resolve_conditions()
+        param_names = prior_dict.sorted_keys_without_fixed_parameters
+
+        f = np.load(data_path / folder_name / 'frequency_grid.npy')
+        with open(data_path / folder_name / 'injection_parameters.yaml') as fi:
+            injection_params = yaml.safe_load(fi)
+        
+        # like = LunarLikelihood()
+        # amplitude, phase = like.amp_phase(f, from_bilby(injection_params))
+        # t = time_to_merger(f, phase)
+        transformed_post = np.load(data_path / folder_name / 'baseline_post_transformed.npy')
+        
+        idx1 = param_names.index('ra')
+        idx2 = param_names.index('dec')
+        
+        plotting.plot_contours(transformed_post[:, idx1], transformed_post[:, idx2], cmap=cmap, levels=[.9], ax=plt.gca())
+        
+
+    plt.axvline(np.rad2deg(injection_params['ra']), c='black', ls='--')
+    plt.axvline(np.rad2deg(injection_params['dec']), c='black', ls='--')
+    plt.show()
+
 
 if __name__ == '__main__':
 
-    # run_postprocessing()
+    run_postprocessing()
     
     # plot_trajectories()
     # plot_timing_posteriors()
-    plot_sky_position_posteriors()
+    # plot_sky_position_marginals()
+    # plot_sky_position_2d()

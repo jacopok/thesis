@@ -57,12 +57,14 @@ def make_analysis_functions(
     folder_name: str, 
     priors: PriorDict,
     freq: np.ndarray,
+    like: LunarLikelihood = None
     ):
     
     log_dir = data_path / folder_name
     log_dir.mkdir(parents=True, exist_ok=True)
     
-    like = LunarLikelihood()
+    if like is None:
+        like = LunarLikelihood()
     like.compute_center(injection_parameters['time_at_center'])
     
     like.make_relbin_data(freq, from_bilby(injection_parameters))
@@ -115,11 +117,11 @@ def run_mcmc(loglike, prior_transform, inverse_prior_transform, log_dir, param_n
             return -np.inf
         return loglike(prior_transform(par))
     
-    mc_sampler = emcee.EnsembleSampler(50, len(param_names), log_prob)
+    mc_sampler = emcee.EnsembleSampler(20, len(param_names), log_prob)
     
     rng = np.random.default_rng(seed=1)
     u0 = np.asarray(inverse_prior_transform([injection_params[name] for name in param_names]))
-    p0 = rng.normal(loc=0, scale=2e-9, size=(50, len(param_names))) + u0[np.newaxis, :]
+    p0 = rng.normal(loc=0, scale=2e-9, size=(20, len(param_names))) + u0[np.newaxis, :]
     
     mc_sampler.run_mcmc(
         p0,
@@ -127,7 +129,7 @@ def run_mcmc(loglike, prior_transform, inverse_prior_transform, log_dir, param_n
         progress=True,
         skip_initial_state_check=True,
     )
-    autocorr = mc_sampler.get_autocorr_time(discard=100)
+    autocorr = mc_sampler.get_autocorr_time(discard=100, quiet=True)
     print(autocorr)
     thin = int(np.min(autocorr)) // 2
     baseline_post_transformed = mc_sampler.get_chain(flat=True, thin=thin, discard=max(100, int(thin*5)))

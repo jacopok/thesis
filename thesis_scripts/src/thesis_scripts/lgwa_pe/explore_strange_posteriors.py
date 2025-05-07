@@ -20,7 +20,7 @@ def compare_mcmc_guess(run_folder, prior_transform, param_names, injection_param
     # post_full = pd.read_csv(run_folder / 'chains' / 'equal_weighted_post.txt', sep=' ')
     guess = np.load(run_folder / 'baseline_post.npy')
     
-    guess_transformed = [prior_transform(row) for row in guess]
+    guess_transformed = [prior_transform(np.clip(row, 0, 1)) for row in guess]
     
     np.save(run_folder / 'baseline_post_transformed.npy', np.asarray(guess_transformed))
     
