@@ -1,0 +1,366 @@
+---
+format:
+    html:
+        code-fold: true
+        bibliography: ../../../rehear.bib
+    beamer:
+        execute:
+            echo: false
+        bibliography: ../../../rehear.bib
+        fig-width: 8
+        fig-height: 4.5
+    revealjs:
+        execute:
+            echo: false
+        menu:
+            side: right
+            width: wide
+        bibliography: ../../../rehear.bib
+        self-contained: true
+author: Jacopo Tissino - Gran Sasso Science Institute
+date: 2025-03-31
+subtitle: GR Amaldi, 2025
+title: Precision gravitational wave science on the Moon
+aspectratio: 169
+---
+
+```{python}
+from thesis_scripts.plotting import plot_contours
+from matplotlib import ticker
+from matplotlib.lines import Line2D
+import pandas as pd
+from thesis_scripts.plotting import make_arcmin_grid
+from thesis_scripts import data_path
+import yaml
+import numpy as np
+import matplotlib.pyplot as plt
+
+from cmcrameri import cm
+
+cmap_full = cm.devon
+cmap_ew = cm.lajolla
+
+def make_legend():
+
+    custom_lines = [
+        Line2D([0], [0], color=cmap_full(.8), markersize=10, marker='o', lw=0),
+        Line2D([0], [0], color=cmap_full(.4), markersize=10, marker='o', lw=0),
+    ]
+    
+    plt.legend(
+        custom_lines, 
+        [
+            '50\% probability contained',
+            '90\% probability contained',
+        ]
+    )
+
+run_folder = data_path / 'bns_test'
+
+injection_params = yaml.safe_load((run_folder / 'injection_parameters.yaml').read_text())
+
+post_full = pd.read_csv(run_folder / 'chains' / 'equal_weighted_post.txt', sep=' ').iloc[:500]
+
+mc = injection_params['chirp_mass']
+
+```
+
+# The 2030s GW detection landscape
+
+![](../figures/landscape_lgwa_1.png){height="85%" fig-align="center"}
+
+# Types of detectors
+
+![](../figures/DetectorTypes.png){height="75%" fig-align="center"}
+
+\footnotesize Figure from [Dupletsa et al. (2023)](https://www.sciencedirect.com/science/article/pii/S2213133722000853).
+
+# What is LGWA?
+
+```{python}
+from thesis_scripts import *
+```
+
+![](../figures/LGWA_crater_lighter.png){height="75%" fig-align="center"}
+
+\footnotesize Figure from the LGWA collaboration.
+
+# Permanently shadowed regions
+
+:::: {.columns}
+
+::: {.column width="50%"}
+![](../figures/psr-black.png){height="70%"}
+:::
+
+::: {.column width="50%"}
+![](../figures/south-pole.png){#psr-temperature height="70%"}
+:::
+
+::::
+
+\footnotesize Figures from the [Lunar and Planetary Institute](https://www.lpi.usra.edu/).
+
+# LGWA payload
+
+![](../figures/LGWApayload.png){height="75%" fig-align="center"}
+
+\footnotesize Figure from [van Heijningen et al., 2023](https://pubs.aip.org/aip/jap/article/133/24/244501/2899601/The-payload-of-the-Lunar-Gravitational-wave).
+
+# LGWA readout
+
+![](../figures/squid-readout.png){height="75%" fig-align="center"}
+
+\footnotesize Figure from [van Heijningen et al., 2023](https://pubs.aip.org/aip/jap/article/133/24/244501/2899601/The-payload-of-the-Lunar-Gravitational-wave).
+
+# Inertial sensing: Watt's linkage
+
+::::: {layout="[ 60, 40 ]"}
+::: {#first-column}
+![](../figures/watts-linkage.png){height="75%" fig-align="left"}
+:::
+
+::: {#second-column}
+$$ \omega_0 \approx \sqrt{ \left( \frac{M_1}{L_1} - \frac{M_2}{L_2 } \right) \frac{g}{M_1 + M_2}}
+$$
+
+\footnotesize Figure from [Bertolini et al. (2005)](https://www.sciencedirect.com/science/article/abs/pii/S0168900205020930)
+:::
+:::::
+
+# Structure of LGWA
+
+LGWA is planned to have:
+
+-   4 **stations**, to reduce overall noise and perform active cancellation;
+-   for each station, two orthogonal **horizontal measurement channels**.
+
+# Lunar response to gravitational waves
+
+We want to measure gravitational wave **strain**: $h(t) \sim \delta L (t) / L_0$, where
+
+$$ L_0(f) = \text{baseline length}(f) = \frac{\text{horizontal motion amplitude}(f)}{\text{monochromatic GW amplitude}(f)}
+$$
+
+# Lunar response to gravitational waves
+
+![](../figures/LunarModel.png){height="75%" fig-align="center"}
+
+\footnotesize Figure from the [LGWA whitepaper (2024)](http://arxiv.org/abs/2404.09181).
+
+# Lunar response to gravitational waves
+
+![](../figures/response_bi_harms.png){height="75%" fig-align="center"}
+
+\footnotesize Figure from Bi and Harms, 2024.
+
+# Noise and moonquakes
+
+![](../figures/Moon_events.png){height="75%" fig-align="center"}
+
+# Soundcheck sensitivity
+
+![](../figures/landscape_lgwa_2.png){height="85%" fig-align="center"}
+
+# LGWA sensitivity
+
+![](../figures/landscape_lgwa_3.png){height="85%" fig-align="center"}
+
+# Multi-band detections
+
+![](../figures/Multiband_concept.pdf){height="75%" fig-align="center"}
+
+# Sky position measurement - 1 month
+
+```{python}
+import numpy as np
+from thesis_scripts import *
+import yaml
+
+with open(data_path / 'gw170817_lgwa_median.yaml') as f:
+    params = yaml.safe_load(f)
+
+def fig_args(radius, params):
+    return {
+        'ra_lims': (
+            np.rad2deg(params['ra']-radius*16/9), 
+            np.rad2deg(params['ra']+radius*16/9)
+        ),
+        'dec_lims': (
+            np.rad2deg(params['dec']-radius), 
+            np.rad2deg(params['dec']+radius)
+        ),
+        'mollweide': False,
+        'figsize': (16/2, 9/2)
+    }
+```
+
+```{python}
+from thesis_scripts.mismatch_plots_lgwa import mismatch_plot
+from thesis_scripts.lgwa_pe.simple_bns_waveforms import time_to_merger_simple_inverse, SUN_MASS_SECONDS
+
+fmin = time_to_merger_simple_inverse(-3600*24*60, params['chirp_mass']*SUN_MASS_SECONDS)
+n_grid = 80
+
+ax = mismatch_plot(
+    params, 
+    np.geomspace(fmin, 3, num=400), 
+    n_grid=n_grid, 
+    cache_name='cache/bns_recentered_2months', 
+    **fig_args(np.deg2rad(1.), params)
+)
+```
+
+# Sky position measurement - 1 year
+
+```{python}
+fmin = time_to_merger_simple_inverse(-3600*24*365.25, params['chirp_mass']*SUN_MASS_SECONDS)
+    
+ax = mismatch_plot(
+    params, 
+    np.geomspace(fmin, 3, num=400), 
+    n_grid=n_grid, 
+    cache_name='cache/bns_recentered_1year', 
+    # cache_name='cache/bns_recentered_1year', 
+    **fig_args(np.deg2rad(1.), params)
+)
+```
+
+# Sky position measurement - early warning
+
+```{python}
+fmin = time_to_merger_simple_inverse(-3600*24*365.25, params['chirp_mass']*SUN_MASS_SECONDS)
+fmax = time_to_merger_simple_inverse(-3600*24*30, params['chirp_mass']*SUN_MASS_SECONDS)
+    
+ax = mismatch_plot(
+    params, 
+    np.geomspace(fmin, fmax, num=400), 
+    n_grid=n_grid, 
+    cache_name='cache/bns_recentered_ew', 
+    # cache_name=None, 
+    **fig_args(np.deg2rad(1.), params)
+)
+```
+
+# Very precise parameter estimation
+
+```{python}
+#| layout-ncol: 2
+
+x = np.linspace(-6e-7, 6e-7, num=200)
+y = np.linspace(0.86, 0.95, num=200)
+
+# plot_contours(post_ew['chirp_mass']-mc, post_ew['mass_ratio'], ax=plt.gca(), levels=[.9], cmap=cmap_ew, x=x, y=y, N=200)
+fig=plt.figure(figsize=(3, 3))
+plot_contours(
+    post_full['chirp_mass']-mc, 
+    post_full['mass_ratio'], ax=plt.gca(), levels=[.5, .9], cmap=cmap_full, x=x, y=y, N=200)
+plt.grid(which='both')
+plt.xlim(-2e-7, 2e-7)
+plt.scatter(0, injection_params['mass_ratio'], marker='x', c='black')
+plt.gca().xaxis.set_major_locator(ticker.FixedLocator(np.arange(-2, 4, 1)*1e-7))
+plt.gca().xaxis.set_major_formatter(ticker.FixedFormatter(
+    [
+        '$- 2 \\times 10^{-7}$',
+        '$-10^{-7}$',
+        '$0$',
+        '$ 10^{-7}$',
+        '$2 \\times 10^{-7}$',
+    ]
+))
+
+plt.xlabel('$\mathcal{M} - \mathcal{M}_0 [ M_{\odot}]$')
+plt.ylabel('$q = m_2 / m_1$')
+make_legend()
+_ = plt.title('Mass constraints')
+plt.show()
+
+ra_lims = np.deg2rad([197+23.2/60, 197+30/60])
+dec_lims = np.deg2rad([-24+34.5/60, -24+41.5/60])
+fig=plt.figure(figsize=(3, 3))
+
+# plot_contours(post_ew['ra'], post_ew['dec'], ax=plt.gca(), levels=[.9], cmap=cmap_ew)
+plot_contours(post_full['ra'], post_full['dec'], ax=plt.gca(), levels=[.5, .9], cmap=cmap_full, N=200)
+plt.scatter(injection_params['ra'], injection_params['dec'], marker='x', c='black')
+
+make_arcmin_grid(plt.gca(), ra_lims, dec_lims)
+plt.grid(which='minor', lw=.5)
+plt.grid(which='major', lw=1)
+plt.gca().set_aspect('equal')
+plt.xlabel('Right ascension')
+plt.ylabel('Declination')
+make_legend()
+_ = plt.title('Sky location constraints')
+plt.show()
+```
+
+# Phase constraint by frequency
+
+```{python}
+from thesis_scripts.lgwa_pe.lgwa_likelihood import LunarLikelihood
+from thesis_scripts.lgwa_pe.lgwa_nested_sampling import from_bilby
+like = LunarLikelihood()
+like.compute_center(injection_params['time_at_center'])
+
+f = np.geomspace(0.086816181214, 3, num=2000)
+
+hx_0, hy_0 = like.projected_waveform(f, from_bilby(injection_params))
+
+ratios_to_plot = len(post_full)
+ratios = np.empty((2, ratios_to_plot, len(f)), dtype=complex)
+
+for i in range(ratios_to_plot):
+    params = from_bilby(post_full.iloc[i].to_dict())
+    hx, hy = like.projected_waveform(f, params)
+    ratios[0, i, :] = hx/hx_0
+    ratios[1, i, :] = hy/hy_0
+```
+
+```{python}
+
+from thesis_scripts.plotting import add_time_to_merger_axis
+cmap = plt.get_cmap('Blues')
+
+phase_diffs = np.sort(np.angle(ratios), axis=1)
+
+fig, axs = plt.subplots(1, 1, sharex=True, figsize=(16/2, 7/2))
+
+for percentile in [.5, .9]:
+    for i in range(1):
+        i_1 = int(ratios_to_plot*percentile/2.)
+        i_2 = int(ratios_to_plot*(1-percentile/2.))
+        axs.fill_between(f, 
+            phase_diffs[i, i_1],
+            phase_diffs[i, i_2],
+            color=cmap(percentile)
+        )
+        axs.plot(f,
+            phase_diffs[i, i_1],
+            c='black', lw=.5
+        )
+        axs.plot(f, 
+            phase_diffs[i, i_2],
+            c='black', lw=.5
+        )
+        axs.set_xscale('log')
+        axs.set_ylim(-0.2, 0.2)
+
+axs.set_xlim(f[0], f[-1])
+axs.set_title('$x$ channel')
+# axs[1].set_title('$y$ channel')
+axs.set_ylabel('Phase constraint [rad]')
+# axs[1].set_ylabel('Phase constraint [rad]')
+axs.set_xlabel('Frequency [Hz]')
+add_time_to_merger_axis(axs, params['chirp_mass'])
+
+```
+
+# LGWA sources
+
+-   Internal lunar sources
+-   Binaries with stellar-mass black holes and neutron stars (long observations, precise constraints)
+-   Binaries with white dwarfs (long observations, \~Mpc horizon)
+-   Binaries with intermediate mass black holes (optimum at \~$10^4 M_{\odot}$)
+-   Intermediate mass ratio inspirals ($m_1 / m_2 \sim 10^{-2} \div 10^{-5}$)
+-   Low-frequency asymmetric neutron stars
+-   Bursts from tidal disruption events
