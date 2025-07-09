@@ -82,3 +82,4 @@ where `note` can be substituted by `warning`, `important`, `tip` or `caution`, s
 
 ### Making a single-file PDF
 
+`uv run quarto render path/to/file.qmd`
