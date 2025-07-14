@@ -1,0 +1,65 @@
+# Chirp mass measurement
+
+I want to make an argument as to what we might expect the precision of the chirp mass measurement to be from "first principles", just based on how much the phase varies with the chirp mass. 
+
+```{python}
+from thesis_scripts.lgwa_pe.simple_bns_waveforms import Phif3hPN
+import numpy as np
+from numdifftools import Derivative
+
+eta = 1/4
+
+delta_phi = lambda mchirp: (
+    Phif3hPN(3, mchirp * 2**(6/5), 1/4) - 
+    Phif3hPN(0.1, mchirp * 2**(6/5), 1/4)
+)
+dphi_dmchirp = Derivative(delta_phi)(1.2)
+
+print(2 * np.pi / dphi_dmchirp)
+```
+
+This gives a number that's pretty close to the actual measurement error! 
+The correlation with mass ratio then broadens the posterior a bit. 
+
+```{python}
+from bilby.gw.prior import BNSPriorDict
+prior_dict = BNSPriorDict()
+
+dir(prior_dict)
+prior_dict.prob(prior_dict.sample())
+```
+
+### Simple approach
+
+```{python}
+import numpy as np
+import astropy.units as u
+import astropy.constants as ac
+
+def f_of_t(t, mchirp):
+    return (1/np.pi * (5/256 / t)**(3/8) * (ac.G * mchirp / ac.c**3)**(-5/8)).to(u.Hz)
+
+def phi_of_t(t, mchirp):
+    return (-2 * (5 * ac.G * mchirp  / ac.c**3)**(-5/8) * t**(5/8) * u.rad).to(u.cycle)
+
+def t_of_f(f, mchirp):
+    return ((( np.pi * f * (ac.G * mchirp / ac.c**3)**(5/8)  )**(8/3) * 256 / 5)**(-1)).to(u.s)
+
+def phase_diff(f1, f2, mchirp, max_t=4*u.yr):
+    t1 = t_of_f(f1, mchirp)
+    t2 = t_of_f(f2, mchirp)
+
+    if t1 > max_t:
+        t1 = max_t
+        print(f'Minimum frequency: {f_of_t(t1, mchirp)}')
+    
+    return (
+        phi_of_t(t2, mchirp)
+        -
+        phi_of_t(t1, mchirp)
+    )
+
+# print(phase_diff(0.02*u.Hz, 0.2*u.Hz, 1.2*u.Msun))
+print(phase_diff(0.01*u.Hz, 3*u.Hz, 1.2*u.Msun, 10*u.yr))
+print(phase_diff(20*u.Hz, 2000*u.Hz, 1.2*u.Msun))
+```
