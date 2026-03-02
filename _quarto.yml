@@ -8,6 +8,7 @@ format:
         cosmo
       dark:
         [cosmo, theme_dark.css]
+    embed-resources: true
   pdf:
     documentclass: scrreprt
     colorlinks: true

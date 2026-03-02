@@ -12,6 +12,7 @@ from ultranest.hotstart import get_auxiliary_contbox_parameterization
 import ultranest
 import ultranest.stepsampler
 
+
 def ensure_float(x):
     if isinstance(x, float):
         return x
@@ -108,7 +109,7 @@ def make_analysis_functions(
     
     return loglike, prior_transform, inverse_prior_transform, log_dir, param_names
 
-def run_mcmc(loglike, prior_transform, inverse_prior_transform, log_dir, param_names, injection_params, n_chain=1_000_000, baseline_post_fname=None):
+def run_mcmc(loglike, prior_transform, inverse_prior_transform, log_dir, param_names, injection_params, n_chain=1_000_000, baseline_post_fname=None, n_walkers=20):
     
     baseline_post_fname = log_dir / 'baseline_post.npy'
         
@@ -117,11 +118,11 @@ def run_mcmc(loglike, prior_transform, inverse_prior_transform, log_dir, param_n
             return -np.inf
         return loglike(prior_transform(par))
     
-    mc_sampler = emcee.EnsembleSampler(20, len(param_names), log_prob)
+    mc_sampler = emcee.EnsembleSampler(n_walkers, len(param_names), log_prob)
     
     rng = np.random.default_rng(seed=1)
     u0 = np.asarray(inverse_prior_transform([injection_params[name] for name in param_names]))
-    p0 = rng.normal(loc=0, scale=2e-9, size=(20, len(param_names))) + u0[np.newaxis, :]
+    p0 = rng.normal(loc=0, scale=2e-9, size=(n_walkers, len(param_names))) + u0[np.newaxis, :]
     
     mc_sampler.run_mcmc(
         p0,

@@ -77,7 +77,7 @@ def plot_contours(x_points, y_points, ax, cmap='Blues', levels=[.5, .9], N=100, 
     
     ax.contourf(X, Y, z, cmap=cmap, levels=contour_probs, **kwargs)
     ax.contour(X, Y, z, levels=contour_probs, colors='black')
-    
+
 def add_time_to_merger_axis(ax, mchirp):
     DAY = 3600*24.
     def forward(x):

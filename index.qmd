@@ -32,3 +32,27 @@ The chapters should be developed as follows:
 - Part: Multimessenger science
 	- Inclination angles in BAYESTAR
 	- IACT - EW synergies
+
+## Parameter estimation and model selection
+
+- [ ] The parameter estimation problem
+- [ ] Fisher matrix [@dupletsaGwfishSimulationSoftware2023] [@dupletsaValidatingPriorinformedFishermatrix2025] 
+- [x] Nested Sampling
+- [ ] NPE and the methods of [@santoliquidoFastAccurateParameter2025] [@santoliquidoComparingNextgenerationDetector2025]
+- [ ] GW likelihoods: regular FD likelihoods review, matched filtering, windowing  [@talbotInferenceFiniteTime2025]
+- [ ] acceleration: ROQ, relative binning, [@tissinoCombiningEffectiveonebodyAccuracy2023], analytical and numerical marginalizations
+
+## Anatomy of a gravitational wave
+
+- [ ] the GW250114 detection, **area law paper** [@abacGW250114TestingHawkings2025] --- an outline of the qualitative results, deferring the technical details; all further discussions will use GW250114 as an example
+- [ ] inspiral: how to get a simple PN waveform, chirp mass, mass ratio, chi_eff, tidal and so forth
+- [ ] HOM, precession
+- [ ] eccentricity **Revisiting GW150914 paper** [@gambaRevisitingGW150914Nonplanar2025]
+- [ ] ringdown, summarizing Berti Cardoso Carullo+ and some other refs the spectrum of a Kerr BH, mode excitation and why we didn't see the 33 and 44 modes for GW250114
+- [ ] extrinsic parameters, the geometry of the detection tensor, the distance-inclination degeneracy
+
+## Future gravitational wave detectors
+
+- [ ] Einstein Telescope design comparison with NPE, 8-modalities with Delta, bimodalities in time,
+- [ ] LGWA mission description [@ajithLunarGravitationalwaveAntenna2025] [@cozzumboOpportunitiesLimitsLunar2024]
+- [ ] GW250114 parameter estimation and reference frames [@tissinoGeometryLunarGravitational2026]

@@ -250,3 +250,42 @@ These are in principle ratios of posteriors but in practice the prior is invaria
 
 The unfolding code by Roulet is [here](https://github.com/jroulet/cogwheel/blob/74c8dc3b122ebea5de99e9007997a0418e450e32/cogwheel/prior.py#L134).
 
+## Analytic marginalization
+
+If the exact dependence of the likelihood on a given parameter is known, 
+the integral over said parameter can sometimes be performed analytically.
+
+[@singerRapidBayesianPosition2016], [@thraneIntroductionBayesianInference2019]
+[@LIGOT1300326v1AnalyticMarginalisation].
+
+### Reference phase
+
+A convenient parameter to marginalize over is the reference phase [@LIGOT1300326v1AnalyticMarginalisation]. 
+It does not have any astrophysical significance, despite being crucial for a complete description of the signal.
+
+If the waveform is dominated by the $\ell |m| = 22$ mode of emission, 
+its dependence on the coalescence phase $\phi_c$ is simply $h(\phi_c, \theta) = h(\phi_c=0, \theta) e^{2 \mathrm{i} \phi_c}$. 
+For convenience, we shall denote the waveform at a reference phase, $h(\phi_{c}=0, \theta)$, simply as $h(\theta)$.
+
+Therefore, the marginalized likelihood reads 
+
+$$ 
+\begin{align}
+\int_{0}^{2\pi} \mathcal{L}(d| \phi_{c}, \theta) \pi(\phi_{c}) \text{d}\phi_{c} &= \mathcal{Z}_{N} \exp\left(  - \frac{1}{2}(h(\theta) | h(\theta)) \right) \int_{0}^{2 \pi} \exp(\Re (d | h(\phi_{c}, \theta))) \pi (\phi_{c}) \text{d} \phi_{c} \\ \\
+&= \mathcal{Z}_{N} \exp\left(  - \frac{1}{2}(h(\theta) | h(\theta)) \right) I_{0}(|(d|h(\theta))|)\,.
+\end{align} 
+$${#eq-phase-marginalized-likelihood}
+
+The function $I_{0}$ appearing in the last expression is a modified Bessel function of the first kind, the solution to the following integral:
+$$
+I_{0}(\sqrt{ A^{2} + B^{2} }) = \frac{1}{2 \pi} \int_{0}^{2\pi} \exp(A \cos \phi + B\sin \phi) \text{d} \phi\,.
+$$
+
+#### Recovering phase from marginalized samples
+
+Since the analytical likelihood is known, it is possible to sample the phase after having performed a run with a phase-marginalized likelihood [@thraneIntroductionBayesianInference2019]. 
+
+For any given sample $\theta$ from a phase-marginalized posterior we can write the posterior as a function of $\phi_{c}$, conditioned on $\theta$: the integrand in equation @eq-phase-marginalized-likelihood. 
+
+### Distance
+
