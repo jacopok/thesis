@@ -11,35 +11,15 @@ format:
 
 # Preface {.unnumbered}
 
-This is a work-in-progress thesis on gravitational-wave data analysis.
-
-The chapters should be developed as follows:
-
-- Part: Gravitational wave data analysis
-	- Gravitational waveforms and their parameter space
-	- The gravitational wave likelihood
-		- Matched filtering
-	- Nested sampling
-	- Acceleration techniques
-		- Analytical marginalization
-		- Numerical marginalization (as in BAYESTAR)
-		- Likelihood acceleration
-		- Prior compression à la supernest
-- Part: Multibanding
-	- LGWA project description
-	- Multibanding and PE in the SSB
-	- LGWA PE
-- Part: Multimessenger science
-	- Inclination angles in BAYESTAR
-	- IACT - EW synergies
+The following is an outline of the thesis, with checkmarks denoting whether the chapters are ready for review, including which papers of which I am a coauthor are mentioned or discussed in that chapter.
 
 ## Parameter estimation and model selection
 
-- [ ] The parameter estimation problem
+- [ ] The parameter estimation problem @sec-inference-model-comparison
 - [ ] Fisher matrix [@dupletsaGwfishSimulationSoftware2023] [@dupletsaValidatingPriorinformedFishermatrix2025] 
 - [x] Nested Sampling
 - [ ] NPE and the methods of [@santoliquidoFastAccurateParameter2025] [@santoliquidoComparingNextgenerationDetector2025]
-- [ ] GW likelihoods: regular FD likelihoods review, matched filtering, windowing  [@talbotInferenceFiniteTime2025]
+- [ ] GW likelihoods: regular FD likelihoods review, matched filtering, windowing  [@talbotInferenceFiniteTime2025], time domain inference 
 - [ ] acceleration: ROQ, relative binning, [@tissinoCombiningEffectiveonebodyAccuracy2023], analytical and numerical marginalizations
 
 ## Anatomy of a gravitational wave
@@ -53,6 +33,6 @@ The chapters should be developed as follows:
 
 ## Future gravitational wave detectors
 
-- [ ] Einstein Telescope design comparison with NPE, 8-modalities with Delta, bimodalities in time,
+- [ ] Einstein Telescope design comparison with NPE, 8-modalities with Delta, bimodalities in time, multimodalities with the 2L configuration [@santoliquidoFastAccurateParameter2025] [@santoliquidoComparingNextgenerationDetector2025]
 - [ ] LGWA mission description [@ajithLunarGravitationalwaveAntenna2025] [@cozzumboOpportunitiesLimitsLunar2024]
 - [ ] GW250114 parameter estimation and reference frames [@tissinoGeometryLunarGravitational2026]

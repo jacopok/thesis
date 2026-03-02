@@ -1,4 +1,4 @@
-## Inference and model comparison
+## Inference and model comparison {#sec-inference-model-comparison}
 
 When performing the analysis of some data $d$ according to some model $M$ parameterized by some finite number of parameters $\theta$, we employ Bayes' theorem, which is derived by expressing the joint probability $\text{prob}(d, \theta | M)$ in two different ways: 
 

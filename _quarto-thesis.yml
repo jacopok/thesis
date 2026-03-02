@@ -2,24 +2,22 @@ project:
   type: book
 
 book:
-  title: "Fast analysis of long gravitational wave signals and applications to multimessenger science"
+  title: "Fast analysis of long gravitational wave signals"
+  subtitle: "and applications to multimessenger science"
   author: "Jacopo Tissino"
   date: "2026-10-31"
   chapters:
     - index.qmd
     - part: "Parameter estimation and model selection"
       chapters:
-      - chapters/data-analysis/waveforms.qmd
-      - chapters/data-analysis/likelihood.qmd
       - chapters/data-analysis/pe-methods.qmd
+      - chapters/data-analysis/likelihood.qmd
       - chapters/data-analysis/acceleration.qmd
     - part: "Anatomy of a gravitational wave signal"
       chapters:
-      - chapters/multibanding/lgwa.qmd
-      - chapters/multibanding/multibanding.qmd
+      - chapters/data-analysis/waveforms.qmd
       - chapters/multibanding/lgwa-pe.qmd
     - part: "Future gravitational wave detectors"
       chapters:
-      - chapters/multimessenger/inclination.qmd
-      - chapters/multimessenger/early-warning.qmd
+      - chapters/multibanding/lgwa.qmd
     - chapters/references.qmd
