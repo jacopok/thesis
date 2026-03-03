@@ -25,9 +25,7 @@ The following is an outline of the thesis, with checkmarks denoting whether the 
 ## Anatomy of a gravitational wave
 
 - [ ] the GW250114 detection, **area law paper** [@abacGW250114TestingHawkings2025] --- an outline of the qualitative results, deferring the technical details; all further discussions will use GW250114 as an example
-- [ ] inspiral: how to get a simple PN waveform, chirp mass, mass ratio, chi_eff, tidal and so forth
-- [ ] HOM, precession
-- [ ] eccentricity **Revisiting GW150914 paper** [@gambaRevisitingGW150914Nonplanar2025]
+- [ ] inspiral: how to get a simple PN waveform, chirp mass, mass ratio, chi_eff, tidal and so forth, HOM, precession, eccentricity **Revisiting GW150914 paper** [@gambaRevisitingGW150914Nonplanar2025]
 - [ ] ringdown, summarizing Berti Cardoso Carullo+ and some other refs the spectrum of a Kerr BH, mode excitation and why we didn't see the 33 and 44 modes for GW250114
 - [ ] extrinsic parameters, the geometry of the detection tensor, the distance-inclination degeneracy
 

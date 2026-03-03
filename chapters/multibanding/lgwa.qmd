@@ -275,8 +275,11 @@ As figure @fig-response-interpolation-errors shows, we can achieve errors on the
 #| label: fig-response-interpolation-errors
 #| fig-cap: "Errors in scalar products computed with an interpolated version of the detector-centric basis vectors. The errors are computed from 400 randomly sampled points in the sky and time. Since the detector is located near the pole (specifically, at 85 degrees of latitude) the normal vector varies less across the month, and is therefore easier to interpolate."
 
-from thesis_scripts.lgwa_pe.lunar_coordinates import make_response_interpolation_plot
-make_response_interpolation_plot()
+from lgwa_response.lunar_coordinates import make_response_interpolation_plot
+from thesis_scripts import data_path
+cache_path = data_path / 'cache'
+
+make_response_interpolation_plot(cache_path)
 ```
 
 We can run a similar test for the computed position of the detector with respect to a fixed reference, 
@@ -291,8 +294,11 @@ The maximum phase error is computed by comparing the position error to the angul
 #| label: fig-position-interpolation-errors
 #| fig-cap: "Interpolation errors in position, by the number of interpolation points."
 
-from thesis_scripts.lgwa_pe.lunar_coordinates import make_position_interpolation_plot
-make_position_interpolation_plot()
+from lgwa_response.lunar_coordinates import make_position_interpolation_plot
+from thesis_scripts import data_path
+cache_path = data_path / 'cache'
+
+make_position_interpolation_plot(cache_path)
 ```
 
 Conveniently, the position interpolation requires about 10 times more points to achieve a comparable level of accuracy, but each evaluation of the position of the detector is roughly 10 times faster than an evaluation of the basis vectors.
@@ -301,7 +307,7 @@ Conveniently, the position interpolation requires about 10 times more points to 
 #| label: fig-position-function-of-time
 #| fig-cap: "Position of the detector as a function of time."
 
-from thesis_scripts.lgwa_pe.lgwa_likelihood import LunarLikelihood
+from lgwa_response.likelihood import LunarLikelihood
 from astropy.coordinates import get_body_barycentric
 from astropy.time import Time
 import numpy as np
@@ -356,7 +362,7 @@ _ = axs[2].set_xlabel('Time from January 1 2030 (lunar months)')
 #| label: fig-response-functions-of-time
 #| fig-cap: "Response functions in terms of time."
 
-from thesis_scripts.lgwa_pe.lgwa_likelihood import LunarLikelihood
+from lgwa_response.likelihood import LunarLikelihood
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -409,7 +415,7 @@ We show this in figure @fig-time-to-merger-error: it leads to errors of several 
 #| fig-cap: "Error in the time to merger estimation by using the lowest-order Post-Newtonian term only. The source considered here is a neutron star binary with equal components, of 1.4 solar masses each."
 
 import matplotlib.pyplot as plt
-from thesis_scripts.lgwa_pe.simple_bns_waveforms import time_to_merger, time_to_merger_simple, Phif3hPN, SUN_MASS_SECONDS
+from lgwa_response.simple_waveforms import time_to_merger, time_to_merger_simple, Phif3hPN, SUN_MASS_SECONDS
 import numpy as np
 
 q = 1
@@ -456,11 +462,11 @@ plt.show()
 #| label: fig-projected-lgwa-waveforms-ratio
 #| fig-cap: "Ratio of projected waveforms with slightly different declination (difference of 10 arcminutes)."
 
-from thesis_scripts.lgwa_pe.lgwa_likelihood import LunarLikelihood
+from lgwa_response.likelihood import LunarLikelihood
 import numpy as np
 import matplotlib.pyplot as plt
 
-like = LunarLikelihood((1500000000., 2000000000.))
+like = LunarLikelihood(gps_time_range=(1500000000., 2000000000.))
 t0 = 1893024018.
 
 f = np.geomspace(1e-1, 3, num=100000)
@@ -501,222 +507,4 @@ axs[1].semilogx(f, np.unwrap(np.angle(hx/hx2)), label='Center at merger-time det
 # axs[1].semilogx(f, np.unwrap(np.angle(hy/hy2)))
 axs[1].legend()
 plt.show()
-```
-
-## Likelihood accuracy
-
-We need a very large number of points to accurately represent LGWA waveforms in general.
-If the sample frequency of the detector is $r = 8\mathrm{Hz}$ (which is a somewhat low estimate), for a $T=10 \mathrm{year}$ observation we will have $rT \approx 2.5 \times 10^9$ real-valued points per channel in the time domain, or $1.3 \times 10^9$ complex-valued ones in the frequency domain.
-
-This would be the full FFT grid, however we know that 
-
-```{python}
-#| label: fig-riemann-likelihood-accuracy
-#| fig-cap: "Error in the likelihood evaluation, computed for points close to the likelihood peak and for a point very far from it (total mass of 4 compared to 2.8 solar masses and completely different time)."
-
-from thesis_scripts import data_path
-from thesis_scripts.lgwa_pe.lgwa_likelihood import LunarLikelihood
-import numpy as np
-import matplotlib.pyplot as plt
-from tqdm import tqdm
-
-like = LunarLikelihood((1500000000., 2000000000.))
-t0 = 1893024018.
-
-parameters = {
-	'chirp_mass': 1.2,
-	'mass_ratio': 1.,
-	'time_at_center': t0,
-	'inclination': 0.5,
-	'phase': 0.,
-	'right_ascension': 0.,
-	'declination': 0.,
-	'polarization': 0.,
-	'luminosity_distance': 40.,
-	'spin_1z': 0.,
-	'spin_2z': 0.,
-	'lambda_eff': 0.,
-	'd_lambda': 0.,
-}
-
-param_list = [
-	parameters,
-	parameters | {'chirp_mass': 1.2 * 1.0001},
-	parameters | {'mass_ratio': 0.99},
-	parameters | {'time_at_center': t0+1.5},
-	parameters | {'right_ascension': np.deg2rad(1/6)},
-	parameters | {'declination': np.deg2rad(1/6)},
-	parameters | {'lambda_eff': 1000},
-	parameters | {'phase': 2},
-	parameters | {'inclination': 2},
-	parameters | {'right_ascension': 1, 'time_at_center': t0+10000, 'chirp_mass': 2},
-]
-
-like.compute_center(t0)
-
-num_frequencies = 100
-
-n_fs = np.geomspace(1000, 500_000, num=num_frequencies, dtype=int)
-
-ll_errors_path = data_path / 'cache' / 'loglikelihood_errors.npy'
-
-if ll_errors_path.exists():
-	llr = np.load(ll_errors_path)
-else:
-	llr = np.empty((num_frequencies, len(param_list)))
-	for i, n_f in tqdm(enumerate(n_fs)):
-		f = np.geomspace(5e-2, 3, num=n_f)
-		like.data = like.projected_waveform(f, parameters)
-		for j, params in enumerate(param_list):
-			llr[i, j] = like.log_likelihood_ratio(f, params)
-	np.save(ll_errors_path, llr)
-
-weights = n_fs / n_fs.sum()
-plt.loglog(n_fs[:-1], np.abs(llr[:-1, 2:-1] - llr[-1, 2:-1][np.newaxis, :]), c='lightgray')
-plt.loglog(n_fs[:-1], np.abs(llr[:-1, 2] - llr[-1, 2]), c='lightgray', label='Parameters close to the peak')
-plt.loglog(n_fs[:-1], np.abs(llr[:-1, 0] - llr[-1, 0]), c='black', label='Parameters at the peak')
-plt.loglog(n_fs[:-1], np.abs(llr[:-1, -1] - llr[-1, -1]), c='red', label='Parameters very far from the peak')
-
-plt.xlabel('Number of geometrically spaced frequency samples')
-plt.ylabel('Log-likelihood error')
-plt.legend()
-plt.show()
-```
-
-```{python}
-#| label: fig-riemann-vs-relbin-likelihood-accuracy
-#| fig-cap: "Error in the likelihood evaluation for relative binning and Riemann integration."
-
-from thesis_scripts import data_path
-from thesis_scripts.lgwa_pe.lgwa_likelihood import LunarLikelihood
-import numpy as np
-import matplotlib.pyplot as plt
-from tqdm import tqdm
-
-from cmcrameri import cm
-
-like = LunarLikelihood()
-t0 = 1893024018.
-
-m_0 = 1.2
-
-parameters = {
-	'chirp_mass': m_0,
-	'mass_ratio': 1.,
-	'time_at_center': t0,
-	'inclination': 0.5,
-	'phase': 0.,
-	'right_ascension': 0.,
-	'declination': 0.,
-	'polarization': 0.,
-	'luminosity_distance': 40.,
-	'spin_1z': 0.,
-	'spin_2z': 0.,
-	'lambda_eff': 0.,
-	'd_lambda': 0.,
-}
-
-like.compute_center(t0)
-
-n_m, n_f = 20, 20
-masses =  np.geomspace(1e-9, 1e-7, num=n_m)+m_0
-freq_numbers = np.geomspace(100, 2_000, num=n_f, dtype=int)
-
-path_errors_relbin = data_path / 'cache' / 'errors_relbin.npy'
-path_errors_regular = data_path / 'cache' / 'errors_regular.npy'
-path_full_likes = data_path / 'cache' / 'full_likes.npy'
-
-if (
-	path_errors_relbin.exists() and 
-	path_errors_regular.exists() and 
-	path_full_likes.exists()):
-
-	errors_relbin = np.load(path_errors_relbin)
-	errors_regular = np.load(path_errors_regular)
-	likes = np.load(path_full_likes)
-
-else:
-
-	errors_relbin = np.empty((n_m, n_f))
-	errors_regular = np.empty((n_m, n_f))
-	likes = np.empty((n_m,))
-
-	full_f = np.geomspace(1e-1, 3, num=20_000_000)
-
-	for i, mass in tqdm(enumerate(masses)):
-
-		mod_parameters = parameters | {'chirp_mass': mass}
-		like.data = like.projected_waveform(full_f, parameters)
-		likes[i] = like.log_likelihood_ratio(full_f, mod_parameters)
-
-	for j, n_freq in tqdm(enumerate(freq_numbers)):
-		f = np.geomspace(1e-1, 3, num=n_freq)
-		like.make_relbin_data(f, parameters)
-		for i, mass in enumerate(masses):
-			mod_parameters = parameters | {'chirp_mass': mass}
-			relbin = like.relbin_log_likelihood_ratio(mod_parameters)
-			like.data = like.projected_waveform(f, parameters)
-			regular = like.log_likelihood_ratio(f, mod_parameters)
-			errors_relbin[i, j] = np.abs(relbin - likes[i])
-			errors_regular[i, j] = np.abs(regular - likes[i])
-
-	np.save(path_errors_relbin, errors_relbin)
-	np.save(path_errors_regular, errors_regular)
-	np.save(path_full_likes, likes)
-
-# fig, axs = plt.subplots(2, 1, sharex=True)
-from matplotlib.cm import ScalarMappable
-from matplotlib.colors import LogNorm, ListedColormap
-
-cmap_relbin = ListedColormap(cm.roma(np.linspace(0., 0.5, 256)))
-cmap_regular = ListedColormap(cm.roma(np.linspace(1., 0.5, 256)))
-
-norm = LogNorm(1e-9, 1e-7)
-
-for i, mass in tqdm(enumerate(masses)):
-	color_value = i / len(masses)
-	plt.loglog(freq_numbers, errors_relbin[i], c=cmap_relbin(norm(mass-m_0)), alpha=np.exp((likes[i] - likes[0])/ 40))
-	plt.loglog(freq_numbers, errors_regular[i], c=cmap_regular(norm(mass-m_0)), alpha=np.exp((likes[i] - likes[0])/ 40))
-plt.xlabel('Number of frequency samples')
-plt.ylabel('Loglikelihood error')
-
-plt.colorbar(ScalarMappable(cmap=cmap_relbin, norm=norm), ax=plt.gca(), label='Chirp mass deviation, relative binning [$M_\odot$]')
-plt.colorbar(ScalarMappable(cmap=cmap_regular, norm=norm), ax=plt.gca(), label='Chirp mass deviation, Riemann integration [$M_\odot$]')
-plt.show()
-```
-
-
-
-```{python}
-#| label: fig-relative-binning-quick-error-estimation
-#| fig-cap: "Relative binning error estimates obtained by looking at bin midpoints."
-
-errors_approx = np.empty_like(errors_relbin)
-n_to_plot = 20
-path_errors_relbin_approx = data_path / 'cache' / 'errors_relbin_approx.npy'
-
-if path_errors_relbin_approx.exists():
-	errors_approx = np.load(path_errors_relbin_approx)
-else:
-	for j, n_freq in enumerate(freq_numbers[:n_to_plot]):
-		f = np.geomspace(1e-1, 3, num=n_freq)
-		like.make_relbin_data(f, parameters)
-		for i, mass in enumerate(masses):
-			mod_parameters = parameters | {'chirp_mass': mass}
-			errors_approx[i, j] = like.relbin_log_likelihood_error(mod_parameters, 1)
-	np.save(path_errors_relbin_approx, errors_approx)
-
-norm_freq = LogNorm(min(freq_numbers), max(freq_numbers[:n_to_plot]))
-
-plt.scatter(errors_approx[:, :n_to_plot].flatten(), errors_relbin[:, :n_to_plot].flatten(), c=cm.imola(norm_freq(np.repeat(freq_numbers[:n_to_plot], n_m).reshape((n_to_plot, n_m)).T.flatten())))
-plt.xscale('log')
-plt.yscale('log')
-
-plt.colorbar(ScalarMappable(cmap=cm.imola, norm=norm_freq), label='Frequency nodes used', ax=plt.gca())
-
-plt.xlabel('Loglikelihood error: rough estimate with 1 midpoint per bin')
-plt.ylabel('Loglikelihood error: comparison with proper likelihood')
-
-r = np.geomspace(1e-6, 1)
-plt.plot(r, r, c='black', ls='--')
 ```

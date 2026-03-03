@@ -16,7 +16,7 @@ import os
 data_folder = Path(os.getcwd()).parent.parent / 'data'
 ```
 
-## Parameter dependence of CBC signals
+# Inspiral
 
 The signal $h_\theta(t)$ (or in the Fourier domain, $h_\theta (f)$) depends on several parameters, both intrinsic
 (describing the source itself) and extrinsic (describing the geometrical relation

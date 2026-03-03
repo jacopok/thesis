@@ -3,7 +3,7 @@ name = "thesis"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 dependencies = [
     "astropy>=5.3.2",
     "bilby>=2.3.0",
@@ -21,12 +21,14 @@ dependencies = [
     "jupyter-cache>=1.0.1",
     "jupyter>=1.1.1",
     "lalsuite>=7.24",
+    "lgwa_response",
     "lunarsky>=0.2.1",
     "matplotlib>=3.9.2",
     "numba>=0.60.0",
     "numdifftools>=0.9.41",
     "numpy>=1.26.4",
     "pandas>=1.4.1",
+    "pyqt6>=6.10.2",
     "pytest>=8.3.5",
     "quarto-cli>=1.5.57",
     "scipy>=1.13.1",
@@ -42,6 +44,7 @@ members = ["thesis_scripts/thesis_scripts"]
 
 [tool.uv.sources]
 thesis-scripts = { path = "thesis_scripts", editable = true }
+lgwa_response = { path = "../Documents/lgwa-response", editable = true }
 gwfish = { path = "../Documents/GWFish" }
 ultranest = { path = "../Documents/UltraNest", editable = true }
 teobresums = { path = "../Documents/Dali/Python" }

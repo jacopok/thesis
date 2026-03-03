@@ -11,7 +11,7 @@ If `uv` is installed, the commands defined in the `Makefile` can be used:
 
 #### Figures
 
-A figure can be made like:
+A figure based on code can be made like:
 
 ```{python}
 #| label: fig-my-figure
@@ -25,6 +25,12 @@ Code execution can be controlled with the [freeze](https://quarto.org/docs/proje
 Figures can be rendered optionally only when making html, see [here](https://quarto.org/docs/authoring/conditional.html#content-visible).
 
 Examples with [figures on the side](https://quarto-dev.github.io/quarto-gallery/page-layout/tufte.html).
+
+Alternatively, importing an existing figure can be simply achieved with the pandoc syntax:
+
+```
+![Caption](figure-filename.png){#fig-my-figure}
+```
 
 ##### Figures side by side
 
@@ -44,6 +50,18 @@ $$
 e^{i \pi} + 1 = 0
 $$ {#eq-euler-identity}
 ```
+
+Example with multiple lines. Do __not__ use the `align` environment!
+
+```
+$$ 
+\begin{aligned}
+e^{i \pi} + 1 &= 0 \\ 
+e^{i \pi} &= -1
+\end{aligned}
+$$ {#eq-euler-identity}
+```
+
 
 Reference as `@eq-title` or `[Equation @eq-title]`
 

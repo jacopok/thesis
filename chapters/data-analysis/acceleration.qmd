@@ -270,10 +270,10 @@ For convenience, we shall denote the waveform at a reference phase, $h(\phi_{c}=
 Therefore, the marginalized likelihood reads 
 
 $$ 
-\begin{align}
+\begin{aligned}
 \int_{0}^{2\pi} \mathcal{L}(d| \phi_{c}, \theta) \pi(\phi_{c}) \text{d}\phi_{c} &= \mathcal{Z}_{N} \exp\left(  - \frac{1}{2}(h(\theta) | h(\theta)) \right) \int_{0}^{2 \pi} \exp(\Re (d | h(\phi_{c}, \theta))) \pi (\phi_{c}) \text{d} \phi_{c} \\ \\
 &= \mathcal{Z}_{N} \exp\left(  - \frac{1}{2}(h(\theta) | h(\theta)) \right) I_{0}(|(d|h(\theta))|)\,.
-\end{align} 
+\end{aligned} 
 $${#eq-phase-marginalized-likelihood}
 
 The function $I_{0}$ appearing in the last expression is a modified Bessel function of the first kind, the solution to the following integral:

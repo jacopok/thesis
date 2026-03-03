@@ -6,6 +6,9 @@ book:
   subtitle: "and applications to multimessenger science"
   author: "Jacopo Tissino"
   date: "2026-10-31"
+  abstract: "Abstract"
+  downloads: "pdf"
+  contributor: "Jan Harms"
   chapters:
     - index.qmd
     - part: "Parameter estimation and model selection"
@@ -15,9 +18,13 @@ book:
       - chapters/data-analysis/acceleration.qmd
     - part: "Anatomy of a gravitational wave signal"
       chapters:
-      - chapters/data-analysis/waveforms.qmd
-      - chapters/multibanding/lgwa-pe.qmd
+      - chapters/anatomy/gw250114.qmd
+      - chapters/anatomy/inspiral.qmd
+      - chapters/anatomy/ringdown.qmd
+      - chapters/anatomy/extrinsic.qmd
     - part: "Future gravitational wave detectors"
       chapters:
+      - chapters/multibanding/einstein-telescope.qmd
       - chapters/multibanding/lgwa.qmd
+      - chapters/multibanding/lgwa-pe.qmd
     - chapters/references.qmd
