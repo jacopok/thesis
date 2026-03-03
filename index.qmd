@@ -13,6 +13,8 @@ format:
 
 The following is an outline of the thesis, with checkmarks denoting whether the chapters are ready for review, including which papers of which I am a coauthor are mentioned or discussed in that chapter.
 
+The hope is for this to be a "living document" of sorts, which I can keep updating also after graduation.
+
 ## Parameter estimation and model selection
 
 - [ ] The parameter estimation problem @sec-inference-model-comparison

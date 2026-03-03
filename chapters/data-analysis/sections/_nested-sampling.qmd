@@ -47,7 +47,7 @@ We can think of our $k$ random variates as a point in the $k$-dimensional unit b
 Then, the geometric meaning of the cumulative distribution is: what is the volume of the region corresponding to the event $t \leq T$, i.e. such that the maximum of the coordinates of our point is $T$?
 The answer is the box $[0, T]^{k}$, whose volume is $T^{k}$, thus proving our claim.
 
-In general, the $n$-th smallest out of $k$ uniform random variates in $[0, 1]$ is distributed according toa beta distribution, specifically $\text{beta}(k, n-k+1) \propto x^{n-1}(1-x)^{k-n}$; here we are looking at the $k$-th smallest (i.e. the largest).
+In general, the $n$-th smallest out of $k$ uniform random variates in $[0, 1]$ is distributed according to a beta distribution, specifically $\text{beta}(k, n-k+1) \propto x^{n-1}(1-x)^{k-n}$; here we are looking at the $k$-th smallest (i.e. the largest).
 :::
 
 In terms of $\log t$, the distribution reads 
@@ -203,6 +203,227 @@ It is readily seen that these weights add to 1, and heuristically they are compu
 
 Often one is be interested in a set of equally-weighted samples: these can be obtained, for example, through density estimation methods.
 
+### Sampling options {#sec-ns-sampling-options}
+
+Nested sampling is, in a way, a meta-algorithm: the sub-algorithm used to sample a new point from the prior subject to the constraint that its likelihood be higher than the last rejected point is a crucial determinant of the computational complexity and behavior of the implementation.
+This problem is called Likelihood-Restricted Prior Sampling.
+
+A review of several possible options can be found in [@buchnerNestedSamplingMethods2021, section 5] or [@ashtonNestedSamplingPhysical2022, table 2]. Roughly speaking, they can be classified into:
+
+- MCMC-based methods
+- region-based methods
+- hybrid methods
+- ML-based methods
+
+While the current set of live points is often used as a guide, the statistical properties of nested sampling hold as long as the new point is uncorrelated from the previous ones.
+
+#### The prior transform
+
+The way most nested sampling software implements likelihood-restricted prior sampling starts from the assumption that the prior is uniform in the box $[0, 1]^{d}$.
+
+This seems restrictive at first glance, but does not actually constrain the class of models we can consider.
+For any given prior $\pi(\theta)$ we want to use, it means that we need to find a mapping $g\colon [0, 1]^{d} \to \mathbb{R}^{d}$  between the unit $d$-dimensional box and our physical prior space, such that if $u \sim \mathcal{U}([0, 1]^{d})$, then $g(u) \sim \pi$, i.e. mapping uniformly-distributed random numbers onto values distributed according to our prior.
+
+If our prior is _separable_, i.e. $\pi (\theta) = \prod_{i=1}^{d} \pi_{i}(\theta_{i})$, then the problem is solvable analytically: the prior transform map will be  such that
+$$
+g(u) = [\text{CDF}^{-1}_{\pi_{i}}(u_{i})]_{i}
+$$
+where "CDF" denotes the cumulative distribution of $\pi_{i}$:
+$$
+\text{CDF}_{\pi_{i}} (\theta_{i}) = \int_{-\infty}^{\theta_{i}} \pi_{i}(y) \text{d}y \in [0,1]
+$$
+and $\text{CDF}^{-1}$ is its inverse. 
+The cumulative distribution can also be computed from samples, so in the case of separate priors we need not have an analytical expression for them.
+
+In the non-separable case there is no general procedure to accomplish this, which is equivalent to stating that there is no algorithm to "analytically" sample from an arbitrary distribution.
+This restricts the space of usable priors, since we need to be able to sample from them. 
+Typically, we use priors with known analytical expressions.
+
+### Model comparison with nested sampling
+
+In order to illustrate the process of model comparison, let us define a simple problem: 
+suppose we have a set of data points $(x_{i}, y_{i})$ with constant uncertainties $\sigma_{y}$ on the $y$ values.
+
+We will compare two simple _nested_ models, namely a parabolic one with $y = f(x; a, b, c) = a x^{2}+bx+c$ and a linear one with $y = f(x; b, c) = bx+c$. 
+Model comparison can also be performed for non-nested models, but the nested case has some nice properties we will showcase later.
+
+Let us generate the data and plot it: it will come from the parabolic model.
+
+```{python}
+#| label: fig-parameter-estimation-parabolic-data
+#| fig-cap: Toy model, with data coming from a parabolic function and Gaussian errors.
+
+import numpy as np
+import matplotlib.pyplot as plt
+from thesis_scripts import data_path
+
+kwargs = {
+	'fmt': 'o',
+	'capsize': 5,
+	'alpha': .8,
+}
+
+rng = np.random.default_rng(seed=1)
+
+n_points = 20
+
+x_i = np.linspace(-5, 5, num=n_points)
+sigma_y = 1
+true_a = -0.1
+true_b = 0.5
+true_c = 3
+
+def model(x, a, b, c):
+	return a*x**2 + b*x + c
+
+y_i = model(x_i, true_a, true_b, true_c) + rng.normal(scale=sigma_y, size=n_points)
+
+_ = plt.errorbar(x_i, y_i, sigma_y, **kwargs)
+_ = plt.xlabel('$x$')
+_ = plt.ylabel('$y$')
+
+np.save(data_path / 'cache' / 'parabolic_data_x.npy', x_i)
+np.save(data_path / 'cache' / 'parabolic_data_y.npy', y_i)
+```
+
+We can then analyze this data, using a Gaussian likelihood and setting (somewhat arbitrarily) uniform priors for the parameters $a$, $b$ and $c$ in the range $[-10, 10]$: 
+
+- $\pi(a, b, c) = 1 / 20^{3}$ in that range and 0 otherwise for the parabola;
+- $\pi(b, c) = 1 / 20^{2}$ in that range and 0 otherwise for the parabola;
+
+The log-likelihood will be 
+$$
+\log \mathcal{L}(\text{data} | \theta, \text{model}) = - \frac{1}{2}  \sum_{i=1}^{n} \frac{(y_{i} - f(x_{i}; \theta))^{2}}{\sigma_{y}^{2}} - \frac{n}{2} \log (2 \pi \sigma_{y}^{2}).
+$$
+
+
+```{python}
+from dynesty import DynamicNestedSampler
+
+lnorm = -0.5 * (
+	np.log(2 * np.pi) * n_points +
+    np.log(sigma_y**2 * n_points))
+
+def loglike(theta):
+	y = model(x_i, *theta)
+	return - 0.5 * ((y-y_i)**2).sum() / sigma_y**2 + lnorm
+
+def loglike_linear(theta):
+	y = model(x_i, 0, *theta)
+	return - 0.5 * ((y-y_i)**2).sum() / sigma_y**2 + lnorm
+
+def prior_transform(u):
+	# flat prior in [-10, 10] for all parameters
+	return u*20. - 10.
+
+fname = data_path / 'cache' / 'parabolic_model.pkl'
+
+if fname.exists():
+	sampler_parabola = DynamicNestedSampler.restore(str(fname))
+else:
+	sampler_parabola = DynamicNestedSampler(loglike, prior_transform, 3, nlive=500)
+	sampler_parabola.run_nested(dlogz_init=0.01)
+	sampler_parabola.save(str(fname))
+```
+
+```{python}
+fname = data_path / 'cache' / 'linear_model.pkl'
+
+if fname.exists():
+	sampler_linear = DynamicNestedSampler.restore(str(fname))
+else:
+	sampler_linear = DynamicNestedSampler(loglike_linear, prior_transform, 2, nlive=500)
+	sampler_linear.run_nested(dlogz_init=0.01)
+	sampler_linear.save(str(fname))
+```
+
+We perform Bayesian inference for the two models with Nested Sampling (@sec-nested-sampling). It gives us estimates for the posterior distributions of the parameters as well as the evidences.
+This allows us to compute a Bayes Factor:
+$$
+\log \text{BF}^{\text{parabola}}_\text{line} = \log Z_\text{parabola} - \log Z_\text{line}\,,
+$$
+
+which appears in the equation for the posterior odds for one model against the other:
+$$
+\underbrace{ \frac{p(M_\text{parabola} | d)}{P(M_\text{line}| d)} }_{ \text{posterior odds} } 
+= \text{BF}^{\text{parabola}}_{\text{line}} \underbrace{ \frac{p(M_{\text{parabola}})}{p(M_{\text{line}})} }_{ \text{prior odds} }\,.
+$$
+
+In this case, the curvature of the data is strong enough for the Bayes Factor to favor the parabolic model (although not by much). 
+
+```{python}
+for sampler, name in zip([sampler_parabola, sampler_linear], ['parabola', 'line']):
+	print(f'{name}: Z = {sampler.results.logz[-1]:.2f} +- {sampler.results.logzerr[-1]:.2f}')
+
+bayes_factor = sampler_parabola.results.logz[-1] - sampler_linear.results.logz[-1]
+bf_error = np.sqrt(
+	sampler_parabola.results.logzerr[-1]**2 + 
+	sampler_linear.results.logzerr[-1]**2
+)
+
+print(f'log Bayes factor = {bayes_factor:.2f} +- {bf_error:.2f} nats for the parabolic model')
+```
+
+Since the models we are considering were nested, we have a comparison point for our Bayes Factor: the Savage-Dickey density ratio [@dickeyWeightedLikelihoodRatio1971], [@cameronGeneralizedSavageDickeyRatio2013].
+
+Our models being nested means that the linear one is a special case of the parabolic one (with $a=0$); the priors for the other parameters are exactly the same in both cases. Then, it can be shown that the Bayes Factor is equal to the ratio of the posterior to the prior for the parabolic model, computed at the value for which the parabolic model reduces to the linear one:
+$$
+\text{BF}^{\text{parabola}}_\text{line} = \frac{p(a=0 | d, M_\text{parabola})}{\pi(a=0|M_\text{parabola})}\,.
+$$
+
+One might then think that, at least in this type of scenario, going through the evidence computation with a powerful tool such as Nested Sampling was unnecessary: the posterior distribution can be computed for cheaper, after all.
+However, as we show in @fig-savage-dickey, computing the value for the posterior density distribution at the point $a=0$ is not easy. 
+
+We can approximate the posterior density based on the samples with tools like a histogram or a kernel density estimate, but any such method will suffer from low statistics if we need to explore the edges of the distribution, as we see here: we would need an enormous amount of posterior samples to reach the same accuracy on the ratio of the distributions we get with Nested Sampling.
+
+```{python}
+#| label: fig-savage-dickey
+#| fig-cap: "Consistency of the Savage-Dickey density ratio and Nested Sampling estimates for the Bayes Factor. "
+
+from scipy.stats import gaussian_kde
+a_samples = sampler_parabola.results.samples[:, 0]
+a_weights = sampler_parabola.results.importance_weights()
+
+a_range = [-0.25, 0.05]
+cmap = plt.get_cmap('coolwarm')
+
+a_values = np.linspace(*a_range, num=50)
+
+values, edges = np.histogram(a_samples, bins=a_values, density=True, weights=a_weights)
+kde = gaussian_kde(a_samples, weights=a_weights)
+
+plt.stairs(values, edges, alpha=.5, color=cmap(1.))
+plt.plot(a_values, kde(a_values), alpha=.9, color=cmap(1.))
+
+_ = plt.axhline(1/20, alpha=.9, color=cmap(0.))
+_ = plt.axvline(true_a, ls='--', lw=1, c='black')
+_ = plt.yscale('log')
+_ = plt.xlim(*a_range)
+_ = plt.ylim(1e-3, 5e1)
+posterior_at_0 = 1/20 * np.exp(-bayes_factor)
+_ = plt.errorbar(0, posterior_at_0, posterior_at_0* bf_error, **kwargs, color='black')
+
+
+_ = plt.arrow(0, 1/20, 0, 1/20*(np.exp(-bayes_factor)-1), length_includes_head=True, color=cmap(0.), alpha=.5, width=0.003)
+
+_ = plt.xlabel('$a$')
+_ = plt.ylabel('Marginal posterior and prior densities $[\mathrm{d}p / \mathrm{d} a]$')
+
+ax = plt.gca()
+
+x1, x2, y1, y2 = -0.01, 0.01, posterior_at_0*0.7, posterior_at_0*1.3  # subregion of the original image
+axins = ax.inset_axes(
+    [0.6, 0.6, 0.37, 0.37],
+    xlim=(x1, x2), ylim=(y1, y2), xticklabels=[], yticklabels=[])
+axins.arrow(0, 1/20, 0, 1/20*(np.exp(-bayes_factor)-1), length_includes_head=True, color=cmap(0.), alpha=.5, width=0.03)
+axins.errorbar(0, posterior_at_0, posterior_at_0* bf_error, **kwargs, color='black')
+axins.stairs(values, edges, alpha=.5, color=cmap(1.))
+ax.indicate_inset_zoom(axins, edgecolor="black")
+_ = axins.plot(a_values, kde(a_values), alpha=.5, color=cmap(1.))
+
+```
+
+
 ### Commonly used plots
 
 The quantities we discussed can be tracked through a Nested Sampling run as a useful diagnostic. 
@@ -224,6 +445,7 @@ We use 400 live points, and stop iterating when the contribution to the integral
 ```{python}
 import numpy as np
 from dynesty import NestedSampler
+from thesis_scripts import data_path
 
 # from the Dynesty quickstart: 
 # https://dynesty.readthedocs.io/en/latest/quickstart.html
@@ -342,8 +564,64 @@ We can show this in different ways; an easy one to implement is by drawing sampl
 #| label: fig-nested-sampling-ppd
 #| fig-cap: A posterior predictive density plot, sketching the posterior densities by plotting 100 curves sampled from the posterior.
 
+from dynesty import DynamicNestedSampler
 
-plt.errorbar(x_i, y_i, sigma_y, **kwargs, c='black')
+x_i = np.load(data_path / 'cache' / 'parabolic_data_x.npy')
+y_i = np.load(data_path / 'cache' / 'parabolic_data_y.npy')
+
+kwargs = {
+	'fmt': 'o',
+	'capsize': 5,
+	'alpha': .8,
+}
+
+
+sigma_y = 1
+true_a = -0.1
+true_b = 0.5
+true_c = 3
+n_points = len(x_i)
+
+lnorm = -0.5 * (
+	np.log(2 * np.pi) * n_points +
+    np.log(sigma_y**2 * n_points))
+
+def loglike(theta):
+	y = model(x_i, *theta)
+	return - 0.5 * ((y-y_i)**2).sum() / sigma_y**2 + lnorm
+
+def loglike_linear(theta):
+	y = model(x_i, 0, *theta)
+	return - 0.5 * ((y-y_i)**2).sum() / sigma_y**2 + lnorm
+
+def prior_transform(u):
+	# flat prior in [-10, 10] for all parameters
+	return u*20. - 10.
+
+fname_parabola = data_path / 'cache' / 'parabolic_model.pkl'
+
+if fname_parabola.exists():
+	sampler_parabola = DynamicNestedSampler.restore(str(fname_parabola))
+else:
+	sampler_parabola = DynamicNestedSampler(loglike, prior_transform, 3, nlive=500)
+	sampler_parabola.run_nested(dlogz_init=0.01)
+	sampler_parabola.save(str(fname_parabola))
+
+fname_linear = data_path / 'cache' / 'linear_model.pkl'
+
+if fname_linear.exists():
+	sampler_linear = DynamicNestedSampler.restore(str(fname_linear))
+else:
+	sampler_linear = DynamicNestedSampler(loglike_linear, prior_transform, 2, nlive=500)
+	sampler_linear.run_nested(dlogz_init=0.01)
+	sampler_linear.save(str(fname_linear))
+
+
+def model(x, a, b, c):
+	return a*x**2 + b*x + c
+
+
+plt.errorbar(x_i, y_i, 1, **kwargs, c='black')
 plt.xlabel('$x$')
 plt.ylabel('$y$')
 
@@ -437,8 +715,10 @@ _ = axs[0].text(-10.5, -6, 'Little contribution to the integral')
 ```
 
 
-Thus, we can find a termination condition based on diagnosing whether this is happening: for example, we can compute the contribution to the evidence integral from the current live points, and stop iterating when that becomes small (this is the default in dynesty [@speagleDYNESTYDynamicNested2020]).
+Thus, we can find a termination condition based on diagnosing whether this is happening: for example, we can compute the contribution to the evidence integral from the current live points, and stop iterating when that becomes smaller than a given threshold --- this is the default in `dynesty` [@speagleDYNESTYDynamicNested2020].
+
 Since this is a stochastic algorithm, there is always a chance we are making a mistake when terminating: for example, there could be a region with very low volume but high likelihood that none of the live points have happened upon, but which could give a significant contribution to the evidence.
+There is no general solution to this issue, besides increasing the number of live points in order to improve the chances that some of them will happen upon the high-likelihood region.
 
 #### Exploration time
 
@@ -452,41 +732,43 @@ $$
 
 So, for a fixed variance on the evidence, we need to have $n_\text{live} \propto H$; therefore, the number of iterations is approximately $n_\text{iter} \propto n_\text{live}H \propto H^{2}$. 
 
-### Sampling options {#sec-ns-sampling-options}
+### Acceleration
 
-Nested sampling is, in a way, a meta-algorithm: the sub-algorithm used to sample a new point from the prior subject to the constraint that its likelihood be higher than the last rejected point is a crucial determinant of the computational complexity and behavior of the implementation.
-This problem is called Likelihood-Restricted Prior Sampling.
+The time complexity for nested sampling can be estimated as
 
-A review of several possible options can be found in [@buchnerNestedSamplingMethods2021, section 5] or [@ashtonNestedSamplingPhysical2022, table 2]. Roughly speaking, they can be classified into:
-
-- MCMC-based methods
-- region-based methods
-- hybrid methods
-- ML-based methods
-
-While the current set of live points is often used as a guide, the statistical properties of nested sampling hold as long as the new point is uncorrelated from the previous ones.
-
-#### The prior transform
-
-The way most nested sampling software implements likelihood-restricted prior sampling starts from the assumption that the prior is uniform in the box $[0, 1]^{d}$.
-
-This seems restrictive at first glance, but does not actually constrain the class of models we can consider.
-For any given prior $\pi(\theta)$ we want to use, it means that we need to find a mapping $g\colon [0, 1]^{d} \to \mathbb{R}^{d}$  between the unit $d$-dimensional box and our physical prior space, such that if $u \sim \mathcal{U}([0, 1]^{d})$, then $g(u) \sim \pi$, i.e. mapping uniformly-distributed random numbers onto values distributed according to our prior.
-
-If our prior is _separable_, i.e. $\pi (\theta) = \prod_{i=1}^{d} \pi_{i}(\theta_{i})$, then the problem is solvable analytically: the prior transform map will be  such that
 $$
-g(u) = [\text{CDF}^{-1}_{\pi_{i}}(u_{i})]_{i}
+T \approx n_{\text{live}} \times \langle t_{\text{like}} \rangle \times \langle n_{\text{replace}}\rangle \times  H 
 $$
-where "CDF" denotes the cumulative distribution of $\pi_{i}$:
-$$
-\text{CDF}_{\pi_{i}} (\theta_{i}) = \int_{-\infty}^{\theta_{i}} \pi_{i}(y) \text{d}y \in [0,1]
-$$
-and $\text{CDF}^{-1}$ is its inverse. 
-The cumulative distribution can also be computed from samples, so in the case of separate priors we need not have an analytical expression for them.
 
-In the non-separable case there is no general procedure to accomplish this, which is equivalent to stating that there is no algorithm to "analytically" sample from an arbitrary distribution.
-This restricts the space of usable priors, since we need to be able to sample from them. 
-Typically, we use priors with known analytical expressions.
+where
+
+- $n_\text{live}$ is the number of live points used;
+- $\langle t_{\text{like}} \rangle$ is the average likelihood evaluation time;
+- $\langle n_\text{replace} \rangle$ is the average number of likelihood evaluations required to find a replacement for each dead point;
+- $H$ is the information gain between posterior and prior.
+
+Based on this equation, we can think of several ways to accelerate sampling;  @rouletInferringBinaryProperties2024 have reviewed many of them in the context of gravitational wave parameter estimation.
+
+#### Varying the number of live points
+
+The original nested sampling algorithm evolves a fixed number of live points throughout the run. 
+It has since been proposed that it can be more efficient to vary it (@higsonDynamicNestedSampling2019, @speagleDYNESTYDynamicNested2020), depending on what is the quantity we are more interested in evaluating.
+
+A nested sampling run gives us estimates for both the evidence and the posterior. If what we are most interested in is precisely computing the evidence, we should allocate more points in the early stages of compression, even though the posterior mass is very low there: this will give us better statistics on the active volume when we reach the posterior bulk.
+
+If we are more interested in the posterior, on the other hand, we can do the initial compression with fewer points and use more once we reach the posterior bulk. 
+
+It turns out [@higsonDynamicNestedSampling2019] that, while both these objectives can be optimized independently, the standard choice of using a constant number of live points is not on the Pareto front for the uncertainties on evidence and posterior: a balanced dynamical allocation of points can improve both compared to the constant case.
+
+#### Likelihood acceleration
+
+A direct way to speed up any likelihood-based approach is to accelerate the evaluation of the likelihood, $\langle t_\text{like} \rangle$. The way to do so is heavily dependent on the model being considered. 
+
+#### Replacement efficiency
+
+As discussed in @sec-ns-sampling-options, there are many different ways to solve the likelihood-restricted sampling problem. 
+While there is no panacea here, trying different parameters for the proposal method or switching to a different one altogether is a useful strategy when looking for acceleration.
+
 
 [^1]: It will not necessarily be _strictly_ decreasing, but that is not a conceptual issue. One can introduce jitter in the likelihood, varying it at each point by an inconsequential amount, in order to ensure that the decreasing condition is verified precisely.
 [^4]: The square brackets are the Iverson bracket, as defined by @knuthTwoNotesNotation1992.

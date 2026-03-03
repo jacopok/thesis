@@ -10,3 +10,10 @@ format:
 ---
 
 # GW250114
+
+Inspiration: @theligoscientificcollaborationBasicPhysicsBinary2017.
+
+![Upper panel: whitened strain for GW250114 in the Livingston and Hanford detectors. Lower panel: a time-frequency spectrogram of the whitened data. Adapted from @abacGW250114TestingHawkings2025.](figures/Figure_1.pdf){#fig-gw250114-whitened-strain width=100%}
+
+![Posterior distribution on the component masses of GW250114. Adapted from @abacGW250114TestingHawkings2025.](figures/S250114_m1_m2_grey.PNG){#fig-gw250114-component-masses width=50%}
+

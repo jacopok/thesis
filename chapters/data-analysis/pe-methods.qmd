@@ -15,10 +15,12 @@ format:
 from thesis_scripts import *
 ```
 
-# Parameter estimation {#parameter-estimation}
+# Statistical methods {#statistical-methods}
 
 {{< include sections/_pe-general.qmd >}}
 
-{{< include sections/_fisher-matrix.qmd >}}
-
 {{< include sections/_nested-sampling.qmd >}}
+
+{{< include sections/_neural-posterior-estimation.qmd >}}
+
+{{< include sections/_fisher-matrix.qmd >}}

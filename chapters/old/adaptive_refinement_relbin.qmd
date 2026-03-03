@@ -1,0 +1,131 @@
+The authors of the original paper use a frequency axis obtained from first-principles arguments. However, it is also possible to run a greedy search to optimize it. @leslieModebymodeRelativeBinning2021 did it, by optimizing on a single waveform.
+My attempt is in @sec-greedy-relbin-selection.
+
+#### Greedy relative binning grid selection {#sec-greedy-relbin-selection}
+
+In [@zackayRelativeBinningFast2018] they give a rough outline for the functional form of the relative binning loglikelihood errors:
+$$
+\Delta \log \mathcal{L} (\theta) \approx \beta \left( \log \mathcal{L}_\text{max} - \log \mathcal{L}(\theta) \right) 
+$$
+
+In principle, this with a fixed $\beta$ does not give big guarantees on how big the error will be.
+
+##### Adaptive accuracy requirement
+
+Suppose $\varepsilon(\theta)$ is the error in log-likelihood evaluation at point $\theta$.
+The typical requirement, as asked for example in ROQ basis construction, is 
+$$
+\varepsilon(\theta) < \varepsilon_{0} \quad \forall \theta \in \Omega\,.
+$$
+
+But we can relax this: we can set
+$$
+\mathbb{E}_{p(\theta|d)}[\varepsilon] < \varepsilon_{0}\,.
+$$
+
+This can be achieved by a $\theta$-dependent requirement. For example, if we set
+$$
+\varepsilon(\theta) \leq \frac{C}{L(d|\theta)\pi(\theta)}
+$$
+then the expectation value reads
+$$
+\mathbb{E}_{p(\theta|d)}[\varepsilon]
+\leq \int \frac{C}{L(d|\theta)\pi(\theta)} p(\theta|d) \text{d}\theta 
+= \int \frac{C}{Z(d)} \text{d}\theta = \frac{C V_{\theta}}{Z(d)}
+$$
+
+Therefore, we need to set
+$$
+C = \varepsilon_{0} \frac{Z(d)}{V_{\theta}}\,.
+$$
+
+The quantity
+$$
+\frac{Z}{V_{\theta}} = \langle L(d|\theta) \pi(\theta) \rangle_{\mathcal{U}(\theta)} 
+$$
+can be estimated roughly at the beginning of inference, if we know $L_\text{max}$, I guess?
+Is it related to the ratio between the posterior and prior volumes?
+
+###### Gaussian example
+
+Let us consider the problem of sampling the standard normal distribution, with a uniform prior constraint of $x \in [-10, 10]$. 
+The integral is $Z \approx 1$, the prior volume is $V_{\theta}=20$. So, we should set $C = \varepsilon_{0} / 20$.
+
+```{python}
+import matplotlib.pyplot as plt
+import numpy as np
+
+x = np.linspace(-5, 5, num=1000)
+
+def standard_normal(x):
+    return -x**2/2 - np.log(np.sqrt(2*np.pi))
+
+eps_0 = 1e-5
+C = eps_0 / (x[-1]-x[0])
+
+plt.semilogy(x, np.exp(standard_normal(x)), label='PDF')
+plt.semilogy(x, C / np.exp(standard_normal(x)), label='accuracy constraint')
+plt.axhline(eps_0, c='black', ls='--', label='$\\varepsilon_0$')
+plt.legend()
+```
+
+We may want to set a minimum tolerable accuracy requirement, so that 
+$$
+\varepsilon(\theta) = \max\left( \varepsilon _\text{min}, \frac{C}{L(d|\theta)\pi(\theta)} \right)\,.
+$$
+
+How does that complicate things?
+A sensible choice could be $\varepsilon _\text{min} = \varepsilon_{0} / 2$.
+
+##### Ratio bounds
+
+We want to be able to represent waveform ratios to a reference waveform with parameters $\theta_{0}$,
+$$
+r(f; \theta) = \frac{h(f; \theta)}{h(f, \theta_{0})}\,,
+$$
+with the fewest possible frequency grid points.
+We do not need to do this for all points in the parameter space, but only for those which will have a large value of the posterior.
+
+The problem is that we do not, _a priori_, know what that region is (it is the final result of our computation!).
+So, the hope is to simultaneously run a search over the parameter space (not necessarily with the actual likelihood as the function being explored) and add frequency grid points as needed to decrease the representation error in the new points we are finding.
+
+We can get a bound on our likelihood using $r$ only. Let us start with the "injection" loglikelihood ratio, with the noise set to zero:
+$$
+\log \mathcal{L} 
+= - \frac{1}{2} \lVert h - h_{0} \rVert^{2}
+= - \frac{1}{2} \lVert h_{0}(r-1) \rVert^{2} 
+$$
+
+By Jensen's inequality, we can apply the convex function $- \log$ inside and outside the norm, and get the following expression:
+$$
+\lVert -\log h_{0} - \log(r-1) \rVert \geq 
+-\log \lVert h-h_{0} \rVert \,.
+$$
+
+::: {#nte-complex-logs .callout-warning collapse="true"}
+##### On complex logs
+
+Does Jensen's inequality still work if we consider logs of complex numbers? Maybe not...
+This probably need to be handled by separating amplitude and phase.
+
+Or actually - the phase doesn't matter, since we're taking the square norm!
+It should be $\log \lvert r-1 \rvert$.
+
+:::
+
+Then, we can use the triangle inequality:
+$$
+\lVert -\log h_{0} - \log(r-1) \rVert
+= \lVert \log h_{0} +\log(r-1) \rVert
+\leq \lVert \log h_{0} \rVert + \lVert \log (r-1) \rVert 
+$$
+
+So we have our final result:
+$$
+\frac{1}{2} \lVert \log h_{0} \rVert + \frac{1}{2} \lVert \log (r-1) \rVert \geq -\log \sqrt{ -2 \log \mathcal{L} }
+$$
+
+It is then to be seen what we can do with this upper bound.
+The norm of the ratio minus one is greater than some increasing function of the likelihood...  
+
+For $h = h_0$ we get $\infty \geq \infty$...

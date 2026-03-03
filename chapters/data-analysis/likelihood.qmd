@@ -8,7 +8,7 @@ format:
             echo: false
         bibliography: ../../rehear.bib
 ---
-# The gravitational wave likelihood
+# Gravitational wave parameter estimation
 
 ## The Whittle likelihood
 
@@ -185,4 +185,135 @@ high-frequency region; for most of the inspiral the signal is decently
 modelled by a simple powerlaw $h\propto f^{-7/6}$, therefore the overall
 SNR integral is much more stable under changes of model than the parameter
 estimation forecasts we will discuss later.
+
+## Likelihood acceleration
+
+The two terms we need to compute in the likelihood ratio [@eq-likelihood-ratio] are the following integrals
+
+$$
+\mathcal{L}_{hd} = \mathrm{Re}(h(\theta)| d) = 4 \mathrm{Re}\int_{0}^{f_\text{max}} \frac{h(f; \theta) d^*(f)}{S_{n}(f)} \text{d}f\,,
+$$
+and
+
+$$
+\mathcal{L}_{hh} = (h(\theta)| h(\theta)) = 4 \int_{0}^{f_\text{max}} \frac{|h(f; \theta)|^{2}}{S_{n}(f)} \text{d}f\,.
+$$
+
+These are integrals of oscillatory functions, so evaluating them as simple Riemann sums requires a large number of samples to achieve convergence.
+
+### Relative binning
+
+Relative binning [@zackayRelativeBinningFast2018] is a technique to accelerate the evaluation of the integrals in the likelihood.
+
+The idea is that, while the waveform itself may be highly oscillatory, it will generally be close to a reference one.
+
+The two terms are approximated as follows, in terms of a set of frequencies $b = \left\lbrace f_{i}\right\rbrace$:
+
+$$
+ \mathcal{L}_{hd} = \mathrm{Re} \sum_{b} (A_{0}(b) r_{0}^{*}(b) + A_{1}(b) r_{1}^{*} (b))
+$$
+and
+$$
+\mathcal{L}_{hh} = \sum_{b} ( B_{0}(b) |r_{0}(b)|^{2} + 2 B_{1}(b) \mathrm{Re}(r_{0}(b) r_{1}^{*}(b)))
+$$
+Here, the ratio $r(f) = h(f)  / h_{0}(f)$ of the generic waveform $h$ to the reference one $h_{0}$ is expressed to linear order in each bin:
+$$
+r(f) = r_{0}(b) + r_{1}(b) (f-f_{m}(b)),
+$$
+where $f_{m}(b)$ is the central frequency in the bin.
+During likelihood evaluation we can easily compute a set of ratios $r(b)$ at every bin edge, and then we will have
+$$
+r_{0}(b) = \frac{r(b)+r(b+1)}{2}
+\qquad \text{and} \qquad r_{1}(b) = \frac{r(b+1)-r(b)}{\text{d}f(b)}\,.
+$$
+
+Crucially, this depends on the ratio $r(f)$ being relatively smooth across the frequency axis.
+This is expected to be approximately true for all the relevant points in the posterior, potentially not if we stray from its peak.
+
+This formulation holds for the 22 mode, but it is possible to write a more generic one including higher order modes, at the expense of some more digital ink [@narolaRelativeBinningComplete2023].
+
+For a look at how the waveform ratio looks in the LGWA case, see @fig-projected-lgwa-waveforms-ratio.
+
+### Reduced order quadrature
+
+This technique differs from relative binning, in that it employs a greedy algorithm to sample from a given prior space and construct a basis that will represent all waveforms sampled there to within a given tolerance.
+
+The equations are as follows:
+$$
+\mathcal{L}_{dh} \approx \sum_{j=1}^{N_{L}} h(f_{j}, \theta) \omega_{j}
+$$
+$$
+\mathcal{L}_{hh} = \sum_{i=1}^{N_{Q}} \sum_{j=1}^{N_{Q}} h(f_{i}, \theta) h^{*}(f_{j}, \theta) \psi_{i}
+$$
+
+About basis size and storage details: [@morisakiRapidLocalizationInference2023].
+
+
+## Multimodality reduction
+
+The folding algorithm from [@rouletRemovingDegeneracyMultimodality2022].
+
+For LGWA the following symmetries will be preserved, I think:
+$$
+\phi \to \phi + \pi
+$$
+$$
+\psi \to \psi + \frac{\pi}{2}
+$$
+
+also one with $\cos \iota$, but let's see.
+
+Suppose we have a set of quasi-symmetries, denoted by a family of $2^{N}$ transformations $\sigma_{i}$ (the first is the identity). We consider a "folded subset" and only look there, computing the posterior probability of a point $\tilde{\theta}$ as
+$$
+\tilde{P} (\tilde{\theta}) = \sum_{i=1}^{2^{N}} P(\sigma_{i}(\tilde{\theta}))
+$$
+We do need to compute all the $2^{N}$ probabilities, and we should store them (or actually not, since we can recompute them for the relevant posterior samples...)
+
+Then we run our sampler on the folded space, and get a posterior there. 
+We can unfold it by taking each weighted sample $(\tilde{\theta}_{j}, w_{j})$ and splitting it into $2^{N}$ samples:
+$$
+\left(\sigma_{i}(\tilde{\theta}_{j}), \frac{w_{j} P(\sigma_{i}(\tilde{\theta}_{j}))}{\tilde{P}(\tilde{\theta})}\right)\,.
+$$
+These are in principle ratios of posteriors but in practice the prior is invariant under all the symmetries at hand.
+
+The unfolding code by Roulet is [here](https://github.com/jroulet/cogwheel/blob/74c8dc3b122ebea5de99e9007997a0418e450e32/cogwheel/prior.py#L134).
+
+## Analytic marginalization
+
+If the exact dependence of the likelihood on a given parameter is known, 
+the integral over said parameter can sometimes be performed analytically.
+
+[@singerRapidBayesianPosition2016], [@thraneIntroductionBayesianInference2019]
+[@LIGOT1300326v1AnalyticMarginalisation].
+
+### Reference phase
+
+A convenient parameter to marginalize over is the reference phase [@LIGOT1300326v1AnalyticMarginalisation]. 
+It does not have any astrophysical significance, despite being crucial for a complete description of the signal.
+
+If the waveform is dominated by the $\ell |m| = 22$ mode of emission, 
+its dependence on the coalescence phase $\phi_c$ is simply $h(\phi_c, \theta) = h(\phi_c=0, \theta) e^{2 \mathrm{i} \phi_c}$. 
+For convenience, we shall denote the waveform at a reference phase, $h(\phi_{c}=0, \theta)$, simply as $h(\theta)$.
+
+Therefore, the marginalized likelihood reads 
+
+$$ 
+\begin{aligned}
+\int_{0}^{2\pi} \mathcal{L}(d| \phi_{c}, \theta) \pi(\phi_{c}) \text{d}\phi_{c} &= \mathcal{Z}_{N} \exp\left(  - \frac{1}{2}(h(\theta) | h(\theta)) \right) \int_{0}^{2 \pi} \exp(\Re (d | h(\phi_{c}, \theta))) \pi (\phi_{c}) \text{d} \phi_{c} \\ \\
+&= \mathcal{Z}_{N} \exp\left(  - \frac{1}{2}(h(\theta) | h(\theta)) \right) I_{0}(|(d|h(\theta))|)\,.
+\end{aligned} 
+$${#eq-phase-marginalized-likelihood}
+
+The function $I_{0}$ appearing in the last expression is a modified Bessel function of the first kind, the solution to the following integral:
+$$
+I_{0}(\sqrt{ A^{2} + B^{2} }) = \frac{1}{2 \pi} \int_{0}^{2\pi} \exp(A \cos \phi + B\sin \phi) \text{d} \phi\,.
+$$
+
+#### Recovering phase from marginalized samples
+
+Since the analytical likelihood is known, it is possible to sample the phase after having performed a run with a phase-marginalized likelihood [@thraneIntroductionBayesianInference2019]. 
+
+For any given sample $\theta$ from a phase-marginalized posterior we can write the posterior as a function of $\phi_{c}$, conditioned on $\theta$: the integrand in equation @eq-phase-marginalized-likelihood. 
+
+### Distance
 

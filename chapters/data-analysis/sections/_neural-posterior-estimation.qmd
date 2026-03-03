@@ -1,0 +1,183 @@
+## Neural posterior estimation
+
+The last few years have seen a significant interest develop
+toward the application of machine learning techniques
+to gravitational wave inference. 
+
+@liangRecentAdvancesSimulationbased2025
+
+Citations:  
+
+- DINGO: @daxRealtimeGravitationalwaveScience2021, @daxNeuralImportanceSampling2022, @daxGroupEquivariantNeural2023
+- Ours: @santoliquidoFastAccurateParameter2025, @santoliquidoComparingNextgenerationDetector2025
+
+### Normalizing flows {#sec-normalizing-flows}
+
+Modelling generic probability distribution is a task with wide applicability in gravitational wave science and beyond. 
+A normalizing flow [@papamakariosNormalizingFlowsProbabilistic2021] is a series of parameterized transformations $T$ which map a base distribution, which is easy to sample from, onto a generic other distribution.
+The base distribution is often chosen to be the standard, $n$-dimensional Gaussian.
+The transformations $T$ should be invertible, and both $T$ and $T^{-1}$ should be differentiable.
+Let us denote the variable in the simple space as $u$, and its transformed value in the parameter space as $\theta = T(u)$. 
+If the simple distribution is labelled $p_{u}(u)$, its transformed version will be
+$$
+q_{\theta}(\theta) = p_{u}\left(T^{-1}(x)\right) \lvert \det J_{T^{-1}}(x)  \rvert \,.
+$$
+
+Transformations in this class can be composed, and the determinant of the composition can be computed as the product of the individual determinants. 
+This fact enables the flow-based architecture, in which several simple transformations are composed to achieve significant distortions of the base space. In fact, it can be shown under some weak assumptions that any distribution can be modeled in this manner.
+
+If we have samples from a target distribution $p(\theta)$, we seek to train a normalizing flow $q_{\theta}(\theta; \lambda)$, where $\lambda$ are the parameters defining the transform $T$. We can do so with the following loss function [@papamakariosNormalizingFlowsProbabilistic2021, equation 13]:
+$$
+\begin{aligned}
+\mathcal{L} &= D_{\text{KL}} (p(\theta) \lvert  \rvert  q_{\theta}(\theta ; \lambda)) \\
+&= \mathbb{E}_{\theta \sim p(\theta)} [- \log p_{\theta}(\theta; \lambda) ] + \text{const.}
+\end{aligned}
+$${#eq-normalizing-flow-loss}
+
+A significant advantage of the normalizing flow architecture is that it enables evaluation of the density function $q_{\theta}(\theta)$ as well as the possibility to generate samples from it.
+
+### Neural posterior estimation
+
+The objective of neural posterior estimation is to be able to directly model the posterior distribution based on an observation $d$. 
+This is achieved through a network architecture dubbed a _neural density estimator_ $q(\theta|d)$, which defines a normalized density function on the parameters $\theta$ conditioned on the data $d$.
+This is often a normalizing flow: see section @sec-normalizing-flows.
+
+The loss function for this, in the simplest case, is [@papamakariosFastEpsilonFree2016], [@daxGroupEquivariantNeural2023]:
+$$
+ \mathcal{L}_{\text{NPE}} = 
+ \mathbb{E}_{\theta \sim \pi(\theta)}
+ \mathbb{E}_{d \sim p(d|\theta)}
+ [-\log q(\theta|d)]\,.
+$${#eq-simple-npe-loss}
+
+The expectation values can be numerically approximated by repeatedly sampling the parameters $\theta$ from their prior distribution $\pi(\theta)$, and then computing a set of data $d$ by fixing the parameters and simulating a noise realization through the likelihood $p(d|\theta)$.
+
+In standard stochastic inference, the _analytic_ form of the likelihood is evaluated, while we only need to be able to _sample_ from the likelihood in order to evaluate equation @eq-simple-npe-loss.
+In principle, this allows us to employ non-analytic likelihoods: for example, in gravitional wave inference, we may sample real noise from the detectors as opposed to modelling it as a Gaussian @daxRealtimeGravitationalwaveScience2021.
+
+In practice, directly employing the loss in @eq-simple-npe-loss is impractical. 
+Some parameters, such as the sky position of the signal, significantly alter the observed waveform in each detector by shifting it in time. 
+This dependence, however, is known and can be amortized during training @daxGroupEquivariantNeural2023, leading to significantly improved performance. 
+Additionally, the detector's power spectral density $S_{n}$ is varied during training, so that conditioning can be performed at inference time.
+With this approach, the actual loss function for `DINGO` [@daxRealtimeGravitationalwaveScience2021, equation 3] is
+$$
+ \mathcal{L}_{\text{GNPE}} = 
+ \mathbb{E}_{\theta \sim \pi(\theta)} 
+ \mathbb{E}_{S_{n} \sim p(S_{n})}
+ \mathbb{E}_{d \sim p(d|\theta)} 
+ \mathbb{E}_{ \delta t_{I} \sim \kappa (\delta t_{I})}
+ [-\log q(\theta|d_{-t_{I}(\theta)-\delta t_{I}}, S_{n}, t_{I}(\theta) + \delta t_{I})]\,.
+$${#eq-gnpe-loss}
+
+Here, $t_{I}(\theta)$ is the arrival time of the gravitational wave signal at a given detector, and $\kappa$ is a kernel used to perturb it.
+The subscript notation $d_{-t_{I}(\theta)-\delta t_{I}}$ denotes time-shifted data. 
+This procedure makes it so that, in all the training data available to the model, waveforms are all approximately aligned. 
+
+### Importance sampling {#sec-importance-sampling}
+
+Taken alone, neural posterior estimation often yields accurate estimates of the posterior distribution, but it does not do so in every case, and we have no guarantee that it did so for any specific signal of interest.
+
+This is the motivation behind the introduction of neural importance sampling [@daxNeuralImportanceSampling2022], which allows us to re-weight the posterior samples, estimate the evidence and correct the posterior distribution.
+
+Importance sampling is a common integration technique, based on the fundamental approximate equality
+$$
+\int f(x) g(x) \text{d}x \approx \sum_{x_{i} \sim g(x)} f(x_{i})\,,
+$$
+where $x$ is a variable in $\mathbb{R}^{n}$, $p(x)$ is a probability distribution on it, while $f(x)$ is an arbitrary function of $x$. 
+Reframing this equality, if we want to compute an integral in the form $\int f(x)\text{d}x$, we can do so by identifying an auxiliary density $g$, and then evaluating 
+$$
+\int f(x) \text{d}x = \int \frac{f(x)}{g(x)} g(x) \text{d}x \approx \sum_{x_{i}\sim g(x)} \frac{f(x_{i})}{g(x_{i})}\,.
+$$
+This approach is not immediately applicable to gravitational wave inference, since there we only have direct access to the integrand function, $f=\mathcal{L}(d|\theta_i) \pi(\theta_{i})$, not to the posterior density.
+
+Neural posterior estimation, though, provides us with an estimate $q(\theta|d)$ of the posterior density, which we may use as in place of the proposal $g$ since its density is also available.
+
+The procedure is then as follows: we extract $n$ samples $\theta_{i} \sim q(\theta|d)$, and assign them weights 
+
+$$w_{i} = \frac{\mathcal{L}(d|\theta_i) \pi(\theta_{i})}{q(\theta_{i}|d)}
+$$
+
+If most of these lie in a low-probability region according to $p(\theta|d)$, however, they might be a coarse representation of it. As an extreme example, suppose that we extract a thousand samples, but the weights are identically zero for 500 of them: then, our effective number of samples will be at most 500, since the other 500 are useless. 
+
+In general, the number of effective samples @a.kongNoteImportanceSampling1992 will be
+
+$$
+n_\text{eff} = \frac{\left( \sum_{i}w_{i} \right)^{2}}{\sum_{i}w_{i}^{2}}\,,
+$$
+and the sample efficiency is defined as $\epsilon =n_\text{eff} / n$.
+
+Our evidence estimate will be 
+
+$$
+Z(d) \approx \frac{1}{n} \sum_{i} w_{i}
+$$
+with an error
+
+$$
+\sigma_{Z} = Z \sqrt{ \frac{1-\epsilon}{n \epsilon} }
+$$
+
+or equivalently 
+
+$$
+\sigma_{\log Z} = \sqrt{ \frac{1-\epsilon}{n\epsilon} }\,.
+$$
+
+#### Numerical example
+
+We will take the unnormalized posterior to be 
+
+$$
+\mathcal{L}(\theta|d)\pi(\theta) = 100 \mathcal{N}(\theta, \mu=0, \sigma=1)
+$$
+while the neural network guess will be slightly offset from it:
+
+$$
+q(\theta|d) = \mathcal{N}(\theta|\mu=2.5, \sigma=1)
+$$
+
+
+```{python}
+from thesis_scripts import *
+
+from scipy.stats import norm
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+
+post = norm(loc=0, scale=1)
+proposal = norm(loc=2.5, scale=1)
+
+theta = np.linspace(-4, 7)
+
+n = 1_000
+
+samples = proposal.rvs(size=n, random_state=1)
+
+weights = 100 * post.pdf(samples) / proposal.pdf(samples)
+
+neff = np.sum(weights)**2 / np.sum(weights**2)
+
+evidence_estimate = np.average(weights)
+evidence_error = evidence_estimate * np.sqrt((1 -neff/n) / neff)
+
+plt.plot(theta, post.pdf(theta), label='Normalized posterior')
+plt.plot(theta, proposal.pdf(theta), label='Proposal')
+
+for sample, norm_weight in zip(samples, weights / np.max(weights)):
+    if np.isclose(norm_weight, 1):
+        label='Samples by importance weight'
+    else:
+        label=''
+    plt.axvline(x=sample, ymax=.1, alpha=norm_weight, c='black', label=label)
+
+plt.title(f'neff={neff:.0f}, n={n}, Z estimate={evidence_estimate:.1f}$\pm${evidence_error:.1f}')
+plt.legend()
+plt.ylim(0, .5)
+
+
+plt.show()
+```
+
+We can see that, when the sample efficiency is low (i.e. the guess was bad) the evidence errors are large; they can be made smaller by extracting many more sample points, but this gets inefficient quickly.

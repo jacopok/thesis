@@ -1,0 +1,12 @@
+Could we not avoid storing the full ROQ basis, if we proceed as follows?
+- determine the sequence of "worst-represented" waveform parameters, $\theta_{i}$, at each iteration
+	- the basis does not simply consist of the waveforms $h(\theta_{i})$, since the procedure also includes orthonormalization
+- iterate through these parameters, constantly updating the subspace projector operator and  as you go
+	- at each iteration, compute $h(\theta_{i})$
+	- project it onto the orthogonal subspace using $\mathcal{P}_{i-1}$
+	- compute the weights $\omega_{i}$ and $\psi_{i}$
+	- update the projector to $\mathcal{P}_{i} = P_{i-1} + e_{i} e_{i}^{\top}$
+
+Useful references:
+- Antil+13 for the two-step ROQ basis construction
+
