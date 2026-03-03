@@ -9,6 +9,8 @@ format:
       dark:
         [cosmo, theme_dark.css]
     embed-resources: true
+    filters: 
+      - pdf-to-webp.lua
   pdf:
     documentclass: scrreprt
     colorlinks: true

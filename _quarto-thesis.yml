@@ -3,11 +3,10 @@ project:
 
 book:
   title: "Fast analysis of long gravitational wave signals"
-  subtitle: "and applications to multimessenger science"
   author: "Jacopo Tissino"
   date: "2026-10-31"
-  abstract: "Abstract"
-  downloads: "pdf"
+  abstract: "Ten years since the first direct detection of gravitational waves, the field is in bloom. Signals are being detected with higher clarity than ever --- the pinnacle of this so far is the coalescence of black holes dubbed GW250114, which enabled stringent tests of fundamental physics. Our theoretical understanding and computational methods are advancing in step, allowing us to efficiently account for more and more effects. The next generation of detectors will allow for extraordinary physical insights, but some aspects of the current data analysis paradigm will need to change. Ground-based detectors will detect so many signals it will be impractical to expend the resources we currently do for each. Deci-Hertz detectors like the Lunar Gravitational Wave Antenna will observe the same stellar-mass binaries for a long time: this makes the choice of reference frame for the analysis non-trivial, while providing significant scientific value by constraining source parameters and providing early warning."
+  # downloads: "pdf"
   contributor: "Jan Harms"
   chapters:
     - index.qmd
@@ -15,7 +14,6 @@ book:
       chapters:
       - chapters/data-analysis/pe-methods.qmd
       - chapters/data-analysis/likelihood.qmd
-      - chapters/data-analysis/acceleration.qmd
     - part: "Anatomy of a gravitational wave signal"
       chapters:
       - chapters/anatomy/gw250114.qmd
