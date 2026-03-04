@@ -13,7 +13,7 @@ end
 
 -- Function to get the modification time of a file using a shell command
 local function file_mod_time(name)
-  local handle = io.popen('stat -f "%m" "' .. name .. '"') -- macOS or BSD
+  local handle = io.popen('stat -c "%Y" "' .. name .. '"') -- bash
   local result = handle:read("*a")
   handle:close()
   
