@@ -132,7 +132,7 @@ We observe that, when the proposal poorly models the posterior distribution, one
 If this is the case, we get $n _\text{eff} \approx w_{1}^{2} / w_{1}^{2} = 1$ and $\epsilon = 1 / n$.
 
 In [@santoliquidoComparingNextgenerationDetector2025, figure 1], one can see a scenario analogous to this occur:
-there, the number of samples drawn is $n=10^{5}$, and for a small number of sources we can see an efficiency of approximately $10^{-5}$, corresponding to an effective sample size of approximately 1.
+there, the number of samples drawn is $n=10^{5}$; while for most sources the sample efficiency is high, for a few we can see very low values, with some reaching the lower bound of $10^{-5}$, which corresponds to an effective sample size of approximately 1.
 
 :::
 

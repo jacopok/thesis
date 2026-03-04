@@ -12,7 +12,7 @@ This integral is in $n$ dimensions (where $n$ is the dimensionality of the param
 $$ X (L) = \int_{\mathcal{L}(d | \theta, M) \geq L} \pi (\theta | M) \text{d}^n\theta\,.
 $$
 
-Since the prior is a normalized probability distribution and the likelihood ranges from 0 to $L _{\text{max}}$, this variable will range from $X(0) = 1$ to $X(L _{\text{max}}) = 0$, and it will always be decreasing.[^1]
+Since the prior is a normalized probability distribution and the likelihood ranges from 0 to $L _{\text{max}}$, this variable will range from $X(0) = 1$ to $X(L _{\text{max}}) = 0$, and it will always be decreasing.^[It will not necessarily be _strictly_ decreasing, but that is not a conceptual issue. One can introduce jitter in the likelihood, varying it at each point by an inconsequential amount, in order to ensure that the decreasing condition is verified precisely.]
 We can define its inverse, $L(X)$, 
 and rewrite the likelihood integral through integration by parts: the evidence is the expectation value of the likelihood, therefore, starting from the definition of a Lebesgue integral:
 $$
@@ -657,7 +657,7 @@ H \sim \text{\# active components in the data} \times \log\text{(signal-to-noise
 $$
 
 It can also be seen as a "volumetric compression" from the prior to the posterior.
-If the distributions are uniform, this intuition is exact [@petrosyanSuperNestAcceleratedNested2022]: suppose we have $\pi (\theta) \equiv [\theta \in V_{\pi}] / V_{\pi}$ and $p(\theta) \equiv [\theta \in V_{p}] / V_{p}$, where the two volumes are such that $V_{p} \subset V_{\pi}$.[^4] Then,  
+If the distributions are uniform, this intuition is exact [@petrosyanSuperNestAcceleratedNested2022]: suppose we have $\pi (\theta) \equiv [\theta \in V_{\pi}] / V_{\pi}$ and $p(\theta) \equiv [\theta \in V_{p}] / V_{p}$, where the two volumes are such that $V_{p} \subset V_{\pi}$.^[The square brackets are the Iverson bracket, as defined by @knuthTwoNotesNotation1992.] Then,  
 $$
 \text{KL} (p \parallel \pi) = \int_{V_{\pi}} \frac{[\theta \in V_{p}]}{V_{p}} \log \frac{V_{\pi}}{V_{p}} \text{d}\theta = \log \frac{V_{\pi}}{V_{p}},
 $$
@@ -768,7 +768,3 @@ A direct way to speed up any likelihood-based approach is to accelerate the eval
 
 As discussed in @sec-ns-sampling-options, there are many different ways to solve the likelihood-restricted sampling problem. 
 While there is no panacea here, trying different parameters for the proposal method or switching to a different one altogether is a useful strategy when looking for acceleration.
-
-
-[^1]: It will not necessarily be _strictly_ decreasing, but that is not a conceptual issue. One can introduce jitter in the likelihood, varying it at each point by an inconsequential amount, in order to ensure that the decreasing condition is verified precisely.
-[^4]: The square brackets are the Iverson bracket, as defined by @knuthTwoNotesNotation1992.
