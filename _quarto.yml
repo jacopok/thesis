@@ -11,6 +11,8 @@ format:
     embed-resources: true
     filters: 
       - pdf-to-webp.lua
+    reference-location: margin
+    citation-location: margin
   pdf:
     documentclass: scrreprt
     colorlinks: true
