@@ -12,3 +12,4 @@ all:
 	mv Fast-analysis-of-long-gravitational-wave-signals.pdf _book/Fast-analysis-of-long-gravitational-wave-signals.pdf
 	mv _book thesis
 	tar -cvf thesis.tar thesis/*
+	rm -rf thesis
