@@ -1,10 +1,18 @@
 ## Neural posterior estimation
 
-The last few years have seen a significant interest develop
-toward the application of machine learning techniques
-to gravitational wave inference. 
+Simulation-based inference (SBI) encompasses a broad range of approaches to inference which lack an explicit, analytic likelihood.
+While they still strive to produce results according to Bayes' theorem [@eq-bayes-theorem], they learn the likelihood implicitly, through the process of training a machine learning model.
+All SBI approaches require the presence of a _simulator_, i.e. a way to simulate data $d$ conditional on a set of parameters $\theta$, distributed according to the likelihood: $d \sim p(d|\theta)$.
+This need not be based on an analytic likelihood: for instance, in the gravitational wave case, one may inject signals into realistic detector noise [@daxRealtimeGravitationalwaveScience2021], [@emmaRNLEResidualNeural2026].
 
-@liangRecentAdvancesSimulationbased2025
+Several SBI methods exist, the main ones being [@liangRecentAdvancesSimulationbased2025]:
+
+- __Neural Posterior Estimation__, the focus of @sec-neural-posterior-estimation, in which a density estimator $q(\theta|d)$ is trained to directly model the posterior density $p(\theta|d)$.
+- __Neural Ratio Estimation__, in which a classifier is trained to distinguish between the joint distribution of parameters and data, $p(\theta, d)$ and the product of their marginals, $p(\theta)p(d)$. The optimal Bayesian classifier operates based on the decision function $f(\theta, d) = p(\theta, d) / (p(\theta, d) + p(\theta)p(d))$, from which the likelihood-to-evidence ratio $r(\theta, d) = p(d|\theta) / p(d) = f / (1-f)$ can be easily recovered. This approach requires a stochastic sampling step.
+- __Neural Likelihood Estimation__, in which a density estimator $q(d|\theta)$ directly learns the likelihood function. This approach also requires a stochastic sampling step.
+
+Other approaches also exist, such as __Flow Matching Posterior Estimation__ and __Consistency Model Posterior Estimation__, and it is plausible that novel ones 
+
 
 Citations:  
 
@@ -14,16 +22,16 @@ Citations:
 ### Normalizing flows {#sec-normalizing-flows}
 
 Modelling generic probability distribution is a task with wide applicability in gravitational wave science and beyond. 
-A normalizing flow [@papamakariosNormalizingFlowsProbabilistic2021] is a series of parameterized transformations $T$ which map a base distribution, which is easy to sample from, onto a generic other distribution.
-The base distribution is often chosen to be the standard, $n$-dimensional Gaussian.
-The transformations $T$ should be invertible, and both $T$ and $T^{-1}$ should be differentiable.
-Let us denote the variable in the simple space as $u$, and its transformed value in the parameter space as $\theta = T(u)$. 
-If the simple distribution is labelled $p_{u}(u)$, its transformed version will be
+A normalizing flow [@papamakariosNormalizingFlowsProbabilistic2021] is a series of parameterized transformations, whose joint action is denoted as $T$, which map a base distribution onto a generic other distribution.
+The base distribution should be easy to sample from: it is often chosen to be the standard $n$-dimensional Gaussian, with zero mean and the identity matrix as covariance.
+The transformations $T$ are chosen to be invertible, and both $T$ and $T^{-1}$ to be differentiable.
+Let us denote the variable in the "simple" space as $u$, and its transformed value in the parameter space as $\theta = T(u)$. 
+If the density function for the simple distribution is labelled $p_{u}(u)$, its transformed version will be
 $$
 q_{\theta}(\theta) = p_{u}\left(T^{-1}(x)\right) \lvert \det J_{T^{-1}}(x)  \rvert \,.
 $$
 
-Transformations in this class can be composed, and the determinant of the composition can be computed as the product of the individual determinants. 
+Transformations in this class can be composed, and the determinant of the composition can be readily computed as the product of the individual determinants. 
 This fact enables the flow-based architecture, in which several simple transformations are composed to achieve significant distortions of the base space. In fact, it can be shown under some weak assumptions that any distribution can be modeled in this manner.
 
 If we have samples from a target distribution $p(\theta)$, we seek to train a normalizing flow $q_{\theta}(\theta; \lambda)$, where $\lambda$ are the parameters defining the transform $T$. We can do so with the following loss function [@papamakariosNormalizingFlowsProbabilistic2021, equation 13]:
@@ -36,7 +44,7 @@ $${#eq-normalizing-flow-loss}
 
 A significant advantage of the normalizing flow architecture is that it enables evaluation of the density function $q_{\theta}(\theta)$ as well as the possibility to generate samples from it.
 
-### Neural posterior estimation
+### Neural posterior estimation {#sec-neural-posterior-estimation}
 
 The objective of neural posterior estimation is to be able to directly model the posterior distribution based on an observation $d$. 
 This is achieved through a network architecture dubbed a _neural density estimator_ $q(\theta|d)$, which defines a normalized density function on the parameters $\theta$ conditioned on the data $d$.
@@ -52,8 +60,7 @@ $${#eq-simple-npe-loss}
 
 The expectation values can be numerically approximated by repeatedly sampling the parameters $\theta$ from their prior distribution $\pi(\theta)$, and then computing a set of data $d$ by fixing the parameters and simulating a noise realization through the likelihood $p(d|\theta)$.
 
-In standard stochastic inference, the _analytic_ form of the likelihood is evaluated, while we only need to be able to _sample_ from the likelihood in order to evaluate equation @eq-simple-npe-loss.
-In principle, this allows us to employ non-analytic likelihoods: for example, in gravitional wave inference, we may sample real noise from the detectors as opposed to modelling it as a Gaussian @daxRealtimeGravitationalwaveScience2021.
+
 
 In practice, directly employing the loss in @eq-simple-npe-loss is impractical. 
 Some parameters, such as the sky position of the signal, significantly alter the observed waveform in each detector by shifting it in time. 
@@ -87,40 +94,57 @@ where $x$ is a variable in $\mathbb{R}^{n}$, $p(x)$ is a probability distributio
 Reframing this equality, if we want to compute an integral in the form $\int f(x)\text{d}x$, we can do so by identifying an auxiliary density $g$, and then evaluating 
 $$
 \int f(x) \text{d}x = \int \frac{f(x)}{g(x)} g(x) \text{d}x \approx \sum_{x_{i}\sim g(x)} \frac{f(x_{i})}{g(x_{i})}\,.
-$$
+$${#eq-importance-sampling}
+The quality of this as an integration technique varies depending on the quality of the proposal $g$. In fact, it can be shown that the estimator's variance is related to the variance of $f(x_{i}) / g(x_{i})$ [@augustinekongNoteImportanceSampling1992].
+The closer the proposal $g$ is to the integrand $f$, the better
+
 This approach is not immediately applicable to gravitational wave inference, since there we only have direct access to the integrand function, $f=\mathcal{L}(d|\theta_i) \pi(\theta_{i})$, not to the posterior density.
 
 Neural posterior estimation, though, provides us with an estimate $q(\theta|d)$ of the posterior density, which we may use as in place of the proposal $g$ since its density is also available.
 
 The procedure is then as follows: we extract $n$ samples $\theta_{i} \sim q(\theta|d)$, and assign them weights 
 
-$$w_{i} = \frac{\mathcal{L}(d|\theta_i) \pi(\theta_{i})}{q(\theta_{i}|d)}
+$$w_{i} = \frac{\mathcal{L}(d|\theta_i) \pi(\theta_{i})}{q(\theta_{i}|d)}\,.
 $$
 
-If most of these lie in a low-probability region according to $p(\theta|d)$, however, they might be a coarse representation of it. As an extreme example, suppose that we extract a thousand samples, but the weights are identically zero for 500 of them: then, our effective number of samples will be at most 500, since the other 500 are useless. 
-
-In general, the number of effective samples @a.kongNoteImportanceSampling1992 will be
+By @eq-importance-sampling, then, the average of these weights will be an estimator for the evidence:
+$$
+Z(d) \approx \frac{1}{n} \sum_{i=1}^{n} w_{i}\,.
+$$
+While this is an unbiased estimator, its variance may be high if the proposal distribution is not close enough to the function we are integrating.
+Let us define the number of __effective samples__ @augustinekongNoteImportanceSampling1992 will be
 
 $$
 n_\text{eff} = \frac{\left( \sum_{i}w_{i} \right)^{2}}{\sum_{i}w_{i}^{2}}\,,
 $$
-and the sample efficiency is defined as $\epsilon =n_\text{eff} / n$.
+and the __sample efficiency__  $\epsilon =n_\text{eff} / n$.
 
-Our evidence estimate will be 
+::: {#nte-importance-sampling-examples .callout-note collapse="true"}
+##### Examples and intuition
 
-$$
-Z(d) \approx \frac{1}{n} \sum_{i} w_{i}
-$$
-with an error
+The optimal situation is if the proposal distribution $q$ perfectly matches the posterior $p(\theta|d)$: in that case, all the weights will be identical and equal to $Z$. 
+Then, the effective sample size will be $n _\text{eff} = (nZ)^{2} / (n Z^{2}) = n$, and the efficiency $\epsilon$ will equal 1.
 
+If the proposal poorly models the posterior, we have no strict mathematical guarantees. In principle, depending on the likelihood's shape, it is possible for the weights to be roughly constant, despite none of the samples lying in the posterior's typical region.
+
+In practice, though, gravitational wave likelihoods exhibit extreme variations far from their typical regions. The log-likelihood ratio in @eq-likelihood-ratio will range at the very least from $-\rho^{2} /2$ to $\rho^{2} / 2$; even for low-SNR detections with $\rho \approx 10$, this is on the order of 100 in the logarithm of the likelihood.
+We observe that, when the proposal poorly models the posterior distribution, one weight tends to completely dominate the sum, so that (for instance) $w_{1} \gg w_{i}$ for any $i \neq 1$.
+If this is the case, we get $n _\text{eff} \approx w_{1}^{2} / w_{1}^{2} = 1$ and $\epsilon = 1 / n$.
+
+In [@santoliquidoComparingNextgenerationDetector2025, figure 1], one can see a scenario analogous to this occur:
+there, the number of samples drawn is $n=10^{5}$, and for a small number of sources we can see an efficiency of approximately $10^{-5}$, corresponding to an effective sample size of approximately 1.
+
+:::
+
+The evidence estimate can be associated with an approximate error [@daxNeuralImportanceSampling2022]
 $$
-\sigma_{Z} = Z \sqrt{ \frac{1-\epsilon}{n \epsilon} }
+\sigma_{Z} \approx Z \sqrt{ \frac{1-\epsilon}{n \epsilon} }
 $$
 
 or equivalently 
 
 $$
-\sigma_{\log Z} = \sqrt{ \frac{1-\epsilon}{n\epsilon} }\,.
+\sigma_{\log Z} \approx \sqrt{ \frac{1-\epsilon}{n\epsilon} }\,.
 $$
 
 #### Numerical example
@@ -130,14 +154,22 @@ We will take the unnormalized posterior to be
 $$
 \mathcal{L}(\theta|d)\pi(\theta) = 100 \mathcal{N}(\theta, \mu=0, \sigma=1)
 $$
-while the neural network guess will be slightly offset from it:
+while the proposal distribution will be slightly offset from it:
 
 $$
-q(\theta|d) = \mathcal{N}(\theta|\mu=2.5, \sigma=1)
+q(\theta|d) = \mathcal{N}(\theta|\mu=\mu_0, \sigma=1)\,.
 $$
 
+In order to illustrate the impact of effective sample size, we choose two different values for the offset: 2.5 an 0.3.
+In @fig-importance-sampling-example we can see the impact of effective sample size on the evidence estimate.
+
+Besides the decreasing accuracy in evidence estimation, a low efficiency (low effective sample size) also leads to inaccurate estimates on the error of the estimate itself.
+Visually, this is not surprising: with the higher value of the offset, the left side of the posterior is completely unexplored, 
 
 ```{python}
+#| label: fig-importance-sampling-example
+#| fig-cap: "A demonstration of importance sampling"
+
 from thesis_scripts import *
 
 from scipy.stats import norm
@@ -145,39 +177,42 @@ from scipy.stats import norm
 import matplotlib.pyplot as plt
 import numpy as np
 
+proposal_locs = [2.5, 0.3]
 
-post = norm(loc=0, scale=1)
-proposal = norm(loc=2.5, scale=1)
+fig, axs = plt.subplots(2, 1, sharex=True)
 
-theta = np.linspace(-4, 7)
+for loc, ax in zip(proposal_locs, axs):
 
-n = 1_000
+    post = norm(loc=0, scale=1)
+    proposal = norm(loc=loc, scale=1)
 
-samples = proposal.rvs(size=n, random_state=1)
+    theta = np.linspace(-4, 7, num=200)
 
-weights = 100 * post.pdf(samples) / proposal.pdf(samples)
+    n = 1_000
 
-neff = np.sum(weights)**2 / np.sum(weights**2)
+    samples = proposal.rvs(size=n, random_state=2)
 
-evidence_estimate = np.average(weights)
-evidence_error = evidence_estimate * np.sqrt((1 -neff/n) / neff)
+    weights = 100 * post.pdf(samples) / proposal.pdf(samples)
 
-plt.plot(theta, post.pdf(theta), label='Normalized posterior')
-plt.plot(theta, proposal.pdf(theta), label='Proposal')
+    neff = np.sum(weights)**2 / np.sum(weights**2)
 
-for sample, norm_weight in zip(samples, weights / np.max(weights)):
-    if np.isclose(norm_weight, 1):
-        label='Samples by importance weight'
-    else:
-        label=''
-    plt.axvline(x=sample, ymax=.1, alpha=norm_weight, c='black', label=label)
+    evidence_estimate = np.average(weights)
+    evidence_error = evidence_estimate * np.sqrt((1 -neff/n) / neff)
 
-plt.title(f'neff={neff:.0f}, n={n}, Z estimate={evidence_estimate:.1f}$\pm${evidence_error:.1f}')
-plt.legend()
-plt.ylim(0, .5)
+    ax.plot(theta, post.pdf(theta), label='Normalized posterior')
+    ax.plot(theta, proposal.pdf(theta), label='Proposal')
 
+    for sample, norm_weight in zip(samples, weights / np.max(weights)):
+        if np.isclose(norm_weight, 1):
+            label='Samples by importance weight'
+        else:
+            label=''
+        ax.axvline(x=sample, ymax=.1, alpha=norm_weight**2, c='black', label=label)
+
+    ax.set_title(f'$n_{{\\mathrm{{eff}}}}=${neff:.0f}, $n=${n}, $Z$ estimate={evidence_estimate:.1f}$\pm${evidence_error:.1f}')
+    if loc < 1:
+        ax.legend()
+    ax.set_ylim(0, .5)
 
 plt.show()
 ```
-
-We can see that, when the sample efficiency is low (i.e. the guess was bad) the evidence errors are large; they can be made smaller by extracting many more sample points, but this gets inefficient quickly.

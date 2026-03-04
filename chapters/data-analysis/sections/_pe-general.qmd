@@ -66,3 +66,40 @@ describes the degree to which the data prefer model $1$ over model 2.
 The remaining term, $p(M_{1}) / p(M_{2})$, is called _prior odds_, and it describes the degree to which we preferred model 1 over model 2 before seeing the data $d$.
 This may be informed, for example, by previous observations, theoretical considerations, or simply be set to 1 if our belief is that both models are equally likely.
 
+::: {#nte-odds-logits .callout-note collapse="true"}
+##### On the usage of odds
+
+@eq-bayes-factor can be applied several times in a row, as more observations become available; the Bayes Factors from each observation multiply. 
+
+This has an interesting consequence if the two models at hand are complementary, i.e. one being correct excludes the other, and one or the other must be correct, so that their probabilities satisfy $p(M_{1})+p(M_{2})=1$. If this is the case, we may simplify the notation by simply using $P(M_{1})$ and $1-p(M_{1})=p(M_{2})$. 
+Then, taking the logarithm of @eq-bayes-factor, we can express it as 
+$$
+\text{logit}(p(M_{1}|d)) = \log \text{BF}_{2}^{1} + \text{logit}(p(M_{1}))\,,
+$$
+where we defined the $\text{logit}$ function, also shown in figure @fig-logit-function:
+$$
+\text{logit}(p) = \log \frac{p}{1-p}\,.
+$$
+
+```{python}
+#| label: fig-logit-function
+#| fig-cap: "The logit function."
+
+from thesis_scripts import *
+import numpy as np
+import matplotlib.pyplot as plt
+
+p = np.linspace(5e-3, 1-5e-3, num=500)
+plt.xlabel('$\\mathrm{{logit}}(p)$')
+
+plt.plot(np.log(p / (1-p)), p)
+plt.xlabel('$\\mathrm{{logit}}(p)$')
+plt.ylabel('$p$')
+plt.grid()
+plt.show()
+```
+
+In a certain sense, the logit of a probability, also called __log-odds__, is a more natural way to express it. 
+It is not bounded in the $[0, 1]$ interval and can instead span $\mathbb{R}$. 
+Furthermore, in this parameterization, extreme statements such as probabilities very close to 0 or 1 are appropriately far from the origin, and absolutes such as $p=0$ are divergent.
+:::
