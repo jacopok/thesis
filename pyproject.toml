@@ -24,6 +24,7 @@ dependencies = [
     "lgwa_response",
     "lunarsky>=0.2.1",
     "matplotlib>=3.9.2",
+    "nessai>=0.15.2",
     "numba>=0.60.0",
     "numdifftools>=0.9.41",
     "numpy>=1.26.4",

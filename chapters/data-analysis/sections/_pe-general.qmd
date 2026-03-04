@@ -26,14 +26,124 @@ What we refer to as "computing the posterior" means obtaining a useful represent
 
 If the parameter space is high-dimensional, evaluating the posterior on a grid quickly becomes unpractical. 
 A common solution to this issue is to use stochastic methods, which allow us to obtain a set of samples $\theta _i$ distributed according to the posterior.
-This way of representing a posterior is convenient, since we can easily compute summary statistics from it, such as the expectation value of any function $f(\theta)$:
-
-$$ \langle f \rangle_{\theta \sim p(\theta | d, M)} \approx \frac{1}{N} \sum _{i=1}^N f(\theta _i) \,.
-$$
 
 There exist many different such algorithms. Several of them can probe the posterior distribution $p(\theta|d, M) \propto \mathcal{L}(d|\theta, M) \pi(\theta|M)$ without computing its normalization constant $\mathcal{Z}$, the evidence: for example, the Metropolis-Hastings algorithm, a flavor of Markov-Chain Monte Carlo [@hoggDataAnalysisRecipes2018], operates by accepting or rejecting proposals based on the ratio of their probabilities, which is normalization-independent.
 
 Nested Sampling, which we shall discuss in more detail in section @sec-nested-sampling, was developed as a method for computing the evidence, but it also yields the posterior as a by-product.
+
+### Posterior samples
+
+Representing a high-dimensional posterior distribution through samples is convenient, since we can easily compute summary statistics from them, such as the expectation value of any function $f(\theta)$:
+
+$$ \langle f \rangle_{\theta \sim p(\theta | d, M)} \approx \frac{1}{N} \sum _{i=1}^N f(\theta _i) \,.
+$$
+
+### Conditioning versus marginalizing
+
+TODO rewrite to fit the context, add definitions of marginals.
+
+It is important to include all parameters when performing a Fisher matrix analysis.
+This is because not including a parameter which correlates to the one we care about in 
+the Fisher analysis is equivalent to __conditioning__ upon it having that specific value, 
+while the correct operation to be performed is __marginalizing__ over all possible values.
+
+Here is a graphical way to see the difference between conditioning and marginalizing 
+for correlated variables.
+
+```{python}
+from thesis_scripts.multivariate_normal import MultivariateNormal
+n = MultivariateNormal([0, 0], [[1, 0.8], [0.8, 1]])
+n.plot_2d_analytical(0, 0, .9)
+```
+
+When dealing with the _correlation matrix_ marginalizing 
+simply amounts to ignoring some parameters, but crucially
+in the _Fisher matrix_ this is not the case, since the 
+inversion introduces mixing between the parameters.
+
+#### Weighted samples {#sec-weighted-samples}
+
+Some algorithms, such as Nested Sampling [@sec-nested-sampling] or importance-sampled Neural Posterior Estimation [@sec-importance-sampling-npe], can return a set of _weighted_ samples. 
+This means that each sample $\theta_{i}$ is associated with a weight $w_{i}$.
+Weighted samples can also arise in the context of _reweighting_: slightly perturbing the assumptions underlying an analysis and 
+
+Summary statistics can be computed through __importance sampling__, as 
+$$ \langle f \rangle_{\theta \sim p(\theta | d, M)} \approx \frac{1}{N} \sum _{i=1}^N w_{i} f(\theta _i) \,.
+$$
+Weighted samples can also be directly used to construct histograms --- the height of each bin will correspond to the sum of the weights of the samples contained within it ---, perform kernel density estimates and so forth. 
+They can be inconvenient
+
+We can also extract equally-weighted samples from weighted ones by __rejection sampling__ @ashtonReconstructingResamplingGuide2025:
+
+1. Establish the highest weight, $w _\text{max} = \max w_{i}$;
+2. for each sample $\theta_{i}$: 
+	1. compute $x= w_{i} / w _\text{max} \in [0, 1)$;
+	2. extract a uniformly random number $r \in [0, 1)$;
+	3. if $r<x$, keep the sample $\theta_{i}$, otherwise, remove it.
+
+On average, this procedure will retain $n\langle w \rangle / \max w$ out of $n$ samples; if many of the weights are lower than their maximum, it can become quite inefficient. 
+In fact, under the realistic assumption of the weights being log-normally distributed, it can be shown that working with the weighted samples can be significantly more efficient than performing rejection sampling [@ashtonReconstructingResamplingGuide2025, fig. 3].
+
+TODO: Also maybe cite: @williamsValidatingSequentialMonte2025, @romero-shawBayesianInferenceCompact2020.
+
+#### $p$-$p$ plots
+
+Mistrusting the results of our analysis pipelines is wise: we ought to put them through as many tests as possible in order to spot any issues. 
+
+
+A common test for self-consistency is the $p$-$p$ plot, which specifically regards the marginal distributions, $p(\theta_i | d)$ for a fixed $i$. 
+We can test this by performing a campaign of injections, for which the true value $\hat{\theta_{i}}$ is known: every time, we need to generate a realistic simulation of the data $d$ and analyze it feigning ignorance of the true value. 
+Then, we may compute the percentile of the distribution at which the true value lies:
+$$
+u = \int_{-\infty}^{\hat{\theta}_{i}} p(\theta_{i}| d) \text{d}\theta\,.
+$$
+Here we assume for simplicity that the parameter can range over $\mathbb{R}$, but the same calculation can be performed starting integration from the lower bound.
+This is the definition of the cumulative distribution function, computed at $\hat{\theta}_{i}$. 
+Repeating this procedure $N_\text{inj}$ times, we will get a set of values $u_{j}$, where the index $j$ denotes the number of the injection.
+If our analysis is self-consistent, and $p(\theta_{i}|d)$ is the probability density for the true value, then the $u_{j}$ should be uniformly distributed in the interval $[0, 1]$.
+
+There are a few ways to check whether this is the case, both visual and statistical. 
+The simplest is probably to histogram the $u_{j}$ and visually check for uniformity. This is not a very powerful method, however, since it is hard to tell by eye which level of fluctuation is "acceptable", and there is a dependence on the size of the bins used for the histogram.
+A better choice is to compute the empirical cumulative distribution function: 
+$$
+P(u) = \frac{\text{number of }u_{j} \leq u}{N_\text{inj}}
+$$
+
+This is a "stepwise", locally constant function. For a perfectly uniform distribution, and an asymptotically high number of injections, it asymptotically tends toward $P(u) = u$. 
+It is uniquely defined, with no parameters.
+
+A first visual test is to plot it and check that it approximately follows the diagonal.
+A useful variant of this is to plot $u$ on the horizontal axis and $P(u) - u$ on the vertical, which is expected to be near zero; see e.g. @chatziioannouNoiseSpectralEstimation2019.
+This allows for the resolution of small fluctuations from the diagonal. 
+
+In order to help in the visual check, we need something to compare against: what is the magnitude of the expected fluctuations of $P(u)$ under the null hypothesis, i.e. if the distribution is indeed uniform?
+If we fix a value of $u$, the question can be reframed as follows: out of $N_\text{inj}$ independent and identically distributed uniform random variates, how many are smaller than $u$?
+The probability for each of them being smaller than $u$ is $u$ itself, so the probability mass function describing this scenario will be binomial, but scaled by $N_\text{inj}$:
+$$
+p \left( P (u) = \frac{k}{N_\text{inj}} \right) = {k\choose N_\text{inj}} u^{k} (1-u)^{N _\text{inj}-k}
+$$
+Therefore we can easily compute its mean and variance, $\langle P(u) \rangle =u$ and
+$$
+\langle (P(u) -u)^{2} \rangle = \frac{u(1-u)}{N_\text{inj}}\,.
+$$
+
+
+```{python}
+#| label: fig-pp-plot-theory
+#| fig-cap: "TODO: Placeholder plot - ideally, this plot should show a pp-test with a uniform distribution, with pdf, pmf, and pmf-p."
+
+from nessai.plot import plot_indices
+import numpy as np
+import matplotlib.pyplot as plt
+
+rng = np.random.default_rng(seed=1)
+indices = rng.choice(1000, size=1000, replace=True)
+
+fig = plot_indices(indices, plot_breakdown=False)
+plt.show()
+```
+
+This was done, for example, with the software `BILBY` @romero-shawBayesianInferenceCompact2020; more details can also be found in @romero-shawWhenModelsFail2022.
 
 ### Model comparison {#sec-model-comparison}
 
@@ -103,3 +213,4 @@ In a certain sense, the logit of a probability, also called __log-odds__, is a m
 It is not bounded in the $[0, 1]$ interval and can instead span $\mathbb{R}$. 
 Furthermore, in this parameterization, extreme statements such as probabilities very close to 0 or 1 are appropriately far from the origin, and absolutes such as $p=0$ are divergent.
 :::
+

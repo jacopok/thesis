@@ -65,7 +65,7 @@ The expectation values can be numerically approximated by repeatedly sampling th
 In practice, directly employing the loss in @eq-simple-npe-loss is impractical. 
 Some parameters, such as the sky position of the signal, significantly alter the observed waveform in each detector by shifting it in time. 
 This dependence, however, is known and can be amortized during training @daxGroupEquivariantNeural2023, leading to significantly improved performance. 
-Additionally, the detector's power spectral density $S_{n}$ is varied during training, so that conditioning can be performed at inference time.
+Additionally, the detector's power spectral density $S_{n}$ is varied during training, so that conditioning can be performed at inference time (__Cite Wildberger__).
 With this approach, the actual loss function for `DINGO` [@daxRealtimeGravitationalwaveScience2021, equation 3] is
 $$
  \mathcal{L}_{\text{GNPE}} = 
@@ -78,13 +78,19 @@ $${#eq-gnpe-loss}
 
 Here, $t_{I}(\theta)$ is the arrival time of the gravitational wave signal at a given detector, and $\kappa$ is a kernel used to perturb it.
 The subscript notation $d_{-t_{I}(\theta)-\delta t_{I}}$ denotes time-shifted data. 
-This procedure makes it so that, in all the training data available to the model, waveforms are all approximately aligned. 
+This procedure makes it so that, in all the training data available to the model, waveforms are all approximately time-aligned. 
+
+Recently, a new transformer-based architecture for `DINGO` has been proposed [@koflerFlexibleGravitationalWaveParameter2025]. 
+By tokenizing the data across detectors and frequency grid sections, a single network can be used for different detector configurations (one, two or three detectors), as well as for different frequency intervals.
+
 
 ### Importance sampling {#sec-importance-sampling}
 
 Taken alone, neural posterior estimation often yields accurate estimates of the posterior distribution, but it does not do so in every case, and we have no guarantee that it did so for any specific signal of interest.
 
 This is the motivation behind the introduction of neural importance sampling [@daxNeuralImportanceSampling2022], which allows us to re-weight the posterior samples, estimate the evidence and correct the posterior distribution.
+
+#### Importance sampling in general
 
 Importance sampling is a common integration technique, based on the fundamental approximate equality
 $$
@@ -105,7 +111,7 @@ Neural posterior estimation, though, provides us with an estimate $q(\theta|d)$ 
 The procedure is then as follows: we extract $n$ samples $\theta_{i} \sim q(\theta|d)$, and assign them weights 
 
 $$w_{i} = \frac{\mathcal{L}(d|\theta_i) \pi(\theta_{i})}{q(\theta_{i}|d)}\,.
-$$
+$${#eq-importance-sampling-weights}
 
 By @eq-importance-sampling, then, the average of these weights will be an estimator for the evidence:
 $$
@@ -216,3 +222,14 @@ for loc, ax in zip(proposal_locs, axs):
 
 plt.show()
 ```
+
+#### Importance sampling for neural posterior estimation {#sec-importance-sampling-npe}
+
+@daxNeuralImportanceSampling2022 introduced the usage of importance sampling to complement neural posterior estimation, with a piece of software called `DINGO-IS`. 
+The density estimate given by `DINGO` for the posterior 
+is corrected through importance sampling, based on the 
+standard gravitational wave likelihood.
+
+Besides giving an estimate for the evidence, this allows us to correct the posterior samples. 
+Suppose we extract $n$ samples $\theta_{i}$ from the NPE distribution $q(\theta|d)$. 
+After computing the weights according to @eq-importance-sampling-weights, we can interpret $\theta_{i}$ as _weighted_ samples from the posterior distribution $p(\theta|d)$, and use them as described in @sec-weighted-samples.

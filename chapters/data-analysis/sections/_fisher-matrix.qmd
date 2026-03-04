@@ -33,23 +33,3 @@ $$
 
 and then, since we are evaluating this quantity at the maximum-likelihood realization of the noise $n = 0$, the term $(n|\partial_i \partial_j h)$ is equal to zero.
 
-### Conditioning versus marginalizing
-
-It is important to include all parameters when performing a Fisher matrix analysis.
-This is because not including a parameter which correlates to the one we care about in 
-the Fisher analysis is equivalent to __conditioning__ upon it having that specific value, 
-while the correct operation to be performed is __marginalizing__ over all possible values.
-
-Here is a graphical way to see the difference between conditioning and marginalizing 
-for correlated variables.
-
-```{python}
-from thesis_scripts.multivariate_normal import MultivariateNormal
-n = MultivariateNormal([0, 0], [[1, 0.8], [0.8, 1]])
-n.plot_2d_analytical(0, 0, .9)
-```
-
-When dealing with the _correlation matrix_ marginalizing 
-simply amounts to ignoring some parameters, but crucially
-in the _Fisher matrix_ this is not the case, since the 
-inversion introduces mixing between the parameters.

@@ -10,3 +10,37 @@ format:
 ---
 
 # Einstein Telescope
+
+The Einstein Telescope [@abacScienceEinsteinTelescope2025] is a planned next-generation (XG) detector in Europe.
+
+
+![Sardinian candide site for the Einstein Telescope](figures/einstein-telescope/ET-map.pdf){#fig-einstein-telescope-location}
+
+## $\Delta$ shape
+
+In terms of the local azimuth $\lambda$, altitude $\beta$, and the polarization angle $\psi$ of the incoming gravitational wave, the antenna pattern functions read [@regimbauMockDataChallenge2012]:^[In @santoliquidoFastAccurateParameter2025 the labels "altitude" and "azimuth" are flipped.]
+$$
+\begin{aligned}
+F_{+}^{\text{ET-1}}(\beta, \lambda, \psi) &= - \frac{\sqrt{ 3 }}{4}[(1+\cos ^{2}\beta)\sin 2\lambda \cos 2 \psi + 2 \cos \beta \cos 2 \lambda \sin 2 \psi] \\
+F_{\times}^{\text{ET-1}}(\beta, \lambda, \psi) &= + \frac{\sqrt{ 3 }}{4}[(1+\cos ^{2}\beta)\sin 2\lambda \sin 2 \psi + 2 \cos \beta \cos 2 \lambda \cos 2 \psi]\,.
+\end{aligned}
+$$
+
+The antenna patterns for ET-2 and ET-3 are obtained with the transformation $\lambda \to \lambda \pm 2 \pi / 3$.
+
+These are symmetric under a reflection across the local horizon ($\beta\to-\beta$), rotation around the locally vertical direction by half a turn ($\lambda\to\lambda+\pi$) and simultaneous rotation of the azimuth and polarization angle by a quarter of a turn ($\lambda\to\lambda+\pi /2$, $\psi \to \psi + \pi / 2$).
+
+These symmetries can be combined in any way, leading to an eight-fold degeneracy in the sky position of any source, with four equally-spaced modes above the local horizon, and four below it.
+
+This also leads to a bimodality in time at the geocenter, if that is used as a parameter. Arrival time at the detector is directly measured, and to convert it to time at the geocenter we must add a term $\hat{n} \cdot \vec{r} _\text{ET} / c$, which also equals $(\lvert \vec{r}_\text{ET} \rvert /c)\cos \beta$. 
+The bimodality in $\beta$, then, is propagated to geocentric time. This can be seen in @fig-einstein-telescope-delta-sky-time.
+
+![Sky position posterior colored by time at geocenter. From @santoliquidoFastAccurateParameter2025.](figures/einstein-telescope/5_skymap_252_geocent_ET-1.png){#fig-einstein-telescope-delta-sky-time}
+
+## 2L shape
+
+![Sky and distance posteriors for an injection in the 2L, misaligned case. From @santoliquidoComparingNextgenerationDetector2025.](figures/einstein-telescope/skymap_dL_hist_colorbar_manualspacing.png){#fig-einstein-telescope-2l-sky}
+
+## Comparison
+
+![Summary statistics for various configurations. From @santoliquidoComparingNextgenerationDetector2025.](figures/einstein-telescope/Big_Panel.pdf){#fig-einstein-telescope-design-comparison-statistics}
