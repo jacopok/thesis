@@ -180,3 +180,5 @@ data/gw170817_run/*
 **/libs/*
 *.js
 *.css
+
+thesis.tar
