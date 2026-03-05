@@ -33,3 +33,21 @@ $$
 
 and then, since we are evaluating this quantity at the maximum-likelihood realization of the noise $n = 0$, the term $(n|\partial_i \partial_j h)$ is equal to zero.
 
+### Analytic Fisher calculations
+
+#### Timing uncertainty
+
+We can obtain a Fisher estimate for the timing uncertainty of a gravitational wave observation by computing the Shur's complement of the Fisher matrix for time and phase [@groverComparisonGravitationalWave2014;@singerRapidBayesianPosition2016].
+
+The result is expressed in terms of the frequency moments of the signal:^[In some references [@fairhurstTriangulationGravitationalWave2009;@essickFrequencydependentResponsesThird2017] this expression is incorrectly reported as $\langle f^{k} \rangle=(f^{k}h|h)$ (or equivalently in each paper's notation). Without the normalization factor $\rho^{2}$, the two terms in the frequency bandwidth expression scale with $\rho^{2}$ and $\rho^{4}$ respectively, meaning that for high enough SNR the variance becomes negative.]
+$$
+\langle f^{k} \rangle = \frac{1}{\rho^{2}} (f^{k} h|h)\,.
+$$
+With these, we can define the frequency bandwidth
+$$
+\sigma_{f}^{2} = \langle f^{2} \rangle -\langle f \rangle ^{2}
+$$
+and from it the timing uncertainty
+$$
+\sigma_{t} = \frac{1}{2\pi\rho\sigma_{f}}\,.
+$$

@@ -13,7 +13,113 @@ format:
 
 ## Extrinsic parameters
 
-Right ascension, declination, distance, redshift, polarization, phase.
+This chapter will discuss the extrinsic parameterization of the signal from a compact binary coalescence (CBC). 
+
+### Sky position and polarization
+
+The strain from a gravitational wave moving along a fixed direction can be written as 
+$$
+h_{ij}(t) = h_+ (t) e_{ij}^{+} + h_\times (t) e_{ij}^{\times}
+$$
+as a function of the two orthogonal unit basis tensors 
+$$
+e_{ij}^{+} = u_{i}u_{j} - v_{i}v_{j}
+\qquad \text{and}
+\qquad
+e_{ij}^{\times} = u_{i}v_{j} + v_{i}u_{j}\,.
+$$
+
+Three angles in total are required to define these two vectors. 
+These are the sky position of the source, $m$, which is orthogonal to both $u$ and $v$, 
+and a _polarization angle_ $\psi$ which parameterizes rotations along the $m$ axis.
+
+The explicit expressions for these three vectors are as follows:
+$$
+\begin{aligned}
+m &= \begin{pmatrix}
+\sin \theta \cos \phi  \\
+\sin \theta \sin \phi \\
+\cos \theta
+\end{pmatrix} \\ 
+u &= \begin{pmatrix}
+-\sin \phi \\
+\cos \phi \\
+0
+\end{pmatrix} \cos \psi
+- \begin{pmatrix}
+\cos\theta \cos \phi \\
+\cos\theta \sin \phi \\
+-\sin\theta
+\end{pmatrix}\sin \psi \\
+v &= 
+\begin{pmatrix}
+-\sin \phi \\
+\cos \phi \\
+0
+\end{pmatrix} \sin \psi
++ \begin{pmatrix}
+\cos\theta \cos \phi \\
+\cos\theta \sin \phi \\
+-\sin\theta
+\end{pmatrix}\cos \psi \,.
+\end{aligned}
+$$
+
+The right ascension and declination angles, in @fig-ra-dec-diagram, are a standard parameterization of 
+
+![Diagram of the right ascension and declination coordinates, from @dupletsaValidatingPriorinformedFishermatrix2025.](figures/ra-dec.pdf){#fig-ra-dec-diagram}
+
+### Distance and redshift {#sec-distance-redshift}
+
+### Phase
+
+Mention analytic phase marginalization, 
+the way phase factors into HOM, 
+the fact that neural networks tend to have trouble inferring it. 
+
+## Detector motion
+
+In order to quantify the effect of detector motion on the signal, 
+we need to describe the relative motion of source and detector.
+We will focus on the case of extragalactic signals, as those encompass the totality of 
+
+It is useful to think of their relative motion as a composition of relative displacements as follows:
+$$ \text{source} \to 
+\text{source galaxy} \to 
+\text{Milky Way} \to 
+\text{Solar System } \to 
+\text{(geocenter)} \to 
+\text{detector}
+$$
+
+The geocenter is included here for completeness, as it is standard to adopt it as a reference frame center in the analysis of ground-based data, but the barycenter of the Solar System (SSB) is also used in other applications. 
+
+It is unlikely that the motion of the source itself is measurably accelerated compared to its environment or its galaxy, but even if it was, we would not have ephemeris available to account for it, and any such effects would need to be modelled together with other intrinsic source parameters.
+The motions of the Milky Way galaxy and of the Solar System within it all have very low accelerations: for the purposes of gravitational wave observation, the barycenter of the Solar System can be considered to be in uniform motion compared to the source, with an effective velocity vector
+$$
+\vec{v}_{\text{eff}} = 
+\vec{v} _{\text{source} \to \text{galaxy}} 
++ \vec{v} _{\text{galaxy} \to \text{MW}} 
++ \vec{v} _{\text{MW} \to \text{SSB}} 
++ \vec{v} _{\text{SSB} \to \text{geo}}\,.
+$$
+Using a velocity vector $\vec{v} _{\text{galaxy} \to \text{MW}}$ is improper in a general-relativistic sense, but for the purposes of data analysis a signal affected by cosmological redshift is indistinguishable from one affected by a Doppler shift.
+
+Let us compare the magnitude of these vectors:
+
+1. $\vec{v} _{\text{source} \to \text{galaxy}}$, the peculiar velocity of the source, is generally unknown and hard to model. As we shall discuss, gravitational observations alone offer little help in this regard.
+2. the magnitude of $\vec{v} _{\text{galaxy} \to \text{MW}}$ is related to the redshift as $1+z = \gamma (1+|\vec{v} _{\text{galaxy} \to \text{MW}}| / c)$, while its direction is radially outward. For the gravitational wave observations performed so far, this has ranged from $z=10^{-2}$ (@abbottGW170817ObservationGravitational2017), corresponding to $v \sim 10^{-2}c$, to $z \gtrsim 1$, corresponding to $v \gtrsim 0.6c$. 
+3. $\vec{v} _{\text{MW} \to \text{SSB}}$ is on the order of $2 \times 10^{5} \text{m/s}$, less than $10^{-3}c$.
+4. $\vec{v} _{\text{SSB} \to \text{geo}}$ is on the order of $3 \times 10^{4} \text{m/s}$, less than $10^{-4}c$.
+
+It is apparent that the cosmological contribution is completely dominant among these effects.
+So, we can find a reference point^[By "point" here we mean a point and its motion over time; in the language of General Relativity, a worldline.] within the Solar System, 
+whose motion can be considered to have constant velocity during the observation period to a sufficiently good approximation.
+Then, we can assume that this point receives a signal unaffected by Doppler modulations beyond a constant shift in frequency in the form $f \to f/(1+z)$.
+
+### Stationary phase approximation
+
+@chenFastFrequencydomainExpression2024
 
 ## Antenna patterns
 
@@ -25,7 +131,7 @@ Right ascension, declination, distance, redshift, polarization, phase.
 
 ```{python}
 #| label: fig-long-wavelength-essick
-#| fig-cap: "Frequency-dependent antenna response as a function of the angle between source and detector arm. Adapted from figure 1 in @essickFrequencydependentResponsesThird2017, implementing their equation 4."
+#| fig-cap: "Frequency-dependent antenna response as a function of the angle between source and detector arm. Adapted from figure 1 in @essickFrequencydependentResponsesThird2017, implementing their equation 4. The amplitude of the response is symmetric under sign flips for the observation direction, hence the curves from negative values are not visible in the upper panel."
 
 from thesis_scripts import *
 import astropy.units as u
@@ -92,11 +198,18 @@ for n_e in np.linspace(-1, 1, num=1000):
 axs[0].set_ylim(0, 1)
 
 axs[0].set_ylabel('Amplitude $D/D_0$')
-axs[1].set_ylabel('Phase $\\angle D$ [rad]')
+axs[1].set_ylabel('Phase $\\angle D$ [deg]')
 axs[1].set_xlabel('Normalized frequency $f / f_{\mathrm{isr}}$')
 
 axs[1].set_ylim(-600, -1)
-axs[1].set_yscale('symlog', linthresh=1)
+axs[1].set_yscale('symlog', linthresh=1, subs=[2, 5])
+
+from matplotlib.ticker import FuncFormatter
+number_formatter = FuncFormatter(
+    lambda x, pos: f'${x:.0f}$'
+)
+axs[1].yaxis.set_major_formatter(number_formatter)
+axs[1].yaxis.set_minor_formatter(number_formatter)
 
 forward = lambda f: (f * f_isr).value
 backward = lambda f: (f / f_isr).value
@@ -105,13 +218,13 @@ secax = axs[0].secondary_xaxis('top', functions=(forward, backward))
 secax.set_xlabel('Frequency for a 10-km ET [Hz]')
 
 for ax in axs:
-    ax.grid()
+    ax.grid(which='both')
 
 _ = plt.colorbar(mappable=ScalarMappable(norm=norm, cmap=cmap), ax=axs, label='$n \cdot e_i$')
 ```
 
-
-@essickFrequencydependentResponsesThird2017
+If this effect were unaccounted for in future gravitational wave detectors, the 
+[@essickFrequencydependentResponsesThird2017]
 
 ### Antenna patterns for the Lunar Gravitational Wave Antenna
 

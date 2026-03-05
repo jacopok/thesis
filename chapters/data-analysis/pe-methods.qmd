@@ -24,4 +24,3 @@ from thesis_scripts import *
 {{< include sections/_neural-posterior-estimation.qmd >}}
 
 {{< include sections/_fisher-matrix.qmd >}}
-

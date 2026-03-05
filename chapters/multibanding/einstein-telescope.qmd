@@ -50,7 +50,6 @@ The bimodality in $\beta$, then, is propagated to geocentric time. This can be s
 These degeneracies are expected to be present as long as no effect is able to make some modes preferred over others.
 
 - Long signals, for which the Earth's rotation provides a significant modulation. The precise threshold for this will depend on the many specifics, but we can expect it to be on the order of an hour in duration.  
-- High-frequency signals, for which the long wavelength approximation breaks down, see @sec-long-wavelength-approximation.
 - Signals observed by another detector, not co-located with the Einstein Telescope. 
 
 ## 2L shape

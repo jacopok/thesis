@@ -10,6 +10,25 @@ format:
 ---
 # Gravitational wave parameter estimation
 
+## Noise spectral densities
+
+The noise in gravitational wave detectors is commonly assumed to be:
+
+1. stationary, _i.e._ its statistical distribution does not change with time on the scale of a given observation;
+2. Gaussian in each of its Fourier components;
+3. with zero mean.
+
+Under these assumptions, it is fully characterized by its Power Spectral density $S_{n}(f)$ [@mooreGravitationalwaveSensitivityCurves2015]:
+$$
+ \langle n(f) n^{*}(f') \rangle = \frac{1}{2} \delta(f-f') S_{n}(f)\,.
+$$
+
+As defined, this is the _one-sided_ PSD,^[We could have alternatively defined it without the $1 / 2$ factor, simultaneously extending the integral from $-\infty$ to $\infty$. This conveys no additional information: since the signal and noise are real, $S_{n}(f) = S_{n}^{*}(-f)$.] which satisfies
+$$
+\langle \lvert n(t) \rvert ^{2} \rangle = \int_{0}^{\infty} S_{n}(f) \text{d}f\,.
+$$
+
+
 ## The Whittle likelihood
 
 The likelihood expresses the answer to the question:
