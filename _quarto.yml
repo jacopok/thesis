@@ -18,6 +18,7 @@ format:
     colorlinks: true
     linkcolor: blue
     link-citations: true
+    thanks: "Supervisor: Jan Harms"
 
 execute:
   cache: true

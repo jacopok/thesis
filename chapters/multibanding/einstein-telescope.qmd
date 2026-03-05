@@ -18,6 +18,16 @@ The Einstein Telescope [@abacScienceEinsteinTelescope2025] is a planned next-gen
 
 ## $\Delta$ shape
 
+The $\Delta$ design for the Einstein Telescope consists of three co-located interferometers, 
+the arms of each are two sides of an equilateral triangle with side length 10km.
+These three interferometers are labelled ET-1, ET-2 and ET-3.
+This detector design has the unique property of being able to "self-localize", 
+that is, determine the position of a gravitational wave source with high precision 
+without making use of travel-time measurements between detectors.
+
+For the many of the expected CBC sources expected, though, this 
+precise localization is sullied by an eight-fold multimodality.
+
 In terms of the local azimuth $\lambda$, altitude $\beta$, and the polarization angle $\psi$ of the incoming gravitational wave, the antenna pattern functions read [@regimbauMockDataChallenge2012]:^[In @santoliquidoFastAccurateParameter2025 the labels "altitude" and "azimuth" are flipped.]
 $$
 \begin{aligned}
@@ -33,11 +43,19 @@ These are symmetric under a reflection across the local horizon ($\beta\to-\beta
 These symmetries can be combined in any way, leading to an eight-fold degeneracy in the sky position of any source, with four equally-spaced modes above the local horizon, and four below it.
 
 This also leads to a bimodality in time at the geocenter, if that is used as a parameter. Arrival time at the detector is directly measured, and to convert it to time at the geocenter we must add a term $\hat{n} \cdot \vec{r} _\text{ET} / c$, which also equals $(\lvert \vec{r}_\text{ET} \rvert /c)\cos \beta$. 
-The bimodality in $\beta$, then, is propagated to geocentric time. This can be seen in @fig-einstein-telescope-delta-sky-time.
+The bimodality in $\beta$, then, is propagated to geocentric time. This can be seen in @fig-einstein-telescope-delta-sky-time, the posterior distribution on the sky position in local altitude/azimuth angular coordinates.
 
 ![Sky position posterior colored by time at geocenter. From @santoliquidoFastAccurateParameter2025.](figures/einstein-telescope/5_skymap_252_geocent_ET-1.png){#fig-einstein-telescope-delta-sky-time}
 
+These degeneracies are expected to be present as long as no effect is able to make some modes preferred over others.
+
+- Long signals, for which the Earth's rotation provides a significant modulation. The precise threshold for this will depend on the many specifics, but we can expect it to be on the order of an hour in duration.  
+- High-frequency signals, for which the long wavelength approximation breaks down, see @sec-long-wavelength-approximation.
+- Signals observed by another detector, not co-located with the Einstein Telescope. 
+
 ## 2L shape
+
+
 
 ![Sky and distance posteriors for an injection in the 2L, misaligned case. From @santoliquidoComparingNextgenerationDetector2025.](figures/einstein-telescope/skymap_dL_hist_colorbar_manualspacing.png){#fig-einstein-telescope-2l-sky}
 

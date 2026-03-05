@@ -9,4 +9,109 @@ format:
         bibliography: ../../rehear.bib
 ---
 
-# Extrinsic parameters
+# Extrinsic parameters and signal projection
+
+## Extrinsic parameters
+
+Right ascension, declination, distance, redshift, polarization, phase.
+
+## Antenna patterns
+
+### Interferometer antenna patterns
+
+
+
+#### The long-wavelength approximation {#sec-long-wavelength-approximation}
+
+```{python}
+#| label: fig-long-wavelength-essick
+#| fig-cap: "Frequency-dependent antenna response as a function of the angle between source and detector arm. Adapted from figure 1 in @essickFrequencydependentResponsesThird2017, implementing their equation 4."
+
+from thesis_scripts import *
+import astropy.units as u
+import astropy.constants as ac
+import numpy as np
+import matplotlib.pyplot as plt
+
+L = 10*u.km
+f = np.geomspace(200, 25000, num=10000) * u.Hz
+
+f_isr = (ac.c / (2 * L)).to(u.Hz)
+
+f_over_isr = (f / f_isr).to(u.dimensionless_unscaled)
+
+def response(n_e):
+    with u.set_enabled_equivalencies(u.dimensionless_angles()):    
+        D_sinc_version = (
+            np.exp(- np.pi * 1j * f_over_isr ) / 2 / (1-n_e**2)
+            * (
+                np.sinc(np.pi*f_over_isr ) 
+                - n_e**2 * np.sinc(np.pi*f_over_isr*n_e)
+                - 1j * n_e / (np.pi*f_over_isr) 
+                * (
+                    np.cos(np.pi * f_over_isr)
+                    - np.cos(np.pi * f_over_isr * n_e)
+                )
+            )
+        )
+        D = (
+            1/(np.pi*4j*f_over_isr)
+            * (
+                (1-np.exp(
+                    -np.pi*1j*f_over_isr*(1-n_e)
+                    )) / (1-n_e)
+                - np.exp(-2j*np.pi*f_over_isr) * (
+                    1-np.exp(
+                        1j*np.pi*f_over_isr*(1+n_e))
+                ) / (1+n_e)
+            )
+        )
+    return D
+
+fig, axs = plt.subplots(2, 1, sharex=True)
+
+from matplotlib.colors import Normalize
+from matplotlib.cm import ScalarMappable
+norm = Normalize(-1, 1)
+cmap = plt.get_cmap('coolwarm')
+
+for n_e in np.linspace(-1, 1, num=1000):
+
+    D = response(n_e)
+
+    axs[0].semilogx(f_over_isr, abs(D)*2, c=cmap(norm(n_e)))
+    axs[1].semilogx(
+        f_over_isr, 
+        np.unwrap(
+            np.rad2deg(
+                np.angle(D)
+            )
+        ),
+    c=cmap(norm(n_e)))
+
+axs[0].set_ylim(0, 1)
+
+axs[0].set_ylabel('Amplitude $D/D_0$')
+axs[1].set_ylabel('Phase $\\angle D$ [rad]')
+axs[1].set_xlabel('Normalized frequency $f / f_{\mathrm{isr}}$')
+
+axs[1].set_ylim(-600, -1)
+axs[1].set_yscale('symlog', linthresh=1)
+
+forward = lambda f: (f * f_isr).value
+backward = lambda f: (f / f_isr).value
+
+secax = axs[0].secondary_xaxis('top', functions=(forward, backward))
+secax.set_xlabel('Frequency for a 10-km ET [Hz]')
+
+for ax in axs:
+    ax.grid()
+
+_ = plt.colorbar(mappable=ScalarMappable(norm=norm, cmap=cmap), ax=axs, label='$n \cdot e_i$')
+```
+
+
+@essickFrequencydependentResponsesThird2017
+
+### Antenna patterns for the Lunar Gravitational Wave Antenna
+

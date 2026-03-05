@@ -38,6 +38,8 @@ Representing a high-dimensional posterior distribution through samples is conven
 $$ \langle f \rangle_{\theta \sim p(\theta | d, M)} \approx \frac{1}{N} \sum _{i=1}^N f(\theta _i) \,.
 $$
 
+TODO add info based on Thrane and Talbot 2019
+
 ### Conditioning versus marginalizing
 
 TODO rewrite to fit the context, add definitions of marginals.
