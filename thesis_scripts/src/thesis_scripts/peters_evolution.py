@@ -108,9 +108,12 @@ def get_gw250114_samples():
     
     return gw250114_samples
 
-def get_gw250114_eccentricity_extrapolation():
+def rejection_sampling_indices(weights, seed=1):
+    rng=np.random.default_rng(seed=seed)
     
-    fname = data_path / 'cache' / 'gw250114_eccentricity_extrapolation.npy'
+    return rng.uniform(0, max(weights), size=len(weights)) < weights
+
+def get_gw250114_eccentricity_extrapolation(fname):
 
     if fname.exists():
         freqs, lo, med, hi = np.load(fname)
@@ -121,7 +124,6 @@ def get_gw250114_eccentricity_extrapolation():
         freqs = np.geomspace(2e-2, 13.33, num=n_freq)
         eccentricities = np.empty((len(gw250114_samples), n_freq))
         for index, row in tqdm(gw250114_samples.iterrows()):
-
             time, f, e = evolve_eccentricity_backward(row['m1'], row['m2'], 13.33, row['eccentricity'])
             eccentricities[index] = np.interp(freqs, f[::-1], e[::-1])
 
@@ -131,3 +133,50 @@ def get_gw250114_eccentricity_extrapolation():
         np.save(fname.as_posix(), save_data)
 
     return freqs, lo, med, hi
+
+def get_gw250114_eccentricity_extrapolation_loguniform(fname):
+
+    if fname.exists():
+        freqs, lo, med, hi = np.load(fname)
+    else:
+        gw250114_samples = get_gw250114_samples()
+
+        n_freq = 250
+        freqs = np.geomspace(2e-2, 13.33, num=n_freq)
+        weights = 1/gw250114_samples['eccentricity']
+        
+        choose = rejection_sampling_indices(weights)
+
+        eccentricities = np.empty((sum(choose), n_freq))
+
+        idx = 0
+        for index, row in tqdm(gw250114_samples.iterrows()):
+            if choose[index]:
+                time, f, e = evolve_eccentricity_backward(row['m1'], row['m2'], 13.33, row['eccentricity'])
+                eccentricities[idx] = np.interp(freqs, f[::-1], e[::-1])
+                idx+=1
+
+        lo, med, hi = np.quantile(eccentricities, [.05, .5, .95], axis=0)
+        
+        save_data = np.vstack((freqs, lo, med, hi))
+        np.save(fname.as_posix(), save_data)
+
+    return freqs, lo, med, hi
+
+if __name__ == '__main__':
+    
+    fname_cache = data_path / 'cache' / 'gw250114_eccentricity_extrapolation_loguniform.npy'
+    
+    freqs, lo, med, hi = get_gw250114_eccentricity_extrapolation(fname_cache)
+
+    plt.fill_between(freqs, lo, hi, color='blue', alpha=.3, label='90\% credible interval')
+    plt.fill_between(freqs, 0, lo, color='blue', alpha=.2, label='Compatible with the data')
+    plt.plot(freqs, med, c='blue', label='Median')
+    plt.xscale('log')
+
+    plt.xlim(2e-2, 13.33)
+    plt.ylim(0, 1)
+    plt.xlabel('Frequency [Hz]')
+    plt.ylabel('Eccentricity')
+    plt.legend()
+    plt.show()

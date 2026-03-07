@@ -53,23 +53,30 @@ Also see @romero-shawBayesianInferenceCompact2020
 
 ## Eccentricity
 
-Generic Keplerian orbits are eccentric, describing an ellipse with the center of mass as a focus. 
+Keplerian orbits are eccentric, in the shape of ellipses with the center of mass as a focus.
+They provide a useful starting point toward an understanding general-relativistic eccentric binaries, despite the fact that their characteristics do not fully generalize: 
+when gravity is strong eccentricity is not a constant of motion, nor is it covariantly defined; 
+orbits are also not exactly elliptical, due to precession and gravitational wave emission.
 
 The radial coordinate $r$ of a generic point along the orbit can be parameterized in terms of its semilatus rectum $p$ and relativistic anomaly $\xi$:
 $$
 r = \frac{p}{1+e \cos \xi}
 $$
 
+@favataGravitationalwaveMemoryEccentric2011
 
 @boninoInferringEccentricityEvolution2022
 
 ### At lower frequencies
 
-Most of the gravitational waves detected so far have had little to no eccentricity in the 
+Most of the gravitational waves detected so far, in the audio band, have had no measurable eccentricity.
+GW250114 was one such example: parameter estimation performed with an eccentric waveform [@boninoInferringEccentricityEvolution2022] model prefers eccentricity values very close to zero, as measured at a reference frequency of 13.33Hz.^[This specific value was chosen to correspond to the start of the generated waveform in the time domain. The frequency band used for the analysis started from 20Hz, but the waveform needed to be started earlier in order to account for the contributions at 20Hz of the $\ell=3$ modes, which appear at a frequency $3/2$ times higher.]
+
+@fig-gw250114-eccentricity-posterior shows the posterior: the eccentricity is bounded to be lower than roughly 0.02.
 
 ```{python}
 #| label: fig-gw250114-eccentricity-posterior
-#| fig-cap: "Eccentricity posterior distribution for GW250114."
+#| fig-cap: "Eccentricity posterior distribution for GW250114. A vertical line shows the location of the 90% upper limit on eccentricity."
 
 from thesis_scripts import peters_evolution
 import matplotlib.pyplot as plt
@@ -80,44 +87,61 @@ samples = peters_evolution.get_gw250114_samples()
 
 ecc = samples['eccentricity']
 
-# KDE the data together with a mirror with negative values
-# in order to correctly model the boundary
-kde = gaussian_kde(
-    np.concatenate((ecc, -ecc)),
-    bw_method=.25
-)
-
-e = np.linspace(0, 0.05)
-plt.plot(e, 2*kde(e), c='blue')
-plt.hist(ecc, density=True, histtype='step', bins=20, color='blue')
-plt.xlabel('Eccentricity $e$')
-plt.xlabel('Posterior distribution $p(e)$')
+plt.hist(ecc, density=True, histtype='step', bins=20, color='black')
+plt.hist(ecc, density=True, bins=20, color='lightgrey')
+plt.axvline(np.quantile(ecc, 0.9), ymin=0, ymax=0.5, color='black')
+plt.xlabel('Eccentricity $e$ measured at 13.33Hz')
+plt.ylabel('Posterior distribution $p(e)$')
+plt.xlim(0, 0.05)
 plt.show()
 ```
 
-
+Despite this being the best constraint on the eccentricity of a black hole binary merger to date, based on this observation alone we cannot exclude the possibility that this binary had significant eccentricity at lower frequencies.
+@fig-gw250114-eccentricity-evolution shows the posterior distribution for GW250114 evolved backward in time. 
+This is done with a simple Post-Newtonian approach, namely Peters' equations [@petersGravitationalRadiationPoint1963;@maggioreGravitationalWavesVolume2007], as it only serves to illustrate the point.
 
 ```{python}
 #| label: fig-gw250114-eccentricity-evolution
 #| fig-cap: "Backward-extrapolated eccentricity evolution for GW250114."
 
-from thesis_scripts import peters_evolution
+from thesis_scripts import peters_evolution, data_path
 import matplotlib.pyplot as plt
 
-freqs, lo, med, hi = peters_evolution.get_gw250114_eccentricity_extrapolation()
+fig, axs = plt.subplots(2, 1, sharex=True)
 
-plt.fill_between(freqs, lo, hi, color='blue', alpha=.3, label='90\% credible interval')
-plt.fill_between(freqs, 0, lo, color='blue', alpha=.2, label='Compatible with the data')
-plt.plot(freqs, med, c='blue', label='Median')
-plt.xscale('log')
 
-plt.xlim(2e-2, 20)
-plt.ylim(0, 1)
-plt.xlabel('Frequency [Hz]')
-plt.ylabel('Eccentricity')
-plt.legend()
+fname_cache = data_path / 'cache' / 'gw250114_eccentricity_extrapolation.npy'
+freqs, lo, med, hi = peters_evolution.get_gw250114_eccentricity_extrapolation(fname_cache)
+
+axs[0].fill_between(freqs, lo, hi, color='blue', alpha=.3, label='90\% credible interval')
+axs[0].plot(freqs, med, c='blue', label='Median')
+axs[0].set_title('Uniform prior on $e$')
+
+fname_cache = data_path / 'cache' / 'gw250114_eccentricity_extrapolation_loguniform.npy'
+freqs, lo, med, hi = peters_evolution.get_gw250114_eccentricity_extrapolation_loguniform(fname_cache)
+
+axs[1].fill_between(freqs, lo, hi, color='blue', alpha=.3, label='90\% credible interval')
+axs[1].plot(freqs, med, c='blue', label='Median')
+
+for ax in axs:
+    ax.set_xscale('log')
+    ax.set_xlim(2e-2, 13.33)
+    ax.set_ylim(0, 1)
+    ax.set_ylabel('Eccentricity')
+    ax.legend()
+axs[1].set_title('Log-uniform prior on $e$')
+axs[1].set_xlabel('Frequency [Hz]')
+
 plt.show()
 ```
+
+While the limits and analysis quoted in the paper [@abacGW250114TestingHawkings2025] used a uniform prior in $e$, 
+a conservative choice, we also show results obtained with a log-uniform prior $p(e) \propto 1/e$.
+The qualitative scenario is similar in both cases: eccentricities on the order of $e \sim 0.5$ are plausible in the deci-hertz band.
+However, the prior significantly affects whether these lie on the edge of the distribution or along its bulk.
+
+This is not surprising: the data is not very informative on the $e_{13.33\text{Hz}} \sim 0$ tail of the distribution, so we get back out of the analysis the assumptions we started with.
+This result can lead us to reflect on the meaning of the prior on eccentricity: a flat distribution in $e_{13.33\text{Hz}}$ is not a neutral statement, but instead one which heavily favors eccentric binaries at lower frequencies. 
 
 ### Intrinsic parameters
 
