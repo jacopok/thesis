@@ -2578,6 +2578,21 @@ wheels = [
 ]
 
 [[package]]
+name = "qnm"
+version = "0.4.4"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numba" },
+    { name = "numpy" },
+    { name = "scipy" },
+    { name = "tqdm" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/8e/d2/27c9c4d941867aa9e7b5439d5e2195da2d3fe3f6022fd80d9eef2327648c/qnm-0.4.4.tar.gz", hash = "sha256:53332a654858633cc67d09731b8c2817b72ed48f6dabede5f583bf3a7652aee6", size = 95478, upload-time = "2025-03-24T17:07:58.05Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/6d/a3/e2d6b17b02b5c52ce6c68fce7f2f190e796c2c1c5419e675f6a947fdb78c/qnm-0.4.4-py3-none-any.whl", hash = "sha256:63711c37ff4847c8cb59e6266da5baf81f88cc6ab728f40fc3fe39a3025f6252", size = 95563, upload-time = "2025-03-24T17:07:55.439Z" },
+]
+
+[[package]]
 name = "quarto-cli"
 version = "1.5.57"
 source = { registry = "https://pypi.org/simple" }
@@ -2977,6 +2992,7 @@ dependencies = [
     { name = "pandas" },
     { name = "pyqt6" },
     { name = "pytest" },
+    { name = "qnm" },
     { name = "quarto-cli" },
     { name = "scipy" },
     { name = "snakeviz" },
@@ -3014,6 +3030,7 @@ requires-dist = [
     { name = "pandas", specifier = ">=1.4.1" },
     { name = "pyqt6", specifier = ">=6.10.2" },
     { name = "pytest", specifier = ">=8.3.5" },
+    { name = "qnm", specifier = ">=0.4.4" },
     { name = "quarto-cli", specifier = ">=1.5.57" },
     { name = "scipy", specifier = ">=1.13.1" },
     { name = "snakeviz", specifier = ">=2.2.2" },

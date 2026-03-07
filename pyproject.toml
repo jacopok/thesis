@@ -31,6 +31,7 @@ dependencies = [
     "pandas>=1.4.1",
     "pyqt6>=6.10.2",
     "pytest>=8.3.5",
+    "qnm>=0.4.4",
     "quarto-cli>=1.5.57",
     "scipy>=1.13.1",
     "snakeviz>=2.2.2",

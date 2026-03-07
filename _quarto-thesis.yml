@@ -16,8 +16,7 @@ book:
     - part: "Anatomy of a gravitational wave signal"
       chapters:
       - chapters/anatomy/gw250114.qmd
-      - chapters/anatomy/inspiral.qmd
-      - chapters/anatomy/ringdown.qmd
+      - chapters/anatomy/intrinsic.qmd
       - chapters/anatomy/extrinsic.qmd
     - part: "Future gravitational wave detectors"
       chapters:

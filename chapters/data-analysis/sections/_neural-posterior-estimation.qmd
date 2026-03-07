@@ -1,5 +1,4 @@
-## Neural posterior estimation
-
+## Simulation-based inference {#sec-simulation-based-inference} 
 Simulation-based inference (SBI) encompasses a broad range of approaches to inference which lack an explicit, analytic likelihood.
 While they still strive to produce results according to Bayes' theorem [@eq-bayes-theorem], they learn the likelihood implicitly, through the process of training a machine learning model.
 All SBI approaches require the presence of a _simulator_, i.e. a way to simulate data $d$ conditional on a set of parameters $\theta$, distributed according to the likelihood: $d \sim p(d|\theta)$.
@@ -63,9 +62,9 @@ The expectation values can be numerically approximated by repeatedly sampling th
 
 
 In practice, directly employing the loss in @eq-simple-npe-loss is impractical. 
-Some parameters, such as the sky position of the signal, significantly alter the observed waveform in each detector by shifting it in time. 
+Some parameters, such as the sky position of the signal, significantly alter the observed waveform in each detector by shifting it in time; 
 This dependence, however, is known and can be amortized during training @daxGroupEquivariantNeural2023, leading to significantly improved performance. 
-Additionally, the detector's power spectral density $S_{n}$ is varied during training, so that conditioning can be performed at inference time (__Cite Wildberger__).
+Additionally, the detector's power spectral density $S_{n}$ is varied during training, so that conditioning can be performed at inference time [@wildbergerAdaptingNoiseDistribution2023].
 With this approach, the actual loss function for `DINGO` [@daxRealtimeGravitationalwaveScience2021, equation 3] is
 $$
  \mathcal{L}_{\text{GNPE}} = 
@@ -80,7 +79,7 @@ Here, $t_{I}(\theta)$ is the arrival time of the gravitational wave signal at a 
 The subscript notation $d_{-t_{I}(\theta)-\delta t_{I}}$ denotes time-shifted data. 
 This procedure makes it so that, in all the training data available to the model, waveforms are all approximately time-aligned. 
 
-Recently, a new transformer-based architecture for `DINGO` has been proposed [@koflerFlexibleGravitationalWaveParameter2025]. 
+Recently, a new transformer-based architecture for `DINGO` has been proposed [@koflerFlexibleGravitationalWaveParameter2025] as an alternative to . 
 By tokenizing the data across detectors and frequency grid sections, a single network can be used for different detector configurations (one, two or three detectors), as well as for different frequency intervals.
 
 

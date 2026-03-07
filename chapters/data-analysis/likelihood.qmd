@@ -10,23 +10,16 @@ format:
 ---
 # Gravitational wave parameter estimation
 
-## Noise spectral densities
+This chapter will outline the basic requirements of parameter estimation for gravitational waves. 
 
-The noise in gravitational wave detectors is commonly assumed to be:
-
-1. stationary, _i.e._ its statistical distribution does not change with time on the scale of a given observation;
-2. Gaussian in each of its Fourier components;
-3. with zero mean.
-
-Under these assumptions, it is fully characterized by its Power Spectral density $S_{n}(f)$ [@mooreGravitationalwaveSensitivityCurves2015]:
+Fourier transform:
 $$
- \langle n(f) n^{*}(f') \rangle = \frac{1}{2} \delta(f-f') S_{n}(f)\,.
+\tilde{g}(f) = \int_{-\infty}^{\infty} g(t) \exp(2\pi i ft)\text{d}t
 $$
 
-As defined, this is the _one-sided_ PSD,^[We could have alternatively defined it without the $1 / 2$ factor, simultaneously extending the integral from $-\infty$ to $\infty$. This conveys no additional information: since the signal and noise are real, $S_{n}(f) = S_{n}^{*}(-f)$.] which satisfies
-$$
-\langle \lvert n(t) \rvert ^{2} \rangle = \int_{0}^{\infty} S_{n}(f) \text{d}f\,.
-$$
+- define Fourier transform
+- TD time shifts = FD linear terms
+- windowing, periodicity assumption
 
 
 ## The Whittle likelihood
@@ -42,13 +35,23 @@ If we are writing the data as $d = n + h(\theta)$, this is equivalent to asking:
 
 In order to answer this, we need a model for the noise. 
 In gravitational wave data analysis, it is commonly assumed that the noise
-can be described as a stationary time series, $n(t)$, such that the autocovariance
+can be described as a stationary time series, $n(t)$, whose autocorrelation
 $\mathbb{E}[n(t)n(t+\Delta t)] \equiv \gamma(\Delta t)$ can be expressed as a function of $\Delta t$ only [@edwardsBayesianSemiparametricPower2015, section II.C].
 A further assumption made is that the noise has zero mean ($\mathbb{E}[n(t)] = 0$ for any time).
 
-The Fourier transform of the autocovariance $\gamma(\Delta t)$ is called the Power Spectral Density, $S_{n}(f)$. 
+The Fourier transform of the autocorrelation function $\gamma(\Delta t)$ is called the Power Spectral Density, $S_{n}(f)$,
+which can alternatively be expressed as [@mooreGravitationalwaveSensitivityCurves2015]:
+$$
+ \langle n(f) n^{*}(f') \rangle = \frac{1}{2} \delta(f-f') S_{n}(f)\,.
+$$
 
-With these ingredients, we can write the Whittle approximation to the Gaussian likelihood [@whittleCurvePeriodogramSmoothing1957], [@rouletInferringBinaryProperties2024]:
+As defined, this is the _one-sided_ PSD, which satisfies
+$$
+\langle \lvert n(t) \rvert ^{2} \rangle = \int_{0}^{\infty} S_{n}(f) \text{d}f\,.
+$$
+We could have alternatively defined it without the $1 / 2$ factor, simultaneously extending the integral from $-\infty$ to $\infty$. The negative-frequency contribution to the integral is equal to the positive-frequency one, since the signal and noise are real.
+
+The PSD can be used for the characterization of the second moment of any stationary noise; if we further assume that the noise is Gaussian, we can obtain the Whittle approximation to the Gaussian likelihood [@whittleCurvePeriodogramSmoothing1957;@rouletInferringBinaryProperties2024]:
 
 $$
 \begin{aligned}
@@ -69,12 +72,8 @@ More specifically, this likelihood answers the question:
 
 > How likely is it that noise distributed according to the PSD $S_{n}(f)$ will have the specific realization $n$?
 
-We can then consider two scenarios, depending on whether we fix the PSD or not.
-
-### Fixed Power Spectral Density
-
-In the data analysis for gravitational wave signals from ground-based interferometers, it is common practice to fix the PSD to an estimate obtained considering data near the event.
-This is acceptable, since variations in the noise distribution happen on much slower time scales than duration of the signal itself [need citations for this!].
+It is possible to infer the PSD together with the signal parameters [@edwardsBayesianSemiparametricPower2015], but in the data analysis for gravitational wave signals from ground-based interferometers, it is common practice to fix the PSD to an estimate obtained considering data near the event.
+This is acceptable, since variations in the noise distribution typically happen on much slower time scales than duration of the signal itself.
 
 In such a case, we can rewrite the likelihood in terms of the signal $h(\theta) = d - n$ as follows:
 
@@ -85,7 +84,7 @@ $$
 \end{aligned}
 $$
 
-We can work around the messy normalization term [@rouletInferringBinaryProperties2024]. Our likelihood is written assuming that a signal is present in the data, but suppose that was not the case: then, we would have $d = n$ and therefore
+We can work around the messy normalization term [@rouletInferringBinaryProperties2024]. Our likelihood is written assuming that a signal is present in the data, but supposing that was not the case, we would have $d = n$ and therefore
 
 $$
 \log \mathcal{L}(d | \text{noise only}) = \log \mathcal{N_{2}} - \frac{1}{2} (d|d)\,.
@@ -93,50 +92,37 @@ $$
 
 Since we are assuming the PSD is fixed, this model has zero parameters, and this likelihood can also be interpreted as an evidence: $\log \mathcal{L}(d | \text{noise only}) = Z _\text{noise}$.
 
-Therefore, we can perform parameter estimation using as a "log-likelihood" the likelihood ratio
+Therefore, we can perform parameter estimation using the likelihood ratio
 
 $$
 \log \mathcal{L}_{r} (d|\theta) = \log \frac{\mathcal{L}(d|h(\theta))}{Z _\text{noise}} = \mathrm{Re}(h(\theta)| d) - \frac{1}{2} (h(\theta)| h(\theta))\,,
 $$ {#eq-likelihood-ratio}
 
-and the "evidence" we will obtain, i.e. the integral of $\mathcal{L}_{r}(d|\theta) \pi(\theta) \text{d}\theta$ over the parameter space, will actually be a Bayes Factor, $Z_\text{signal and model} / Z_\text{noise}$.
+and the evidence we will obtain, the integral of $\mathcal{L}_{r}(d|\theta) \pi(\theta) \text{d}\theta$ over the parameter space, will actually be a Bayes Factor, $Z_\text{signal and model} / Z_\text{noise}$.
 
-### Varied Power Spectral Density
+### Periodic data: windowing
 
-TBD
 
-## Matched filtering
+### Non-periodic data: time domain parameter estimation {#sec-time-domain-pe}
 
-When we measure gravitational wave data $d(t)$, we will have a contribution from noise $n(t)$ and signal
-$h_\theta(t)$, where $\theta$ are the parameters: $d = n + h_\theta$.
-We can estimate the parameters $\theta$ by exploring the posterior distribution 
+The previous analysis has an assumption of periodicity.  
 
-$$ p(\theta | d) = \mathcal{L}(d | \theta ) \pi (\theta ) = \mathcal{N} \exp \left( (d | h_\theta) - \frac{1}{2} (h_\theta | h_\theta) \right) \pi (\theta )\,,
+$$
+\mathcal{L}(d|\theta) = - \frac{1}{2}\sum_{i,j=0}^{N} (d_{i}-h_{i}) C_{ij}^{-1} (d_{j}-h_{j}) + \text{const.}
 $$
 
+### Strain plotting and whitening {#sec-strain-whitening}
 
-while $\pi (\theta )$ is our prior distribution on the parameters.
-This kind of analysis is assuming that the noise is Gaussian, and described by the power spectral density (PSD) $S_n(f)$.
+TODO: describe how whitening works, 
+and why it is generally preferred 
+as opposed to plotting strain. 
 
-This posterior, in full generality, is an arbitrary function
-of more than a dozen parameters, making it somewhat difficult to calculate and interpret.
-Typically, the algorithms used to compute it for real signals explore the parameter space in some stochastic manner, and yield a set of some thousands of samples $\lbrace\theta\rbrace_i$. 
 
-This makes it simple to compute summary statistics like the average of a parameter 
-$\langle \theta_i \rangle$, the variance $\sigma_i^2 = \langle (\theta_i- \langle \theta_i\rangle)^2 \rangle$, as 
-well as covariances $\mathcal{C}_{ij} = \langle (\theta_i- \langle \theta_i\rangle) (\theta_j- \langle \theta_j\rangle) \rangle = \langle \Delta \theta^i \Delta \theta^j \rangle$.
-
-At this stage, we are not making any approximation, and the 
-covariance matrix is just a summary tool. 
-
-These quantities give us an estimate of how well any given parameter is constrained, although
-they do not tell the whole story especially in the regime where the error $\sigma$ starts to be comparable 
-with the signal.
-For those cases, in general, if the posterior is available the best idea is to plot it; 
-this is typically done as a corner plot, which shows the correlations among different 
-parameters.
 
 ## Signal-to-noise ratio
+
+TODO: distinguish MF SNR vs opt SNR
+TODO: discuss data visualization, why use whitened strain vs strain and so forth
 
 The signal-to-noise ratio (SNR) statistic $\rho$ for the data $d$, assuming a template $h$, is 
 $\rho = (d | h) / \sqrt{(h|h)}$.

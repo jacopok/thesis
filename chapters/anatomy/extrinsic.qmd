@@ -65,13 +65,46 @@ v &=
 \end{aligned}
 $$
 
-The right ascension and declination angles, in @fig-ra-dec-diagram, are a standard parameterization of 
+The right ascension and declination angles, in @fig-ra-dec-diagram, are a standard parameterization for positions in the sky. 
 
 ![Diagram of the right ascension and declination coordinates, from @dupletsaValidatingPriorinformedFishermatrix2025.](figures/ra-dec.pdf){#fig-ra-dec-diagram}
 
 ### Distance and redshift {#sec-distance-redshift}
 
+In flat spacetime, gravitational wave amplitudes decay proportionally to $1/d$, where $d$ is the distance to the source. 
+
+Like electromagnetic signals, however, binaries at cosmological distances are expected to be affected by cosmological redshift. This affects their propagation, modifying their frequencies. 
+We generally work under the assumption that, on large enough scales, the Universe is described by a Friedmann-Lemaître-Robertson-Walker FLRW cosmological model, whose metric in spherical coordinates is
+$$
+\text{d}s^{2} = -c^{2}\text{d}t^{2} + a^{2}(t) 
+\left[ \frac{\text{d}r^{2}}{1-kr^{2}} + r^{2}\text{d}\theta^{2} + r^{2} \sin ^{2}\theta \text{d}\phi^{2} \right] \,.
+$$
+The curvature parameter $k$ can take on the values $k=-1$ (open Universe), $k=0$ (flat universe), $k=+1$ (closed Universe). 
+The parameter $a(t)$ is the _scale factor_. 
+
+The following prescriptions are required to consider cosmological effects in the analysis of a signal
+[@maggioreGravitationalWavesVolume2007, section 4.1.4].
+
+The Euclidean notion of distance $d$ should be replaced by _luminosity distance_ $d_{L}$. This is defined by the requirement that radiation flux from any source, as measured in the observer's frame, should decay proportionally to $1 / d_{L}^{2}$; in FLRW cosmology it is 
+$$
+d_{L}(z) = c(1+z) \int_{0}^{z} \frac{\text{d}z'}{H(z')}\,,
+$$
+where $H(z) = \dot{a} / a$ is the Hubble parameter. 
+
+Furthermore, all frequencies are shifted down by a factor $1+z$. 
+For compact binary coalescences, this can be simply accounted for by changing the reference scale of the system, which is encoded in the masses: the signals we measure are then parameterized in terms of _detector-frame_ masses $M_d$, which are related to those in the _source frame_, $M_{s}$, by 
+$$
+M_{d} = (1+z) M_{s}\,.
+$$
+For signals emitted by black holes, this is the only measurable combination through gravitational waves: 
+changing $z$ and $M_{s}$ in a way that leaves $M_{d}$ unchanged gives rise to exactly identical signals. 
+
 ### Phase
+
+$$
+h_+ (f) - i h_\times (f) = \frac{1}{d_L} \sum _{l=2}^{\infty } \sum
+_{m=-\ell}^{\ell} h_{\ell m} (f; \theta_{\text{int}})\, {}^{(-2)}Y_{\ell m} (\iota, \phi_0)
+$$
 
 Mention analytic phase marginalization, 
 the way phase factors into HOM, 
@@ -108,18 +141,66 @@ Using a velocity vector $\vec{v} _{\text{galaxy} \to \text{MW}}$ is improper in 
 Let us compare the magnitude of these vectors:
 
 1. $\vec{v} _{\text{source} \to \text{galaxy}}$, the peculiar velocity of the source, is generally unknown and hard to model. As we shall discuss, gravitational observations alone offer little help in this regard.
-2. the magnitude of $\vec{v} _{\text{galaxy} \to \text{MW}}$ is related to the redshift as $1+z = \gamma (1+|\vec{v} _{\text{galaxy} \to \text{MW}}| / c)$, while its direction is radially outward. For the gravitational wave observations performed so far, this has ranged from $z=10^{-2}$ (@abbottGW170817ObservationGravitational2017), corresponding to $v \sim 10^{-2}c$, to $z \gtrsim 1$, corresponding to $v \gtrsim 0.6c$. 
+2. the magnitude of $\vec{v} _{\text{galaxy} \to \text{MW}}$ is related to the redshift as $1+z = \gamma (1+|\vec{v} _{\text{galaxy} \to \text{MW}}| / c)$, while its direction is radially outward. For the gravitational wave observations performed so far, this has ranged from $z=10^{-2}$ [@abbottGW170817ObservationGravitational2017], corresponding to $v \sim 10^{-2}c$, to $z \gtrsim 1$ [@theligoscientificcollaborationGWTC40UpdatingGravitationalWave2025], corresponding to $v \gtrsim 0.6c$. 
 3. $\vec{v} _{\text{MW} \to \text{SSB}}$ is on the order of $2 \times 10^{5} \text{m/s}$, less than $10^{-3}c$.
 4. $\vec{v} _{\text{SSB} \to \text{geo}}$ is on the order of $3 \times 10^{4} \text{m/s}$, less than $10^{-4}c$.
 
-It is apparent that the cosmological contribution is completely dominant among these effects.
+For typical CBC sources, then, the cosmological contribution is completely dominant among these effects.
 So, we can find a reference point^[By "point" here we mean a point and its motion over time; in the language of General Relativity, a worldline.] within the Solar System, 
 whose motion can be considered to have constant velocity during the observation period to a sufficiently good approximation.
 Then, we can assume that this point receives a signal unaffected by Doppler modulations beyond a constant shift in frequency in the form $f \to f/(1+z)$.
 
 ### Stationary phase approximation
 
-@chenFastFrequencydomainExpression2024
+The stationary phase approximation [@chassande-mottinStationaryPhaseApproximation1998] (SPA) is a technique to quickly compute an approximate Fourier transform of slowly-modulated oscillatory functions with monotonically increasing frequency. 
+Given a time domain function $g(t)=A(t) \exp \left( -i \Phi(t) \right)$, its Fourier transform is approximately
+$$
+\tilde{g}(f) \approx A(t^{*}(f)) \exp(-i \Phi(t^{*}(f)) + 2 \pi f t^{*}(f)) \sqrt{ \frac{-2 \pi i}{\ddot{\Phi}(t^{*}(f))} }\,,
+$$
+where the stationary time $t^{*}(f)$ is defined by the condition $2 \pi f = \dot{\Phi}(t^{*}(f))$, and dots denote derivatives with respect to time.
+
+It is often useful to compute the stationary time based on the frequency domain phase, 
+$$
+\angle \tilde{g} (f) = - \phi(f) 
+= -\Phi(t^{*}(f)) + 2 \pi f t^{*}(f) - \frac{\pi}{4}\,.
+$$
+
+By differentiating it we get [@marsatFourierdomainModulationsDelays2018, eq. 21]:
+$$
+\frac{ \text{d}\phi}{\text{d}f} = - 2 \pi t^{*}
+$$
+
+This formulation 
+
+The conditions required for this approximation to hold are [@chassande-mottinStationaryPhaseApproximation1998;@tissinoMachineLearningGravitational2021]:
+
+1. $\dot{\Phi}$ is monotonic: $\ddot{\Phi} >0$;
+2. the amplitude $A(t)$ evolves slowly: $\lvert \dot{A} / A \rvert \ll \lvert \dot{\Phi} \rvert$;
+3. the frequency $\dot{\Phi}$ evolves slowly: $\lvert \ddot{\Phi} \rvert \ll \lvert \dot{\Phi} \rvert^{2}$.
+
+#### SPA as linearization in frequency
+
+The SPA can be viewed as a linearization in phase of the sidebands due to a slow modulation. We show this with an example borrowed from the work of @chenFastFrequencydomainExpression2024.
+
+Let us consider the case of a signal $h(t)$, with known Fourier transform $\tilde{h}(f)$, modulated by a sinusoid as $h_{s}(t) = \sin(2 \pi F t) h(t)$, with $F \ll f$.
+This is a simplified model for the effect of the detector's orbit on a long-lived signal.
+
+The exact Fourier transform of the modulated signal includes contributions from two sidebands to either side of the signal:
+$$
+\tilde{h}_{s}(f) = \frac{\tilde{h}(f+F) - \tilde{h}(f-F)}{2i}\,.
+$$
+The SPA result, $\tilde{h}_{s}^{\text{SPA}}(f) = \sin(2\pi F t^{*}(f)) \tilde{h}(f)$, can also be recovered by Taylor expanding the phase $\Psi = \angle \tilde{h}$ in the $f\pm F$ terms around $f$. Since the amplitude is slowly varying, we take $\lvert \tilde{h}(f) \rvert \approx \lvert \tilde{h}(f\pm F) \rvert$. Then:
+$$
+\begin{aligned}
+\tilde{h}_{s}(f) &\approx \frac{\lvert \tilde{h}(f) \rvert 
+}{2i} 
+\left[  
+\exp \left( i\Psi(f) + i\Psi'(f) F \right) -
+\exp \left( i\Psi(f) - i\Psi'(f) F \right) 
+ \right] \\
+&= \sin(\Psi'(f) F) \tilde{h}_{s}^{\text{SPA}}(f)
+\end{aligned}
+$$
 
 ## Antenna patterns
 

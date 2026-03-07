@@ -17,7 +17,7 @@ The entries in this equation are:
 - the _posterior_ $p$ for the model's parameters - a representation of our updated beliefs about them after seeing the data, it is a probability distribution over the parameters;
 - the _evidence_ $\mathcal{Z}$ for the model - a normalization constant for the posterior, or the likelihood for the data marginalized over all the model's parameters.
 
-The likelihood and prior are part of the problem definition, and can typically be readily computed at any given value of the parameters.
+The likelihood and prior are part of the problem definition, and can often be readily computed at any given value of the parameters.^[This is not true for all approaches: in Simulation-Based Inference (SBI, see @sec-simulation-based-inference) the likelihood may be implicitly defined; nevertheless, Bayes' theorem underlies those analyses as well.]
 What we refer to as "computing the posterior" means obtaining a useful representation for it: the questions we are often interested in are in the form
 
 - what is the mean value and standard deviation of the $i$-th parameter $\theta_{i}$?
@@ -211,8 +211,29 @@ plt.grid()
 plt.show()
 ```
 
-In a certain sense, the logit of a probability, also called __log-odds__, is a more natural way to express it. 
-It is not bounded in the $[0, 1]$ interval and can instead span $\mathbb{R}$. 
-Furthermore, in this parameterization, extreme statements such as probabilities very close to 0 or 1 are appropriately far from the origin, and absolutes such as $p=0$ are divergent.
+The logit of a probability $\text{logit}(p) \in \mathbb{R}$, also called __log-odds__, 
+can be argued to be more natural way to express it than $p\in (0, 1)$. 
+Probabilities very close to 0 or 1 are extreme statements: in this parameterization, they are accordingly very far from the origin, and absolutes such as $p=0, 1$ are divergent towards $\pm \infty$.
 :::
 
+Based on this formalism, we may be tempted to multiply Bayes Factors 
+from different observations of the same phenomenon. 
+While this is correct in an idealized scenario, 
+it can lead to dramatically incorrect conclusions when applied in practice,
+due to its dependence on the prior used in each analysis;
+@isiComparingBayesFactors2022 have discussed this 
+in the context of tests of General Relativity (GR).
+
+If two models are nested, _i.e._ one is a special case of the other, 
+then we can express the Bayes Factor between them in a simple way
+[@dickeyWeightedLikelihoodRatio1971;@cameronGeneralizedSavageDickeyRatio2013]:
+$$
+\text{BF}_{1}^{2} = \frac{p_{2}(\theta=\theta_{0}|d)}{\pi_{2}(\theta=\theta_{0})}\,.
+$${#eq-savage-dickey-density-ratio}
+Here, model 1 is the special case of model 2 in which parameter $\theta$ equals $\theta_{0}$, $p_{2}$ is the marginal posterior distribution for the parameter $\theta$ under model 2, while $\pi_{2}$ is the marginal prior distribution for the parameter $\theta$ under model 2.
+
+This formulation illustrates the general fact that Bayes Factors are heavily dependent on the width of the prior distribution.
+This is a well-known feature of Bayesian inference, known as the Occam Factor or Penalty: 
+the preferred models are the "simplest", in the sense that they are compatible with the data for a large fraction of their prior mass; a model which is able to fit a plethora of different scenarios is disfavored compared to one which fits the current one and few others.
+
+A negative consequence of this arises if the prior distributions cannot be selected in a principled way, though: if they are set to be wide, the data may seem to favor the baseline model even in the presence of a deviation.

@@ -16,7 +16,7 @@ import os
 data_folder = Path(os.getcwd()).parent.parent / 'data'
 ```
 
-# Inspiral
+# Intrinsic parameters
 
 The signal $h_\theta(t)$ (or in the Fourier domain, $h_\theta (f)$) depends on several parameters, both intrinsic
 (describing the source itself) and extrinsic (describing the geometrical relation
@@ -30,6 +30,22 @@ the parameter $x$.
 For the purposes of this section, I will not show Fisher matrix results 
 but actual variances, covariances et cetera computed from the samples
 of a full parameter estimation of GW170817.
+
+## Spin
+
+In a generic binary with orbital angular momentum $\vec{L}$, the component objects will have two spin vectors $\vec{S}_{1,2}$. These three vectors will generally not be aligned, neither to each other nor with the observation direction $\vec{N}$.^[In this section we shall use this letter for the observation direction to conform with the convention, though elsewhere we use $m$.]  
+
+In principle we could use 9 Cartesian coordinates to describe these parameters. However, in practice, gravitational wave analyses use the following parameters:
+
+1. $\theta_{\text{JN}} = \arccos(\vec{J}\cdot \vec{N})$, the angle between the total angular momentum $\vec{J}=\vec{L}+\vec{S}_{1}+\vec{S}_{2}$ and the observation direction $\vec{N}$;
+2. $a_{1} = \lvert \vec{S}_{1} \rvert$, the magnitude of the primary object's spin;
+3. $a_{2} = \lvert \vec{S}_{2} \rvert$, the magnitude of the secondary object's spin;
+4. $\mathtt{tilt\_1} = \arccos (\vec{S}_{1} \cdot \vec{L})$, the angle between the orbital angular momentum and the primary object's spin;
+5. $\mathtt{tilt\_2} = \arccos (\vec{S}_{2} \cdot \vec{L})$, the angle between the orbital angular momentum and the secondary object's spin;
+6. $\phi_{12} = \arccos(\vec{S}_{1}^{\parallel}\cdot \vec{S}_{2}^{\parallel})$, the angle between the projections of the component spins in the orbital plane, $\vec{S}_{i}^{\parallel} = \vec{S}_{i} - \vec{S}_{i} \cdot \hat{L}$.
+
+
+![Diagram of the angles involved in the description of generic spins, from @dupletsaValidatingPriorinformedFishermatrix2025. ](figures/spin-angles.pdf){#fig-spin-diagram}
 
 ### Intrinsic parameters
 

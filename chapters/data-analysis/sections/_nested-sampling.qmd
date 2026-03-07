@@ -364,9 +364,9 @@ bf_error = np.sqrt(
 print(f'log Bayes factor = {bayes_factor:.2f} +- {bf_error:.2f} nats for the parabolic model')
 ```
 
-Since the models we are considering were nested, we have a comparison point for our Bayes Factor: the Savage-Dickey density ratio [@dickeyWeightedLikelihoodRatio1971], [@cameronGeneralizedSavageDickeyRatio2013].
+Since the models we are considering were nested, we have a comparison point for our Bayes Factor: the Savage-Dickey density ratio; see @eq-savage-dickey-density-ratio.
 
-Our models being nested means that the linear one is a special case of the parabolic one (with $a=0$); the priors for the other parameters are exactly the same in both cases. Then, it can be shown that the Bayes Factor is equal to the ratio of the posterior to the prior for the parabolic model, computed at the value for which the parabolic model reduces to the linear one:
+The linear model is indeed a special case of the parabolic one (with $a=0$); the priors for the other parameters are exactly the same in both cases. Then:
 $$
 \text{BF}^{\text{parabola}}_\text{line} = \frac{p(a=0 | d, M_\text{parabola})}{\pi(a=0|M_\text{parabola})}\,.
 $$
