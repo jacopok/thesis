@@ -17,5 +17,7 @@ m
 
 [Here are some more notes and examples](https://quarto.org/docs/interactive/widgets/jupyter.html).
 
+Links to [event viewer](https://peviewer.igwn.org/?event1=GW150914).
+
 ## Topics
 

@@ -47,6 +47,78 @@ In principle we could use 9 Cartesian coordinates to describe these parameters. 
 
 ![Diagram of the angles involved in the description of generic spins, from @dupletsaValidatingPriorinformedFishermatrix2025. ](figures/spin-angles.pdf){#fig-spin-diagram}
 
+Due to precession, the orbital angular momentum $\vec{L}$ and the spins $\vec{S}$ are time-dependent. The total angular momentum $\vec{J}$, on the other hand, is conserved, and so is its angle with the observation direction $\theta_{\text{JN}}$.
+
+Also see @romero-shawBayesianInferenceCompact2020
+
+## Eccentricity
+
+Generic Keplerian orbits are eccentric, describing an ellipse with the center of mass as a focus. 
+
+The radial coordinate $r$ of a generic point along the orbit can be parameterized in terms of its semilatus rectum $p$ and relativistic anomaly $\xi$:
+$$
+r = \frac{p}{1+e \cos \xi}
+$$
+
+
+@boninoInferringEccentricityEvolution2022
+
+### At lower frequencies
+
+Most of the gravitational waves detected so far have had little to no eccentricity in the 
+
+```{python}
+#| label: fig-gw250114-eccentricity-posterior
+#| fig-cap: "Eccentricity posterior distribution for GW250114."
+
+from thesis_scripts import peters_evolution
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.stats import gaussian_kde
+
+samples = peters_evolution.get_gw250114_samples()
+
+ecc = samples['eccentricity']
+
+# KDE the data together with a mirror with negative values
+# in order to correctly model the boundary
+kde = gaussian_kde(
+    np.concatenate((ecc, -ecc)),
+    bw_method=.25
+)
+
+e = np.linspace(0, 0.05)
+plt.plot(e, 2*kde(e), c='blue')
+plt.hist(ecc, density=True, histtype='step', bins=20, color='blue')
+plt.xlabel('Eccentricity $e$')
+plt.xlabel('Posterior distribution $p(e)$')
+plt.show()
+```
+
+
+
+```{python}
+#| label: fig-gw250114-eccentricity-evolution
+#| fig-cap: "Backward-extrapolated eccentricity evolution for GW250114."
+
+from thesis_scripts import peters_evolution
+import matplotlib.pyplot as plt
+
+freqs, lo, med, hi = peters_evolution.get_gw250114_eccentricity_extrapolation()
+
+plt.fill_between(freqs, lo, hi, color='blue', alpha=.3, label='90\% credible interval')
+plt.fill_between(freqs, 0, lo, color='blue', alpha=.2, label='Compatible with the data')
+plt.plot(freqs, med, c='blue', label='Median')
+plt.xscale('log')
+
+plt.xlim(2e-2, 20)
+plt.ylim(0, 1)
+plt.xlabel('Frequency [Hz]')
+plt.ylabel('Eccentricity')
+plt.legend()
+plt.show()
+```
+
 ### Intrinsic parameters
 
 We can measure the component __masses__ $m_1$ and $m_2$ with reasonable accuracy ($\sigma _x / x \sim 10\%$), but their combination called _chirp mass_ $\mathcal{M}$ and defined as follows:
