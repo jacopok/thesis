@@ -150,7 +150,7 @@ So, we can find a reference point^[By "point" here we mean a point and its motio
 whose motion can be considered to have constant velocity during the observation period to a sufficiently good approximation.
 Then, we can assume that this point receives a signal unaffected by Doppler modulations beyond a constant shift in frequency in the form $f \to f/(1+z)$.
 
-### Stationary phase approximation
+### Stationary phase approximation {#sec-stationary-phase-approximation}
 
 The stationary phase approximation [@chassande-mottinStationaryPhaseApproximation1998] (SPA) is a technique to quickly compute an approximate Fourier transform of slowly-modulated oscillatory functions with monotonically increasing frequency. 
 Given a time domain function $g(t)=A(t) \exp \left( -i \Phi(t) \right)$, its Fourier transform is approximately

@@ -145,10 +145,41 @@ fig, ax = pp_plot.pp_plot(u, confidence_intervals=(.68, .95, .997))
 plt.show()
 ```
 
+Along with the plots we show the values, and corresponding $p$-values, for the one-sided Kolmogorov-Smirnov [@kolmogorovSullaDeterminazioneEmpirica1933;@smirnovTableEstimatingGoodness1948] statistics $D_{+}$ and $D_-$, defined in terms of the empirical CDF as
 
-This was done, for example, with the software `BILBY` @romero-shawBayesianInferenceCompact2020; more details can also be found in @romero-shawWhenModelsFail2022.
+$$
+D_{\pm} = \sup \left[ \pm \left( P_{\text{emp}}(u) - u \right)  \right]\,.
+$$
+One may also use the two-sided statistic
+$$
+D = \sup \lvert  P_{\text{emp}}(u) - u  \rvert\,.
+$$
 
-#### Failure modes
+We show the two one-sided versions since their values can be combinedly used to distinguish different types of misspecification, see @sec-pp-test-failure-modes. 
+The density function of the K-S statistics under the null hypothesis is shown in @fig-kolmogorov-smirnov-distribution.
+
+```{python}
+#| label: fig-kolmogorov-smirnov-distribution
+#| fig-cap: "Distribution for the K-S statistics."
+
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+D = np.linspace(0, 0.07, num=500)
+n = 1000
+plt.plot(D, stats.ksone.pdf(D, n=n), label=f'$D_{{\pm}}$ distribution for $n={{{n}}}$')
+plt.plot(D, stats.kstwo.pdf(D, n=n), label=f'$D$ distribution for $n={{{n}}}$')
+
+plt.legend()
+plt.xlabel('$D$ or $D_{\pm}$')
+plt.ylabel('Probability density')
+plt.show()
+```
+
+These tests are common in the literature: they were performed, for example, with the software `BILBY` @romero-shawBayesianInferenceCompact2020; more details can also be found in @romero-shawWhenModelsFail2022.
+
+#### Failure modes {#sec-pp-test-failure-modes}
 
 Let us now explore the way that $p$-$p$ plots look when the test fails. 
 
@@ -175,7 +206,6 @@ import matplotlib.pyplot as plt
 from scipy import stats
 
 rng = np.random.default_rng(seed=1)
-
 u = stats.norm(loc=0.2, scale=1).cdf(rng.normal(size=2000))
 
 fig, ax = pp_plot.pp_plot(u, confidence_intervals=(.68, .95, .997))
@@ -200,18 +230,19 @@ import matplotlib.pyplot as plt
 from scipy import stats
 
 rng = np.random.default_rng(seed=1)
-
 u = stats.norm(loc=-0.2, scale=1).cdf(rng.normal(size=2000))
 
 fig, ax = pp_plot.pp_plot(u, confidence_intervals=(.68, .95, .997))
 plt.show()
 ```
 
+Note that only one of the two KS tests gives extreme results in both cases. 
+
 Now let us consider a different scenario: when the mean of the posterior distribution is correctly estimated, but its variance is not. 
 If the variance is too high, we are _underconstraining_ the parameter, assigning a higher uncertainty to our measurement than is warranted: for example, if
 $$
 \begin{aligned}
-p(\theta|d) &= \mathcal{N}(\mu=0, \sigma=1.1)\\
+p(\theta|d) &= \mathcal{N}(\mu=0, \sigma=1.2)\\
 p(\hat{\theta}|d) &= \mathcal{N}(\mu=0, \sigma=1)\,.
 \end{aligned}
 $$
@@ -227,16 +258,16 @@ from scipy import stats
 
 rng = np.random.default_rng(seed=1)
 
-u = stats.norm(loc=0, scale=1.1).cdf(rng.normal(size=2000))
+u = stats.norm(loc=0, scale=1.2).cdf(rng.normal(size=2500))
 
 fig, ax = pp_plot.pp_plot(u, confidence_intervals=(.68, .95, .997))
 plt.show()
 ```
 
-In the opposite scenario, we are _overconstaining_, assigning a lower uncertainty to our measurement than is warranted: for example,
+In the opposite scenario, we are _overconstraining_, assigning a lower uncertainty to our measurement than is warranted: for example,
 $$
 \begin{aligned}
-p(\theta|d) &= \mathcal{N}(\mu=0, \sigma=0.9)\\
+p(\theta|d) &= \mathcal{N}(\mu=0, \sigma=0.8)\\
 p(\hat{\theta}|d) &= \mathcal{N}(\mu=0, \sigma=1)\,.
 \end{aligned}
 $$
@@ -251,11 +282,57 @@ from scipy import stats
 
 rng = np.random.default_rng(seed=1)
 
-u = stats.norm(loc=0, scale=0.9).cdf(rng.normal(size=2000))
+u = stats.norm(loc=0, scale=0.8).cdf(rng.normal(size=2500))
 
 fig, ax = pp_plot.pp_plot(u, confidence_intervals=(.68, .95, .997))
 plt.show()
 ```
+
+Finally, let us consider a distribution with the correct mean and variance, but the wrong shape.
+To this end we choose a generalized normal distribution, with a shape parameter $\beta = 2.5$. 
+The $\beta = 2$ case recovers the standard normal distribution. 
+
+```{python}
+#| label: fig-generalized-normal
+#| fig-cap: "Triangle and normal distributions with the same variance and mean."
+
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+beta = 2.5
+var = stats.gennorm.stats(beta, moments='v')
+
+dist = stats.gennorm(beta=beta, loc=0, scale=1/np.sqrt(var))
+vals = np.linspace(-4., 4., num=1000)
+plt.plot(vals, stats.norm(loc=0, scale=1).pdf(vals), label='Standard normal')
+plt.plot(vals, dist.pdf(vals), label=f'Generalized normal with $\beta={beta}$')
+plt.legend()
+plt.show()
+```
+
+We rescale the distribution so that it has unit variance, as shown in figure @fig-generalized-normal.
+As this shift is harder to detect than the ones before, we need to raise the statistics. 
+
+```{python}
+#| label: fig-pp-plot-bias-distributional
+#| fig-cap: "p-p plot in the scenario of the wrong distribution, despite correct mean and variance."
+
+from thesis_scripts import pp_plot
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+rng = np.random.default_rng(seed=1)
+
+u = dist.cdf(rng.normal(size=10000))
+
+fig, ax = pp_plot.pp_plot(u, confidence_intervals=(.68, .95, .997))
+plt.show()
+```
+
+The distribution looks similar to the underconstrained case, as for the bulk of the probability mass (-2 to +2 in figure @fig-generalized-normal) the difference between these distribution is analogous to underconstraining. 
+However, close to the edges in @fig-pp-plot-bias-distributional we can see the trend reverse. 
 
 ### Model comparison {#sec-model-comparison}
 
@@ -346,4 +423,4 @@ This formulation illustrates the general fact that Bayes Factors are heavily dep
 This is a well-known feature of Bayesian inference, known as the Occam Factor or Penalty: 
 the preferred models are the "simplest", in the sense that they are compatible with the data for a large fraction of their prior mass; a model which is able to fit a plethora of different scenarios is disfavored compared to one which fits the current one and few others.
 
-A negative consequence of this arises if the prior distributions cannot be selected in a principled way, though: if they are set to be wide, the data may seem to favor the baseline model even in the presence of a deviation.
+A negative consequence of this arises if the prior distributions cannot be selected in a principled way, though: if they are set too wide, the data may seem to favor the baseline model even in the presence of a deviation.

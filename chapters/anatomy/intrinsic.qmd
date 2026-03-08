@@ -18,38 +18,88 @@ data_folder = Path(os.getcwd()).parent.parent / 'data'
 
 # Intrinsic parameters
 
-The signal $h_\theta(t)$ (or in the Fourier domain, $h_\theta (f)$) depends on several parameters, both intrinsic
-(describing the source itself) and extrinsic (describing the geometrical relation
-between detector and source).
-Here I will describe these parameters and also give an example 
-of the error with which they are measured in the case of GW170817.
-For most of them I will quote the figure $\sigma _x / x$, meaning the 
-standard deviation of the posterior samples normalized to the value of
-the parameter $x$.
+This section will continue in the dissection of a gravitational signal by considering its intrinsic parameters, those relating to the source itself and not to its relation to the observer.
 
-For the purposes of this section, I will not show Fisher matrix results 
-but actual variances, covariances et cetera computed from the samples
-of a full parameter estimation of GW170817.
+## Waveform modelling
+
+
+It will be convenient to give 
+Its terms will be explained throughout the section.
+
+## Mass
+
+The component masses, primary $m_{1}$ and secondary $m_{2}$ with $m_{1}>m_{2}$, are typically measured in units of the solar mass $M_{\odot} \approx 1.98841\times 10^{30} \text{kg}$.
+
+Some common combinations include the total mass $M = m_{1}+m_{2}$, the mass ratio $q=m_{2} / m_{1} \leq 1$,^[Conventions for this parameter differ, with some authors using $q=m_{1} / m_{2}>1$, but within `BILBY`, the standard piece of software for gravitational wave inference it is defined to be less than 1 [@romero-shawBayesianInferenceCompact2020].] the reduced mass $\mu = m_{1} m_{2} / M$ and the symmetric mass ratio $\nu = \mu / M = m_{1} m_{2} / M^{2}$.
+
+The waveform at low frequencies is most affected by their combination called _chirp mass_ $\mathcal{M}$, which is defined as follows:
+
+$$ \mathcal{M} = \nu^{3/5}M = \frac{(m_1 m_2 )^{3/5}}{(m_1 + m_2)^{1/5}}
+$$
+
+A general Post-Newtonian expression for the phase of a compact binary reads as follows [@abacScienceEinsteinTelescope2025, eq. 1.1]:
+$$
+\Psi(f) = 2 \pi f t_{c} - \phi_{c} - \frac{\pi}{4} + \frac{3}{128 \nu x^{5}} \sum_{n=0}^{7} \left[ \varphi_{n} + \varphi_{n}^{(l)} \log x \right] x^{n}\,.
+$${#eq-post-newtonian-phase-generic}
+
+Here, the expansion parameter represents the velocity of the binary: $x = v / c = (\pi M f)^{1 / 3}$.
+The chirp mass appears as a prefactor in @eq-post-newtonian-phase-generic: $\nu x^{5} = \nu (\pi M f)^{5/3} = (\pi \mathcal{M} f)^{5/3}$.
+This means it affects the phase evolution of the signal at a basic level, and its measurement will be precise if we can constrain a large number of signal cycles.
+
+On the other hand, the Post-Newtonian coefficients $\varphi_{n}$^[A terminology note: the $n$-th term in the sum is called the $(n /2)$PN contribution. For example, the $n=5$ term is called 2.5PN.] contain information about various other contributions, such as mass ratio and spin @blanchetPostNewtonianTheoryGravitational2024.
+For example, the symmetric mass ratio $\nu$ enters in the expression at 1PN order, spin-orbit effects at 1.5PN, and spin-spin effects at 2PN.
+
+### At lower frequencies
+
+At very low frequencies we might expect to only be able to constrain the chirp mass, with a large uncertainty on the mass ratio and all other parameters appearing later in the Post-Newtonian expansion such as spin.
+While this is qualitatively true, an interesting observation 
+[@toubianaParameterEstimationStellarmass2020]
+is that low frequency data will exhibit a strong correlation between chirp mass and mass ratio.
+
+If chirp mass were the only parameter allowed to vary, the frequency derivative of the signal $\dot{f}$, or equivalently, in the SPA approximation @sec-stationary-phase-approximation, the second derivative of the FD phase $\Psi''$ in @eq-post-newtonian-phase-generic, would be sufficient to constrain it.
+However, in general, fixing this frequency derivative will determine a surface - for example, a 1D curve in the $(\mathcal{M}, \nu)$ space, or a 2D surface in the $(\mathcal{M}, \nu, \chi _\text{eff})$ space.
+
+@toubianaParameterEstimationStellarmass2020 show this curve in the $\mathcal{M}, \nu$ plane, in the case of a stellar-mass black hole binary observed by LISA. 
+Qualitatively, it is very "shallow": a variation of $\nu$ from 0.2 to 0.25 (a 25% increase) only corresponds to a variation in $\mathcal{M}$ by $10^{-3}M_{\odot}$ (a 0.003% increase). 
+Nevertheless, the scale of the variation in chirp mass is comparable to typical uncertainties in this parameter obtained with long observations, and an anticorrelation between $\mathcal{M}$ and $\nu$ is systematically observed.
 
 ## Spin
 
 In a generic binary with orbital angular momentum $\vec{L}$, the component objects will have two spin vectors $\vec{S}_{1,2}$. These three vectors will generally not be aligned, neither to each other nor with the observation direction $\vec{N}$.^[In this section we shall use this letter for the observation direction to conform with the convention, though elsewhere we use $m$.]  
 
-In principle we could use 9 Cartesian coordinates to describe these parameters. However, in practice, gravitational wave analyses use the following parameters:
+In principle we could use Cartesian coordinates to describe these spins; 
+however gravitational wave analyses typically use the following parameters, which are better behaved:
 
-1. $\theta_{\text{JN}} = \arccos(\vec{J}\cdot \vec{N})$, the angle between the total angular momentum $\vec{J}=\vec{L}+\vec{S}_{1}+\vec{S}_{2}$ and the observation direction $\vec{N}$;
-2. $a_{1} = \lvert \vec{S}_{1} \rvert$, the magnitude of the primary object's spin;
-3. $a_{2} = \lvert \vec{S}_{2} \rvert$, the magnitude of the secondary object's spin;
-4. $\mathtt{tilt\_1} = \arccos (\vec{S}_{1} \cdot \vec{L})$, the angle between the orbital angular momentum and the primary object's spin;
-5. $\mathtt{tilt\_2} = \arccos (\vec{S}_{2} \cdot \vec{L})$, the angle between the orbital angular momentum and the secondary object's spin;
-6. $\phi_{12} = \arccos(\vec{S}_{1}^{\parallel}\cdot \vec{S}_{2}^{\parallel})$, the angle between the projections of the component spins in the orbital plane, $\vec{S}_{i}^{\parallel} = \vec{S}_{i} - \vec{S}_{i} \cdot \hat{L}$.
+1. $\theta_{\text{JN}} = \arccos(\vec{J}\cdot \vec{N})$, the angle between the total angular momentum $\vec{J}=\vec{L}+\vec{S}_{1}+\vec{S}_{2}$ and the observation direction $\vec{N}$;^[This should be considered an extrinsic parameter, since it describes the geometric relation of the source and the observer, but it is included here for clarity.]
+2. $a_{1} = \lvert \vec{S}_{1} \rvert / m_{1}^{2}$, the dimensionless _magnitude_ of the primary object's spin;
+3. $a_{2} = \lvert \vec{S}_{2} \rvert / m_{2}^{2}$, the dimensionless _magnitude_ of the secondary object's spin;
+4. $\theta_{1} = \arccos (\vec{S}_{1} \cdot \vec{L})$, the tilt angle between the orbital angular momentum and the primary object's spin; 
+5. $\theta_{2} = \arccos (\vec{S}_{2} \cdot \vec{L})$, the tilt angle between the orbital angular momentum and the secondary object's spin;
+6. $\phi_{12} = \arccos(\vec{S}_{1}^{\parallel}\cdot \vec{S}_{2}^{\parallel})$, the azimuthal angle between the projections of the component spins in the orbital plane, $\vec{S}_{i}^{\parallel} = \vec{S}_{i} - \vec{S}_{i} \cdot \hat{L}$;
+7. $\phi_{\text{JL}}$, the azimuthal angle of $\vec{L}$, which parameterizes rotations around the $\vec{J}$ axis.
 
+Also see @romero-shawBayesianInferenceCompact2020 for the definitions of these parameters within `BILBY`.
 
 ![Diagram of the angles involved in the description of generic spins, from @dupletsaValidatingPriorinformedFishermatrix2025. ](figures/spin-angles.pdf){#fig-spin-diagram}
 
-Due to precession, the orbital angular momentum $\vec{L}$ and the spins $\vec{S}$ are time-dependent. The total angular momentum $\vec{J}$, on the other hand, is conserved, and so is its angle with the observation direction $\theta_{\text{JN}}$.
+Due to precession, the orbital angular momentum $\vec{L}$ and the spins $\vec{S}$ are time-dependent. The total angular momentum $\vec{J}$, on the other hand, is conserved, so is its angle with the observation direction $\theta_{\text{JN}}$, as the magnitudes of the spins $a_{i}$.
+The four remaining parameters --- two tilts and two azimuthal angles --- evolve through precession, and thus need to be specified at a given reference frequency.
 
-Also see @romero-shawBayesianInferenceCompact2020
+In terms of measurement, the best-constrained spin-related quantity (TODO: cite) is generally the effective spin parameter
+$$
+\chi _\text{eff} = \left(   \frac{m_{1} \vec{\chi}_{1} + m_{2}\vec{\chi}_{2}}{m_{1}+m_{2}}  \right) \cdot \hat{L}\,.
+$$
+
+The extent to which precessing spin affects a binary is often characterized through the precessing spin parameter 
+$$
+\chi_{p} = \max \left( \chi_{1}^{\perp}, q(3q+4) / (4q+3) \chi_{2}^{\perp} \right) \,,
+$$
+where $\chi_{i}^{\perp} = |a_{1} \sin(\theta_{i})|$ denotes the magnitude of the in-plane component of the spins.
+
+### Modelling precession
+
+TODO: a brief description of the twisting-up procedure, based on
+@prattenComputationallyEfficientModels2021.
 
 ## Eccentricity
 
@@ -66,6 +116,8 @@ $$
 @favataGravitationalwaveMemoryEccentric2011
 
 @boninoInferringEccentricityEvolution2022
+
+TODO: add 
 
 ### At lower frequencies
 
@@ -143,16 +195,7 @@ However, the prior significantly affects whether these lie on the edge of the di
 This is not surprising: the data is not very informative on the $e_{13.33\text{Hz}} \sim 0$ tail of the distribution, so we get back out of the analysis the assumptions we started with.
 This result can lead us to reflect on the meaning of the prior on eccentricity: a flat distribution in $e_{13.33\text{Hz}}$ is not a neutral statement, but instead one which heavily favors eccentric binaries at lower frequencies. 
 
-### Intrinsic parameters
-
-We can measure the component __masses__ $m_1$ and $m_2$ with reasonable accuracy ($\sigma _x / x \sim 10\%$), but their combination called _chirp mass_ $\mathcal{M}$ and defined as follows:
-
-$$ \mathcal{M} = \frac{(m_1 m_2 )^{3/5}}{(m_1 + m_2)^{1/5}}
-$$
-
-is measured to much higher accuracy ($\sigma _x / x \sim 0.1\%$).
-This is because it affects the overall phasing of the signal, meaning that 
-small changes in it will bring the signal-to-noise ratio very quickly.
+## Tidal parameters
 
 On the other hand, the ratio between the masses, $q = m_1 / m_2$, is measured to worse accuracy than the masses themselves ($\sigma _x / x \sim 20\%$).
 
@@ -177,15 +220,6 @@ not that meaningful here, since it was found to be compatible with zero [@thelig
 Similarly, the __tidal parameters__ $\Lambda _1$ and $\Lambda _2$, were not as well-constrained ($\sigma _x / x \sim 1.5$)
 as the effective tidal parameter $\widetilde{\Lambda}$ ($\sigma_x / x \sim 0.6$).
 
-### Extrinsic parameters
-
-The signal's overall amplitude depends on the source (luminosity) __distance__ $d_L$
-as $h \propto 1 / d_L$, and because of 
-this we are able to measure it with some accuracy ($\sigma _x / x \sim 20\%$).
-
-This parameter is, however, degenerate with the __inclination__ of the source, $\iota$ ---
-this is the angle between the orbital angular momentum of the binary and the 
-vector connecting detector and source. 
 A source for which $\iota$ is close to zero or to $\pi$ is said to be _face-on_, 
 while a source for which $\iota$ is close to $\pi/2$ is said to be _edge-on_.
 

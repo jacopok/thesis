@@ -10,6 +10,11 @@ from scipy import stats
 import numpy as np
 import matplotlib.pyplot as plt
 
+from matplotlib import patheffects
+
+white_stroke = [patheffects.withStroke(linewidth=4, foreground="w")]
+
+
 def ks_test(u, mode="D+"):
     """
     Compute the two-sided KS test for random variates u in [0, 1].
@@ -24,7 +29,7 @@ def ks_test(u, mode="D+"):
     Returns
     -------
     D : float
-        Two-sided KS statistic
+        One or two-sided KS statistic
     p : float
         p-value
     """
@@ -42,12 +47,18 @@ def ks_test(u, mode="D+"):
         D = (cdf - theoretical_cdf)[idx]
         p = stats.ksone.sf(D, N)
         return -D, p, idx
+    elif mode == "D":
+        idx = np.argmax(abs(cdf - theoretical_cdf))
+        D = abs(cdf - theoretical_cdf)[idx]
+        p = stats.kstwo.sf(D, N)
+        return D, p, idx
+
     else:
-        raise RuntimeError(f"{mode} is not a valid mode. Choose D+ or D-")
+        raise RuntimeError(f"{mode} is not a valid mode. Choose D, D+ or D-")
 
 
 
-def pp_plot(u, confidence_intervals = (.68, .95, .997)):
+def pp_plot(u, confidence_intervals = (.68, .95, .997), ks_test_labels='floating'):
 
     # First bin should have non-zero probability since this is a p.m.f
     N = len(u)
@@ -55,7 +66,7 @@ def pp_plot(u, confidence_intervals = (.68, .95, .997)):
     theoretical_cdf = np.arange(1.0, N + 1) / N
     x = theoretical_cdf
 
-    fig, ax = plt.subplots(1, ncols=3, figsize=(12, 4))
+    fig, ax = plt.subplots(1, ncols=3, figsize=(8, 8/3))
     nbins = min(len(np.histogram_bin_edges(u, "auto")) - 1, 1000)
 
     # Plot the analytic p.m.f first
@@ -140,35 +151,54 @@ def pp_plot(u, confidence_intervals = (.68, .95, .997)):
             arrowprops=dict(arrowstyle="->"),
         )
         
-        if x[idx] < 0.2:
-            horizontalalignment = 'left'
-        elif x[idx] > 0.8:
-            horizontalalignment ='right'
-        else:
-            horizontalalignment = 'center'
-        
-        if mode == 'D+':
-            verticalalignment = 'bottom'
-        else:
-            verticalalignment = 'top'
-        
         if p_value < 0.0001:
             p_string = f'$p<10^{{-4}}$'
         elif p_value > 0.9999:
             p_string = f'$p>1-10^{{-4}}$'
         else:
             p_string = f'$p={p_value:.4f}$'
+
+        label = f'K-S test, {mode} mode\n$D={abs(D):.3f}$\n{p_string}'
+
+        if ks_test_labels == 'on_arrow':
+            if x[idx] < 0.2:
+                horizontalalignment = 'left'
+            elif x[idx] > 0.8:
+                horizontalalignment ='right'
+            else:
+                horizontalalignment = 'center'
             
-        ax[2].text(
-            x[idx], D*1.1,
-            f'K-S test, {mode} mode\n$D={abs(D):.3f}$\n{p_string}', 
-            horizontalalignment=horizontalalignment,
-            verticalalignment=verticalalignment,
-        )
+            if mode == 'D+':
+                verticalalignment = 'bottom'
+            else:
+                verticalalignment = 'top'
+            
+                
+            ax[2].text(
+                x[idx], D*1.1,
+                label, 
+                horizontalalignment=horizontalalignment,
+                verticalalignment=verticalalignment,
+            )
+        elif ks_test_labels == 'floating':
+            
+            if mode == 'D+':
+                y = 0.75
+            else:
+                y = 0.25
+            
+            ax[2].text(
+                0.5, y,
+                label, 
+                transform=ax[2].transAxes,
+                path_effects=white_stroke,
+                horizontalalignment='center',
+                verticalalignment='center',
+            )
         
 
     for a in ax:
-        a.legend(loc="lower right")
+        # a.legend(loc="lower right")
         a.set_xlim([0, 1])
         a.set_xlabel("Uniform variates")
 
