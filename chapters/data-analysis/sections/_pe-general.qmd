@@ -97,7 +97,7 @@ A common test for self-consistency is the $p$-$p$ plot, which specifically regar
 We can test this by performing a campaign of injections, for which the true value $\hat{\theta_{i}}$ is known: every time, we need to generate a realistic simulation of the data $d$ and analyze it feigning ignorance of the true value. 
 Then, we may compute the percentile of the distribution at which the true value lies:
 $$
-u = \int_{-\infty}^{\hat{\theta}_{i}} p(\theta_{i}| d) \text{d}\theta\,.
+u = \int_{-\infty}^{\hat{\theta}_{i}} p(\theta_{i}| d) \text{d}\theta = \text{CDF}_{p(\theta_{i}| d)}(\hat{\theta}_{i})\,.
 $$
 Here we assume for simplicity that the parameter can range over $\mathbb{R}$, but the same calculation can be performed starting integration from the lower bound.
 This is the definition of the cumulative distribution function, computed at $\hat{\theta}_{i}$. 
@@ -132,20 +132,130 @@ $$
 
 ```{python}
 #| label: fig-pp-plot-theory
-#| fig-cap: "TODO: Placeholder plot - ideally, this plot should show a pp-test with a uniform distribution, with pdf, pmf, and pmf-p."
+#| fig-cap: "Visualizations for a p-p test: histogram, empirical cdf, tilted empirical cdf. We also visualize the Kolmogorov-Smirnov test."
 
-from nessai.plot import plot_indices
+from thesis_scripts import pp_plot
 import numpy as np
 import matplotlib.pyplot as plt
 
 rng = np.random.default_rng(seed=1)
-indices = rng.choice(1000, size=1000, replace=True)
+u = rng.uniform(size=1000)
 
-fig = plot_indices(indices, plot_breakdown=False)
+fig, ax = pp_plot.pp_plot(u, confidence_intervals=(.68, .95, .997))
 plt.show()
 ```
 
+
 This was done, for example, with the software `BILBY` @romero-shawBayesianInferenceCompact2020; more details can also be found in @romero-shawWhenModelsFail2022.
+
+#### Failure modes
+
+Let us now explore the way that $p$-$p$ plots look when the test fails. 
+
+For simplicity, we will always consider measurements
+for which the posterior distribution is Gaussian.
+
+However, while we will keep the distribution according to which the true parameter $\hat{\theta}$ is distributed fixed to the standard normal, centered on zero and with unit variance, we will explore how the $p$-$p$ plot can help us diagnose errors in the estimated posterior distribution.
+
+First, let us suppose we have a bias in our measurement, so that the posterior distribution is not centered at the true value, 0, but instead at a slightly higher one, say 0.2:
+$$
+\begin{aligned}
+p(\theta|d) &= \mathcal{N}(\mu=0.2, \sigma=1)\\
+p(\hat{\theta}|d) &= \mathcal{N}(\mu=0, \sigma=1)\,.
+\end{aligned}
+$$
+
+```{python}
+#| label: fig-pp-plot-bias-positive
+#| fig-cap: "p-p plot in the scenario of an overestimation bias."
+
+from thesis_scripts import pp_plot
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+rng = np.random.default_rng(seed=1)
+
+u = stats.norm(loc=0.2, scale=1).cdf(rng.normal(size=2000))
+
+fig, ax = pp_plot.pp_plot(u, confidence_intervals=(.68, .95, .997))
+plt.show()
+```
+
+Suppose instead that the bias is in the negative direction:
+$$
+\begin{aligned}
+p(\theta|d) &= \mathcal{N}(\mu=-0.2, \sigma=1)\\
+p(\hat{\theta}|d) &= \mathcal{N}(\mu=0, \sigma=1)\,.
+\end{aligned}
+$$
+
+```{python}
+#| label: fig-pp-plot-bias-negative
+#| fig-cap: "p-p plot in the scenario of a bias."
+
+from thesis_scripts import pp_plot
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+rng = np.random.default_rng(seed=1)
+
+u = stats.norm(loc=-0.2, scale=1).cdf(rng.normal(size=2000))
+
+fig, ax = pp_plot.pp_plot(u, confidence_intervals=(.68, .95, .997))
+plt.show()
+```
+
+Now let us consider a different scenario: when the mean of the posterior distribution is correctly estimated, but its variance is not. 
+If the variance is too high, we are _underconstraining_ the parameter, assigning a higher uncertainty to our measurement than is warranted: for example, if
+$$
+\begin{aligned}
+p(\theta|d) &= \mathcal{N}(\mu=0, \sigma=1.1)\\
+p(\hat{\theta}|d) &= \mathcal{N}(\mu=0, \sigma=1)\,.
+\end{aligned}
+$$
+
+```{python}
+#| label: fig-pp-plot-bias-underconstrain
+#| fig-cap: "p-p plot in the scenario of an underconstraining bias."
+
+from thesis_scripts import pp_plot
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+rng = np.random.default_rng(seed=1)
+
+u = stats.norm(loc=0, scale=1.1).cdf(rng.normal(size=2000))
+
+fig, ax = pp_plot.pp_plot(u, confidence_intervals=(.68, .95, .997))
+plt.show()
+```
+
+In the opposite scenario, we are _overconstaining_, assigning a lower uncertainty to our measurement than is warranted: for example,
+$$
+\begin{aligned}
+p(\theta|d) &= \mathcal{N}(\mu=0, \sigma=0.9)\\
+p(\hat{\theta}|d) &= \mathcal{N}(\mu=0, \sigma=1)\,.
+\end{aligned}
+$$
+```{python}
+#| label: fig-pp-plot-bias-overconstrain
+#| fig-cap: "p-p plot in the scenario of an overconstraining bias."
+
+from thesis_scripts import pp_plot
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+rng = np.random.default_rng(seed=1)
+
+u = stats.norm(loc=0, scale=0.9).cdf(rng.normal(size=2000))
+
+fig, ax = pp_plot.pp_plot(u, confidence_intervals=(.68, .95, .997))
+plt.show()
+```
 
 ### Model comparison {#sec-model-comparison}
 

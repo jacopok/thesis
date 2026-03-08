@@ -1,9 +1,18 @@
-from scipy import stats
+"""KS test and pp plot for uniform random variates.
 
-def ks_test(indices, nlive, mode="D+"):
+Adapted from nessai, specifically 
+https://github.com/mj-will/nessai/blob/main/src/nessai/plot.py
+and
+https://github.com/mj-will/nessai/blob/main/src/nessai/utils/indices.py.
+"""
+
+from scipy import stats
+import numpy as np
+import matplotlib.pyplot as plt
+
+def ks_test(u, mode="D+"):
     """
-    Compute the two-sided KS test for discrete insertion indices for a given
-    number of live points
+    Compute the two-sided KS test for random variates u in [0, 1].
 
     Parameters
     ----------
@@ -20,99 +29,147 @@ def ks_test(indices, nlive, mode="D+"):
         p-value
     """
 
-    counts = np.zeros(nlive)
-    u, c = np.unique(indices, return_counts=True)
-    counts[u] = c
-    cdf = np.cumsum(counts) / len(indices)
+    N = len(u)
+    cdf = stats.ecdf(u).cdf.quantiles
+    theoretical_cdf = np.arange(1.0, N + 1) / N
     if mode == "D+":
-        D = np.max(np.arange(1.0, nlive + 1) / nlive - cdf)
+        idx = np.argmax(theoretical_cdf - cdf)
+        D = (theoretical_cdf - cdf)[idx]
+        p = stats.ksone.sf(D, N)
+        return D, p, idx
     elif mode == "D-":
-        D = np.max(cdf - np.arange(0.0, nlive) / nlive)
+        idx = np.argmax(cdf - theoretical_cdf)
+        D = (cdf - theoretical_cdf)[idx]
+        p = stats.ksone.sf(D, N)
+        return -D, p, idx
     else:
         raise RuntimeError(f"{mode} is not a valid mode. Choose D+ or D-")
-    p = stats.ksone.sf(D, len(indices))
-    return D, p
 
 
 
-def pp_plot(uniform_variates, ax):
-
-
-    D, p_value = ks_test(indices, nlive, mode=ks_test_mode)
+def pp_plot(u, confidence_intervals = (.68, .95, .997)):
 
     # First bin should have non-zero probability since this is a p.m.f
-    x = np.arange(1.0, nlive + 1, 1)
-    analytic_cmf = x / x[-1]
-    counts = np.bincount(indices, minlength=nlive)
-    estimated_cmf = np.cumsum(counts) / len(indices)
+    N = len(u)
+    estimated_cdf = stats.ecdf(u).cdf.quantiles
+    theoretical_cdf = np.arange(1.0, N + 1) / N
+    x = theoretical_cdf
 
-    if plot_breakdown:
-        n_cols = 3
-        figsize = (15, 5)
-    else:
-        n_cols = 2
-        figsize = (10, 5)
-
-    fig, ax = plt.subplots(1, ncols=n_cols, figsize=figsize)
-    nbins = min(len(np.histogram_bin_edges(indices, "auto")) - 1, 1000)
+    fig, ax = plt.subplots(1, ncols=3, figsize=(12, 4))
+    nbins = min(len(np.histogram_bin_edges(u, "auto")) - 1, 1000)
 
     # Plot the analytic p.m.f first
     ax[0].axhline(
-        1 / nlive,
+        1,
         color="black",
         linestyle="-",
-        label="pmf",
+        label="Uniform distribution",
         alpha=0.5,
     )
-    # 1-sigma regions
-    ax[0].axhline(
-        (1 + (nbins / len(indices)) ** 0.5) / nlive,
-        color="black",
-        linestyle=":",
-        alpha=0.5,
-        label="1-sigma",
-    )
-    ax[0].axhline(
-        (1 - (nbins / len(indices)) ** 0.5) / nlive,
-        color="black",
-        linestyle=":",
-        alpha=0.5,
-    )
+    
+    sigma = (nbins / N) ** 0.5
+    for ci in confidence_intervals:
+        bound = (1 - ci) / 2
+        z_score = stats.norm.isf(bound)
+        lower = np.ones_like(x) * (1-z_score*sigma)
+        upper = np.ones_like(x) * (1+z_score*sigma)
+        ax[0].fill_between(
+            x, lower, upper, color="grey", alpha=0.2)
 
     ax[0].hist(
-        indices,
+        u,
         density=True,
         color="C0",
         histtype="step",
         bins=nbins,
-        label="Estimated",
-        range=(0, nlive - 1),
+        label="Histogram of random variates",
+        range=(0, 1),
+    )
+    
+    ax[1].plot(
+        x,
+        theoretical_cdf ,
+        c="C0",
+        ls='--',
+        label="Analytic cdf",
+    )
+    ax[1].plot(
+        x,
+        estimated_cdf,
+        c="C0",
+        label="Estimated cdf",
     )
 
-    # Subtract 1 since we count indices from 0
-    ax[1].plot(
-        x - 1,
-        analytic_cmf - estimated_cmf,
-        c="C0",
-        label="Analytic cmf - Estimated cmf",
-    )
-    n_indices = len(indices)
     for ci in confidence_intervals:
         bound = (1 - ci) / 2
         bound_values = (
-            stats.binom.ppf(1 - bound, n_indices, analytic_cmf) / n_indices
+            stats.binom.ppf(1 - bound, N, theoretical_cdf) / N
         )
-        lower = bound_values - analytic_cmf
-        upper = analytic_cmf - bound_values
+        lower = bound_values - theoretical_cdf
+        upper = theoretical_cdf - bound_values
 
-        ax[1].fill_between(x - 1, lower, upper, color="grey", alpha=0.2)
+        ax[2].fill_between(x, lower, upper, color="grey", alpha=0.2)
 
-    ax[0].legend(loc="lower right")
-    ax[0].set_xlim([0, nlive - 1])
-    ax[0].set_xlabel("Insertion index")
 
-    ax[1].legend(loc="lower right")
-    ax[1].set_xlim([0, nlive - 1])
-    ax[1].set_xlabel("Insertion index")
+    # Subtract 1 since we count indices from 0
+    ax[2].plot(
+        x,
+        theoretical_cdf - estimated_cdf,
+        c="C0",
+        label="Analytic cdf - Estimated cdf",
+    )
 
-    return ax
+    for ci in confidence_intervals:
+        bound = (1 - ci) / 2
+        lower = (
+            stats.binom.ppf(1 - bound, N, theoretical_cdf) / N
+        )
+        upper = (
+            stats.binom.ppf(bound, N, theoretical_cdf) / N
+        )
+
+        ax[1].fill_between(x, lower, upper, color="grey", alpha=0.2)
+
+    for mode in ['D+', 'D-']:
+        D, p_value, idx = ks_test(u, mode=mode)
+
+        ax[2].annotate(
+            "",
+            xytext=(x[idx], D), 
+            xy=(x[idx], 0),
+            arrowprops=dict(arrowstyle="->"),
+        )
+        
+        if x[idx] < 0.2:
+            horizontalalignment = 'left'
+        elif x[idx] > 0.8:
+            horizontalalignment ='right'
+        else:
+            horizontalalignment = 'center'
+        
+        if mode == 'D+':
+            verticalalignment = 'bottom'
+        else:
+            verticalalignment = 'top'
+        
+        if p_value < 0.0001:
+            p_string = f'$p<10^{{-4}}$'
+        elif p_value > 0.9999:
+            p_string = f'$p>1-10^{{-4}}$'
+        else:
+            p_string = f'$p={p_value:.4f}$'
+            
+        ax[2].text(
+            x[idx], D*1.1,
+            f'K-S test, {mode} mode\n$D={abs(D):.3f}$\n{p_string}', 
+            horizontalalignment=horizontalalignment,
+            verticalalignment=verticalalignment,
+        )
+        
+
+    for a in ax:
+        a.legend(loc="lower right")
+        a.set_xlim([0, 1])
+        a.set_xlabel("Uniform variates")
+
+    return fig, ax
