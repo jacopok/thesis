@@ -10,13 +10,7 @@ Several SBI methods exist, the main ones being [@liangRecentAdvancesSimulationba
 - __Neural Ratio Estimation__, in which a classifier is trained to distinguish between the joint distribution of parameters and data, $p(\theta, d)$ and the product of their marginals, $p(\theta)p(d)$. The optimal Bayesian classifier operates based on the decision function $f(\theta, d) = p(\theta, d) / (p(\theta, d) + p(\theta)p(d))$, from which the likelihood-to-evidence ratio $r(\theta, d) = p(d|\theta) / p(d) = f / (1-f)$ can be easily recovered. This approach requires a stochastic sampling step.
 - __Neural Likelihood Estimation__, in which a density estimator $q(d|\theta)$ directly learns the likelihood function. This approach also requires a stochastic sampling step.
 
-Other approaches also exist, such as __Flow Matching Posterior Estimation__ and __Consistency Model Posterior Estimation__, and it is plausible that novel ones 
-
-
-Citations:  
-
-- DINGO: @daxRealtimeGravitationalwaveScience2021, @daxNeuralImportanceSampling2022, @daxGroupEquivariantNeural2023
-- Ours: @santoliquidoFastAccurateParameter2025, @santoliquidoComparingNextgenerationDetector2025
+Other approaches include __Flow Matching Posterior Estimation__ and __Consistency Model Posterior Estimation__.
 
 ### Normalizing flows {#sec-normalizing-flows}
 
@@ -230,5 +224,10 @@ is corrected through importance sampling, based on the
 standard gravitational wave likelihood.
 
 Besides giving an estimate for the evidence, this allows us to correct the posterior samples. 
-Suppose we extract $n$ samples $\theta_{i}$ from the NPE distribution $q(\theta|d)$. 
-After computing the weights according to @eq-importance-sampling-weights, we can interpret $\theta_{i}$ as _weighted_ samples from the posterior distribution $p(\theta|d)$, and use them as described in @sec-weighted-samples.
+We can extract $n$ samples $\theta_{i}$ from the NPE distribution $q(\theta|d)$, compute their weights according to @eq-importance-sampling-weights, and then interpret $\theta_{i}$ as _weighted_ samples from the posterior distribution $p(\theta|d)$, and use them as described in @sec-weighted-samples.
+
+This approach effectively makes the `DINGO-IS` analysis results equivalent to those obtained by stochastically sampling the likelihood. 
+While bringing a significant advantage in terms of robustness and trustworthiness,
+this approach --- if applied with a Gaussian likelihood 
+--- negates any benefits that could be gained from training 
+the neural network on anything other than Gaussian noise. 

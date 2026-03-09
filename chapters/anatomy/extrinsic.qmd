@@ -15,6 +15,204 @@ format:
 
 This chapter will discuss the extrinsic parameterization of the signal from a compact binary coalescence (CBC). 
 
+### Phase and inclination angle
+
+As we introduced in @sec-spin,
+the reference orbital phase of the signal $\phi_{0}$
+and the inclination angle $\iota$ define the position of the
+observer relative to the orbital plane. 
+In order to better understand their effect, the rest of this section will describe
+them in relation to the way a waveform is decomposed in spherical harmonics.
+
+The reference phase from a compact binary merger is a crucial parameter for its description, 
+which however brings little physical insight @LIGOT1300326v1AnalyticMarginalisation.
+This has led to efforts to simplify its treatment. 
+If the signal only includes the $\ell |m| = 22$ harmonic, 
+it is possible to derive a formulation of the likelihood which is analytically 
+marginalized over phase, see @sec-analytic-marginalization-phase.
+
+Phase is also difficult to infer when using neural posterior estimation [@sec-neural-posterior-estimation]: the network tends to be unable to infer it, and returns the prior instead, 
+despite correctly constraining the remaining parameters.
+To this end, @daxNeuralImportanceSampling2023 introduced a resampling method, 
+in which the phase is synthetically sampled by evaluating the likelihood
+on a grid in phase.
+
+#### Spherical harmonic decomposition
+
+The two time-domain polarizations of a gravitational wave, 
+$h_+$ and $h_\times$, can be decomposed into spin-weighted spherical harmonics
+as 
+$$
+h_+ (t) - i h_\times (t) = \frac{1}{d_L} \sum _{l=2}^{\infty } \sum
+_{m=-\ell}^{\ell} h_{\ell m} (t; \theta_{\text{int}})\, {}^{(-2)}Y_{\ell m} (\iota, \phi_0)\,.
+$${#eq-spherical-harmonic-decomposition}
+
+This decomposition is performed around the _orbital_ angular momentum,
+which is not conserved in the generic, precessing case.
+If the binary is spin-aligned, then it is also symmetric about the orbital plane, 
+which leads to the relation $h_{\ell m}= (-1)^{\ell}h^{*}_{\ell -m}$ [@prattenComputationallyEfficientModels2021]. 
+For the expressions of the spin-weighted harmonics, see @nte-spherical-harmonics.
+
+To a good approximation, the time-domain phase of each harmonic component satisfies 
+$$
+\phi_{\ell m} (t) \approx \frac{m}{2} \phi_{22}(t)\,,
+$$
+which can also be written in the frequency domain as [@garcia-quirosIMRPhenomXHMMultimodeFrequencydomain2020]
+$$
+\phi_{\ell m} (f) = \frac{m}{2} \phi_{22}\left(  \frac{2f}{m} \right)\,.
+$$
+
+
+
+::: {#nte-spherical-harmonics .callout-note collapse="true"}
+##### Spin-weighted spherical harmonics 
+
+The spin-weighted spherical harmonics are functions of the orientation 
+of the source, parametrized as $\iota$ (inclination angle, between the 
+observation direction and the source angular momentum) and $\phi_0$ (initial phase 
+of the source's rotation).
+The formulas given here are again from 
+
+Explicitly, they are [@ajithDataFormatsNumerical2011]:
+
+$${}^{(-s)}Y_{\ell m} = (-1)^s \sqrt{\frac{2 \ell + 1}{4 \pi }} d^\ell_{m, s} (\iota ) e^{im \phi_0 }
+$$
+
+where $d^\ell_{m, s} (\iota )$ is called a Wigner $d$-function, given by
+$$ d^\ell_{m, s} (\iota ) = \sum _{k=k_1 }^{k_2 }
+\frac{(-1)^k \sqrt{(\ell+m)! (\ell-m)! (\ell+s)! (\ell-s)!}}{(\ell+m-k)! (\ell-s-k)! k! (k+s-m)!} 
+\left(\cos (\iota / 2)\right)^{2 \ell + m -s - 2k}
+\left(\sin (\iota / 2)\right)^{2 k + s - m}\,,/
+$${#eq-wigner-d-functions}
+
+where $k_1 = \max(0, m-s)$ and $k_2 = \min (\ell + m, \ell - s)$.
+
+Note that in the GW case the label for the harmonics $Y$ is $-2$, but the parameter $s$ in the $d$-function is 
+equal to $+2$. 
+
+:::
+
+::: {#nte-spherical-harmonic-identities .callout-note collapse="true"}
+##### Identities
+
+These harmonics form an orthogonal basis: 
+
+$$ \int \mathrm{d}\Omega {}^{(-2)}Y_{\ell m} {}^{(-2)}Y_{\ell' m'} = \delta _{\ell \ell'} \delta _{m m'}\,,
+$$
+
+and they satisfy
+$$ {}^sY_{\ell m} = (-1)^{s+m} Y^*_{\ell -m} \,.
+$$
+
+:::
+
+
+::: {#nte-time-domain-22-wave .callout-note collapse="true"}
+#####  The time-domain 22 wave
+
+We derive the time-domain expression for the $\ell=2$, $|m| = 2$ harmonic, 
+which is the most commonly used approximation for a gravitational wave.
+
+These are the relevant harmonics: 
+$$ {}^{(-2)}Y_{2 \pm 2} = \sqrt{ \frac{5}{64 \pi }} (1 \pm \cos \iota )^2 e^{\pm 2i \phi }\,.
+$$
+
+According to the expression we gave earlier, we will have
+
+$$ \begin{align}
+h(t) &= h_+(t) - i h_\times (t)
+= \frac{1}{d_L} \sum_{\ell = 2} \sum_{|m| = 2} H_{\ell m}(t) {}^{(-2)}Y_{\ell m}  \\
+&= \frac{1}{d_L} \left( H_{22}(t) {}^{(-2)}Y_{22} + H_{2-2}(t) {}^{(-2)}Y_{2-2}\right)  \\
+&= \frac{1}{d_L} \sqrt{ \frac{5}{64 \pi }} 
+\left( H_{22}(t) (1 + \cos \iota )^2 e^{2 i \phi_0 } + H_{2-2}(t) (1 - \cos \iota )^2 e^{-2 i \phi_0 }\right)  
+\end{align}
+$$
+
+Now, we can make use of the fact that, thanks to symmetry under reflection across the orbital plane, 
+we have $H_{\ell m} = (-1)^\ell H_{\ell -m}^*$, which in this case reduces to 
+$H_{22} = H_{2-2}^*$ (see section II.D in @ossokineMultipolarEffectiveonebodyWaveforms2020). 
+Therefore, if we define $\widetilde{H}_{22} = H_{22} e^{2i \phi_0 }$, we 
+will have 
+
+$$ 
+\begin{align}
+h(t) &= \frac{1}{d_L} \sqrt{ \frac{5}{64 \pi }} 
+\left(
+    \widetilde{H}_{22} (t) (1 + \cos \iota )^2 +
+    \widetilde{H}_{22}^* (t) (1 - \cos \iota )^2
+\right)  \\
+&= \frac{1}{d_L} \sqrt{ \frac{5}{64 \pi }} 
+\left(
+    2 \Re \widetilde{H}_{22} (t) (1 + \cos^2 \iota ) +
+    4 i \Im \widetilde{H}_{22} (t) \cos \iota 
+\right) \\
+&= h_+ - i h_\times
+\end{align}
+$$
+
+At this point, we can identify the real and imaginary components, as well as expressing 
+$\widetilde{H}_{22} = H_{22} e^{2 i \phi_0 } = A_{22}(t) e^{i \phi_{22}(t) + 2i \phi_0 }$: 
+
+$$ \begin{align}
+h_+ &= \frac{4}{d_L} \sqrt{ \frac{5}{64 \pi }} A_{22}(t) \frac{1 + \cos^2 \iota }{2} \cos(\phi_{22}(t) + 2 \phi_0) \\
+h_\times &= - \frac{4}{d_L} \sqrt{ \frac{5}{64 \pi }} A_{22}(t) \cos \iota \sin(\phi_{22}(t) + 2 \phi_0 )
+\end{align}
+$$
+
+This is the same expression we get in the quadrupole, Newtonian approximation ---
+see, for example, equations 4.3 in @maggioreGravitationalWavesVolume2007,
+as long as we reabsorb the coefficients into the amplitude.
+
+:::
+
+#### Twisting: the construction of precessing frequency-domain waveforms
+
+The construction of precessing gravitational waveforms is 
+generally performed by computing them in an inertial frame, aligned with the total angular momentum $\vec{J}$, and then converting to the non-inertial, precessing frame aligned with $\vec{L}$ by means of a time-dependent rotation [@prattenComputationallyEfficientModels2021, eq. 3.3]:
+$$
+h_{\ell m}^{L} = \sum _{m'=-\ell}^{\ell} \mathcal{D}_{m'm}^{\ell}(\alpha, \beta, \gamma) h_{\ell m'}^{J}\,.
+$$
+
+The $\mathcal{D}_{m'm}^{\ell}$ are the Wigner D-matrices
+$$
+\mathcal{D}_{m'm}^{\ell}(\alpha, \beta, \gamma)
+= e^{i m' \alpha} e^{im\gamma}\mathcal{d}_{m'm}^{\ell}(\beta)\,,
+$$
+where the $\mathcal{d}_{m'm}^{\ell}$ are the Wigner $d$-function, defined in @eq-wigner-d-functions. 
+The three Euler angles $\alpha$, $\beta$ and $\gamma$ are time-dependent.
+
+After some computation, one gets the following expression for the positive-frequency waveforms in the inertial frame:
+$$
+\begin{aligned}
+\tilde{h}^{J}_{+}(f) = \frac{1}{2} \sum_{\ell\geq {2}} \sum_{m' = 0}^{\ell} \tilde{h}^{L}_{\ell -m'}(f) e^{i m' \gamma} \sum_{m = -\ell}^{\ell} \left[ A^{\ell}_{m-m'} + (-1)^{\ell}A^{\ell*}_{mm'} \right]  \\
+\tilde{h}^{J}_{\times}(f) = \frac{i}{2} \sum_{\ell\geq {2}} \sum_{m' = 0}^{\ell} \tilde{h}^{L}_{\ell -m'}(f) e^{i m' \gamma} \sum_{m = -\ell}^{\ell} \left[ A^{\ell}_{m-m'} - (-1)^{\ell}A^{\ell*}_{mm'} \right]\,,
+\end{aligned}
+$${#eq-fourier-domain-precessing-waveforms}
+written in terms of the mode-by-mode transfer functions
+$$
+A^{\ell}_{mm'} = e^{-im \alpha} d^{\ell}_{mm'}(\beta) ^{(-2)}Y_{\ell m}\,.
+$$
+
+At a first approximation, the $L$-frame modes can be approximated with a non-precessing model, but this is not completely accurate.
+
+The angles defining the transformation need to be computed in the frequency domain as well, at a frequency $2 \pi f / m'$. 
+Post-Newtonian expressions for them can be used, such as those given in appendix G.1 of @prattenComputationallyEfficientModels2021.
+
+::: {#nte-fourier-transform-real-part .callout-note collapse="true"}
+#####  Fourier transforming a complex signal
+
+Starting from equation @eq-spherical-harmonic-decomposition, we want to obtain frequency-domain expressions for both the plus and cross polarizations, which are real-valued.
+They can be extracted by taking the real and imaginary part, and then Fourier transforming:
+$$
+\begin{aligned}
+h_{+}(f) &= \frac{1}{2} \left[ \tilde{h}(f) + \tilde{h}^{*}(-f) \right] \\
+h_{\times}(f) &= \frac{i}{2} \left[ \tilde{h}(f) - \tilde{h}^{*}(-f) \right] \,.
+\end{aligned}
+$$
+
+We can recognize this structure in @eq-fourier-domain-precessing-waveforms.
+:::
+
 ### Sky position and polarization
 
 The strain from a gravitational wave moving along a fixed direction can be written as 
@@ -99,16 +297,25 @@ $$
 For signals emitted by black holes, this is the only measurable combination through gravitational waves: 
 changing $z$ and $M_{s}$ in a way that leaves $M_{d}$ unchanged gives rise to exactly identical signals. 
 
-### Phase
+#### Gravitational wave cosmology
 
-$$
-h_+ (f) - i h_\times (f) = \frac{1}{d_L} \sum _{l=2}^{\infty } \sum
-_{m=-\ell}^{\ell} h_{\ell m} (f; \theta_{\text{int}})\, {}^{(-2)}Y_{\ell m} (\iota, \phi_0)
-$$
+A significant issue in modern cosmology is the precise determination of the expansion rate of the Universe as a function of time, or equivalently the Hubble rate $H(z)$ as a function of redshift $z$. 
 
-Mention analytic phase marginalization, 
-the way phase factors into HOM, 
-the fact that neural networks tend to have trouble inferring it. 
+Measurements of distance associated with redshift in the form $(d_{L}, z)_{i}$ would be sufficient to uniquely determine it. However, the observation of gravitational waves from a black hole binary only provides estimates of $(d_{L}, (1+z)\mathcal{M})$. 
+Much of the field of gravitational wave cosmology is devoted to the disentanglement of these contributions. Common approaches include:
+
+- Source galaxy association: if the sky position of the source 
+    is measured well enough that an electromagnetic counterpart is detected 
+    and associated with a galaxy, 
+    we can use standard spectroscopic methods to determine the redshift of that galaxy 
+    and associate it to the source. 
+    This was done with GW170817 @abbottGW170817ObservationGravitational2017, 
+    the only gravitational wave source with an electromagnetic counterpart to date.
+- Spectral methods based on the mass distribution: 
+    even if we do not know the mass of any specific source, 
+    we can model the mass distribution of the population to extract information 
+    on it. 
+
 
 ## Detector motion
 
@@ -201,6 +408,14 @@ $$
 &= \sin(\Psi'(f) F) \tilde{h}_{s}^{\text{SPA}}(f)
 \end{aligned}
 $$
+
+## Calibration
+
+When analyzing data from a detector, 
+we need to estimate strain based on some other physical quantity,
+such as the number of photons arriving at a photodiode.
+This will come with some uncertainty 
+in the amplitude and phase of the measured strain.
 
 ## Antenna patterns
 

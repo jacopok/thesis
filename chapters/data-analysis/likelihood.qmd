@@ -291,7 +291,7 @@ the integral over said parameter can sometimes be performed analytically.
 [@singerRapidBayesianPosition2016], [@thraneIntroductionBayesianInference2019]
 [@LIGOT1300326v1AnalyticMarginalisation].
 
-### Reference phase
+### Reference phase {#sec-analytic-marginalization-phase}
 
 A convenient parameter to marginalize over is the reference phase [@LIGOT1300326v1AnalyticMarginalisation]. 
 It does not have any astrophysical significance, despite being crucial for a complete description of the signal.
