@@ -39,7 +39,7 @@ However, due to the improvements in the detectors' sensitivity over the decade b
 
 ![Posterior distribution on the component masses of GW250114. Adapted from @abacGW250114TestingHawkings2025.](figures/S250114_m1_m2_grey.PNG){#fig-gw250114-component-masses width=50%}
 
-## Ringdown
+## Ringdown {#sec-ringdown}
 
 After the coalescence of two Kerr black holes, the remnant quickly settles into a quiescent state, emitting gravitational radiation in a process called _ringdown_.
 

@@ -66,7 +66,7 @@ The normalization terms $\mathcal{N_{1}}$ and $\mathcal{N_{2}}$ are different, b
 In the last equation, we introduced the notation $(\cdot | \cdot)$ for the noise-weighed inner product between waveforms, defined as 
 
 $$ (a | b) = 4 \Re \int_0^\infty \frac{a(f) b^*(f)}{S_n(f)}\text{d}f \,.
-$$
+$${#eq-noise-weighted-inner-product}
 
 More specifically, this likelihood answers the question: 
 
