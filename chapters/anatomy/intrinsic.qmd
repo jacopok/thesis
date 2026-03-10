@@ -258,13 +258,17 @@ This result can lead us to reflect on the meaning of the prior on eccentricity: 
 Objects such as neutron stars can be deformed by the tidal gravitational field caused by the presence of a nearby object, such as the binary companion.
 
 In the static case, this tidal field can be expressed as $\mathcal{E}_{ij}=C_{0i0j}$, where $C$ is the Weyl curvature tensor [@misnerGravitation1973; eq. 13.50], the trace-free component of the Riemann curvature tensor. At leading order, this tidal field will induce a quadrupole moment $Q_{ij}$, given by 
+
 $$
 Q_{ij} = - \Lambda M^{5} \mathcal{E}_{ij}
 $$
+
 where $\Lambda$ is the _tidal deformability_ or _polarizability_ parameter, written as
+
 $$
 \Lambda = \frac{2}{3} \kappa_{2} \left( \frac{Rc^{2}}{GM} \right)^{5}
-$$
+$${#eq-tidal-polarizability}
+
 where $R$ is the radius of the object, while $\kappa_{2}$ is its $\ell=2$ dimensionless tidal Love number, which for neutron stars is generally on the order of 0.1.
 
 The main tidal contribution to the waveform is through the effective tidal parameter [@wadeSystematicStatisticalErrors2014]:
@@ -316,7 +320,7 @@ There are several approaches to waveform modelling,
 with varying degrees of computational complexity, 
 completeness in the inclusion of physical effects,
 and accuracy.
-Beyond the ones listed here, we also not the existence of __Numerical Relativity surrogates__ and __phenomenological models__.
+Beyond the ones listed here, we also note the existence of __Numerical Relativity surrogates__ and __phenomenological models__.
 
 ### Post-Newtonian
 

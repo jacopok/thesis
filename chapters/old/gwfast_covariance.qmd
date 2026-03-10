@@ -1,0 +1,40 @@
+```{python}
+
+import numpy as np
+from thesis_scripts.correlation_checkerboard import plot_correlations
+symbols = np.array([
+    '$\\mathcal{M}$',
+    '$\\eta$',
+    '$d_L$',
+    '$\\theta$',
+    'ra',
+    '$\\iota$',
+    '$\\psi$',
+    '$t_{\\mathrm{coal}}$',
+    '$\\phi_{\\mathrm{coal}}$',
+    '$\\chi_{1z}$',
+    '$\\chi_{2z}$',
+    '$\\widetilde{\\Lambda}$',
+])
+# ['Mc',
+#  'dL',
+#  'theta',
+#  'phi',
+#  'iota',
+#  'psi',
+#  'tcoal',
+#  'eta',
+#  'Phicoal',
+#  'chi1z',
+#  'chi2z',
+#  'Lambda1',
+#  'Lambda2']
+# ['ra', 'dec', 'psi', 'theta_jn', 'luminosity_distance', 'mass_1', 'mass_2', 'geocent_time', 'phase']
+cov = np.loadtxt(data_path / 'gwfast_covariance.txt')
+
+reshuffle = [0, 1, 9, 10, 11, 2, 5, 3, 4, 6, 7, 8]
+
+plot_correlations(cov[np.ix_(reshuffle, reshuffle)], symbols[reshuffle])
+
+```
+
