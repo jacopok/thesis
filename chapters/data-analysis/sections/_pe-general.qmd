@@ -87,7 +87,7 @@ $$
 
 If a parameter is not constrained near a boundary, a symmetric interval can be used:
 $$
-\theta_{i}\in[y_{1}, y_{2}] \text{ at $X$ confidence, symmetric}
+\text{``}\theta_{i}\in[y_{1}, y_{2}] \text{ at $X$ confidence, symmetric''}
 \iff
 \int_{y_{1}}^{y_{2}} p(\theta_{i}|d) \text{d}\theta_{i} = X\,,
 $$

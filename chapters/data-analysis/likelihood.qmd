@@ -191,7 +191,7 @@ modelled by a simple powerlaw $h\propto f^{-7/6}$, therefore the overall
 SNR integral is much more stable under changes of model than the parameter
 estimation forecasts we will discuss later.
 
-## Likelihood acceleration
+## Likelihood acceleration {#sec-likelihood-acceleration}
 
 The two terms we need to compute in the likelihood ratio [@eq-likelihood-ratio] are the following integrals
 

@@ -720,7 +720,7 @@ Thus, we can find a termination condition based on diagnosing whether this is ha
 Since this is a stochastic algorithm, there is always a chance we are making a mistake when terminating: for example, there could be a region with very low volume but high likelihood that none of the live points have happened upon, but which could give a significant contribution to the evidence.
 There is no general solution to this issue, besides increasing the number of live points in order to improve the chances that some of them will happen upon the high-likelihood region.
 
-#### Exploration time
+### Acceleration
 
 The information gain provides an estimate of the expected volumetric compression: we expect to be sampling from the bulk of the posterior mass when $\log X \sim -H$, which will take approximately $n_\text{live}H \pm \sqrt{ n_\text{live}H }$ iterations due to Poisson variability.
 
@@ -732,9 +732,7 @@ $$
 
 So, for a fixed variance on the evidence, we need to have $n_\text{live} \propto H$; therefore, the number of iterations is approximately $n_\text{iter} \propto n_\text{live}H \propto H^{2}$. 
 
-### Acceleration
-
-The time complexity for nested sampling can be estimated as
+The time complexity for nested sampling can then be estimated as
 
 $$
 T \approx n_{\text{live}} \times \langle t_{\text{like}} \rangle \times \langle n_{\text{replace}}\rangle \times  H 
@@ -747,9 +745,16 @@ where
 - $\langle n_\text{replace} \rangle$ is the average number of likelihood evaluations required to find a replacement for each dead point;
 - $H$ is the information gain between posterior and prior.
 
+This equation assumes that likelihood evaluation is the primary computational requirement; this may not always be the case, especially for sophisticated proposal methods such as machine-learning based ones [@williamsNestedSamplingNormalising2021].
+
 Based on this equation, we can think of several ways to accelerate sampling;  @rouletInferringBinaryProperties2024 have reviewed many of them in the context of gravitational wave parameter estimation.
 
-#### Varying the number of live points
+The minimum number of live points required for unbiased inference is generally fixed by the problem, though as we discuss in @sec-dynamic-nested-sampling it may be varied during the run to gain in performance.
+
+A large gain can be often obtained by improving the replacement efficiency of the method used --- see also @sec-ns-sampling-options.
+Accelerating the evaluation of the likelihood, $\langle t_\text{like} \rangle$, will also result in a direct reduction of computational time. In @sec-likelihood-acceleration we discuss some approaches in this direction.
+
+#### Varying the number of live points {#sec-dynamic-nested-sampling}
 
 The original nested sampling algorithm evolves a fixed number of live points throughout the run. 
 It has since been proposed that it can be more efficient to vary it (@higsonDynamicNestedSampling2019, @speagleDYNESTYDynamicNested2020), depending on what is the quantity we are more interested in evaluating.
@@ -759,13 +764,4 @@ A nested sampling run gives us estimates for both the evidence and the posterior
 If we are more interested in the posterior, on the other hand, we can do the initial compression with fewer points and use more once we reach the posterior bulk. 
 
 It turns out [@higsonDynamicNestedSampling2019] that, while both these objectives can be optimized independently, the standard choice of using a constant number of live points is not on the Pareto front for the uncertainties on evidence and posterior: a balanced dynamical allocation of points can improve both compared to the constant case.
-
-#### Likelihood acceleration
-
-A direct way to speed up any likelihood-based approach is to accelerate the evaluation of the likelihood, $\langle t_\text{like} \rangle$. The way to do so is heavily dependent on the model being considered. 
-
-#### Replacement efficiency
-
-As discussed in @sec-ns-sampling-options, there are many different ways to solve the likelihood-restricted sampling problem. 
-While there is no panacea here, trying different parameters for the proposal method or switching to a different one altogether is a useful strategy when looking for acceleration.
 
