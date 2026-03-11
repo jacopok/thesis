@@ -24,4 +24,4 @@ execute:
   cache: true
   warning: false
 
-
+csl: bibstyle.csl
