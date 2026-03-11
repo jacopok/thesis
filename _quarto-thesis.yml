@@ -1,6 +1,13 @@
 project:
   type: book
 
+
+website:
+  sidebar:
+    style: "docked"
+    search: true
+
+number-depth: 3
 book:
   title: "Fast analysis of long gravitational wave signals"
   author: "Jacopo Tissino"
@@ -24,3 +31,6 @@ book:
       - chapters/multibanding/lgwa.qmd
       - chapters/multibanding/lgwa-pe.qmd
     - chapters/references.qmd
+  page-navigation: true
+  repo-url: https://github.com/jacopok/thesis
+  repo-actions: [edit, source, issue]
