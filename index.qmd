@@ -45,26 +45,27 @@ The following is a working index.
 
 ### To-add list
 
-- [ ] add final details to posterior sample section
-	- [ ] Add credible interval definition
-	- [ ] add marginal distribution definition
+- [x] add final details to posterior sample section
+	- [x] Add credible interval definition
+	- [x] add marginal distribution definition
+	- [ ] add KDE description, with the example of computing sky localization area (OPTIONAL)
 - [ ] Fisher: 
 	- [ ] add definitions from Vallisneri (LSA, Cramer Rao etc)
 	- [ ] discussion of derivative computation, cite gwfish
 	- [ ] Fisher integrands as a tool for understanding PE
-	- [ ] Fisher as a tool for understanding correlations (bayestar)
-	- [ ] Area between detectors for triangulation
+	- [ ] Fisher as a tool for understanding correlations (bayestar) 
+	- [ ] Area between detectors for triangulation, Wen-Chen
 - [ ] Likelihoods: 
 	- [ ] time-domain covariance structure, why go to the frequency domain
-	- [ ] time-domain inference in brief
+	- [ ] time-domain inference in brief (OPTIONAL)
 	- [ ] windowing, talbot et al
-	- [ ] strain plotting and whitening
+	- [ ] strain plotting and whitening (OPTIONAL)
 - [ ] NS: specify the acceleration methods to NS-related ones only, and give refs to others
 - [ ] SNR section: contextualize, mention zero-noise vs noisy injections, 
 	- [ ] mention SNR additivity in quadrature
 	- [ ] records and GW250114
 - [ ] Likelihood acceleration: give context, reference waveforms
-	- [ ] frequency grid sizes, with `mlgw_bns` figures 3-4
+	- [ ] frequency grid sizes, with `mlgw_bns` figures 3-4 (OPTIONAL)
 	- [ ] Explain ROQ in some more detail
 	- [ ] remove marginalization over distance and time, but mention them
 	- [ ] check whether there is more to cite from Roulet
@@ -93,7 +94,7 @@ The following is a working index.
 	- [ ] spin components
 	- [x] eccentricity
 	- [ ] tidal (cite only)
-- [ ] ADD: Left SXS:BBH:3999 (initial energy Ei = 1.023 and angular momentum Ji = 1.600M ). Right SXS:BBH:4000 (Ei = 1.001 and Ji = 1.005M ). These are SXS simulations showing hyperbolic capture.
+- [ ] ADD: Left SXS:BBH:3999 (initial energy Ei = 1.023 and angular momentum Ji = 1.600M ). Right SXS:BBH:4000 (Ei = 1.001 and Ji = 1.005M ). These are SXS simulations showing hyperbolic capture. (OPTIONAL)
 - [ ] eccentricity geometric description
 - [ ] move antenna pattern section from the tidal one
 - [ ] touch on priors
@@ -115,10 +116,9 @@ The following is a working index.
 	 - [ ] description of the comparison with Fisher, backreference
  - [ ] LGWA introduction from the whitepaper
 	 - [ ] add pretty pictures, payload description, location
-	 - [ ] redo computations for the response
+	 - [ ] redo computations for the response (OPTIONAL)
 	 - [ ] finish "importance of computing merger time" with estimates of the wavelength of a GW at that freq
 	 - [ ] include opportunities of LG detection Fisher figure
 	 - [ ] include GW231123 paper pop results
  - [ ] move geometry of lunar GW detection to LGWA chapter, report results
  - [ ] describe relative binning for LGWA
-

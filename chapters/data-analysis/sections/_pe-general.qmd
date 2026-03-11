@@ -18,64 +18,118 @@ The entries in this equation are:
 - the _evidence_ $\mathcal{Z}$ for the model - a normalization constant for the posterior, or the likelihood for the data marginalized over all the model's parameters.
 
 The likelihood and prior are part of the problem definition, and can often be readily computed at any given value of the parameters.^[This is not true for all approaches: in Simulation-Based Inference (SBI, see @sec-simulation-based-inference) the likelihood may be implicitly defined; nevertheless, Bayes' theorem underlies those analyses as well.]
-What we refer to as "computing the posterior" means obtaining a useful representation for it: the questions we are often interested in are in the form
-
-- what is the mean value and standard deviation of the $i$-th parameter $\theta_{i}$?
-- what is the smallest region to which we can constrain the parameter $\theta_{i}$ with a certain probability, such as 90%?
-- what is the correlation between parameter $\theta_{i}$ and parameter $\theta_{j}$?
 
 If the parameter space is high-dimensional, evaluating the posterior on a grid quickly becomes unpractical. 
-A common solution to this issue is to use stochastic methods, which allow us to obtain a set of samples $\theta _i$ distributed according to the posterior.
+A common solution to this issue is to use stochastic methods, which allow us to obtain a set of samples $\theta _i$ distributed according to the posterior and from which we can obtain information as discussed in @sec-posterior-samples.
 
 There exist many different such algorithms. Several of them can probe the posterior distribution $p(\theta|d, M) \propto \mathcal{L}(d|\theta, M) \pi(\theta|M)$ without computing its normalization constant $\mathcal{Z}$, the evidence: for example, the Metropolis-Hastings algorithm, a flavor of Markov-Chain Monte Carlo [@hoggDataAnalysisRecipes2018], operates by accepting or rejecting proposals based on the ratio of their probabilities, which is normalization-independent.
+Nested Sampling, which we shall discuss in more detail in @sec-nested-sampling, was developed as a method for computing the evidence, but it also yields the posterior as a by-product.
+Machine learning-based methods such as Simulation-Based Inference (@sec-simulation-based-inference) can perform this task even faster.
 
-Nested Sampling, which we shall discuss in more detail in section @sec-nested-sampling, was developed as a method for computing the evidence, but it also yields the posterior as a by-product.
+### Posterior samples {#sec-posterior-samples}
 
-### Posterior samples
-
-Representing a high-dimensional posterior distribution through samples is convenient, since we can easily compute summary statistics from them, such as the expectation value of any function $f(\theta)$:
-
-$$ \langle f \rangle_{\theta \sim p(\theta | d, M)} \approx \frac{1}{N} \sum _{i=1}^N f(\theta _i) \,.
+What we refer to as "computing the posterior" means obtaining a useful representation for it.
+For example, a common quantity we are interested in are the _marginal distributions_ of single parameters. The marginal posterior for the parameter $\theta_{i}$ is defined by integrating over all the other parameters, _i.e._ _marginalizing_: 
+$$
+p(\theta_{i}|d) = \int \left( \prod_{k\neq i} \text{d}\theta_{k} \right) p(\theta| d)\,.
+$$
+The marginal distribution over two or more parameters can be defined analogously, by integrating along all dimensions except for the ones at hand.
+Marginal distributions are the best approximation for what out posterior belief about the given parameter(s) should be; they include all the uncertainty on that parameter driven by the uncertainty in other, related parameters. @fig-marginalizing-vs-conditioning illustrates this by comparing the marginal distribution with the _conditional_ distribution, obtained by fixing the values of the other parameters to some value: 
+$$
+p(\theta_{i}|d, \left\{ \theta_{k}^{0} \right\}_{k \neq i})
+=
+p(\theta|d) \text{ computed at } \left\{ \theta_{k} = \theta_{k}^{0} \right\}_{k \neq i}
+\,.
 $$
 
-TODO add info based on Thrane and Talbot 2019
-
-### Conditioning versus marginalizing
-
-TODO rewrite to fit the context, add definitions of marginals.
-
-It is important to include all parameters when performing a Fisher matrix analysis.
-This is because not including a parameter which correlates to the one we care about in 
-the Fisher analysis is equivalent to __conditioning__ upon it having that specific value, 
-while the correct operation to be performed is __marginalizing__ over all possible values.
-
-Here is a graphical way to see the difference between conditioning and marginalizing 
-for correlated variables.
+Conditional distributions generally have less variance than their respective marginals, but unless we have a reason (such as a different observation) to specifically choose a given value for the other parameters, they are inaccessible in real parameter estimation.
 
 ```{python}
+#| label: fig-marginalizing-vs-conditioning
+#| fig-cap: "An illustration of the difference between marginalizing and conditioning in the case of a multivariate Gaussian distribution."
+
 from thesis_scripts.multivariate_normal import MultivariateNormal
 n = MultivariateNormal([0, 0], [[1, 0.8], [0.8, 1]])
 n.plot_2d_analytical(0, 0, .9)
 ```
 
-When dealing with the _correlation matrix_ marginalizing 
-simply amounts to ignoring some parameters, but crucially
-in the _Fisher matrix_ this is not the case, since the 
-inversion introduces mixing between the parameters.
+A set of $N$ samples^[We represent these samples with two indices: a lower one indicating the dimension in the parameter space, and an upper one in parenthesis indicating the number of the sample.] $\left\{ \theta^{(k)} \right\}_{k}$ can be used to represent a high-dimensional posterior distribution. 
+This is convenient, since we can marginal distributions are trivially obtained from these by only considering one of their entries, since $\left\{ \theta_{i}^{(k)} \right\} \sim p(\theta_{i}|d)$.
+
+We can easily compute a number of summary statistics from samples, such as the expectation value of any function $f(\theta)$ [@thraneIntroductionBayesianInference2019]:
+
+$$ \langle f \rangle_{\theta \sim p(\theta | d, M)} \approx \frac{1}{N} \sum _{k=1}^N f(\theta^{(k)}) \,.
+$$
+This general expression can be used for many different applications:
+
+- the mean and variance of a parameter $\theta_{i}$ can be obtained by setting $f=\theta_{i}$ and $f= (\theta_{i} - \langle \theta_{i} \rangle)^{2} N/ (N-1)$ respectively;
+- the covariance matrix of the whole parameter space can be obtained by setting $f = (\theta_{i}-\langle \theta_{i} \rangle)(\theta_{j} - \langle \theta_{j} \rangle) N/(N-1)$;
+- an histogram for the parameter $\theta_{i}$ can be obtained with a set of functions which return the height of bin $m$: $f_{m} = [ \theta^{\text{min}}_{m} \leq \theta_{i}^{(k)} < \theta^{\text{max}}_{m}]$,^[This expression is using the Iverson bracket [@knuthTwoNotesNotation1992] which returns 1 if the statement inside is true and 0 otherwise.].
+
+Working with samples also has disadvantages. 
+For example, conditional distributions, which we are sometimes interested in, are difficult to obtain. 
+Furthermore, in certain applications an estimate of the underlying density function is useful, 
+but it is hard to obtain, though some techniques exist including Kernel Density Estimation and normalizing flows (@sec-normalizing-flows).
+
+#### Credible regions
+
+A common method to quantify the uncertainty in the estimate of a parameter is to compute some kind of Bayesian Credible Interval with a given confidence $X$; in the gravitational wave literature, $X=0.9$ is generally the standard choice. 
+
+There are different ways to define such an interval, depending on the problem at hand. 
+If a parameter is bounded, and its posterior exhibits significant mass near the boundary, a single-sided interval is often given:
+$$
+\text{``}\theta_{i} \leq y \text{ at $X$ confidence"} \iff \int_{\theta_{i}^{\text{min}}}^{y} p(\theta_{i}|d) \text{d}\theta_{i} = X
+$$
+$$
+\text{``}\theta_{i} \geq y \text{ at $X$ confidence"} \iff 
+\int_y^{\theta_{i}^{\text{max}}} p(\theta_{i}|d) \text{d}\theta_{i} = X\,.
+$$
+
+If a parameter is not constrained near a boundary, a symmetric interval can be used:
+$$
+\theta_{i}\in[y_{1}, y_{2}] \text{ at $X$ confidence, symmetric}
+\iff
+\int_{y_{1}}^{y_{2}} p(\theta_{i}|d) \text{d}\theta_{i} = X\,,
+$$
+with also
+$$
+\int_{y_{2}}^{\theta_{i}^{\text{max}}} p(\theta_{i}|d) \text{d}\theta_{i} =
+\int_{\theta_{i}^{\text{min}}}^{y_{1}} p(\theta_{i}|d) \text{d}\theta_{i} 
+= \frac{1-X}{2}\,.
+$$
+These kind of intervals are commonly adopted due to the ease of their computation, which reduces to computing quantiles of the $p(\theta_{i}|d)$ distribution, either at $X$ or $1-X$ (for the one-sided case) or at $(1-X) / 2$ and $(1+X) / 2$ (for the symmetric case).
+
+Another method to quantify the uncertainty on one or more parameters is the _Highest Probability Density_ )HPD region.
+This is a region defined as $R(X) = \left\{ \theta | p(\theta|d) \geq K(X) \right\}$, where the value of $K$ is chosen such that 
+$$
+\int_{R(X)} p(\theta|d) \text{d}\theta = X\,.
+$$
+For a univariate, unimodal distribution this is the shortest possible interval which contains a probability mass $X$.
+
+Computationally, this region can be estimated by: 
+
+- discretizing the parameter space for the variables of interest into bins;
+- estimating the probability density in each bin (this is often performed with a KDE, since counting the samples in each bin is affected by high variance); 
+- sorting the bins by contained probability mass (highest first);
+- adding the probability mass in the first $n$ bins, and increasing $n$ until the total surpasses $X$.
+
+The $n$ bins obtained will represent the desired region.
 
 #### Weighted samples {#sec-weighted-samples}
 
 Some algorithms, such as Nested Sampling [@sec-nested-sampling] or importance-sampled Neural Posterior Estimation [@sec-importance-sampling-npe], can return a set of _weighted_ samples. 
 This means that each sample $\theta_{i}$ is associated with a weight $w_{i}$.
-Weighted samples can also arise in the context of _reweighting_: slightly perturbing the assumptions underlying an analysis and 
+Weighted samples can also arise in the context of _reweighting_: slightly perturbing the assumptions underlying an analysis and thus obtaining a set of weights in the form
+$$
+w_{i} = \frac{\mathcal{L}_{1}(\theta_{i}|d) \pi_{1}(\theta_{i})}{\mathcal{L}_{2}(\theta_{i}|d) \pi_{2}(\theta_{i})}\,.
+$$
 
 Summary statistics can be computed through __importance sampling__, as 
-$$ \langle f \rangle_{\theta \sim p(\theta | d, M)} \approx \frac{1}{N} \sum _{i=1}^N w_{i} f(\theta _i) \,.
+$$ \langle f \rangle_{\theta \sim p(\theta | d, M)} \approx \frac{\sum _{i=1}^N w_{i} f(\theta _i)}{\sum_{i=1}^{N}w_{i}} \,.
 $$
-Weighted samples can also be directly used to construct histograms --- the height of each bin will correspond to the sum of the weights of the samples contained within it ---, perform kernel density estimates and so forth. 
-They can be inconvenient
+Based on this, all the quantities that could be obtained as described in @sec-posterior-samples can be retrieved with weighted samples as well.
 
-We can also extract equally-weighted samples from weighted ones by __rejection sampling__ @ashtonReconstructingResamplingGuide2025:
+We can also extract equally-weighted samples from weighted ones by __rejection sampling__ [@ashtonReconstructingResamplingGuide2025]:
 
 1. Establish the highest weight, $w _\text{max} = \max w_{i}$;
 2. for each sample $\theta_{i}$: 
@@ -85,8 +139,6 @@ We can also extract equally-weighted samples from weighted ones by __rejection s
 
 On average, this procedure will retain $n\langle w \rangle / \max w$ out of $n$ samples; if many of the weights are lower than their maximum, it can become quite inefficient. 
 In fact, under the realistic assumption of the weights being log-normally distributed, it can be shown that working with the weighted samples can be significantly more efficient than performing rejection sampling [@ashtonReconstructingResamplingGuide2025, fig. 3].
-
-TODO: Also maybe cite: @williamsValidatingSequentialMonte2025, @romero-shawBayesianInferenceCompact2020.
 
 #### $p$-$p$ plots
 

@@ -2,6 +2,12 @@
 
 The Fisher matrix approximation 
 
+When dealing with the _correlation matrix_ marginalizing 
+simply amounts to ignoring some parameters, but crucially
+in the _Fisher matrix_ this is not the case, since the 
+inversion introduces mixing between the parameters.
+
+
 In the Fisher matrix approximation, we are considering the 
 gravitational wave likelihood as if it was written like 
 
