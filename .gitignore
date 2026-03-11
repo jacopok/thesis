@@ -184,3 +184,6 @@ data/gw170817_run/*
 thesis.tar
 
 *.webp
+thesis/chapters/anatomy/figures/S250114_m1_m2_grey.PNG
+.gitignore
+thesis/site_libs/bootstrap/bootstrap-icons.woff
