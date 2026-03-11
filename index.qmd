@@ -60,7 +60,7 @@ The following is a working index.
 	- [ ] time-domain inference in brief (OPTIONAL)
 	- [ ] windowing, talbot et al
 	- [ ] strain plotting and whitening (OPTIONAL)
-- [ ] NS: specify the acceleration methods to NS-related ones only, and give refs to others
+- [x] NS: specify the acceleration methods to NS-related ones only, and give refs to others
 - [ ] SNR section: contextualize, mention zero-noise vs noisy injections, 
 	- [ ] mention SNR additivity in quadrature
 	- [ ] records and GW250114
