@@ -29,8 +29,15 @@ and/or computationally intensive to generate.
 ### To-do list
 
 - [ ] find the proper `preamble.tex`, GSSI logo and so forth to use
-- [ ] fix the weirdly large number of authors cited 
+- [x] fix the weirdly large number of authors cited 
 - [ ] explain code availability and the meaning of typewriter text in preamble
+- [ ] make the repository and website public
+- [ ] understand why the pp-plot in Talbot+ is underconstrained
+
+#### Nice-to-haves
+
+- [ ] add some interactive plots
+
 
 ## Parameter estimation and model selection
 

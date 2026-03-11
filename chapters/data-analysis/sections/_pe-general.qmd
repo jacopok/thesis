@@ -140,7 +140,7 @@ We can also extract equally-weighted samples from weighted ones by __rejection s
 On average, this procedure will retain $n\langle w \rangle / \max w$ out of $n$ samples; if many of the weights are lower than their maximum, it can become quite inefficient. 
 In fact, under the realistic assumption of the weights being log-normally distributed, it can be shown that working with the weighted samples can be significantly more efficient than performing rejection sampling [@ashtonReconstructingResamplingGuide2025, fig. 3].
 
-#### $p$-$p$ plots
+#### $p$-$p$ plots {#sec-pp-plot}
 
 Mistrusting the results of our analysis pipelines is wise: we ought to put them through as many tests as possible in order to spot any issues. 
 

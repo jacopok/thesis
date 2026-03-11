@@ -39,6 +39,7 @@ See the example [here](https://quarto.org/docs/authoring/figures.html#block-layo
 #### References
 
 See [here](https://quarto.org/docs/authoring/citations.html). 
+To vary the citation style see [here](https://quarto.org/docs/authoring/citations.html#sec-citations-style).
 
 - Section title: `## Title {#sec-title}`
 - Equation: `{#eq-title}` _after_ the final `$$`
@@ -103,6 +104,7 @@ where `note` can be substituted by `warning`, `important`, `tip` or `caution`, s
 ### Useful refs
 
 - [Tips and tricks](https://danielborek.me/2023/pdf-quarto-tips/)
+- [Code execution and caching options](https://quarto.org/docs/projects/code-execution.html)
 
 ### Making a single-file PDF
 

@@ -10,19 +10,40 @@ format:
 ---
 # Gravitational wave parameter estimation
 
-This chapter will outline the basic requirements of parameter estimation for gravitational waves. 
+This chapter will outline the basic tools used for the parameter estimation for gravitational waves. 
 
-Fourier transform:
+The starting point for our analysis is typically an estimate for the gravitational wave strain observed by one or more detectors, which is expressed as a discretized time series $d(i \Delta t)$, with integer $i$. 
+Each of the entries in this time series is noisy, and they cannot be considered in isolation: due to the wide-band nature of the noise, any given pair of points $d(i \Delta t)$ and $d(j\Delta t)$ will in general be _correlated_.
+Then, in order to analyze a data segment of duration $T$, with $N = T / \Delta t$ samples, we would naïvely need to consider all $N^{2}$ combinations.
+
+The Fourier transform of the signal can come to our aid: its continuous version is
 $$
-\tilde{g}(f) = \int_{-\infty}^{\infty} g(t) \exp(2\pi i ft)\text{d}t
+\tilde{h}(f) = \int_{-\infty}^{\infty} h(t) \exp(-2\pi i ft)\text{d}t\,,
 $$
+while the discrete version, computed at a frequency $f = m / T$ with integer $m$, is
+$$
+\tilde{h}(m / T) = \Delta t \sum_{n=0}^{N-1} h(n \Delta t) \exp \left(  -\frac{2 \pi i mn }{N}  \right)\,.
+$${#eq-fourier-transform-discrete}
 
-- define Fourier transform
-- TD time shifts = FD linear terms
-- windowing, periodicity assumption
+::: {#nte-fourier-transform-periodicity .callout-note collapse="true"}
+##### Fourier transform periodicity and range
+
+While this  can be computed for any $m \in \mathbb{Z}$, it only contains independent information for $0 \leq m < N / 2$: since our time domain signal is real-valued $\tilde{h}(-m / T) = \tilde{h}^{*}( m / T)$, and $\tilde{h}(m /T) = \tilde{h}( (m+N) / T)$. 
+
+Starting from $N$ real-valued samples in time we then get $N / 2$ complex-valued ones in frequency.
+The frequency samples are spaced by $1 / T$, while the highest frequency available is $1 / 2 \Delta t$, the Nyquist frequency. 
+Any signal with frequency higher than this would experience _aliasing_, since its period would be faster than the sample rate. 
+:::
 
 
-## The Whittle likelihood
+The Fast Fourier Transform algorithm allows us to compute this relatively quickly, in $O(N \log N)$ operations [@heidemanGaussHistoryFast1984].
+
+Under some assumptions, the Fourier components of the data are uncorrelated, which reduces the computational complexity to $O(N)$.
+Because of this, we will start our discussion with the Fourier-domain Whittle likelihood (@sec-whittle-likelihood), but also describe the way parameter estimation can be performed when those assumptions break down (@sec-time-domain-pe).
+
+
+
+## The Whittle likelihood {#sec-whittle-likelihood}
 
 The likelihood expresses the answer to the question:
 
@@ -102,6 +123,111 @@ and the evidence we will obtain, the integral of $\mathcal{L}_{r}(d|\theta) \pi(
 
 ### Periodic data: windowing
 
+The Fourier transform in equation @eq-fourier-transform-discrete is, technically speaking, only valid if the data is _periodic_. 
+This is not the case for realistic data: on the contrary, we only want to consider a given segment in time around our event.
+
+We can model the process of selecting a finite chunk of data from a theoretically infinite process as multiplication by a window function $w(t)$ [@talbotInferenceFiniteTime2021]: if the data time series is $d_{i}$, originating from an infinite process $D_{i}$, we can define a corresponding window time series $w_{i}$ and get
+$$
+d_{i} = D_{i} w_{i}\,.
+$$
+The series $w_{i}$ is here simply defined to be 1 for indices inside the window, and 0 outside.
+In the Fourier domain, multiplication is replaced by convolution:
+$$
+\tilde{d}_{k} = (\tilde{D} * \tilde{w})_{k} = \Delta t \sum_{j=0}^{N-1} D_{j} w_{j} \exp \left( - \frac{2 \pi i j k}{N} \right) \,.
+$$
+
+Any window function will therefore introduce _spectral leakage_, making the noise covariance significantly non-diagonal in the frequency domain. 
+
+In gravitational wave science, the Tukey window is commonly chosen:
+$$
+w(t) = \begin{cases}
+\frac{1}{2} \left[ 1-\cos \left( \frac{2 \pi t}{\alpha T} \right)  \right]  && 0\leq t \leq \alpha T / 2 \\ 
+1 && \alpha T / 2 \leq t \leq T/2 \\
+w(T-t) && 0 \leq t \leq T
+\end{cases}
+$$
+
+It significantly decreases spectral leakage compared to the rectangular window, as seen in @fig-window-functions, despite leaving the central $1-\alpha$ seconds of the data unchanged.
+
+
+```{python}
+#| label: fig-window-functions
+#| fig-cap: "A comparison of a rectangular and Tukey window function in the time and frequency domains."
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+N = 1000
+x = np.arange(0, 2*N)
+
+y_rect = np.zeros(2*N)
+y_rect[:N] = 1
+
+y_tuk = np.zeros(2*N)
+
+alpha = .2
+
+for n in range(int(alpha*N/2)):
+    y_tuk[n] = .5 * (1-np.cos(2 * np.pi * n / alpha / N))
+    y_tuk[N-n] = .5 * (1-np.cos(2 * np.pi * n / alpha / N))
+for n in range(int(alpha*N/2), N//2+1):
+    y_tuk[n] = 1
+    y_tuk[N-n] = 1
+
+fig, axs = plt.subplots(1, 2, figsize=(8, 3.5))
+
+c1 = 'grey'
+c2 = 'navy'
+
+axs[0].plot(x-N//2, np.roll(y_rect, N//2), c=c1)
+axs[0].plot(x-N//2, np.roll(y_tuk, N//2), c=c2)
+axs[0].set_title('Time domain')
+axs[0].set_xlabel('Time bins')
+axs[0].set_ylabel('$w(t)$')
+
+axs[1].loglog(abs(np.fft.rfft(y_rect)), c=c1, label='Rectangular window')
+axs[1].loglog(abs(np.fft.rfft(y_tuk)), c=c2, 
+label='Tukey window, $\\alpha=0.25$')
+axs[1].set_ylim(1e-3, 5e3)
+axs[1].set_title('Frequency domain')
+axs[1].set_xlabel('Frequency bins [log]')
+axs[1].set_ylabel('$\log|\\tilde{{w}}(f)|$')
+axs[1].set_yticklabels([])
+axs[1].legend()
+
+plt.show()
+
+```
+
+Applying a Tukey function with parameter $\alpha$ to a stationary time series will, on average, reduce its power to a fraction of the total given by [@talbotInferenceFiniteTime2025]
+$$
+\beta = \int w^{2}(t) \text{d}t = 1- \frac{5\alpha}{8}\,.
+$$
+
+Before mid-2025, it was common practice in the analyses performed by the LIGO-Virgo-KAGRA collaboration to counteract this effect by rescaling the whole data segment by a factor $1/\sqrt{ \beta }$.
+
+However, @talbotInferenceFiniteTime2025 showed that 
+
+1. the non-diagonality in the noise matrix introduced by the Tukey window has no significant impact on inference if the data segment is long enough;^[The precise requirement is as follows: let us define $D_{w}$ as the diagonal matrix which applies the whitening operation in the time domain, and the whitening filter $\mathcal{W}$, written in terms of the noise covariance matrix $C$ as $\mathcal{W}^{\top} \mathcal{W} = C^{-1}$. Then, the impact on inference is small as long as the two quantities $\mathcal{W}h$ and $\mathcal{W}(1-D_{w})d$ do not significantly intersect.]
+2. rescaling the data by $1 / \sqrt{ \beta }$ brings about a small, but detectable, systematic bias in inference.
+
+The second point was shown through a pp-plot.
+For a few thousand times, a signal was injected and recovered in a data segment, with or without the correction.
+The recovery was performed only varying the luminosity distance of the signals. 
+
+::: {layout-ncol=2}
+
+![_p_-_p_ plot for the distance-only injections with and without the correction. From @talbotInferenceFiniteTime2025.](figures/pp-test.pdf)
+
+  
+
+![K-S test _p_-value as a function of the number of injected signals, from @talbotInferenceFiniteTime2025.](figures/pvalue_logit.png)
+
+:::
+
+It shows signs of underconstraining, see @fig-pp-plot-bias-underconstrain.
+TODO it should be overconstrained! 
 
 ### Non-periodic data: time domain parameter estimation {#sec-time-domain-pe}
 
@@ -119,7 +245,7 @@ as opposed to plotting strain.
 
 
 
-## Signal-to-noise ratio
+## Matched filtering and the signal-to-noise ratio
 
 TODO: distinguish MF SNR vs opt SNR
 TODO: discuss data visualization, why use whitened strain vs strain and so forth
