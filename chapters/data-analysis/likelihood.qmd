@@ -141,9 +141,9 @@ Any window function will therefore introduce _spectral leakage_, making the nois
 In gravitational wave science, the Tukey window is commonly chosen:
 $$
 w(t) = \begin{cases}
-\frac{1}{2} \left[ 1-\cos \left( \frac{2 \pi t}{\alpha T} \right)  \right]  && 0\leq t \leq \alpha T / 2 \\ 
-1 && \alpha T / 2 \leq t \leq T/2 \\
-w(T-t) && 0 \leq t \leq T
+\frac{1}{2} \left[ 1-\cos \left( \frac{2 \pi t}{\alpha T} \right)  \right]  & 0\leq t \leq \alpha T / 2 \\ 
+1 & \alpha T / 2 \leq t \leq T/2 \\
+w(T-t) & 0 \leq t \leq T
 \end{cases}
 $$
 
@@ -220,7 +220,7 @@ The recovery was performed only varying the luminosity distance of the signals.
 
 ![_p_-_p_ plot for the distance-only injections with and without the correction. Adapted from @talbotInferenceFiniteTime2025.](figures/pp-test.pdf)
 
-![K-S test _p_-value as a function of the number of injected signals, adapted from @talbotInferenceFiniteTime2025.](figures/pvalue_logit.png)
+![K-S test _p_-value as a function of the number of injected signals, adapted from @talbotInferenceFiniteTime2025.](figures/pvalue_logit.pdf)
 
 :::
 
