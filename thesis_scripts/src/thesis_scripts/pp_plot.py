@@ -35,16 +35,18 @@ def ks_test(u, mode="D+"):
     """
 
     N = len(u)
-    cdf = stats.ecdf(u).cdf.quantiles
-    theoretical_cdf = np.arange(1.0, N + 1) / N
+    x = np.arange(1.0, N + 1) / N
+    theoretical_cdf = x
+    cdf = stats.ecdf(u).cdf.evaluate(x)
+    
     if mode == "D+":
-        idx = np.argmax(theoretical_cdf - cdf)
-        D = (theoretical_cdf - cdf)[idx]
+        idx = np.argmax(cdf - theoretical_cdf)
+        D = (cdf - theoretical_cdf)[idx]
         p = stats.ksone.sf(D, N)
         return D, p, idx
     elif mode == "D-":
-        idx = np.argmax(cdf - theoretical_cdf)
-        D = (cdf - theoretical_cdf)[idx]
+        idx = np.argmax(theoretical_cdf - cdf)
+        D = (theoretical_cdf - cdf)[idx]
         p = stats.ksone.sf(D, N)
         return -D, p, idx
     elif mode == "D":
@@ -60,11 +62,10 @@ def ks_test(u, mode="D+"):
 
 def pp_plot(u, confidence_intervals = (.68, .95, .997), ks_test_labels='floating'):
 
-    # First bin should have non-zero probability since this is a p.m.f
     N = len(u)
-    estimated_cdf = stats.ecdf(u).cdf.quantiles
-    theoretical_cdf = np.arange(1.0, N + 1) / N
-    x = theoretical_cdf
+    x = np.arange(1.0, N + 1) / N
+    theoretical_cdf = x
+    estimated_cdf = stats.ecdf(u).cdf.evaluate(x)
 
     fig, ax = plt.subplots(1, ncols=3, figsize=(8, 8/3))
     nbins = min(len(np.histogram_bin_edges(u, "auto")) - 1, 1000)
@@ -122,10 +123,9 @@ def pp_plot(u, confidence_intervals = (.68, .95, .997), ks_test_labels='floating
         ax[2].fill_between(x, lower, upper, color="grey", alpha=0.2)
 
 
-    # Subtract 1 since we count indices from 0
     ax[2].plot(
         x,
-        theoretical_cdf - estimated_cdf,
+        estimated_cdf - theoretical_cdf,
         c="C0",
         label="Analytic cdf - Estimated cdf",
     )

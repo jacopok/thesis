@@ -9,7 +9,7 @@ format:
         bibliography: ../../rehear.bib
 ---
 
-# Extrinsic parameters and signal projection
+# Extrinsic parameters and signal projection {#sec-extrinsic}
 
 ## Extrinsic parameters
 
@@ -164,7 +164,7 @@ as long as we reabsorb the coefficients into the amplitude.
 
 :::
 
-#### Twisting: the construction of precessing frequency-domain waveforms
+#### Twisting: the construction of precessing frequency-domain waveforms {#sec-twisting}
 
 The construction of precessing gravitational waveforms is 
 generally performed by computing them in an inertial frame, aligned with the total angular momentum $\vec{J}$, and then converting to the non-inertial, precessing frame aligned with $\vec{L}$ by means of a time-dependent rotation [@prattenComputationallyEfficientModels2021, eq. 3.3]:
@@ -368,13 +368,18 @@ z = np.linspace(0, 1, num=1000)
 
 dV_dz = cosmo.differential_comoving_volume(z) * 4 * np.pi * u.steradian
 
-dL = cosmo.luminosity_distance(z)
+dL = cosmo.luminosity_distance(z).to(u.Gpc)
 dd_dz = dL / (1+z) +  ac.c * (1+z) / cosmo.H(z)
 
-plt.plot(dL, (dL**2).to(u.Gpc**2), label='Luminosity volume')
-plt.plot(dL, (1/(1+z)*dV_dz / dd_dz).to(u.Gpc**2), label='Source frame volume')
-plt.plot(dL, (dV_dz / dd_dz).to(u.Gpc**2)/1.6, label='Comoving frame volume')
+normalize = lambda x :  x.to(u.Gpc**2) / np.max(x.to(u.Gpc**2))
+
+plt.plot(dL, normalize(dL**2), label='Luminosity volume')
+plt.plot(dL, normalize(1/(1+z)*dV_dz / dd_dz), label='Source frame volume')
+plt.plot(dL, normalize(dV_dz / dd_dz), label='Comoving frame volume')
 plt.legend()
+plt.yticks([])
+plt.xlabel('Distance [Gpc]')
+plt.ylabel('Normalized probability density')
 plt.show()
 ```
 
@@ -503,10 +508,20 @@ $$
 
 ## Antenna patterns
 
-
-
 ### Interferometer antenna patterns
 
+The strain at the detector, $h(t)$, depends on the gravitational-wave
+strain $h_{ij}(t)$ through contraction with a __detection tensor__ $D_{ij}$,
+which depends on the orientation and shape of the detector's arms: 
+$$ h(t) = h_{ij} (t) D_{ij}(t)\,.
+$$
+
+For current detectors the time dependence of $D_{ij}$ is negligible, 
+since the signal is in band for minutes at most, while for ET
+this will have to be taken into account.
+The Fisher matrix is typically computed in the frequency domain, which makes 
+the computation trickier, but still feasible (see section 3.2 of
+@iacovelliForecastingDetectionCapabilities2022 for more details).
 
 
 #### The long-wavelength approximation {#sec-long-wavelength-approximation}

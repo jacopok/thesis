@@ -218,51 +218,115 @@ The recovery was performed only varying the luminosity distance of the signals.
 
 ::: {layout-ncol=2}
 
-![_p_-_p_ plot for the distance-only injections with and without the correction. From @talbotInferenceFiniteTime2025.](figures/pp-test.pdf)
+![_p_-_p_ plot for the distance-only injections with and without the correction. Adapted from @talbotInferenceFiniteTime2025.](figures/pp-test.pdf)
 
-  
-
-![K-S test _p_-value as a function of the number of injected signals, from @talbotInferenceFiniteTime2025.](figures/pvalue_logit.png)
+![K-S test _p_-value as a function of the number of injected signals, adapted from @talbotInferenceFiniteTime2025.](figures/pvalue_logit.png)
 
 :::
 
-It shows signs of underconstraining, see @fig-pp-plot-bias-underconstrain.
-TODO it should be overconstrained! 
+It shows signs of overconstraing: compare with the example in @fig-pp-plot-bias-overconstrain.
+Rescaling the data is equivalent to multiplying the log-likelihood by $1/ \beta$, which makes its peak artificially too narrow.
+
 
 ### Non-periodic data: time domain parameter estimation {#sec-time-domain-pe}
 
-The previous analysis has an assumption of periodicity.  
+The procedure of windowing and tapering the data works well enough for the analysis of a full gravitational wave signal, for which we can consider a relatively long segment around the event. 
+However, in some cases we do not have that luxury: 
+for example, in the analysis of the ringdown,
+it is crucial to be able to isolate the perturbative regime, 
+which only describes the data well starting a certain time after the merger (@sec-ringdown).
 
+To this end, we want to only analyze data starting from a specific point in time which "cuts off" part of the signal in the region where it is stronger. 
+Trying to impose this kind of sharp time-domain cut in the frequency domain is a losing endeavour.
+The solution is to go back to a time-domain likelihood, in the form:
 $$
 \mathcal{L}(d|\theta) = - \frac{1}{2}\sum_{i,j=0}^{N} (d_{i}-h_{i}) C_{ij}^{-1} (d_{j}-h_{j}) + \text{const.}
+$$
+where $d_i$ and $h_i$ are the discretized time-domain data and predicted strain, defined so that the index $i=0$ corresponds to the cut time [@isiAnalyzingBlackholeRingdowns2021].
+
+The time-domain covariance $C_{ij}$ is not diagonal, unlike the frequency-domain one. Still, there are some computational tricks one can use. 
+
+We need two definitions: a matrix is said to be _Toeplitz_ if its diagonals contain constant values: for all $0\leq i,j < N$, we have $C_{ij} = C_{{(i+1)(j+1)}}$. An $N\times N$ Toepliz matrix has $2N-1$ independent entries.
+A _symmetric Toeplitz_ matrix, furthermore, satisfies $C_{ij}=C_{ji}$, and only has $N$ independent entries.
+It can be expressed in terms of a vector $\rho$ with $N$ entries: $C_{ij} = \rho_{|i-j|}$.
+A _circulant_ matrix is a Toeplitz matrix in which every row is equal to the previous one, shifted by one:   $C_{ij} = \rho_{{(i-j) \text{ mod }N}}$; if the circulant matrix is symmetric, then $C_{ij} = \rho_{|i-j| \text{ mod } N}$. 
+A symmetric circulant metric only has $\lceil N / 2 \rceil$ independent entries.
+
+The time-domain noise covariance of a stationary process is always symmetric Toeplitz: its entry $C_{ij}$ describes the covariance between time $i\Delta t$ and time $j \Delta t$; by stationarity, this can only depend on the delay $(i-j)\Delta t$, therefore only on the difference $i-j$. As this is a covariance matrix it will be symmetric: the entries can actually only depend on the modulus of the index difference, $|i-j|$.
+Furthermore, if we impose periodic boundary conditions then the covariance is also circulant; we cannot do so in the time-limited case.
+
+Circulant matrices are exactly diagonalized by the discrete Fourier transform.
+Toeplitz matrices are not, but they can be fully characterized by the autocovariance function $\rho$: $C_{ij}= \rho(|i-j|)$.
+
+The time-domain likelihood can be written as in @eq-likelihood-ratio, but with scalar products in the form [@isiAnalyzingBlackholeRingdowns2021]
+$$
+(a|b)_{\text{TD}} = \sum_{i, j= 0}^{N-1} a_{i} C^{-1}_{ij} b_{j}\,.
+$$
+If $C$ is Toepliz, this can be efficiently computed with a standard routine such as Levinson–Durbin recursion, which returns a the solution $x$ to a linear system $b_{i}=C_{ij}x_{j}$ when $C$ is a Toeplitz matrix. 
+Alternatively, one can compute the lower-triangular Cholesky factor $L$ such that $LL^{\top} = C$, invert it, and then compute the product as the scalar product of the _whitened_ vectors $L^{-1}a$ and $L^{-1}b$
+$$
+(a|b)_\text{TD} = (L^{-1}a)\cdot(L^{-1}b)\,.
 $$
 
 ### Strain plotting and whitening {#sec-strain-whitening}
 
-TODO: describe how whitening works, 
-and why it is generally preferred 
-as opposed to plotting strain. 
+It is common for data analysts to wish to start their description of some signal by showing the corresponding _unprocessed_ data, the starting point for their endeavors to draw physical meaning. 
+Being able to show unprocessed data is also useful in the context of scientific communication, since it allows the presenter to show a figure which can be immediately understood.
 
+This task is made tricky in the context of gravitational wave analysis by the nature of the noise.
+The sensitivity "bucket" in the frequency domain means that the magnitude of the noise outside a given band completely overwhelms the time-domain data: while typical strain magnitudes are on the order of $10^{-21}$ or less, raw time-domain strain data is often $> 10^{-18}$.
 
+If we are determined to show strain, we need to filter the series: @fig-strain-gw250114 shows this for GW250114. A Butterworth band-pass filter between $35 \text{Hz}$ and $350 \text{Hz}$ was applied twice to the data, in addition to a notch filter at $60 \text{Hz}$ to remove power grid-driven noise.
+The original detection paper for GW150914 [@ligoscientificcollaborationandvirgocollaborationObservationGravitationalWaves2016] used many more hand-tuned notches to eliminate the numerous spectral features present in the noise at that time, which have fortunately been reduced nowadays.
+
+![GW250114, shown in the same way as the first figure from the discovery paper for GW150914, @ligoscientificcollaborationandvirgocollaborationObservationGravitationalWaves2016.](figures/Figure_1_gw250114.png){#fig-strain-gw250114}
+
+Besides the apparent technical complexity of this approach and its many parameters, its residuals are problematic. 
+Residuals computed subtracting a filtered model from filtered strain data have little meaning, since their distribution is hard to model and frequency-dependent: one should refrain from trying to draw conclusions based on their patterns and magnitude, which essentially removes all of their utility.
+
+A significant advantage of showing filtered data is being able to show the actual signal magnitude, on the order of $10^{-21}$, on the $y$-axis.
+The alternative approach, which has become the standard nowadays, does not share this. 
+
+_Whitening_ the data means normalizing it to the noise, so that in the absence of a signal it becomes white noise. 
+In the frequency domain, whitening a series $h(f)$ means defining
+$$
+h_{w}(f) = h(f) \sqrt{ \frac{4}{T S_{n}(f)} }\,,
+$$
+where $S_{n}$ is the noise power spectral density, while $T$ is the segment duration. With this normalization, each noise entry has variance 2 (due to its independent real and imaginary components) [@BilbygwdetectorinterferometerInterferometerBilby28].
+This can also be generalized to time-domain analyses, as discussed in @sec-time-domain-pe.
+
+In the presence of a signal, whitened time-domain strain will deviate from its mean of zero; the deviation amount can be immediately interpreted as a number of standard deviations.
+For GW250114, this reached the level of 15$\sigma$, as one can see in @fig-gw250114-whitened-strain.
 
 ## Matched filtering and the signal-to-noise ratio
 
-TODO: distinguish MF SNR vs opt SNR
-TODO: discuss data visualization, why use whitened strain vs strain and so forth
+The discussion so far has discussed the analysis of a signal we know to be present in the data. 
+However, the tools we described can also be used to quantify the _detectability_ of a signal.
 
-The signal-to-noise ratio (SNR) statistic $\rho$ for the data $d$, assuming a template $h$, is 
-$\rho = (d | h) / \sqrt{(h|h)}$.
-This is the quantity that matched-filter signal searches attempt to maximize. 
-In general this will be given by $\rho = [(n|h) + (h|h)] / \sqrt{(h|h)}$, but if we are performing a forecast
-we cannot know in advance what the noise realization will be. Fortunately, the average contribution
-of the term $(n|h)$ is zero, so the expectation value is just $\rho \approx \sqrt{(h|h)}$. 
+The _matched-filter_ signal-to-noise ratio (SNR) statistic $\rho$ for the data $d$, assuming a template $h$, is given by
+$$\rho _\text{MF} = \frac{(d | h)}{\sqrt{(h|h)}}
+$$
+in terms of the scalar products defined in @eq-noise-weighted-inner-product.
 
-This does not mean that we are neglecting the noise, since its _distribution_ $S_n$ is still taken 
-into account: for example, consider the behaviour under a global rescaling of the noise PSD: $\rho \propto 1 / \sqrt{S_n}$.
-At each frequency $f$ the noise is normally distributed, with variance $S_n(f)$ and mean zero,
-so we are just considering the mean value of the noise distribution. 
+A common approach when looking for a signal in the data, is to look for high values in this quantity for a large set of templates $h$.
+
+If we fix the template $h$ we can also compute the expectation value of the SNR when varying the noise realization:
+$$
+\rho _\text{opt} = \mathbb{E}_{n} \left[ \frac{(d|h)}{\sqrt{ (h|h) }} \right] = \sqrt{ (h|h) }\,.
+$$
+While this is called _optimal_ SNR, it involves no optimization procedure. 
+If a template with a given optimal SNR is injected into Gaussian noise, the matched-filter SNR is equally likely to be higher and lower than the optimal value.
+
+Since the optimal SNR depends on an integral in the form $\rho _\text{opt}^2 \sim \int |h|^2 / S \text{d}f$, independent SNRs (such as ones from different detectors, or different frequency bands considered independently) add in quadrature:
+$$
+\rho _\text{tot}^{2} =  \sum_{i} \rho_{i}^{2}\,.
+$$
+
+The highest SNR for a gravitational wave signal, as of early 2026, was achieved by the event GW250114 [@abacGW250114TestingHawkings2025], which reached a value of nearly 80 when combining the Livingston and Hanford LIGO detectors.
 
 ### SNR thresholds
+
+This section gives a brief outline of the way to estimate what value of SNR is sufficient for a signal to be detectable. This is useful information in the context of _forecasting_, i.e. estimating the number of detected signals by some detector that is not yet operational.
 
 If we were searching for a signal without any possible shift in time and with the certainty 
 that the noise did not contain any glitches or non-Gaussianities, then the SNR would simply follow
@@ -282,11 +346,11 @@ realistic data by removing all possible coincidences.
 We can then compute the rate of noise instances surpassing our threshold, even if this rate
 is very low.
 With this, we can compute the false-alarm rate (FAR) associated to a given SNR threshold.
-It should also be noted that real searches also include other vetoes, such as requiring
+It should be noted that real searches are significantly more sophisticated than SNR maximizers; for example, `PyCBC` requires
 that each frequency band contributes appropriately to the SNR [@nitzRapidDetectionGravitational2018], which allows us to discard many loud glitches.
 
-The scaling of the FAR as a function of SNR, in the absence of large outliers, is typically exponential [@lynchObservationalImplicationsLowering2018]:
-$$ \text{FAR} = \text{FAR}_8 \exp \left( - \frac{\rho - 8}{\alpha}\right) \,.
+Nevertheless, high SNR is correlated with low FAR, and the scaling of the FAR as a function of SNR, in the absence of large outliers, is typically exponential [@lynchObservationalImplicationsLowering2018]:
+$$ \text{FAR} \approx \text{FAR}_8 \exp \left( - \frac{\rho - 8}{\alpha}\right) \,.
 $$
 
 The specific values for the FAR at $\rho = 8$ and the scaling parameter $\alpha$ 
@@ -295,64 +359,65 @@ A fit of O1 data found $\alpha = 0.18$ and $\text{FAR}_8 = 5500 \text{yr}^{-1}$ 
 and $\alpha = 0.13$ and $\text{FAR}_8 = 30000 \text{yr}^{-1}$ for BNS.
 This value of $\alpha$ means that the exponential cutoff is quite steep: 
 for example, bringing the BNS FAR from 30 thousand per year to just one 
-per year only requires us to raise the threshold to $\rho = 9.4$.
-
-### Forecasting SNR
+per year only requires us to raise the equivalent threshold to $\rho = 9.4$ on average.
 
 For the purposes of forecasting, then, what SNR threshold should we consider 
 as the minimum for detectability?
-We cannot know yet which glitches will affect our future detector, but 
-we can safely say that a threshold in the range of 8 to 10 is probably 
-acceptable.
-
-This quantity is easy to estimate and not too dependent on the 
-specifics of the waveform model: for one, it discards all phase information:
-
-$$ \text{SNR} = 2 \sqrt{\int_0^\infty \frac{|h(f)|^2}{S_n(f)} \text{d}f}
-$$
-
-and also waveform models for compact binaries differ significantly only in the 
-high-frequency region; for most of the inspiral the signal is decently
-modelled by a simple powerlaw $h\propto f^{-7/6}$, therefore the overall
-SNR integral is much more stable under changes of model than the parameter
-estimation forecasts we will discuss later.
+Despite not knowing which glitches will affect our future detectors, 
+this sharp exponential behavior gives us confidence that values in the range of roughly 8 to 12 will be sufficient. 
 
 ## Likelihood acceleration {#sec-likelihood-acceleration}
 
-The two terms we need to compute in the likelihood ratio [@eq-likelihood-ratio] are the following integrals
+This section will discuss common approaches which can be used to accelerate the computation of a frequency-domain Whittle likelihood.
 
+The two terms we need to compute for the likelihood ratio [@eq-likelihood-ratio] are the following integrals:
 $$
-\mathcal{L}_{hd} = \mathrm{Re}(h(\theta)| d) = 4 \mathrm{Re}\int_{0}^{f_\text{max}} \frac{h(f; \theta) d^*(f)}{S_{n}(f)} \text{d}f\,,
+\mathrm{Re}(h(\theta)| d) = 4 \mathrm{Re}\int_{0}^{f_\text{max}} \frac{h(f; \theta) d^*(f)}{S_{n}(f)} \text{d}f\,,
 $$
 and
 
 $$
-\mathcal{L}_{hh} = (h(\theta)| h(\theta)) = 4 \int_{0}^{f_\text{max}} \frac{|h(f; \theta)|^{2}}{S_{n}(f)} \text{d}f\,.
+(h(\theta)| h(\theta)) = 4 \int_{0}^{f_\text{max}} \frac{|h(f; \theta)|^{2}}{S_{n}(f)} \text{d}f\,.
 $$
 
-These are integrals of oscillatory functions, so evaluating them as simple Riemann sums requires a large number of samples to achieve convergence.
+The baseline approach is to evaluate these as Riemann sums on the full Fourier-domain grid (also called the "FFT grid"), which as we outlined in @nte-fourier-transform-periodicity has $T / 2\Delta t$ frequency bins.
+This becomes less and less practical the longer the data segment is. 
+
+Several approaches to accelerate this computation have been proposed, see section 3 in @rouletInferringBinaryProperties2024 for a review. 
+Here we will outline two of the most popular approaches: relative binning and reduced order quadrature.
 
 ### Relative binning
 
-Relative binning [@zackayRelativeBinningFast2018] is a technique to accelerate the evaluation of the integrals in the likelihood.
+Relative binning [@zackayRelativeBinningFast2018] is a technique to accelerate the evaluation of the integrals in the likelihood using the key idea that, while the waveform itself may be highly oscillatory, all the waveforms which are compatible with the data will be quite similar to each other (in a specific sense).
 
-The idea is that, while the waveform itself may be highly oscillatory, it will generally be close to a reference one.
+Starting from a reference waveform $h_{0}(f)$, we define the ratio $r(f) = h(f)  / h_{0}(f)$ of the generic waveform $h$ to the reference one $h_{0}$. 
+Then, we can define a relatively coarse grid in frequency, and approximate $r(f)$ to linear order within each bin $b$: for all frequencies $f$ in the bin,
+$$
+r(f) = r_{0}(b) + r_{1}(b) (f-f_{m}(b)),
+$$
+where $f_{m}(b)$ is the central frequency in the bin.
 
-The two terms are approximated as follows, in terms of a set of frequencies $b = \left\lbrace f_{i}\right\rbrace$:
+Then, we compute some summary statistics: for each bin $b$, define
+$$
+\begin{aligned}
+A_{0}(b) &= \int_{f\in b} \frac{d(f) h^{*}_{0}(f)}{S_{n}(f) / T} \\
+A_{1}(b) &= \int_{f\in b} \frac{d(f) h^{*}_{0}(f)}{S_{n}(f) / T} (f-f_{m}(b)) \\
+B_{0}(b) &= \int_{f\in b} \frac{|h_{0}(f)|^{2}}{S_{n}(f) / T} \\
+B_{1}(b) &= \int_{f\in b} \frac{|h_{0}(f)|^{2}}{S_{n}(f) / T} (f-f_{m}(b))\,.
+\end{aligned}
+$$
+
+These integrals need to be computed at maximum resolution in frequency, but only once, with the reference waveform.
+With these at hand, the two terms are approximated as follows, in terms of a set of frequencies $b = \left\lbrace f_{i}\right\rbrace$:
 
 $$
  \mathcal{L}_{hd} = \mathrm{Re} \sum_{b} (A_{0}(b) r_{0}^{*}(b) + A_{1}(b) r_{1}^{*} (b))
 $$
 and
 $$
-\mathcal{L}_{hh} = \sum_{b} ( B_{0}(b) |r_{0}(b)|^{2} + 2 B_{1}(b) \mathrm{Re}(r_{0}(b) r_{1}^{*}(b)))
+\mathcal{L}_{hh} = \sum_{b} ( B_{0}(b) |r_{0}(b)|^{2} + 2 B_{1}(b) \mathrm{Re}(r_{0}(b) r_{1}^{*}(b)))\,.
 $$
-Here, the ratio $r(f) = h(f)  / h_{0}(f)$ of the generic waveform $h$ to the reference one $h_{0}$ is expressed to linear order in each bin:
-$$
-r(f) = r_{0}(b) + r_{1}(b) (f-f_{m}(b)),
-$$
-where $f_{m}(b)$ is the central frequency in the bin.
-During likelihood evaluation we can easily compute a set of ratios $r(b)$ at every bin edge, and then we will have
+The values of the constant and linear coefficients for each bin, $r_{0}$ and $r_{1}$, can be be computed from the values of the ratio at the bin edges as
 $$
 r_{0}(b) = \frac{r(b)+r(b+1)}{2}
 \qquad \text{and} \qquad r_{1}(b) = \frac{r(b+1)-r(b)}{\text{d}f(b)}\,.
@@ -361,66 +426,42 @@ $$
 Crucially, this depends on the ratio $r(f)$ being relatively smooth across the frequency axis.
 This is expected to be approximately true for all the relevant points in the posterior, potentially not if we stray from its peak.
 
-This formulation holds for the 22 mode, but it is possible to write a more generic one including higher order modes, at the expense of some more digital ink [@narolaRelativeBinningComplete2023].
+The formulation given here works well in the absence of orbital precession. 
+In its presence it breaks down, since the smooth structure of the waveforms is not preserved - the residual $r(f)$, directly computed, is not smooth enough for . However, this can be counteracted by performing a mode-by-mode decomposition in the orbital frame of the binary (see @sec-twisting) [@narolaRelativeBinningComplete2023].
 
-For a look at how the waveform ratio looks in the LGWA case, see @fig-projected-lgwa-waveforms-ratio.
+For an example of how the waveform ratio $r(f)$ looks, see @fig-projected-lgwa-waveforms-ratio, where it is computed with the Lunar Gravitational Wave Antenna.
 
 ### Reduced order quadrature
 
-This technique differs from relative binning, in that it employs a greedy algorithm to sample from a given prior space and construct a basis that will represent all waveforms sampled there to within a given tolerance.
+Whereas relative binning seeks to closely approximate the likelihood in the region where waveforms look like what was measured, reduced order quadrature allows us to obtain a representation which is valid for any point in the prior space [@morisakiRapidLocalizationInference2023].
 
-The equations are as follows:
+The equations to approximate the terms in the likelihood are somewhat similar: some weights $\omega$ and $\psi$ are pre-computed, then the waveform is evaluated on a sparse grid and multiplied by these.
 $$
-\mathcal{L}_{dh} \approx \sum_{j=1}^{N_{L}} h(f_{j}, \theta) \omega_{j}
-$$
-$$
-\mathcal{L}_{hh} = \sum_{i=1}^{N_{Q}} \sum_{j=1}^{N_{Q}} h(f_{i}, \theta) h^{*}(f_{j}, \theta) \psi_{i}
-$$
-
-About basis size and storage details: [@morisakiRapidLocalizationInference2023].
-
-
-## Multimodality reduction
-
-The folding algorithm from [@rouletRemovingDegeneracyMultimodality2022].
-
-For LGWA the following symmetries will be preserved, I think:
-$$
-\phi \to \phi + \pi
+\mathrm{Re} (d|h) \approx \sum_{j=1}^{N_{L}} h(f_{j}, \theta) \omega_{j}
 $$
 $$
-\psi \to \psi + \frac{\pi}{2}
+(h|h) = \sum_{i=1}^{N_{Q}} |h(f_{i}, \theta)|^{2} \psi_{i}\,.
 $$
 
-also one with $\cos \iota$, but let's see.
+The weights are typically computed with a greedy algorithm, which constructs a basis that will represent all waveforms sampled from the prior to a given tolerance.
 
-Suppose we have a set of quasi-symmetries, denoted by a family of $2^{N}$ transformations $\sigma_{i}$ (the first is the identity). We consider a "folded subset" and only look there, computing the posterior probability of a point $\tilde{\theta}$ as
-$$
-\tilde{P} (\tilde{\theta}) = \sum_{i=1}^{2^{N}} P(\sigma_{i}(\tilde{\theta}))
-$$
-We do need to compute all the $2^{N}$ probabilities, and we should store them (or actually not, since we can recompute them for the relevant posterior samples...)
+@bakerSignificantChallengesAstrophysical2025 have argued that this method, while being the best currently available option to guarantee an unbiased analysis, can only be extended so far when considering next generation detectors such as the Einstein Telescope and Cosmic Explorer.
+This is because, when accounting for the Earth's rotation and frequency-dependent antenna patterns, the computational burden for creating and storing the basis becomes too large.
 
-Then we run our sampler on the folded space, and get a posterior there. 
-We can unfold it by taking each weighted sample $(\tilde{\theta}_{j}, w_{j})$ and splitting it into $2^{N}$ samples:
-$$
-\left(\sigma_{i}(\tilde{\theta}_{j}), \frac{w_{j} P(\sigma_{i}(\tilde{\theta}_{j}))}{\tilde{P}(\tilde{\theta})}\right)\,.
-$$
-These are in principle ratios of posteriors but in practice the prior is invariant under all the symmetries at hand.
-
-The unfolding code by Roulet is [here](https://github.com/jroulet/cogwheel/blob/74c8dc3b122ebea5de99e9007997a0418e450e32/cogwheel/prior.py#L134).
-
-## Analytic marginalization
+## Marginalization
 
 If the exact dependence of the likelihood on a given parameter is known, 
-the integral over said parameter can sometimes be performed analytically.
+the integral over said parameter can sometimes be performed analytically
+[@singerRapidBayesianPosition2016;@thraneIntroductionBayesianInference2019;@LIGOT1300326v1AnalyticMarginalisation].
+This procedure is generally applied to reference phase $\phi$, distance $d_{L}$ and reference time $t_{0}$ [@thraneIntroductionBayesianInference2019].
 
-[@singerRapidBayesianPosition2016], [@thraneIntroductionBayesianInference2019]
-[@LIGOT1300326v1AnalyticMarginalisation].
+With some more advanced techniques, it is possible to marginalize over all extrinsic parameter in order to minimize the number of times an expensive model for the intrinsic ones is evaluated [@rouletInferringBinaryProperties2024; @langeRapidAccurateParameter2018].
+
+Here we will outline the analytic marginalization procedure only for the relatively simple case of reference phase, as we used this in @tissinoGeometryLunarGravitational2026.
 
 ### Reference phase {#sec-analytic-marginalization-phase}
 
-A convenient parameter to marginalize over is the reference phase [@LIGOT1300326v1AnalyticMarginalisation]. 
-It does not have any astrophysical significance, despite being crucial for a complete description of the signal.
+Reference phase does not have any astrophysical significance, despite being crucial for a complete description of the signal [@LIGOT1300326v1AnalyticMarginalisation].
 
 If the waveform is dominated by the $\ell |m| = 22$ mode of emission, 
 its dependence on the coalescence phase $\phi_c$ is simply $h(\phi_c, \theta) = h(\phi_c=0, \theta) e^{2 \mathrm{i} \phi_c}$. 
@@ -446,5 +487,4 @@ Since the analytical likelihood is known, it is possible to sample the phase aft
 
 For any given sample $\theta$ from a phase-marginalized posterior we can write the posterior as a function of $\phi_{c}$, conditioned on $\theta$: the integrand in equation @eq-phase-marginalized-likelihood. 
 
-### Distance
 

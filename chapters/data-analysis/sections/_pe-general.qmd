@@ -71,7 +71,7 @@ For example, conditional distributions, which we are sometimes interested in, ar
 Furthermore, in certain applications an estimate of the underlying density function is useful, 
 but it is hard to obtain, though some techniques exist including Kernel Density Estimation and normalizing flows (@sec-normalizing-flows).
 
-#### Credible regions
+#### Credible regions {#sec-credible-regions}
 
 A common method to quantify the uncertainty in the estimate of a parameter is to compute some kind of Bayesian Credible Interval with a given confidence $X$; in the gravitational wave literature, $X=0.9$ is generally the standard choice. 
 
@@ -104,9 +104,10 @@ This is a region defined as $R(X) = \left\{ \theta | p(\theta|d) \geq K(X) \righ
 $$
 \int_{R(X)} p(\theta|d) \text{d}\theta = X\,.
 $$
-For a univariate, unimodal distribution this is the shortest possible interval which contains a probability mass $X$.
+For a univariate, unimodal distribution this is the shortest possible interval which contains a probability mass $X$, and it can be computed quickly by sorting the samples, computing all possible interval widths and choosing the minimum.
 
-Computationally, this region can be estimated by: 
+However, this technique will fail with no warning if the posterior distribution is not unimodal.
+A computationally expensive but more expensive way to estimate this region is: 
 
 - discretizing the parameter space for the variables of interest into bins;
 - estimating the probability density in each bin (this is often performed with a KDE, since counting the samples in each bin is affected by high variance); 

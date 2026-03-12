@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 ```
 
-# Intrinsic parameters and waveform modelling
+# Intrinsic parameters and waveform modelling {#sec-intrinsic}
 
 This section will continue in the dissection of a gravitational signal by considering its intrinsic parameters, those relating to the source itself and not to its relation to the observer.
 
@@ -40,6 +40,14 @@ This means it affects the phase evolution of the signal at a basic level, and it
 
 On the other hand, the Post-Newtonian coefficients $\varphi_{n}$^[A terminology note: the $n$-th term in the sum is called the $(n /2)$PN contribution. For example, the $n=5$ term is called 2.5PN.] contain information about various other contributions, such as mass ratio and spin @blanchetPostNewtonianTheoryGravitational2024.
 For example, the symmetric mass ratio $\nu$ enters in the expression at 1PN order, spin-orbit effects at 1.5PN, and spin-spin effects at 2PN.
+
+### The component masses of GW250114
+
+This signal was quite similar to the first-ever detection, GW150914. The inferred masses of the component black holes were in fact compatible, and the distances were similar as well. 
+However, due to the improvements in the detectors' sensitivity over the decade between them, the precision in measurement is now significantly better. 
+@fig-gw250114-component-masses shows the posterior distribution on the component masses for these two events.
+
+![Posterior distribution on the component masses of GW250114. Adapted from @abacGW250114TestingHawkings2025.](figures/S250114_m1_m2_grey.PNG){#fig-gw250114-component-masses width=50%}
 
 ### At lower frequencies
 
@@ -294,20 +302,6 @@ $$
 While their expressions are intimidating, note that several terms vanish in the equal-mass case, where $\nu = 1 / 4$; if that is true then $\tilde{\Lambda} =f(\nu) (\Lambda_{1}+\Lambda_{2})$ and $\delta \tilde{\Lambda} = g(\nu)(\Lambda_{1}-\Lambda_{2})$ for some functions $f$ and $g$. 
 Furthermore, if the masses are equal and so are the tidal parameters ($\Lambda_{1}=\Lambda_{2}=\Lambda$), then we have $\Lambda = \tilde{\Lambda}$ and $\delta \tilde{\Lambda} =0$.
 
-### Antenna pattern
-
-The strain at the detector, $h(t)$, depends on the gravitational-wave
-strain $h_{ij}(t)$ through contraction with a __detection tensor__ $D_{ij}$,
-which depends on the orientation and shape of the detector's arms: 
-$$ h(t) = h_{ij} (t) D_{ij}(t)\,.
-$$
-
-For current detectors the time dependence of $D_{ij}$ is negligible, 
-since the signal is in band for minutes at most, while for ET
-this will have to be taken into account.
-The Fisher matrix is typically computed in the frequency domain, which makes 
-the computation trickier, but still feasible (see section 3.2 of
-@iacovelliForecastingDetectionCapabilities2022 for more details).
 
 ## Waveform modelling
 

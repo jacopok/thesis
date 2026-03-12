@@ -1,0 +1,29 @@
+
+## Multimodality reduction
+
+The folding algorithm from [@rouletRemovingDegeneracyMultimodality2022].
+
+For LGWA the following symmetries will be preserved, I think:
+$$
+\phi \to \phi + \pi
+$$
+$$
+\psi \to \psi + \frac{\pi}{2}
+$$
+
+also one with $\cos \iota$, but let's see.
+
+Suppose we have a set of quasi-symmetries, denoted by a family of $2^{N}$ transformations $\sigma_{i}$ (the first is the identity). We consider a "folded subset" and only look there, computing the posterior probability of a point $\tilde{\theta}$ as
+$$
+\tilde{P} (\tilde{\theta}) = \sum_{i=1}^{2^{N}} P(\sigma_{i}(\tilde{\theta}))
+$$
+We do need to compute all the $2^{N}$ probabilities, and we should store them (or actually not, since we can recompute them for the relevant posterior samples...)
+
+Then we run our sampler on the folded space, and get a posterior there. 
+We can unfold it by taking each weighted sample $(\tilde{\theta}_{j}, w_{j})$ and splitting it into $2^{N}$ samples:
+$$
+\left(\sigma_{i}(\tilde{\theta}_{j}), \frac{w_{j} P(\sigma_{i}(\tilde{\theta}_{j}))}{\tilde{P}(\tilde{\theta})}\right)\,.
+$$
+These are in principle ratios of posteriors but in practice the prior is invariant under all the symmetries at hand.
+
+The unfolding code by Roulet is [here](https://github.com/jroulet/cogwheel/blob/74c8dc3b122ebea5de99e9007997a0418e450e32/cogwheel/prior.py#L134).

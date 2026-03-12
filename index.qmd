@@ -32,7 +32,7 @@ and/or computationally intensive to generate.
 - [x] fix the weirdly large number of authors cited 
 - [ ] explain code availability and the meaning of typewriter text in preamble
 - [ ] make the repository and website public
-- [ ] understand why the pp-plot in Talbot+ is underconstrained
+- [x] understand why the pp-plot in Talbot+ is underconstrained
 
 #### Nice-to-haves
 
@@ -63,19 +63,19 @@ The following is a working index.
 	- [ ] Fisher as a tool for understanding correlations (bayestar) 
 	- [ ] Area between detectors for triangulation, Wen-Chen
 - [ ] Likelihoods: 
-	- [ ] time-domain covariance structure, why go to the frequency domain
-	- [ ] time-domain inference in brief (OPTIONAL)
-	- [ ] windowing, talbot et al
-	- [ ] strain plotting and whitening (OPTIONAL)
+	- [x] time-domain covariance structure, why go to the frequency domain
+	- [x] time-domain inference in brief (OPTIONAL)
+	- [x] windowing, talbot et al
+	- [x] strain plotting and whitening (OPTIONAL)
 - [x] NS: specify the acceleration methods to NS-related ones only, and give refs to others
-- [ ] SNR section: contextualize, mention zero-noise vs noisy injections, 
-	- [ ] mention SNR additivity in quadrature
-	- [ ] records and GW250114
+- [x] SNR section: contextualize, mention zero-noise vs noisy injections, 
+	- [x] mention SNR additivity in quadrature
+	- [x] records and GW250114
 - [ ] Likelihood acceleration: give context, reference waveforms
-	- [ ] frequency grid sizes, with `mlgw_bns` figures 3-4 (OPTIONAL)
-	- [ ] Explain ROQ in some more detail
-	- [ ] remove marginalization over distance and time, but mention them
-	- [ ] check whether there is more to cite from Roulet
+	- [x] frequency grid sizes, with `mlgw_bns` figures 3-4 (OPTIONAL)
+	- [x] Explain ROQ in some more detail
+	- [x] remove marginalization over distance and time, but mention them
+	- [x] check whether there is more to cite from Roulet
 
 ## Anatomy of a gravitational wave
 
