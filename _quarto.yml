@@ -19,6 +19,16 @@ format:
     linkcolor: blue
     link-citations: true
     thanks: "Supervisor: Jan Harms"
+    reference-section-title: "References"
+    pdf-engine: xelatex
+    include-in-header:
+      text: |
+        %\usepackage{unicode-math,polyglossia}
+        %\usepackage[sups,osf]{fbb}
+        \usepackage[scaled=.95]{cabin} 
+        \usepackage[varqu,varl]{inconsolata} 
+        %\usepackage{mathpazo}
+
 
 execute:
   cache: true

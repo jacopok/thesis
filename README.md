@@ -105,6 +105,7 @@ where `note` can be substituted by `warning`, `important`, `tip` or `caution`, s
 
 - [Tips and tricks](https://danielborek.me/2023/pdf-quarto-tips/)
 - [Code execution and caching options](https://quarto.org/docs/projects/code-execution.html)
+- [HTML customization](https://quarto.org/docs/output-formats/html-themes.html)
 
 ### Making a single-file PDF
 

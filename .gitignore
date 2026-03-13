@@ -187,3 +187,5 @@ thesis.tar
 thesis/chapters/anatomy/figures/S250114_m1_m2_grey.PNG
 .gitignore
 thesis/site_libs/bootstrap/bootstrap-icons.woff
+
+titlepage/*
