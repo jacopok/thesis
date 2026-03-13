@@ -23,7 +23,7 @@ of the derivatives of waveforms:
 $$ \mathcal{F}_{ij} = \left.\left\langle \partial_i \partial_j \mathcal{L} \right\rangle \right|_{n = 0,\ \theta = \langle \theta \rangle} =  ( \partial_i h | \partial_j h ) = \Re \int_0^{\infty} \frac{1}{S_n(f)}  \frac{\partial h}{\partial \theta _i} \frac{\partial h^*}{\partial \theta _j}\text{d}f\,.
 $$
 
-These derivatives may be computed numerically or analytically.
+These derivatives may be computed numerically or analytically [@iacovelliForecastingDetectionCapabilities2022].
 
 ### Derivation
 
@@ -40,6 +40,7 @@ $$ \begin{aligned}
 $$
 
 and then, since we are evaluating this quantity at the maximum-likelihood realization of the noise $n = 0$, the term $(n|\partial_i \partial_j h)$ is equal to zero.
+
 
 ### Analytic Fisher calculations
 

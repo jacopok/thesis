@@ -175,7 +175,7 @@ Fortunately, this does not diminish the power of our analysis, as the ratio $(A_
 @fig-area-law-posterior illustrates the posterior distribution on this quantity, which excludes a negative area variation to high credibility.
 The upper panel showcases the robustness of this result to varying the cut time for the inspiral.
 We further explore this in @fig-area-law-varying-time; the rapid decay in the ringdown signal makes the choice of cut time there significantly more impactful than that in the inspiral.
-Despite this, the statement $A_{f} - A_{i} > 0$ is robustly verified for a wide range of cut time choices.
+Despite this, the statement $A_{f} - A_{i} > 0$ is robustly verified for a wide range of choices for the end time of the inspiral analysis, $t_<$, and the start time of the ringdown analysis, $t_>$.
 
 ![Robustness of the fractional area change of GW250114 to changes in cut times. Adapted from @abacGW250114TestingHawkings2025.](figures/supp_area_compare_10.5M.pdf){#fig-area-law-varying-time} 
 

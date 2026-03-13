@@ -11,20 +11,21 @@ format:
 
 # Preface {.unnumbered}
 
-The following is an outline of the thesis, with checkmarks denoting whether the chapters are ready for review, including which papers of which I am a coauthor are mentioned or discussed in that chapter.
 
-The hope is for this to be a "living document" of sorts, which I can keep updating after graduation.
 
 This thesis is simultaneously compiled with [quarto](https://quarto.org/) 
 into both HTML --- as a static website --- and PDF.
 The HTML version is interactive, with hyperlinks, the possibility to see
 internal and external references by mouse over, and a dynamic table of contents.
-Also, several figures are rendered just-in-time from `python` code, 
-which can be seen directly within the website.
+Also, several figures are rendered from `python` code, 
+which can be seen directly within the website, but is omitted from the PDF.
 This literate programming-like approach [@knuthLiterateProgramming1984] 
 allows for reproducibility and transparency.
-I did not, however, adopt it for all figures, as several of them are rather complex
-and/or computationally intensive to generate. 
+I would like thesis to be a "living document" of sorts, 
+which I can keep updating after graduation.
+
+What follows is a working index / to-do list, 
+which will be removed and substituted by an outline of the various chapters.
 
 ### To-do list
 
@@ -95,19 +96,19 @@ The following is a working index.
 	- [ ] for an interferometer
 	- [ ] for the LGWA, with interpolation accuracy graphs
 - [ ] distance-inclination degeneracy (under signal projection), referring to the 22 mode, GW250114 example
-- [ ] remove mention in spin section of twisting - described elsewhere
+- [x] remove mention in spin section of twisting - described elsewhere
 - [ ] Add GW250114 example posteriors
 	- [x] mass (only need citation)
-	- [ ] spin components
+	- [ ] spin components (OPTIONAL)
 	- [x] eccentricity
-	- [ ] tidal (cite only)
+	- [x] tidal (cite only)
 - [ ] ADD: Left SXS:BBH:3999 (initial energy Ei = 1.023 and angular momentum Ji = 1.600M ). Right SXS:BBH:4000 (Ei = 1.001 and Ji = 1.005M ). These are SXS simulations showing hyperbolic capture. (OPTIONAL)
-- [ ] eccentricity geometric description
-- [ ] move antenna pattern section from the tidal one
-- [ ] touch on priors
-	- [ ] briefly for the angles
-	- [ ] expression in mchirp-q
-	- [ ] normalize distance
+- [x] eccentricity geometric description
+- [x] move antenna pattern section from the tidal one
+- [x] touch on priors
+	- [x] briefly for the angles
+	- [x] expression in mchirp-q
+	- [x] normalize distance
 	- [ ] timing (obv)
 
 ## Future gravitational wave detectors

@@ -214,10 +214,10 @@ We can recognize this structure in @eq-fourier-domain-precessing-waveforms.
 
 ### Sky position and polarization
 
-The strain from a gravitational wave moving along a fixed direction can be written as 
+The strain from a gravitational wave moving along a fixed direction has two independent polarizations, and it can be written as 
 $$
 h_{ij}(t) = h_+ (t) e_{ij}^{+} + h_\times (t) e_{ij}^{\times}
-$$
+$$ {#eq-strain-tensor-decomposition}
 as a function of the two orthogonal unit basis tensors 
 $$
 e_{ij}^{+} = u_{i}u_{j} - v_{i}v_{j}
@@ -500,31 +500,53 @@ such as the number of photons arriving at a photodiode.
 This will come with some uncertainty 
 in the amplitude and phase of the measured strain.
 
-This is commonly modelled as a frequency-dependent deviation around the observed waveform, in the form
+This is commonly modelled as a frequency-dependent deviation around the observed waveform, in the form^[The phase term can be substituted by an expression in the form $(2 +i \delta \phi(f)) / (2 - i \delta \phi(f))$, which is equivalent to third order in $\delta \phi$ and does not involve exponentials [@farrMODELLINGCALIBRATIONERRORS2014].]
 $$
-h_\text{obs}(f) = h_\text{true}(f) (1+\delta A(f)) \frac{2 +i \delta \phi(f)}{2 - i \delta \phi(f)}
+h_\text{obs}(f) = h_\text{true}(f) (1+\delta A(f)) \exp(i \delta \phi(f)) \,.
 $$
 
+It is common practice to model the functions $\delta A(f)$ and $\delta \phi(f)$ through a Gaussian Process [@cahillaneCalibrationUncertaintyAdvanced2017], whose parameters are inferred together with those of the gravitational wave source.
+
+Over the first observing runs, the typical order of magnitude for the $1\sigma$ width of the posterior predictive distribution on the calibration envelope was $\delta A \sim \text{few} \times 10^{-2}$ and $\delta \phi \sim \text{few deg}$.
 
 ## Antenna patterns
 
-### Interferometer antenna patterns
+Antenna patterns allow us to compute the scalar strain measured by a detector, $h(t)$, 
+starting from the gravitational wave strain tensor $h_{ij}(t)$.
 
-The strain at the detector, $h(t)$, depends on the gravitational-wave
-strain $h_{ij}(t)$ through contraction with a __detection tensor__ $D_{ij}$,
-which depends on the orientation and shape of the detector's arms: 
-$$ h(t) = h_{ij} (t) D_{ij}(t)\,.
+This is often quantified by computing the response of a static detector to a monochromatic wave with frequency $f_{0}$.
+If this response is linear, it can be expressed as a contraction with a __detection tensor__ $D_{ij}$, which depends on the orientation and shape of the detector's arms: 
+
+$$ 
+h(t; f_{0}) = h_{ij} (t; f_{0}) D_{ij}(f_{0})
+\,.
 $$
 
-For current detectors the time dependence of $D_{ij}$ is negligible, 
-since the signal is in band for minutes at most, while for ET
-this will have to be taken into account.
-The Fisher matrix is typically computed in the frequency domain, which makes 
-the computation trickier, but still feasible (see section 3.2 of
-@iacovelliForecastingDetectionCapabilities2022 for more details).
+If the detector is not static, this expression needs to be made time-dependent: 
+$$
+h(t; f_{0}) = h_{ij} (t; f_{0}) D_{ij}(t; f_{0})\,.
+$$
 
+In many applications, this dependence is slow enough to be either ignored completely, or applied as an amplitude correction directly in the frequency domain through a Stationary Phase Approximation [@iacovelliForecastingDetectionCapabilities2022]. 
 
-#### The long-wavelength approximation {#sec-long-wavelength-approximation}
+If the strain tensor is decomposed as in @eq-strain-tensor-decomposition, we can express the detection tensor in terms of its effect on the two gravitational wave polarizations:
+$$
+F_{+ / \times} = D_{ij} e_{ij}^{+ / \times}\,.
+$$
+
+### Interferometer antenna patterns
+
+Let us start with a derivation of the antenna pattern for an interferometric detector in the static limit, also called long-wavelength approximation, in which the gravitational perturbation $h_{ij}$ is taken to be constant [@essickFrequencydependentResponsesThird2017]. This is approximately valid when the wavelength of the gravitational wave is much longer than the round-trip travel time along the detector arm, $2L / c$ where $L$ is the arm length. 
+Equivalently, it is approximately valid when the frequency $f_{0}$ of the gravitational wave is much smaller than the _free spectral range_ $f _\text{fsr} = c / 2L$.
+
+In this limit, the change in arm length can be taken to be $\delta L = L (h_{ij} / 2) e_{i} e_{j}$, where $e$ is the unit vector along the arm direction. 
+Measuring the relative displacement in arm length then means computing 
+$$
+\frac{\delta L }{L} = \frac{\delta L_{x}- \delta L_{y}}{L} = \underbrace{ \frac{1}{2} (e_{i}^{x} e_{j}^{x} - e_{i}^{y} e_{j}^{y}) }_{ D_{ij} } h_{ij}\,.
+$$
+
+For high-frequency observations performed with next generation detectors, the long wavelength approximation starts to break down. @fig-long-wavelength-essick illustrates this: already at a few kHz, for the Einstein Telescope ignoring this effect would correspond to a bias of tens of degrees in phase.
+@essickFrequencydependentResponsesThird2017 have pointed out that, for sources localized by a network of detectors, neglecting this effect would lead to biased sky localization, due to a biase in the estimate of the arrival time at the detectors.
 
 ```{python}
 #| label: fig-long-wavelength-essick
@@ -620,8 +642,7 @@ for ax in axs:
 _ = plt.colorbar(mappable=ScalarMappable(norm=norm, cmap=cmap), ax=axs, label='$n \cdot e_i$')
 ```
 
-If this effect were unaccounted for in future gravitational wave detectors, the 
-[@essickFrequencydependentResponsesThird2017]
 
 ### Antenna patterns for the Lunar Gravitational Wave Antenna
+
 

@@ -63,6 +63,14 @@ However, in general, fixing this frequency derivative will determine a surface -
 Qualitatively, it is very "shallow": a variation of $\nu$ from 0.2 to 0.25 (a 25% increase) only corresponds to a variation in $\mathcal{M}$ by $10^{-3}M_{\odot}$ (a 0.003% increase). 
 Nevertheless, the scale of the variation in chirp mass is comparable to typical uncertainties in this parameter obtained with long observations, and an anticorrelation between $\mathcal{M}$ and $\nu$ is systematically observed.
 
+### Prior distribution
+
+Typically, sampling is performed in terms of the variables $\mathcal{M}$ and $q$, but the prior distribution is required to be uniform in the $(m_{1}, m_{2})$ plane. 
+The equivalent distribution can then be obtained by computing the Jacobian of the transformation [@dupletsaValidatingPriorinformedFishermatrix2025]:
+$$
+\pi(\mathcal{M}, q) = \mathcal{M} \frac{(1+q)^{2/5}}{q^{6/5}}\,.
+$$
+
 ## Spin and orbital angular momentum {#sec-spin}
 
 In a generic binary with orbital angular momentum $\vec{L}$, the component objects will have two spin vectors $\vec{S}_{1,2}$. These three vectors will generally not be aligned, neither to each other nor with the observation direction $\vec{N}$.^[In this section we shall use this letter for the observation direction to conform with the convention, though elsewhere we use $m$.]  
@@ -105,7 +113,7 @@ The four remaining parameters --- two tilts and two azimuthal angles --- evolve 
 
 The angle between orbital angular momentum and observation direction, or _inclination angle_, is denoted as $\iota = \arccos(\vec{L}\cdot \vec{N})$. In the aligned-spin case $\iota = \theta_{\text{JN}}$ is constant, but in general $\iota$ is a time-dependent quantity.
 
-The best-constrained spin-related quantity (TODO: cite) is generally the effective spin parameter
+The best-constrained spin-related quantity is generally the effective spin parameter
 $$
 \chi _\text{eff} = \left(   \frac{m_{1} \vec{\chi}_{1} + m_{2}\vec{\chi}_{2}}{m_{1}+m_{2}}  \right) \cdot \hat{L}\,.
 $$
@@ -116,35 +124,47 @@ $$
 $$
 where $\chi_{i}^{\perp} = |a_{1} \sin(\theta_{i})|$ denotes the magnitude of the in-plane component of the spins.
 
-The 
+Modelling precession is generally accomplished through a change in reference frame: a waveform is obtained in a co-precessing frame, whose $z$ axis is the orbital angular momentum, and then transformed to an inertial frame by means of a time-dependent transformation, which can efficiently be computed with a Post-Newtonian approximation. We give more details on the procedure in @sec-twisting.
 
-### Modelling precession
+### Prior distribution
 
-TODO: a brief description of the twisting-up procedure, based on
-@prattenComputationallyEfficientModels2021.
+The prior to adopt for spin variables is a matter of convention. 
+Within `BILBY` [@romero-shawBayesianInferenceCompact2020], it is defined so that the dimensionless spin magnitudes $a_{i}$ are uniformly distributed in the range $[0, 0.99]$, while the spins are uniformly distributed on the sphere, meaning that $\phi_{12}$, $\phi_{JL}$, $\cos \theta_{1}$, $\cos \theta_{2}$ are uniformly distributed.
+
+If one wishes to restrict sampling to the aligned-spin case only, care must be taken to use compatible priors: given a prior $\pi(a)$ on the spin magnitude and a prior $\pi(\cos\theta)$ on the cosine of the tilt, the equivalent prior on the aligned spin component is 
+$$
+\pi(\chi) = \int_{0}^{1} \text{d}a \int_{-1}^{1} \text{d}\cos\theta
+        \left[  \pi(a) \pi(\cos\theta) \delta(\chi - a \cos\theta) \right]\,.
+$$
+
 
 ## Eccentricity
 
-Keplerian orbits are eccentric, in the shape of ellipses with the center of mass as a focus.
-They provide a useful starting point toward an understanding general-relativistic eccentric binaries, despite the fact that their characteristics do not fully generalize: 
-when gravity is strong eccentricity is not a constant of motion, nor is it covariantly defined; 
-orbits are also not exactly elliptical, due to both precession and gravitational wave emission.
+In Newtonian gravity, the two-body problem is analytically solvable.
+The corresponding trajectories are all planar, and they can be expressed in polar coordinates as [@karttunenCelestialMechanics2017]:
+$$
+r = \frac{p}{1 + e\cos f}\,,
+$$
+where $f$ is a polar angle in the orbital plane, measured  from the center of mass of the system, while $r = |r_{1}-r_{2}|$ is the distance between the two objects.
+The motion of either body can easily be recovered from this equation: their radii as measured from the center of mass will always have opposite signs, and magnitudes $r_{1} = q r / (1+q)$ and $r_{2} = r / (1+q)$, where $q$ is the mass ratio. 
+The constants of motion $p$ and $e$ are called _semilatus rectus_ and _eccentricity_. 
+The former has the dimensions of a length and it characterizes the orbit's scale; the latter is a pure number, which determines the type of conic section the orbit describes:
 
-A generic eccentric orbit is described by an ellipse.
+- $e=0$ is a circular orbit;
+- $0 < e< 1$ is an elliptical orbit; 
+- $e=1$ is a parabolic trajectory;
+- $e>1$ is a hyperbolic trajectory.
 
-TODO relative position vector
-
-ith semimajor axis $a$ and semiminor axis $b$, so its points obey the equation
+Systems with $e<1$ are _bound_, they repeat their motion and have negative total energy.
+Let us define some parameters for the elliptical case: the points $(x, y)$ of an ellipse with semimajor axis $a$ and semiminor axis $b$ obey
 $$\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1$$
 
-The *eccentricity* $e$ is defined by $e^2 = 1- ( b / a)^2$.
+The *eccentricity* $e$ is given by $e^2 = 1- ( b / a)^2$.
 The *focal distance* $c$ is $c = \sqrt{ a^{2} - b^{2} }$.
 The _semilatus rectum_ $p$ is $p=a \sqrt{ 1-e^{2} }$. 
 
-The *eccentric anomaly* $E$ is the angle from the periastron to the *projection* of the orbiting body onto the smallest circle containing the ellipse, measured using the *center of the ellipse* as the center.
-
-The *true anomaly* $f$ is the angle from the periastron to the orbiting body, measured using the *focus of the ellipse* as the center.
-
+We have previously used the *true anomaly* $f$ as a polar angle: it is the angle from the periastron to the orbiting body, measured using the *focus of the ellipse* as the center. 
+There are some other choices: the *eccentric anomaly* $E$ is the angle from the periastron to the *projection* of the orbiting body onto the smallest circle containing the ellipse, measured using the *center of the ellipse* as the center.
 The *mean anomaly* $M$ is an angle increasing proportionally to time from a periastron pass to the next.
 
 ::: {#nte-eccentric-parameter-conversion .callout-note collapse="true"}
@@ -156,7 +176,7 @@ $$M = E - e \sin E$$
 True anomaly and eccentric anomaly are related through the equation:
 $$(1 - e) \tan^2(f/2) = (1+e) \tan^2(E/2)$$
 
-but solving it is numerically unstable (the tangent diverges), so there is a [better way](https://ui.adsabs.harvard.edu/abs/1973CeMec...7..388B/abstract):
+but solving it is numerically unstable (the tangent diverges), so there is a better way [@brouckeNoteRelationsTrue1973]:
 define $\beta = e / (1 + \sqrt(1-e^2))$, then
 $$f = E + 2 \text{atan2}(\beta \sin E, 1 - \beta \cos E)$$
 
@@ -166,24 +186,17 @@ Finally, one may close the circle of conversions with the following relation:
 $$M = \text{atan2}(-\sqrt{ 1-e^{2} \sin f }, -e - \cos f) + \pi -e \frac{\sqrt{ 1 - e^{2} } \sin f}{1+e \cos f}$$
 :::
 
-The radial coordinate $r$ of a generic point along the orbit can be parameterized in terms of its semilatus rectum $p$ and relativistic anomaly $\xi$:
-$$
-r = \frac{p}{1+e \cos \xi}
-$$
 
-Eccentricity is a fundamentally Keplerian parameter, and 
+They provide a useful starting point toward an understanding general-relativistic eccentric binaries, but their characteristics do not fully generalize: 
+when gravity is strong eccentricity is not a constant of motion, nor is it covariantly defined; 
+orbits are also not exactly elliptical, due to both precession and gravitational wave emission [@favataGravitationalwaveMemoryEccentric2011].
 
-@favataGravitationalwaveMemoryEccentric2011
+Furthermore, the strict classification of Newtonian binaries breaks down in General Relativity: 
 
-@boninoInferringEccentricityEvolution2022
+It is possible to define a notion of eccentricity based on the evolution of the emission frequency of the binary, which is monotonic when the orbit is quasi-circular, while it exhibits peaks and trophs on the orbital timescale for eccentric orbits [@shaikhDefiningEccentricityGravitational2023].
 
-TODO: add 
-
-### Hyperbolic capture and scattering
-
-ADD:
-Left SXS:BBH:3999 (initial energy Ei = 1.023 and angular
-momentum Ji = 1.600M ). Right SXS:BBH:4000 (Ei = 1.001 and Ji = 1.005M ).
+Within the `TEOBResumS-DAlí` EOB waveform model [@boninoInferringEccentricityEvolution2022, @gambaRevisitingGW150914Nonplanar2025], 
+eccentricity and relativistic anomaly are used as an initial condition for the EOB variables, which are then evolved with fully relativistic prescriptions (see also @sec-eob). 
 
 ### At lower frequencies
 
@@ -303,6 +316,18 @@ While their expressions are intimidating, note that several terms vanish in the 
 Furthermore, if the masses are equal and so are the tidal parameters ($\Lambda_{1}=\Lambda_{2}=\Lambda$), then we have $\Lambda = \tilde{\Lambda}$ and $\delta \tilde{\Lambda} =0$.
 
 
+Love numbers are generally expected to vanish for black holes, 
+and to be nonzero for other compact objects such as neutron stars.
+GW250114 provided an opportunity to test this prediction:
+if it had a measurable deviation from $\tilde{\Lambda}=0$, 
+it would have indicated a potential violation of 
+General Relativity or some other missing aspect in our description
+of this binary. 
+@andres-carcasonaNoLoveBlack2025 have shown this not 
+to be necessary for the data currently available, 
+constraining $\tilde{\Lambda}$ to be less than 
+155 (with uniform priors) or 35 (with log-uniform priors).
+
 ## Waveform modelling
 
 General relativity is a complex non-linear theory, 
@@ -326,10 +351,9 @@ $$
 $$
 where the phase $\Psi$ is in the form reported in @eq-post-newtonian-phase-generic.
 
-
 Post-Newtonian templates including eccentricity also exist, though their validity is limited to the small-eccentricity regime. 
 
-### Effective One Body
+### Effective One Body {#sec-eob}
 
 Effective One-Body waveforms are obtained by mapping the relativistic two-body problem to the motion of a test particle in a deformed metric. 
 The following description will mainly describe the components of the `TEOBResumS` family of models, though similar considerations also apply to other models, such as those in the `SEOB` family.
