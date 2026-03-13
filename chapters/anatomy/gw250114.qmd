@@ -17,9 +17,9 @@ The signal is clearly visible with minimal processing: @fig-gw250114-whitened-st
 
 ![Whitened strain for GW250114 in the Livingston and Hanford detectors. Adapted from @abacGW250114TestingHawkings2025.](figures/Figure_1_simplified.pdf){#fig-gw250114-whitened-strain-simplified width=100%}
 
-After the first gravitational wave detection in 2015, @theligoscientificcollaborationBasicPhysicsBinary2017 gave an outline of the basic physics that can be gleamed from the "bare" data without the need to invoke complex models.
+We will attempt to give an outline of the essential physics of binary mergers, starting from what can be gleamed from the "bare" data without the need to invoke complex models [@theligoscientificcollaborationBasicPhysicsBinary2017].
 
-Similarly, here we can visually identify the sections of the waveform emitted by a black hole coalescence:
+We can visually identify the sections of the waveform emitted by a black hole coalescence:
 
 - an _inspiral_, whose amplitude and frequency rise over time;
 - a _merger_, where the signal's amplitude peaks;
@@ -40,7 +40,7 @@ After the coalescence of two Kerr black holes, the remnant quickly settles into 
 
 ![Whitened strain in the ringdown of GW250114. The data from the Hanford detector was shifted in time and inverted to account for its different position and antenna pattern.](figures/overlapped_strains.pdf){#fig-whitened-strain-ringdown-gw250114}
 
-The qualitative behaviour of this regime is apparent in @fig-whitened-strain-ringdown-gw250114: it looks like a damped sinusoid. 
+The qualitative behaviour of this regime, a damped sinusoid, is apparent in @fig-whitened-strain-ringdown-gw250114. 
 
 This radiation can be described, at the perturbative level, in terms of quasi-normal modes (QNMs), whose complex frequencies $\omega_{\ell mn} = 2 \pi f_{\ell mn} - i / \tau_{\ell mn}$ are well-understood functions of the black hole properties: mass $M_{f}$ and spin magnitude $\chi_{f}$.
 
@@ -139,19 +139,43 @@ If we were to use the whole signal, as opposed to only its ringdown, to inform o
 ## Area law
 
 The possibility to independently analyze the inspiral and ringdown also provided the opportunity to validate Hawking's area law: the statement that the horizon area of black holes in the universe must increase over time. 
+
+This law is fundamentally related to the second law of thermodynamics, $\text{d} S \geq 0$, which dictates that the entropy of a closed system is non-decreasing. 
+The entropy $S$ of a black hole is encoded in its surface area $A$ [@hawkingGravitationalRadiationColliding1971], as $S = k_{B} c^{3} A / 4 G \hbar$. 
+
+Quantum effects at the horizon (_i.e._ Hawking radiation) can be incorporated in a generalized second law [@bekensteinGeneralizedSecondLaw1974], though they are negligible at the scales we are probing.
+Hawking's law be drawn based on some assumptions:
+
+1. General Relativity, a metric theory of driven governed by Einstein's equations $G_{\mu \nu} = 8 \pi G c^{-4} T_{\mu \nu}$, which derive from an action in the form $S = \int R \text{d}^{4}x$.
+2. The observed objects are black holes and follow the weak censorship principle, which disallows the existence of naked singularities.
+3. The null-energy condition holds, meaning that for any null vector field $\xi$ (_i.e._ satisfying $g_{\mu \nu}\xi^{\mu} \xi^{\nu} = 0$) the stress tensor satisfies $T_{\mu \nu} \xi^{\mu} \xi^{\nu} \geq 0$.
+
+We do not have direct access to the areas of the black holes; in order to probe Hawking's law we must estimate them based on the parameters which affect the available data.
 The surface area of a Kerr black hole is given in terms of its mass $M$ and spin magnitude $\chi$ by:
 $$ A(M, \chi) = 8 \pi \left(  \frac{GM}{c^{2}} \right)^{2} \left( 1+\sqrt{ 1-\chi^{2} } \right) \,.
 $$
 
+Applying this formula to our data means assuming that GW250114 was produced by a binary systems of black holes, and both the two initial components and the remnant are described by the Kerr metric. 
+Furthermore, we need to assume that General Relativity provides a good description of binary dynamics in the weak field regime, corresponding to the early inspiral. 
 
+We do _not_, however, need to assume that our understanding of GR is correct in its strong-field regime, at merger: the exceptionally high SNR of this signal allows us to excise the merger part of our signal, and extract the component and remnant areas from independent analyses of the early inspiral and late ringdown.
+The fractions of data analyzed can be seen in the inset of @fig-area-law-posterior .
+In order to have a statistically sound analysis of the truncated data, we need to use time-domain techniques (@sec-time-domain-pe).
 
-In the context of a binary coalescence, this translates to the statement that the remnant area should be larger than the sum of the component areas: 
+In the context of a binary coalescence, Hawking's law translates to the statement that the remnant area should be larger than the sum of the component areas: 
 $$
-A_{1} + A_{2} \leq A_{f}\,.
+A_{1} + A_{2} = A_{i} \leq A_{f}\,.
 $$
 
+The inspiral and ringdown analyses do not directly give us access to the mass $M$ of the black holes: instead, the signal directly depends on detector frame masses, in the form $(1+z)M$ --- see @sec-distance-redshift --- and therefore we can only probe "redshifted areas" in the form $(1+z)^{2}A$.
+Fortunately, this does not diminish the power of our analysis, as the ratio $(A_{f} - A_{i} ) / A_{i}$ is independent of the signal's redshift.
 
-The inspiral and ringdown analyses do not directly give us access to the mass $M$ of the black holes: instead, the signal directly depends on detector frame masses, in the form $(1+z)M$ --- see @sec-distance-redshift.
-Fortunately, this does not pose a problem for this analysis, as the ratio $(A_{f} - A_{1} - A_{2}) / (A_{1} + A_{2})$ is independent of the signal's redshift.
+![Posterior distribution for the fractional area change of GW250114. Adapted from @abacGW250114TestingHawkings2025.](figures/area_law_plot_combined.pdf){#fig-area-law-posterior width=80%} 
 
-![Posterior distribution for the fractional area change of GW250114. Adapted from @abacGW250114TestingHawkings2025.](figures/area_law_plot_combined.pdf){width=80%}
+@fig-area-law-posterior illustrates the posterior distribution on this quantity, which excludes a negative area variation to high credibility.
+The upper panel showcases the robustness of this result to varying the cut time for the inspiral.
+We further explore this in @fig-area-law-varying-time; the rapid decay in the ringdown signal makes the choice of cut time there significantly more impactful than that in the inspiral.
+Despite this, the statement $A_{f} - A_{i} > 0$ is robustly verified for a wide range of cut time choices.
+
+![Robustness of the fractional area change of GW250114 to changes in cut times. Adapted from @abacGW250114TestingHawkings2025.](figures/supp_area_compare_10.5M.pdf){#fig-area-law-varying-time} 
+

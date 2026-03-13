@@ -93,6 +93,9 @@ Text
 
 where `note` can be substituted by `warning`, `important`, `tip` or `caution`, see the [docs](https://quarto.org/docs/authoring/callouts.html).
 
+#### Title page
+
+Info [here](https://nmfs-opensci.github.io/quarto_titlepages/).
 
 ### Known issues
 

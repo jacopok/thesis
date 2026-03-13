@@ -12,15 +12,22 @@ format:
     filters: 
       - pdf-to-webp.lua
     reference-location: margin
-    # citation-location: margin
-  pdf:
+    code-fold: true
+    code-summary: "Source code"
+  titlepage-pdf:
     documentclass: scrreprt
     colorlinks: true
     linkcolor: blue
     link-citations: true
-    thanks: "Supervisor: Jan Harms"
     reference-section-title: "References"
     pdf-engine: xelatex
+    titlepage: academic
+    titlepage-logo: "logo-gssi.jpg"    
+    titlepage-footer: "[Gran Sasso Science Institute](https://gssi.it)"
+    titlepage-theme:
+      affiliation-style: "numbered-list"
+      affiliation-sep: "newline"
+    echo: false
     include-in-header:
       text: |
         %\usepackage{unicode-math,polyglossia}

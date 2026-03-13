@@ -182,10 +182,14 @@ data/gw170817_run/*
 *.css
 
 thesis.tar
+thesis/*
+_extensions/*
+QTDublinIrish.otf
 
 *.webp
 thesis/chapters/anatomy/figures/S250114_m1_m2_grey.PNG
 .gitignore
 thesis/site_libs/bootstrap/bootstrap-icons.woff
+site_libs/bootstrap/bootstrap-icons.woff
 
 titlepage/*

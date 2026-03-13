@@ -41,8 +41,6 @@ The Fast Fourier Transform algorithm allows us to compute this relatively quickl
 Under some assumptions, the Fourier components of the data are uncorrelated, which reduces the computational complexity to $O(N)$.
 Because of this, we will start our discussion with the Fourier-domain Whittle likelihood (@sec-whittle-likelihood), but also describe the way parameter estimation can be performed when those assumptions break down (@sec-time-domain-pe).
 
-
-
 ## The Whittle likelihood {#sec-whittle-likelihood}
 
 The likelihood expresses the answer to the question:
@@ -123,8 +121,8 @@ and the evidence we will obtain, the integral of $\mathcal{L}_{r}(d|\theta) \pi(
 
 ### Periodic data: windowing
 
-The Fourier transform in equation @eq-fourier-transform-discrete is, technically speaking, only valid if the data is _periodic_. 
-This is not the case for realistic data: on the contrary, we only want to consider a given segment in time around our event.
+The Fourier transform in equation @eq-fourier-transform-discrete is, technically speaking, only appropriate if the data is _periodic_. 
+This is not the case for realistic data: on the contrary, we only want to consider a given segment in time around our event. Then, the noise matrix will not be exactly diagonalized by the Fourier transform.
 
 We can model the process of selecting a finite chunk of data from a theoretically infinite process as multiplication by a window function $w(t)$ [@talbotInferenceFiniteTime2021]: if the data time series is $d_{i}$, originating from an infinite process $D_{i}$, we can define a corresponding window time series $w_{i}$ and get
 $$

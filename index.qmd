@@ -86,10 +86,10 @@ The following is a working index.
 
 ### To-add list
 
-- [ ] mention chapter structure
-	- [ ] mention that we will work within GR, and many other options exist outside
-- [ ] $\delta f_{221}$ test of GR with GW250114
-- [ ] briefly discuss meaning of area law test
+- [x] mention chapter structure
+	- [x] mention that we will work within GR, and many other options exist outside
+- [x] $\delta f_{221}$ test of GR with GW250114
+- [x] briefly discuss meaning of area law test
 - [ ] antenna patterns vs detection tensor
 	- [ ] in general
 	- [ ] for an interferometer
