@@ -77,6 +77,7 @@ $$
 Predicting the amplitudes of these modes is in general hard, doing so in the generic-orbit case is in fact an open problem [@carulloBlackHoleSpectroscopy2025].
 
 Ringdown analyses may be performed at several levels of model-dependence, ranging from a purely data-driven fit with damped sinusoids to imposing a prescription for the Kerr spectrum as well as the mode amplitudes [@bertiBlackHoleSpectroscopy2025, table 7].
+The fits in @sec-gw250114-overtone are model-dependent, imposing a Kerr spectrum but not the mode amplitudes.
 
 In order to isolate the ringdown, one generally analyzes data starting after the coalescence, with the time domain data analysis techniques described in @sec-time-domain-pe. But what should the start time be?
 The initial spacetime at the collision is highly dynamical and nonlinear, and asymptotically approaches the perturbative regime in which the QNM description is formulated. 
@@ -99,7 +100,7 @@ very high magnitude of the ringdown-only SNR.
 As far as $20 t_{M_{f}}$ after the peak it is of the order of 10, 
 more than the entirety of some other gravitational wave signals.
 
-## Detection of the 221 overtone
+## Detection of the 221 overtone {#sec-gw250114-overtone}
 
 The exceptional SNR of GW250114 allowed for the confident detection of the $\ell m n = 221$ overtone in the data. 
 Its amplitude was constrained to be non-vanishing: @fig-gw250114-mode-amplitudes illustrates posterior distributions on the amplitudes of the 220 and 221. 
@@ -125,26 +126,32 @@ $$
 
 This allowed the two modes to freely vary, independently of each other.
 In the right panel of @fig-spectroscopy we show the posterior distribution on the deviation parameter $\delta f_{221}$: it is constrained to be close to zero, a null result.
+The prior on the deviation parameter is also shown. We can visually compare the ratio of posterior and prior, which constitutes the evidence based on this data against a deviation from General Relativity (see @eq-savage-dickey-density-ratio). The precise value of this number depends on many analysis details; qualitatively, we can say we found weak evidence against a deviation from General Relativity.
+
 The left panel offers an alternative perspective on the same result: we show the two-dimensional posterior distribution on the frequencies $(1+z)f_{220}$ and $(1+z)f_{221}$.^[The quantities in the plot are the measured frequencies at the detector. Due to cosmological effects we expect them to be redshifted by a factor $(1+z)$ - see also @sec-distance-redshift.]
 The grey diagonal band shows the range of possible combinations of values under the Kerr assumption. 
-They change as a function of detector-frame remnant mass $(1+z)M_{f}$ and spin $\chi_{f}$; these are free parameters in the ringdown analysis, hence the wide posterior. 
-However, if we were to use the whole signal as opposed to only its ringdown, we would get values near the black cross.
 
-![Spectroscopic test of the 221 QNM's frequency with GW250114. Adapted from @abacGW250114TestingHawkings2025.](figures/221_kerr_test.pdf){#fig-spectroscopy}
+The two estimated frequencies change as a function of detector-frame remnant mass $(1+z)M_{f}$ and spin $\chi_{f}$; these are free parameters, informed only by the ringdown, hence their wide posterior distributions. 
+If we were to use the whole signal, as opposed to only its ringdown, to inform our estimates of these paramters, we would get precise values near the black cross.
+
+![Spectroscopic test of the 221 QNM's frequency with GW250114. Adapted from @abacGW250114TestingHawkings2025.](figures/221_kerr_test.pdf){#fig-spectroscopy width=80%}
 
 ## Area law
 
 The possibility to independently analyze the inspiral and ringdown also provided the opportunity to validate Hawking's area law: the statement that the horizon area of black holes in the universe must increase over time. 
+The surface area of a Kerr black hole is given in terms of its mass $M$ and spin magnitude $\chi$ by:
+$$ A(M, \chi) = 8 \pi \left(  \frac{GM}{c^{2}} \right)^{2} \left( 1+\sqrt{ 1-\chi^{2} } \right) \,.
+$$
+
+
 
 In the context of a binary coalescence, this translates to the statement that the remnant area should be larger than the sum of the component areas: 
 $$
 A_{1} + A_{2} \leq A_{f}\,.
 $$
 
-The surface area of a Kerr black hole is given in terms of its mass $M$ and spin magnitude $\chi$ by:
-$$ A(M, \chi) = 8 \pi \left(  \frac{GM}{c^{2}} \right)^{2} \left( 1+\sqrt{ 1-\chi^{2} } \right) \,.
-$$
+
 The inspiral and ringdown analyses do not directly give us access to the mass $M$ of the black holes: instead, the signal directly depends on detector frame masses, in the form $(1+z)M$ --- see @sec-distance-redshift.
 Fortunately, this does not pose a problem for this analysis, as the ratio $(A_{f} - A_{1} - A_{2}) / (A_{1} + A_{2})$ is independent of the signal's redshift.
 
-![Posterior distribution for the fractional area change of GW250114. Adapted from @abacGW250114TestingHawkings2025.](figures/area_law_plot_combined.pdf)
+![Posterior distribution for the fractional area change of GW250114. Adapted from @abacGW250114TestingHawkings2025.](figures/area_law_plot_combined.pdf){width=80%}
