@@ -1,0 +1,17 @@
+::: {#nte-fisher-matrix-derivation .callout-note collapse="true"}
+##### Derivation
+
+For a more in-depth derivation refer to ; here we just give a simple argument.
+We can rewrite the derivatives of the log-likelihood as follows, recalling that  $(a|b) = (b|a)^{*}$:
+
+$$ \begin{aligned}
+\partial_i \partial_j \log \mathcal{L} &= \frac{1}{2} \partial_i \partial_j (d-h|d-h) \\
+&= \frac{1}{2} \partial_i \partial_j \left((d|d) - 2 (d|h) + (h|h)\right) \\
+&=  \partial_i \left(-  (d|\partial_j h) + (\partial_j h|h)\right) \\
+&=  \left(-  (d|\partial_i \partial_j h) + (\partial_i \partial_j h|h) + (\partial_i h | \partial_j h)\right) \\
+&=  -(n|\partial_i \partial_j h)  + (\partial_i h | \partial_j h) 
+\end{aligned}
+$$
+
+and then, since we are computing an expectation value of this quantity with respect to noise realization the term $\langle (n|\partial_i \partial_j h) \rangle_{\text{noise}}$ is equal to zero.
+::: 

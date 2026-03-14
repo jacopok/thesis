@@ -152,7 +152,7 @@ plt.legend()
 plt.plot()
 ```
 
-## Response to gravitational waves
+## Response to gravitational waves {#sec-lgwa-response}
 
 The response to gravitational waves is assumed to be linear, in the form
 $$
@@ -172,6 +172,8 @@ $$
 $$
 where $n_{i}(t)$ is the normal to the lunar surface at the detector location at time $t$, while $b_{j}(t)$ is a vector parallel to the lunar surface and aligned to the measurement channel.
 We obtain these vectors in an ICRS frame with the `lunarsky` package [@lanmanAelanmanLunarsky2024].
+
+figure from @cozzumboOpportunitiesLimitsLunar2024
 
 ### Response calculation
 

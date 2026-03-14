@@ -546,7 +546,7 @@ $$
 $$
 
 For high-frequency observations performed with next generation detectors, the long wavelength approximation starts to break down. @fig-long-wavelength-essick illustrates this: already at a few kHz, for the Einstein Telescope ignoring this effect would correspond to a bias of tens of degrees in phase.
-@essickFrequencydependentResponsesThird2017 have pointed out that, for sources localized by a network of detectors, neglecting this effect would lead to biased sky localization, due to a biase in the estimate of the arrival time at the detectors.
+@essickFrequencydependentResponsesThird2017 have pointed out that, for sources localized by a network of detectors, neglecting this effect would lead to a bias in the estimate of the arrival time at the detectors, which would in turn bias sky localization.
 
 ```{python}
 #| label: fig-long-wavelength-essick
@@ -645,4 +645,17 @@ _ = plt.colorbar(mappable=ScalarMappable(norm=norm, cmap=cmap), ax=axs, label='$
 
 ### Antenna patterns for the Lunar Gravitational Wave Antenna
 
+While the operational principle of the Lunar Gravitational Wave Antenna is quite different from that of interferometric detectors, its response can ultimately be cast into a similar form.
+However, unlike interferometers, the displacement measured by a lunar seismometer is not directly proportional to strain in a wide band. 
+Instead, the lunar response is expected to have significant fluctuations as a function of frequency, as we will discuss in more detail in @sec-lgwa-response.
+Therefore, it is convenient to define a response tensor $\mathcal{D}_{ij}$ with the dimensions of a length, such that the displacement $s(t; f_{0})$ measured by the detector when a monochromatic gravitational wave impacts the Moon is
+$$
+s(t;f_{0}) = \mathcal{D}_{ij} h_{ij}\,.
+$$
 
+This response tensor is then given by
+$$
+D_{ij}(f_{0}) = \hat{b}_{i} \hat{n}_{j}L(f_{0})\,,
+$$
+where $\hat{b}$ is a horizontal unit vector along the lunar surface, along whose direction the seismometer is measuring displacement, while $\hat{n}$ is the normal unit vector to the surface.
+The function $L(f_{0})$ quantifies the lunar response. 

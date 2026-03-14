@@ -296,7 +296,7 @@ This can also be generalized to time-domain analyses, as discussed in @sec-time-
 In the presence of a signal, whitened time-domain strain will deviate from its mean of zero; the deviation amount can be immediately interpreted as a number of standard deviations.
 For GW250114, this reached the level of 15$\sigma$, as one can see in @fig-gw250114-whitened-strain.
 
-## Matched filtering and the signal-to-noise ratio
+## Matched filtering and the signal-to-noise ratio {#sec-snr}
 
 The discussion so far has discussed the analysis of a signal we know to be present in the data. 
 However, the tools we described can also be used to quantify the _detectability_ of a signal.
