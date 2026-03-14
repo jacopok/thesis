@@ -12,6 +12,10 @@ format:
 
 ## Detector concept
 
+The idea of using a planetary body such as the Earth or Moon as a gravitational wave detector
+was proposed in 1960 by J [@weberDetectionGenerationGravitational1960].
+While to 
+
 ### Displacement noise
 
 ```{python}
@@ -279,11 +283,7 @@ As figure @fig-response-interpolation-errors shows, we can achieve errors on the
 #| label: fig-response-interpolation-errors
 #| fig-cap: "Errors in scalar products computed with an interpolated version of the detector-centric basis vectors. The errors are computed from 400 randomly sampled points in the sky and time. Since the detector is located near the pole (specifically, at 85 degrees of latitude) the normal vector varies less across the month, and is therefore easier to interpolate."
 
-from lgwa_response.lunar_coordi```{python}
-#| label: fig-position-function-of-time
-#| fig-cap: "Position of the detector as a function of time."
-
-nates import make_response_interpolation_plot
+from lgwa_response.lunar_coordinates import make_response_interpolation_plot
 from thesis_scripts import data_path
 cache_path = data_path / 'cache'
 
@@ -517,7 +517,9 @@ axs[1].legend()
 plt.show()
 ```
 
-## Scientific potential
+## Scientific prospects
 
 ### Sky localization
+
+## Reference frames for long observations
 

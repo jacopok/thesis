@@ -230,7 +230,7 @@ Three angles in total are required to define these two vectors.
 These are the sky position of the source, $m$, which is orthogonal to both $u$ and $v$, 
 and a _polarization angle_ $\psi$ which parameterizes rotations along the $m$ axis.
 
-The explicit expressions for these three vectors are as follows:
+The explicit expressions for these three vectors are as follows [@nishizawaProbingNontensorialPolarizations2009]:
 $$
 \begin{aligned}
 m &= \begin{pmatrix}
@@ -258,11 +258,11 @@ v &=
 \cos\theta \cos \phi \\
 \cos\theta \sin \phi \\
 -\sin\theta
-\end{pmatrix}\cos \psi \,.
+\end{pmatrix}\cos \psi \,,
 \end{aligned}
 $$
-
-The right ascension and declination angles, in @fig-ra-dec-diagram, are a standard parameterization for positions in the sky. 
+where the sky position is parameterized by an azimuth $\phi \in [0, 2 \pi)$ and a colatitude $\theta \in (0, \pi)$, which is equal to $\pi / 2$ on the equator. 
+@fig-ra-dec-diagram illustrates the meaning of right ascension $\text{ra} = \phi$ and declination $\text{dec} = \pi / 2 - \theta$, a standard parameterization for positions in the sky. Declination is analogous to latitude, and it is equal to $0$ on the equator.
 
 ![Diagram of the right ascension and declination coordinates, from @dupletsaValidatingPriorinformedFishermatrix2025.](figures/ra-dec.pdf){#fig-ra-dec-diagram}
 
