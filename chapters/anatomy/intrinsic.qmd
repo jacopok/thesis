@@ -479,7 +479,7 @@ Whereas the mismatch is a global metric, reconstruction accuracy can also be loc
 
 ![Reconstruction accuracy for `mlgw_bns` in the frequency domain. ](figures/mlgw_bns/fig07.pdf){#fig-mlgw-bns-reconstruction-fd}
 
-The surrogate model should also be faster to evaluate: this was indeed the case, as @fig-mlgw-bns-timing shows.
+The surrogate model should also be faster to evaluate: this was indeed the case, as @fig-mlgw-bns-compared-timing shows.
 The number of gridpoints has a significant impact on the evaluation time for all models, as is inevitable given the increased number of floating point operations.
 Therefore, we separate out the constant-time contribution to the evaluation time from the one scaling with the number of grid points.
 
