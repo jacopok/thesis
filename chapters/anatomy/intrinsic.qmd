@@ -170,7 +170,7 @@ The *mean anomaly* $M$ is an angle increasing proportionally to time from a peri
 ::: {#nte-eccentric-parameter-conversion .callout-note collapse="true"}
 #####  Converting between eccentric parameters
 
-Mean anomaly and eccentric anomaly are related through Kepler's equation, which is transcendental and therefore must be solved numerically:
+Mean anomaly and eccentric anomaly are related through Kepler's equation, which is transcendental and therefore must be solved numerically if we want to compute $E$ as a function of $M$:
 $$M = E - e \sin E$$
 
 True anomaly and eccentric anomaly are related through the equation:
@@ -184,6 +184,12 @@ where $\text{atan2}(y, x) = \arctan( y / x)$ is the two-argument tangent functio
 
 Finally, one may close the circle of conversions with the following relation:
 $$M = \text{atan2}(-\sqrt{ 1-e^{2} \sin f }, -e - \cos f) + \pi -e \frac{\sqrt{ 1 - e^{2} } \sin f}{1+e \cos f}$$
+
+
+In @fig-anomalies-visualization we illustrate how these anomalies can vary as a function of time. Also see [this animated visualization](https://www.youtube.com/watch?v=Mr9t7SLo0I0). 
+
+![The three anomalies for a generic orbit](figures/anomalies.png){#fig-anomalies-visualization}
+
 :::
 
 
@@ -195,8 +201,14 @@ Furthermore, the strict classification of Newtonian binaries breaks down in Gene
 
 It is possible to define a notion of eccentricity based on the evolution of the emission frequency of the binary, which is monotonic when the orbit is quasi-circular, while it exhibits peaks and trophs on the orbital timescale for eccentric orbits [@shaikhDefiningEccentricityGravitational2023].
 
-Within the `TEOBResumS-DAlí` EOB waveform model [@boninoInferringEccentricityEvolution2022, @gambaRevisitingGW150914Nonplanar2025], 
+Within the `TEOBResumS-DAlí` EOB waveform model [@boninoInferringEccentricityEvolution2022], 
 eccentricity and relativistic anomaly are used as an initial condition for the EOB variables, which are then evolved with fully relativistic prescriptions (see also @sec-eob). 
+
+@gambaRevisitingGW150914Nonplanar2025 performed a first-of-its-kind reanalysis of the first-ever detection GW150914 with a model including both eccentricity and precessing spins. 
+Beyond the regular 15 parameters describing a precessing black hole binary,^[For convenience we give the list here: 2 masses, 6 independent spin components, 7 extrinsic parameters (inclination $\theta_{JN}$, phase $\phi_{0}$, 2 sky coordinates, luminosity distance $d_{L}$, polarization $\psi$, time of coalescence $t_{0}$.)] this analysis required two more: eccentricity and (true) anomaly.
+The constraints on these two parameters are shown in @fig-ecc-zeta-gw150914.
+
+![Eccentricity and true anomaly posterior for GW150914, from @gambaRevisitingGW150914Nonplanar2025.](figures/ecc_zeta.pdf){#fig-ecc-zeta-gw150914}
 
 ### At lower frequencies
 
@@ -471,5 +483,5 @@ The surrogate model should also be faster to evaluate: this was indeed the case,
 The number of gridpoints has a significant impact on the evaluation time for all models, as is inevitable given the increased number of floating point operations.
 Therefore, we separate out the constant-time contribution to the evaluation time from the one scaling with the number of grid points.
 
-![Evaluation time for `mlgw_bns` compared to its reference model `TEOBResumSPA` and some others. ](figures/mlgw_bns/fig12.pdf){#fig-mlgw-bns-timing}
+![Evaluation time for `mlgw_bns` compared to its reference model `TEOBResumSPA` and some others. ](figures/mlgw_bns/fig12.pdf){#fig-mlgw-bns-compared-timing}
 

@@ -384,6 +384,10 @@ This becomes less and less practical the longer the data segment is.
 Several approaches to accelerate this computation have been proposed, see section 3 in @rouletInferringBinaryProperties2024 for a review. 
 Here we will outline two of the most popular approaches: relative binning and reduced order quadrature.
 
+The efficacy of both approaches is fundamentally driven by their ability to decrease the number of frequencies at which the waveform approximant is evaluated. 
+This will generally reduce the total evaluation time, but only to a point: in @fig-mlgw-bns-compared-timing we illustrate the general scaling of waveform model evaluation: $t = t_1 + N t_{2}$, where $N$ is the number of grid points.
+Decreasing $N$ significantly below $t_{1} / t_{2}$ is going to exhibit diminishing returns.
+
 ### Relative binning
 
 Relative binning [@zackayRelativeBinningFast2018] is a technique to accelerate the evaluation of the integrals in the likelihood using the key idea that, while the waveform itself may be highly oscillatory, all the waveforms which are compatible with the data will be quite similar to each other (in a specific sense).

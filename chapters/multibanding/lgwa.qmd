@@ -10,7 +10,9 @@ format:
 ---
 # The Lunar Gravitational Wave Antenna {#sec-lgwa}
 
-## Displacement noise
+## Detector concept
+
+### Displacement noise
 
 ```{python}
 #| label: fig-lgwa-soundcheck-displacement-noise
@@ -152,7 +154,7 @@ plt.legend()
 plt.plot()
 ```
 
-## Response to gravitational waves {#sec-lgwa-response}
+### Response to gravitational waves {#sec-lgwa-response}
 
 The response to gravitational waves is assumed to be linear, in the form
 $$
@@ -510,3 +512,8 @@ axs[1].semilogx(f, np.unwrap(np.angle(hx/hx2)), label='Center at merger-time det
 axs[1].legend()
 plt.show()
 ```
+
+## Scientific potential
+
+### Sky localization
+

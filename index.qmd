@@ -57,13 +57,13 @@ The following is a working index.
 	- [x] Add credible interval definition
 	- [x] add marginal distribution definition
 	- [ ] add KDE description, with the example of computing sky localization area (OPTIONAL)
-- [ ] Fisher: 
-	- [ ] add definitions from Vallisneri (LSA, Cramer Rao etc)
-	- [ ] discussion of derivative computation, cite gwfish
-	- [ ] Fisher integrands as a tool for understanding PE
-	- [ ] Fisher as a tool for understanding correlations (bayestar) 
-	- [ ] Area between detectors for triangulation, Wen-Chen
-- [ ] Likelihoods: 
+- [x] Fisher: 
+	- [x] add definitions from Vallisneri (LSA, Cramer Rao etc)
+	- [x] discussion of derivative computation, cite gwfish
+	- [x] Fisher integrands as a tool for understanding PE
+	- [x] Fisher as a tool for understanding correlations (bayestar) 
+	- [x] Area between detectors for triangulation, Wen-Chen
+- [x] Likelihoods: 
 	- [x] time-domain covariance structure, why go to the frequency domain
 	- [x] time-domain inference in brief (OPTIONAL)
 	- [x] windowing, talbot et al
@@ -72,7 +72,7 @@ The following is a working index.
 - [x] SNR section: contextualize, mention zero-noise vs noisy injections, 
 	- [x] mention SNR additivity in quadrature
 	- [x] records and GW250114
-- [ ] Likelihood acceleration: give context, reference waveforms
+- [x] Likelihood acceleration: give context, reference waveforms
 	- [x] frequency grid sizes, with `mlgw_bns` figures 3-4 (OPTIONAL)
 	- [x] Explain ROQ in some more detail
 	- [x] remove marginalization over distance and time, but mention them
@@ -91,9 +91,9 @@ The following is a working index.
 	- [x] mention that we will work within GR, and many other options exist outside
 - [x] $\delta f_{221}$ test of GR with GW250114
 - [x] briefly discuss meaning of area law test
-- [ ] antenna patterns vs detection tensor
-	- [ ] in general
-	- [ ] for an interferometer
+- [x] antenna patterns vs detection tensor
+	- [x] in general
+	- [x] for an interferometer
 	- [ ] for the LGWA, with interpolation accuracy graphs
 - [ ] distance-inclination degeneracy (under signal projection), referring to the 22 mode, GW250114 example
 - [x] remove mention in spin section of twisting - described elsewhere
