@@ -12,9 +12,9 @@ format:
 
 ## Detector concept
 
-The idea of using a planetary body such as the Earth or Moon as a gravitational wave detector
-was proposed in 1960 by J [@weberDetectionGenerationGravitational1960].
-While to 
+The idea of using a planetary body as a gravitational wave detector
+was proposed by Joseph Weber [@weberDetectionGenerationGravitational1960], who led the efforts to deploy a gravimeter on the Moon with the Apollo 17 mission.
+The Lunar Surface Gravimeter was 
 
 ### Displacement noise
 
@@ -158,130 +158,101 @@ plt.legend()
 plt.plot()
 ```
 
-### Response to gravitational waves {#sec-lgwa-response}
+### Computing the lunar response to gravitational waves {#sec-lgwa-response}
 
-The response to gravitational waves is assumed to be linear, in the form
-$$
-s(t_\text{det}, f) = h_{ij}(t) \hat{D}_{ij}(t_\text{det}) L(f)\,.
-$$
+The LGWA will consist of seismometers measuring displacement along the horizontal direction.
 
-The strain $h_{ij}(t)$ is assumed to be expressed as a time series such that some characteristic event, such as the merger, happens when $t=0$.
-Then, if we denote with $t_{0}$ the time at which this characteristic event reaches the center of the coordinate frame, we will have 
+As we anticipated in @sec-lgwa-antenna-patterns, the displacement corresponding to an impacting monochromatic gravitational wave can be modeled through a detection tensor
 $$
-t_\text{det} = t + t_{0} + \frac{\vec{n}\cdot \vec{r}(t_\text{det})}{c}\,,
-$$
-where $\vec{n}$ is the propagation direction of the GW, while $\vec{r}$ is the vector denoting the position of the detector as measured from the center of the reference frame.
-
-The detection tensor for one LGWA channel is in the form
-$$
-\hat{D}_{ij}(t) = n_{i}(t) b_{j}(t)\,,
+\mathcal{D}_{ij}(t; f_{0}) = n_{i}(t) b_{j}(t) L(f_{0}) = \hat{D}_{ij}(t; f_{0})L(f_{0}) \,,
 $$
 where $n_{i}(t)$ is the normal to the lunar surface at the detector location at time $t$, while $b_{j}(t)$ is a vector parallel to the lunar surface and aligned to the measurement channel.
-We obtain these vectors in an ICRS frame with the `lunarsky` package [@lanmanAelanmanLunarsky2024].
+We compute all vectors in a fixed frame, so that the source's position is constant.
 
-figure from @cozzumboOpportunitiesLimitsLunar2024
+In @sec-timing-general we outlined the effect of detector motion on the waveform in the time domain. Applying a Stationary Phase Approximation, we can combine the effect of a moving detector and a rotating antenna pattern in the frequency domain: the measured frequency-domain strain will satisfy
+$$
+s(f) = h_{ij}(f) \mathcal{D}_{ij}(t(f); f) \exp\left( 2 \pi i f \left( t_{0} + \frac{\vec{r}(t(f)) \cdot \hat{m}}{c} \right)  \right)\,,
+$${#eq-lgwa-strain-projection-spa}
+where: 
 
-### Response calculation
+- $t(f)$ is the time-to-frequency map given by the Stationary Phase Approximation (@eq-spa-time-from-phase);
+- $h_{ij}(f)$ is the frequency-domain gravitational wave strain tensor;
+- $\hat{m}$ is the _propagation_ unit vector (which has opposite sign to the _source position_ unit vector, and points "inward");^[As a sanity check, consider the relative signs of $t_{0}$ and this phase term: increasing $t_{0}$ means the introduction of a delay, and accordingly increasing the scalar product $\vec{r} \cdot \hat{n}$ means moving the detector further from the source, which also delays the signal's arrival.]
+- $\vec{r}(t)$ is the position of the detector as a function of time, measured in an ICRS-aligned coordinate frame, centered at some point in space;
+- $t_{0}$ is the reference time, _i.e._ the time at which the event which occurs at $t=0$ in the time-domain waveform $h_{ij}(t)$ reaches the center of the reference frame, $\vec{r}=0$.
 
-The gravitational wave strain tensor is written as 
+Let us define an orthonormal reference frame at the lunar surface: $(a, b, n)$, where $n$ is aligned to the local normal direction, while $a$ and $b$ define the horizontal measurement directions of the two LGWA channel.
+In order to compute the geometric portion of the antenna pattern tensor, $\hat{D}_{ij}$, we need to know these vectors as a function of time.
+Once we have them, computed these vectors, we can recover the strain through the antenna pattern functions, which are obtained as described in @sec-antenna-patterns:
 $$
-h_{ij}(t) = h_{+}(t) e_{ij}^{+} + h_{\times}(t) e^{\times}_{ij}\,,
-$$
-where the two basis tensor are time-independent since we are working in a frame in which the source is stationary (ICRS).
-The basis tensors are given as 
-$$
-e_{ij}^{+} = u_{i}u_{j} - v_{i}v_{j}
-\qquad \text{and}
-\qquad
-e_{ij}^{\times} = u_{i}v_{j} + v_{i}u_{j}\,.
+\begin{aligned}
+F_{+} &= (n\cdot u)(b\cdot u)-(n\cdot v)(b\cdot v)) \\
+F_{\times} &= (n\cdot u)(b\cdot v)+(n\cdot v)(b\cdot u)\,.
+\end{aligned}
 $$
 
-The two vectors $u$ and $v$ form, together with the vector $m$ describing the sky position of the source, an orthonormal reference frame.
-The rotation of the $u$ and $v$ vectors along the $m$ axis is determined by the polarization angle $\psi$.
+```{python}
+#| label: fig-response-functions-of-time
+#| fig-cap: "Response functions in terms of time."
 
-We will need explicit expressions for them, as obtained by @nishizawaProbingNontensorialPolarizations2009. 
-The parametrization we use for the sky position vector $m$ is in terms of its longitude $\phi$ (right ascension) and colatitude $\theta$ ($\pi /2$ minus its declination) in the ICRS frame.
-The unit vector then has the following coordinates:
-$$
-m = \begin{pmatrix}
-\sin \theta \cos \phi  \\
-\sin \theta \sin \phi \\
-\cos \theta
-\end{pmatrix}
-$$
-and we can complete the orthonormal basis with the following vectors:
-$$
-u = \begin{pmatrix}
--\sin \phi \\
-\cos \phi \\
-0
-\end{pmatrix} \cos \psi
-- \begin{pmatrix}
-\cos\theta \cos \phi \\
-\cos\theta \sin \phi \\
--\sin\theta
-\end{pmatrix}\sin \psi
-$$
-$$
-v = 
-\begin{pmatrix}
--\sin \phi \\
-\cos \phi \\
-0
-\end{pmatrix} \sin \psi
-+ \begin{pmatrix}
-\cos\theta \cos \phi \\
-\cos\theta \sin \phi \\
--\sin\theta
-\end{pmatrix}\cos \psi \,.
-$$
-For the $\psi = 0$ case we recover the standard basis vectors along latitude and longitude lines.
+from lgwa_response.likelihood import LunarLikelihood
+import matplotlib.pyplot as plt
+import numpy as np
 
-::: {#nte-basis-orientation .callout-warning collapse="true"}
-##### On the handedness of the basis
+like = LunarLikelihood()
+t_0 = 1577491218.
+day = 3600*24
+times = np.linspace(t_0, t_0+day*28, num=1000)
+hp1, hp2, hc1, hc2 = like.get_antenna_response(times, ra=0, dec=np.pi/2, psi=.9)
 
-I think the orientation of the basis might be flipped compared to the standard case, since we construct it based on the vector $m$ but the real propagation direction is $-m$; this should be perfectly degenerate with a switch $\psi \to - \psi$ so I wouldn't particularly worry about it.
+times_days = (times - t_0)/day
 
-:::
-
-Once we have computed these vectors, we can recover the strain as 
-$$
-s(t, f) = [
-h_{+}(t) \underbrace{((n\cdot u)(b\cdot u)-(n\cdot v)(b\cdot v))}_{F_{+}} +
-h_{\times}(t) \underbrace{((n\cdot u)(b\cdot v)+(n\cdot v)(b\cdot u))}_{F_{\times}}
-] L(f)
-$$
+plt.plot(times_days, hp1, label='$F_+$ response, $x$ channel', color='#117733')
+plt.plot(times_days, hc1, label='$F_\\times$ response, $x$ channel', color='#44AA99')
+plt.plot(times_days, hp2, label='$F_+$ response, $y$ channel', color='#CC6677')
+plt.plot(times_days, hc2, label='$F_\\times$ response, $y$ channel', color='#882255')
+plt.legend()
+plt.xlabel('Days from January 1st 2030')
+plt.title('Antenna patterns for a source at declination 90 degrees')
+plt.show()
+```
 
 ::: {#nte-scalar-products-spherical .callout-note collapse="true"}
 ##### Scalar products in spherical coordinates
 
-The scalar products can be computed from the angles on the sphere:
+The scalar product between two unit vectors in spherical coordinates can be computed from their colatitudes and azimuths as follows:
 $$
-a\cdot b = \cos \theta_{a} \cos\theta_{b} + \sin \theta_{a} \sin \theta_{b} \cos(\phi_{a} - \phi_{b})
+a\cdot b = \cos \theta_{a} \cos\theta_{b} + \sin \theta_{a} \sin \theta_{b} \cos(\phi_{a} - \phi_{b})\,.
 $$
 :::
 
-
-Therefore, to compute the LGWA likelihood we need to be able to compute:
-
-- the position of LGWA, $\vec{r}(t)$, for all relevant times
-	- this needs to be represented as a vector in 3D space, since its magnitude is not fixed across the year
-- the unit vectors $a$, $b$ and $n$, for all relevant times
-	- these can be represented with angles only, since they are unit vectors, but we need to convert them to Cartesian coordinates when we compute scalar products
-
-### Ephemeris interpolation accuracy
-
 Computing these vectors can be somewhat expensive (on the scale of tens of milliseconds per evaluation), and their variation is relatively slow, on the scale of a month.
 Therefore, it is advantageous to pre-compute them on a grid, cache the results and interpolate them as required.
+We compute them in an ICRS frame with the `lunarsky` package [@lanmanAelanmanLunarsky2024].
+We store them in spherical coordinates, with which we can still directly compute any scalar products (@nte-scalar-products-spherical).
 
-In order to evaluate how dense the interpolation grid must be to satisfy a given accuracy requirement, we perform the 
-interpolation with different grid sizes, then select uniformly random points in time and locations on the sky and compute the error in the scalar product computed with the correct computation and the interpolated approximation.
+::: {#nte-lgwa-location .callout-note collapse="true"}
+##### The position of the LGWA
+
+The precise location of the LGWA is a required input for the computation of these vectors as a function of time. It is defined by three angles: lunar latitude, lunar longitude and azimuth of one LGWA arm, the other being perpendicular to it. 
+
+We choose a lunar latitude of 88.5 degrees, a longitude of 290 degrees, and an azimuth of 0.
+These parameters were obtained through a preliminary site selection study [@gobeSeismicInvestigationLunar2025].
+
+:::
+
+In order to evaluate how dense the interpolation grid must be to satisfy a given accuracy requirement, we compute it with different grid sizes for a duration of 10 years,^[Specifcally, from 2030 to 2040.] and for each grid size we:
+
+- uniformly sample a moment in time $t$ within the interpolation region;
+- uniformly sample a unit vector $u$ on the sphere;
+- compute the error in the scalar products, $|u \cdot (n^{\text{interp}}(t) - n^{\text{true}}(t)|$ and similarly for $a$ and $b$.
 
 As figure @fig-response-interpolation-errors shows, we can achieve errors on the scale of $10^{-4}$ on the scalar products with only $10^{4}$ points, which take about a minute to compute, and adding more as required is easy.
+Linear interpolation is sufficient to achieve this level of accuracy.
 
 ```{python}
 #| label: fig-response-interpolation-errors
-#| fig-cap: "Errors in scalar products computed with an interpolated version of the detector-centric basis vectors. The errors are computed from 400 randomly sampled points in the sky and time. Since the detector is located near the pole (specifically, at 85 degrees of latitude) the normal vector varies less across the month, and is therefore easier to interpolate."
+#| fig-cap: "Errors in scalar products computed with an interpolated version of the detector-centric basis vectors. The errors are computed from 400 randomly sampled points in the sky and time. Since the detector is located near the pole, the normal vector varies less across the month, and is therefore easier to interpolate."
 
 from lgwa_response.lunar_coordinates import make_response_interpolation_plot
 from thesis_scripts import data_path
@@ -290,13 +261,13 @@ cache_path = data_path / 'cache'
 make_response_interpolation_plot(cache_path)
 ```
 
-We can run a similar test for the computed position of the detector with respect to a fixed reference, 
-which enters the response as a phase term. 
+In order to compute the strain in @eq-lgwa-strain-projection-spa we also need the detector position. 
+We apply the interpolation approach here as well, pre-computing the position on an equally spaced grid, and we can run a similar test to that in @fig-response-interpolation-errors to determine how fine the interpolation grid needs to be.
+ 
 The results in figure @fig-position-interpolation-errors show that in order to
 achieve an error of $10^{-4}$ radians we need as many as 160 thousand interpolation points for the 10-year span we are considering. 
-
 The maximum phase error is computed by comparing the position error to the angular wavelength corresponding to the smallest angular wavelength in the LGWA band (i.e. the highest frequency): $c/(2 \pi \times 3 \mathrm{Hz}) \approx 1.6 \times 10^7 \mathrm{m}$.
-
+This is the worst-case scenario, as to achieve it we would need a source at the upper edge of the detector's band to also be perfectly aligned with the position error vector $\vec{r} _\text{interp} - \vec{r}_\text{true}$.
 
 ```{python}
 #| label: fig-position-interpolation-errors
@@ -309,7 +280,9 @@ cache_path = data_path / 'cache'
 make_position_interpolation_plot(cache_path)
 ```
 
-Conveniently, the position interpolation requires about 10 times more points to achieve a comparable level of accuracy, but each evaluation of the position of the detector is roughly 10 times faster than an evaluation of the basis vectors.
+The position interpolation requires about 10 times more points to achieve a comparable level of accuracy, but each evaluation of the position of the detector is roughly 10 times faster than an evaluation of the basis vectors.
+
+In @fig-position-function-of-time we illustrate how the position vector encodes several epicycles: motion of the Earth-Moon system around the Sun, of the Moon around the Earth, and finally of the detector location from the lunar center.
 
 ```{python}
 #| label: fig-position-function-of-time
@@ -366,31 +339,8 @@ _ = axs[2].set_xlabel('Time from January 1 2030 (lunar months)')
 ```
 
 
-```{python}
-#| label: fig-response-functions-of-time
-#| fig-cap: "Response functions in terms of time."
 
-from lgwa_response.likelihood import LunarLikelihood
-import matplotlib.pyplot as plt
-import numpy as np
 
-like = LunarLikelihood()
-t_0 = 1577491218.
-day = 3600*24
-times = np.linspace(t_0, t_0+day*28, num=1000)
-hp1, hp2, hc1, hc2 = like.get_antenna_response(times, ra=0, dec=np.pi/2, psi=.9)
-
-times_days = (times - t_0)/day
-
-plt.plot(times_days, hp1, label='$F_+$ response, $x$ channel', color='#117733')
-plt.plot(times_days, hc1, label='$F_\\times$ response, $x$ channel', color='#44AA99')
-plt.plot(times_days, hp2, label='$F_+$ response, $y$ channel', color='#CC6677')
-plt.plot(times_days, hc2, label='$F_\\times$ response, $y$ channel', color='#882255')
-plt.legend()
-plt.xlabel('Days from January 1st 2030')
-plt.title('Antenna patterns for a source at declination 90 degrees')
-plt.show()
-```
 
 ### The importance of computing time to merger correctly
 

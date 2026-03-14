@@ -383,7 +383,7 @@ plt.ylabel('Normalized probability density')
 plt.show()
 ```
 
-### Timing
+### Timing {#sec-timing-general}
 
 The timing parameter $t_{0}$ has a straightforward physical meaning, encoding our uncertainty
 on the precise moment a given signal has arrived at a reference position. 
@@ -460,7 +460,7 @@ $$
 By differentiating it we get a commonly used expression to recover the SPA time in terms of the frequency-domain phasing [@marsatFourierdomainModulationsDelays2018, eq. 21]:
 $$
 \frac{ \text{d}\phi}{\text{d}f} = - 2 \pi t^{*}\,.
-$$
+$${#eq-spa-time-from-phase}
 
 The conditions required for this approximation to hold are [@chassande-mottinStationaryPhaseApproximation1998;@tissinoMachineLearningGravitational2021]:
 
@@ -509,7 +509,7 @@ It is common practice to model the functions $\delta A(f)$ and $\delta \phi(f)$ 
 
 Over the first observing runs, the typical order of magnitude for the $1\sigma$ width of the posterior predictive distribution on the calibration envelope was $\delta A \sim \text{few} \times 10^{-2}$ and $\delta \phi \sim \text{few deg}$.
 
-## Antenna patterns
+## Antenna patterns {#sec-antenna-patterns}
 
 Antenna patterns allow us to compute the scalar strain measured by a detector, $h(t)$, 
 starting from the gravitational wave strain tensor $h_{ij}(t)$.
@@ -643,7 +643,7 @@ _ = plt.colorbar(mappable=ScalarMappable(norm=norm, cmap=cmap), ax=axs, label='$
 ```
 
 
-### Antenna patterns for the Lunar Gravitational Wave Antenna
+### Antenna patterns for the Lunar Gravitational Wave Antenna {#sec-lgwa-antenna-patterns}
 
 While the operational principle of the Lunar Gravitational Wave Antenna is quite different from that of interferometric detectors, its response can ultimately be cast into a similar form.
 However, unlike interferometers, the displacement measured by a lunar seismometer is not directly proportional to strain in a wide band. 
