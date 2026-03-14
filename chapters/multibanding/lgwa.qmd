@@ -16,149 +16,31 @@ The idea of using a planetary body as a gravitational wave detector
 was proposed by Joseph Weber [@weberDetectionGenerationGravitational1960], who led the efforts to deploy a gravimeter on the Moon with the Apollo 17 mission.
 The Lunar Surface Gravimeter was 
 
+First LGWA paper: [@harmsLunarGravitationalwaveAntenna2021]
+Whitepaper: [@ajithLunarGravitationalwaveAntenna2024]
+
+### Site selection
+
+These parameters were obtained through a preliminary site selection study [@gobeSeismicInvestigationLunar2025].
+
+![LGWA proposed landing site (right blue dot) and PSR (left blue dot), in 3D perspective. The color on the lunar surface indicates maximum summer temperatures, ranging from 50K (deep blue), through 100K (white) to red (150K or more). The Earth's and Sun's apparent orbits are shown for reference. This figure was generated with `QuickMap` [@LunarLROCQuickMap].](figures/quickmap-lroc-2.png)
+
+
 ### Displacement noise
 
-```{python}
-#| label: fig-lgwa-soundcheck-displacement-noise
-#| fig-cap: "Displacement noise estimates for LGWA and Soundcheck."
+Seismic noise: 
+Payload: [@vanheijningenPayloadLunarGravitationalwave2023]
 
-from thesis_scripts import *
-import numpy as np
-import matplotlib.pyplot as plt
-import astropy.units as u
-import astropy.constants as ac
+![Upper bound on the lunar seismic spectrum, from [@coughlinConstrainingGravitationalWave2014].](figures/Moon-noise-spectrum.png)
 
-# there is an extra sqrt(2) in the shot noise, which is explained by the
-# fact that only one the two interferometer arms picks up the signal
+### The lunar seismic response
 
-def get_noise_asd(ff, n_seismometers, temperature, quality_factor, m, P, dL):
-	hbar = ac.hbar.si.value
-	kB = ac.k_B.si.value
-	c = ac.c.si.value
-	laser_wavelength = 1.064e-6
-	reference_frequency = 0.1
+Formalism: [@ben-menahemExcitationEarthsEigenvibrations1983]
+Then discuss the results of [@biResponseMoonGravitational2024].
 
-	omega0 = 2*np.pi*c/laser_wavelength
 
-	n_shot = laser_wavelength/(2*np.pi)*np.sqrt(2*hbar*omega0/P)*np.sqrt((reference_frequency**2-ff**2)**2+(reference_frequency**2/quality_factor)**2)/ff**2
 
-	n_freq = dL*(4e4+5e4*(0.1/ff)**1.2)/omega0*np.sqrt((reference_frequency**2-ff**2)**2+(reference_frequency**2/quality_factor)**2)/ff**2
-
-	n_readout = np.sqrt(n_shot**2 + n_freq**2)/np.sqrt(n_seismometers)
-	
-	n_therm = np.sqrt(4*kB*temperature*(2*np.pi*reference_frequency)**2/(m*quality_factor*2*np.pi*ff))/(2*np.pi*ff)**2
-
-	return np.sqrt(n_readout**2 + n_therm**2)/np.sqrt(n_seismometers)
-
-def get_noise_asd_squid(ff, energy_resolution, critical_frequency, coupling_efficiency, suspended_mass, quality_factor, temperature, natural_frequency):
-	hbar = ac.hbar.si.value
-	kB = ac.k_B.si.value
-	c = ac.c.si.value
-
-	n_therm = np.sqrt(
-		4*kB*temperature*(
-		2*np.pi*natural_frequency)**2
-		/(suspended_mass*quality_factor*2*np.pi*ff)
-	) / (2*np.pi*ff)**2
-
-	eA = energy_resolution * hbar
-	omega_0 = 2 * np.pi * natural_frequency
-	omega = 2 * np.pi * ff
-
-	n_squid = np.sqrt(
-		2*eA*(1+critical_frequency/ff)
-		/ (suspended_mass * omega_0 * coupling_efficiency )
-		 * (
-			(omega**2-omega_0**2)**2 + omega_0**2 / quality_factor
-		) / omega**4
-	)
-	return np.sqrt(n_squid**2 + n_therm**2)
-
-ff = np.logspace(-3,1,500)
-
-f_stab = 100
-
-noise_params_lgwa = {
-	'n_seismometers': 1, 
-	'temperature': 4, 
-	'quality_factor': 1e4, 
-	'm': 10, 
-	'P': 5e-3, 
-	'dL': 1e-3/f_stab
-}
-
-noise_params_lgwa_si = {
-	'energy_resolution': 50,
-	'suspended_mass': 10,
-	'quality_factor': 1e6,
-	'critical_frequency': 0.1,
-	'natural_frequency': 0.25,
-	'coupling_efficiency': 0.25,
-	'temperature': 5,
-}
-
-noise_params_soundcheck = {
-	'n_seismometers': 1, 
-	'temperature': 40, 
-	'quality_factor': 1e4, 
-	'm': 3, 
-	'P': 5e-9, 
-	'dL': 1e-3
-}
-
-noise_lgwa = get_noise_asd(ff, **noise_params_lgwa)
-noise_lgwa_si = get_noise_asd_squid(ff, **noise_params_lgwa_si)
-noise_soundcheck = get_noise_asd(ff, **noise_params_soundcheck)
-
-plt.loglog(ff, noise_lgwa, label='LGWA Nb (1 seismometer)')
-plt.loglog(ff, noise_lgwa_si, label='LGWA Si (1 seismometer)')
-plt.loglog(ff, noise_soundcheck, label='Soundcheck')
-plt.xlabel('Frequency [Hz]')
-plt.ylabel('Noise ASD $[\\mathrm{{m}} / \\sqrt{{\\mathrm{{Hz}}}}]$')
-plt.legend()
-plt.grid('both')
-```
-
-```{python}
-from thesis_scripts import data_path
-
-psd_path = data_path / 'LGWA_Si_psd.txt'
-psd_data = np.loadtxt(psd_path)
-
-displacement_noise = get_noise_asd_squid(psd_data[:, 0], **noise_params_lgwa_si)
-
-R_moon = 1737.4e3
-lgwa_strain_asd = np.sqrt(psd_data[:, 1])
-
-plt.loglog(psd_data[:, 0], displacement_noise / lgwa_strain_asd)
-
-secax = plt.gca().secondary_yaxis('right', functions=(
-	lambda x : x / R_moon, 
-	lambda x : x * R_moon)
-)
-secax.set_ylabel('Response [Moon radii]')
-
-plt.ylabel('Response model [m]')
-plt.xlabel('Frequency [Hz]')
-plt.show()
-```
-
-```{python}
-soundcheck_displacement_noise = get_noise_asd(psd_data[:, 0], **noise_params_soundcheck)
-
-soundcheck_psd = np.loadtxt(data_path / 'LGWA_Soundcheck_psd.txt')
-
-plt.loglog(psd_data[:, 0], soundcheck_displacement_noise / (displacement_noise / lgwa_strain_asd), label='Recomputed Soundcheck strain ASD')
-plt.loglog(soundcheck_psd[:, 0], np.sqrt(soundcheck_psd[:, 1]), label='Stored Soundcheck ASD')
-
-plt.ylabel('Strain ASD $[\\mathrm{{m}} / \\sqrt{{\\mathrm{{Hz}}}}]$')
-plt.xlabel('Frequency [Hz]')
-
-plt.legend()
-plt.plot()
-```
-
-### Computing the lunar response to gravitational waves {#sec-lgwa-response}
+### Projected gravitational wave strain {#sec-lgwa-response}
 
 The LGWA will consist of seismometers measuring displacement along the horizontal direction.
 
@@ -237,7 +119,6 @@ We store them in spherical coordinates, with which we can still directly compute
 The precise location of the LGWA is a required input for the computation of these vectors as a function of time. It is defined by three angles: lunar latitude, lunar longitude and azimuth of one LGWA arm, the other being perpendicular to it. 
 
 We choose a lunar latitude of 88.5 degrees, a longitude of 290 degrees, and an azimuth of 0.
-These parameters were obtained through a preliminary site selection study [@gobeSeismicInvestigationLunar2025].
 
 :::
 
@@ -282,7 +163,7 @@ make_position_interpolation_plot(cache_path)
 
 The position interpolation requires about 10 times more points to achieve a comparable level of accuracy, but each evaluation of the position of the detector is roughly 10 times faster than an evaluation of the basis vectors.
 
-In @fig-position-function-of-time we illustrate how the position vector encodes several epicycles: motion of the Earth-Moon system around the Sun, of the Moon around the Earth, and finally of the detector location from the lunar center.
+In @fig-position-function-of-time we illustrate how the position vector encodes several "epicycles": motion of the Earth-Moon system around the Sun, of the Moon around the Earth, and finally of the detector location from the lunar center.
 
 ```{python}
 #| label: fig-position-function-of-time
@@ -338,35 +219,18 @@ axs[2].set_title('Position from lunar center')
 _ = axs[2].set_xlabel('Time from January 1 2030 (lunar months)')
 ```
 
+#### The importance of computing time to merger correctly
 
+In the Stationary Phase Approximation, the time left until merger for a source whose phase in the frequency domain is known is given by @eq-spa-time-from-phase. 
 
-
-
-### The importance of computing time to merger correctly
-
-In the Stationary Phase approximation, the time left until merger for a source whose phase in the frequency domain is given by $\varphi(f)$ can be computed as (Marsat and Baker 2018, eq 20)
-$$
-t(f) = - \frac{1}{2 \pi} \frac{\text{d}\varphi}{\text{d}f}\,.
-$$
-
-In principle this should be computed using the same expression for $\varphi$ we have in the waveform (i.e. the most accurate one available).
-One may think that, however, this time can be safely approximated by using a low-order expression for $\varphi$, which will only be inaccurate at high frequency, where the time to merger is low and relative errors are less relevant.
-
-In the Post-Newtonian approximation, the phase is given as a series in the form
-$$
-\varphi(f) \propto \frac{1}{\eta v^{5}} \left(
-1+ \sum_{i=2}^{\infty} c_{i} v^{i}
-\right)
-$$
-where $v = (\pi M f)^{1/3}$ and $\eta=\mu / M = m_{1} m_{2} / (m_{1} + m_{2})^{2}$.
-The lowest-order expression, therefore, is $\varphi \propto \eta^{-1}(Mf)^{-5/3} = \mathcal{M}_{c}^{-5/3} f^{-5/3}$, where we define the chirp mass $\mathcal{M}_{c} = (m_{1}m_{2})^{3/5} (m_{1}+m_{2})^{1/5}$.
-Reintroducing the relevant constants, this leads to the following expression for the time to merger:
+One may think that. for these purposes, a precise description of the phase to a high PN order is not necessary. 
+If we only consider the leading order in the phase (@eq-post-newtonian-phase-generic), we get the following expression for the time to merger:
 $$
 t_\text{lowest order}(f) = - \frac{5}{256 \pi^{8/3}} \frac{1}{\mathcal{M}_{c}^{5/3}} \frac{1}{f^{8/3}}\,.
 $$
 
-The next-order correction to this expression for the phase comes with a factor of $v^{2}\propto f^{2/3}$, which carries over during the differentiation, leading to the error scaling with $f^{-2}$.
-We show this in figure @fig-time-to-merger-error: it leads to errors of several hours to days in the deci-Hertz band for a light source.
+The next-order correction to this expression for the phase comes with a factor of $v^{2}\propto f^{2/3}$, which carries over during the differentiation, leading to the leading term in the  error scaling with $f^{-2}$.
+In figure @fig-time-to-merger-error we show the error  it leads to errors of several hours to days in the deci-Hertz band for a light source.
 
 ```{python}
 #| label: fig-time-to-merger-error
