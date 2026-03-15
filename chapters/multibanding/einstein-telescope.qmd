@@ -13,10 +13,11 @@ format:
 
 The Einstein Telescope [@abacScienceEinsteinTelescope2025] is a planned next-generation (XG) detector in Europe.
 
-
 ![Sardinian candide site for the Einstein Telescope](figures/einstein-telescope/ET-map.pdf){#fig-einstein-telescope-location}
 
-## $\Delta$ shape
+## Detector configurations
+
+### $\Delta$ shape
 
 The $\Delta$ design for the Einstein Telescope consists of three co-located interferometers, 
 the arms of each are two sides of an equilateral triangle with side length 10km.
@@ -52,12 +53,14 @@ These degeneracies are expected to be present as long as no effect is able to ma
 - Long signals, for which the Earth's rotation provides a significant modulation. The precise threshold for this will depend on the many specifics, but we can expect it to be on the order of an hour in duration.  
 - Signals observed by another detector, not co-located with the Einstein Telescope. 
 
-## 2L shape
-
-
+### 2L shape
 
 ![Sky and distance posteriors for an injection in the 2L, misaligned case. From @santoliquidoComparingNextgenerationDetector2025.](figures/einstein-telescope/skymap_dL_hist_colorbar_manualspacing.png){#fig-einstein-telescope-2l-sky}
 
-## Comparison
+## Scientific prospects
+
+### Candidate sources
+
+### Design comparison for high-mass black holes
 
 ![Summary statistics for various configurations. From @santoliquidoComparingNextgenerationDetector2025.](figures/einstein-telescope/Big_Panel.pdf){#fig-einstein-telescope-design-comparison-statistics}

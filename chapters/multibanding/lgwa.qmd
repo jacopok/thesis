@@ -8,7 +8,7 @@ format:
             echo: false
         bibliography: ../../rehear.bib
 ---
-# The Lunar Gravitational Wave Antenna {#sec-lgwa}
+# Lunar Gravitational Wave Antenna {#sec-lgwa}
 
 ## Detector concept
 
