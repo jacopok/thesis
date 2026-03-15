@@ -57,6 +57,8 @@ These degeneracies are expected to be present as long as no effect is able to ma
 
 ![Sky and distance posteriors for an injection in the 2L, misaligned case. From @santoliquidoComparingNextgenerationDetector2025.](figures/einstein-telescope/skymap_dL_hist_colorbar_manualspacing.png){#fig-einstein-telescope-2l-sky}
 
+## Data analysis challenges
+
 ## Scientific prospects
 
 ### Candidate sources

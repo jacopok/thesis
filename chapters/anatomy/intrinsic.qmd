@@ -9,14 +9,9 @@ format:
         bibliography: ../../rehear.bib
 ---
 
-```{python}
-from pathlib import Path
-import os
-```
-
 # Intrinsic parameters and waveform modelling {#sec-intrinsic}
 
-This section will continue in the dissection of a gravitational signal by considering its intrinsic parameters, those relating to the source itself and not to its relation to the observer.
+This section will continue in the dissection of the gravitational signal emitted by the coalescence of two compact objects by considering its intrinsic parameters, those relating to the source itself and not to its relation to the observer.
 
 ## Component masses
 

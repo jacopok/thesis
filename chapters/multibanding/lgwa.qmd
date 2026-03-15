@@ -32,6 +32,14 @@ Combined with a sufficiently strong lunar response to gravitational waves, this 
 
 In the following years, a collaboration has been formed to study the science of the Lunar Gravitational Wave Antenna; this has resulted in the publication of several works, among them the so-called "whitepaper" [@ajithLunarGravitationalwaveAntenna2024], which details several aspects of the possible science achievable in this band.
 
+This chapter will focus on the full LGWA mission and its projected sensitivity, 
+but a preliminary mission, dubbed Soundcheck, is also planned.
+Whereas the LGWA will require advancements in sensor technology compared to the current
+state of the art, Soundcheck will use off-the-shelf components. 
+Even so, if deployed at the lunar pole, it will provide extremely valuable data, 
+though the chance a gravitational wave signal strong enough to be is detected by it comes is slim.
+The Soundcheck mission has been included in the Reserve Pool of Activities by the European Space Agency.
+
 ### Site selection {#sec-lgwa-site-selection}
 
 Permanently Shadowed Regions (PSRs) exist in the lunar polar regions: due to the low tilt of the Moon's orbit, the Sun remains close to the horizon throughout the year, therefore some low-elevation regions never receive direct sunlight.
@@ -578,12 +586,61 @@ plt.show()
 
 ## Scientific prospects
 
-### Candidate sources
+### Lunar science
 
-### Sky localization
+The scientific potential of a very sensitive seismometer array at the lunar pole
+does not only include gravitational wave science [@ajithLunarGravitationalwaveAntenna2024].
+Indeed, all the seismic motion which is a nuisance for gravitational wave observations
+would include valuable data on seismic events on the Moon.
 
-### Mass constraints
+The seismometers deployed by the Apollo mission detected thousands of moonquakes, originating both near the surface (shallow moonquakes) and near the core (deep moonquakes).
+The information available comes from the lunar near side, but it seems to point to an asymmetry between it and the far side in terms of moonquake event rate. 
+Whether this is a genuine effect or an artefact of selection bias is an open question. 
+
+Furthermore, the LGWA would be able to precisely measure the excitation of lunar normal modes by Moonquakes.^[As discussed earlier, their excitation by gravitational waves would require an improbably strong signal.] This would provide insights into the lunar interior structure, enabling the exploration of lunar origin models.
+The formation mechanism of the Moon is not a settled debate: the giant impact scenario, in which a large planetary object dubbed Theia impacted a young Earth thus forming a disk of debris which coalesced into our satellite, is the dominant theory, but it does not stand unchallenged. 
+The _isotopic crisis_ is the problem posed by the observation that the Earth and Moon's mantles have nearly identical ratios of isotopes such as $^{17}O / ^{16}O$, $^{50}Ti / ^{47}Ti$ and $^{182}W / ^{184}W$. This is unlike any other body in the Solar System, for which these ratios are significantly different, and is hard to explain under the giant impact scenario. 
+Mapping the composition of the lunar interior, which can be accomplished through seismic observations, will aid in the resolution of this problem.
+
+### Gravitational wave sources
+
+![Horizon for equal mass black hole binaries as seen by the detectors for the next decade: Einstein Telescope, Lunar Gravitational Wave Antenna and LISA](figures/horizon_IMBH.pdf){#fig-horizon-multiband width=80%}
+
+![Time to merger as a function of mass, highlighting at which point various sources would cross the decihertz band.](figures/time_to_merger.pdf){#fig-time-to-merger-lgwa width=80%}
+
+### Parameter estimation
+
+#### Sky localization
+
+#### Mass constraints
 
 
 ## Reference frames for long observations
 
+### Shifting reference frame in post-processing
+
+$$
+t_{i}^{f, r} = t_{i}^{\text{mrg}, r_0} 
++ \frac{(r-r_0 ) \cdot \hat{n}_{i}}{c}
++ \frac{1}{2 \pi} \frac{ \text{d} \varphi_{22}(f; \theta_i)}{ \text{d} f}
+$$
+
+![](figures/ra_dec_corner_gw170817.png){#fig-lgwa-gw170817-sky width=80%}
+
+![](figures/time_std_solar_system.pdf){#fig-timing-lgwa-solar-system width=80%}
+
+![](figures/minimum_uncertainty_velocity.pdf){#fig-minimum-uncertainty-velocity width=80%}
+
+![](figures/timing_constraint_by_frequency_GW250114.pdf){#fig-timing-lgwa-by-frequency width=80%}
+
+### Spanned area scaling validation
+
+![](trajectories.pdf){#fig-trajectories-lgwa-injections width=80%}
+
+![](lgwa_waveforms_month_by_month.pdf){#fig-waveforms-lgwa-injections width=80%}
+
+![](sky_locs.pdf){#fig-injections-sky-areas width=80%}
+
+![](sky_loc_vs_theory.pdf){#fig-injections-vs-wen-chen width=80%}
+
+z
