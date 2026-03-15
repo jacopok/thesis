@@ -3,7 +3,6 @@
 demo.qmd
 *.pdf
 *.h5
-*.png
 *.txt
 *.tar.gz
 
@@ -154,7 +153,6 @@ skymap-comparison_files/figure-pdf/*
 .jupyter_cache/*
 
 *.pdf
-*.png
 *.html
 *.json
 
@@ -185,6 +183,9 @@ thesis.tar
 thesis/*
 _extensions/*
 QTDublinIrish.otf
+
+**/cell-*
+chapters/multibanding/presentations/*
 
 *.webp
 thesis/chapters/anatomy/figures/S250114_m1_m2_grey.PNG
