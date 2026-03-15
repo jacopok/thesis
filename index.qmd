@@ -11,7 +11,24 @@ format:
 
 # Preface {.unnumbered}
 
+This thesis is the result of four and a half years of PhD, during which I had the opportunity to work on many aspects of gravitational wave astronomy. 
+Its first two chapters take the reader through the details of how we can go from the data observed by a detector to the properties of the astrophysical source which generated the signal.
 
+@sec-statistical-methods introduces the statistical tools required to efficiently perform inference; 
+these are of general applicability, though the discussion already has an eye toward gravitational waves.
+@sec-gw-pe illustrates how these tools can be applied to gravitational waves specifically, 
+_i.e._ to the robust analysis of timeseries, as well as what computational acceleration techniques 
+can be applied at this stage.
+
+The next three chapters summarize the main effects which can drive variations in the waveform measured at the detectors.
+In @sec-gw250114 we introduce the protagonist signal for this endeavour is introduced, GW250114, which as of this writing
+holds the record as the clearest-ever gravitational wave detection. 
+In @sec-intrinsic we outline how the signal produced by a binary compact merger is characterized, while in @sec-extrinsic
+we take it from the source to the detector, by discussing the geometric relation between us and the emitter.
+
+Finally, in @sec-einstein-telescope and @sec-lgwa we look toward the next decades 
+with two concepts for future detectors, both of which are developing 
+thriving collaborations. 
 
 This thesis is simultaneously compiled with [quarto](https://quarto.org/) 
 into both HTML --- as a static website --- and PDF.
@@ -23,110 +40,3 @@ This literate programming-like approach [@knuthLiterateProgramming1984]
 allows for reproducibility and transparency.
 I would like thesis to be a "living document" of sorts, 
 which I can keep updating after graduation.
-
-What follows is a working index / to-do list, 
-which will be removed and substituted by an outline of the various chapters.
-
-### To-do list
-
-- [ ] find the proper `preamble.tex`, GSSI logo and so forth to use
-- [x] fix the weirdly large number of authors cited 
-- [ ] explain code availability and the meaning of typewriter text in preamble
-- [ ] make the repository and website public
-- [x] understand why the pp-plot in Talbot+ is underconstrained
-
-#### Nice-to-haves
-
-- [ ] add some interactive plots
-
-
-## Parameter estimation and model selection
-
-The following is a working index.
-
-- The parameter estimation problem
-- Fisher matrix [@dupletsaGwfishSimulationSoftware2023] [@dupletsaValidatingPriorinformedFishermatrix2025], 
-- Nested Sampling
-- NPE and the methods of [@santoliquidoFastAccurateParameter2025] [@santoliquidoComparingNextgenerationDetector2025]
-- GW likelihoods: regular FD likelihoods review, matched filtering, windowing  [@talbotInferenceFiniteTime2025], time domain inference 
-- acceleration: ROQ, relative binning, [@tissinoCombiningEffectiveonebodyAccuracy2023], analytical and numerical marginalizations
-
-### To-add list
-
-- [x] add final details to posterior sample section
-	- [x] Add credible interval definition
-	- [x] add marginal distribution definition
-	- [ ] add KDE description, with the example of computing sky localization area (OPTIONAL)
-- [x] Fisher: 
-	- [x] add definitions from Vallisneri (LSA, Cramer Rao etc)
-	- [x] discussion of derivative computation, cite gwfish
-	- [x] Fisher integrands as a tool for understanding PE
-	- [x] Fisher as a tool for understanding correlations (bayestar) 
-	- [x] Area between detectors for triangulation, Wen-Chen
-- [x] Likelihoods: 
-	- [x] time-domain covariance structure, why go to the frequency domain
-	- [x] time-domain inference in brief (OPTIONAL)
-	- [x] windowing, talbot et al
-	- [x] strain plotting and whitening (OPTIONAL)
-- [x] NS: specify the acceleration methods to NS-related ones only, and give refs to others
-- [x] SNR section: contextualize, mention zero-noise vs noisy injections, 
-	- [x] mention SNR additivity in quadrature
-	- [x] records and GW250114
-- [x] Likelihood acceleration: give context, reference waveforms
-	- [x] frequency grid sizes, with `mlgw_bns` figures 3-4 (OPTIONAL)
-	- [x] Explain ROQ in some more detail
-	- [x] remove marginalization over distance and time, but mention them
-	- [x] check whether there is more to cite from Roulet
-
-## Anatomy of a gravitational wave
-
-- the GW250114 detection, **area law paper** [@abacGW250114TestingHawkings2025] --- an outline of the qualitative results, deferring the technical details; all further discussions will use GW250114 as an example
-- inspiral: how to get a simple PN waveform, chirp mass, mass ratio, chi_eff, tidal and so forth, HOM, precession, eccentricity **Revisiting GW150914 paper** [@gambaRevisitingGW150914Nonplanar2025]
-- ringdown, the spectrum of a Kerr BH, mode excitation and why we didn't see the 33 and 44 modes for GW250114
-- extrinsic parameters, the geometry of the detection tensor, the distance-inclination degeneracy
-
-### To-add list
-
-- [x] mention chapter structure
-	- [x] mention that we will work within GR, and many other options exist outside
-- [x] $\delta f_{221}$ test of GR with GW250114
-- [x] briefly discuss meaning of area law test
-- [x] antenna patterns vs detection tensor
-	- [x] in general
-	- [x] for an interferometer
-	- [ ] for the LGWA, with interpolation accuracy graphs
-- [ ] distance-inclination degeneracy (under signal projection), referring to the 22 mode, GW250114 example
-- [x] remove mention in spin section of twisting - described elsewhere
-- [ ] Add GW250114 example posteriors
-	- [x] mass (only need citation)
-	- [ ] spin components (OPTIONAL)
-	- [x] eccentricity
-	- [x] tidal (cite only)
-- [ ] ADD: Left SXS:BBH:3999 (initial energy Ei = 1.023 and angular momentum Ji = 1.600M ). Right SXS:BBH:4000 (Ei = 1.001 and Ji = 1.005M ). These are SXS simulations showing hyperbolic capture. (OPTIONAL)
-- [x] eccentricity geometric description
-- [x] move antenna pattern section from the tidal one
-- [x] touch on priors
-	- [x] briefly for the angles
-	- [x] expression in mchirp-q
-	- [x] normalize distance
-	- [ ] timing (obv)
-
-## Future gravitational wave detectors
-
-- Einstein Telescope design comparison with NPE, 8-modalities with Delta, bimodalities in time, multimodalities with the 2L configuration [@santoliquidoFastAccurateParameter2025] [@santoliquidoComparingNextgenerationDetector2025]
-- LGWA mission description [@ajithLunarGravitationalwaveAntenna2025] [@cozzumboOpportunitiesLimitsLunar2024]
-- GW250114 parameter estimation and reference frames [@tissinoGeometryLunarGravitational2026]
-
-### To-add list
-
- - [ ] ET outline from the bluebook
-	 - [ ] description of the summary statistics in the new paper
-	 - [ ] description of the comparison with Fisher, backreference
- - [ ] LGWA introduction from the whitepaper
-	 - [ ] add pretty pictures, payload description, location
-	 - [ ] redo computations for the response (OPTIONAL)
-	 - [ ] finish "importance of computing merger time" with estimates of the wavelength of a GW at that freq
-	 - [ ] include opportunities of LG detection Fisher figure
-	 - [ ] include GW231123 paper pop results
- - [ ] move geometry of lunar GW detection to LGWA chapter, report results
- - [ ] describe relative binning for LGWA

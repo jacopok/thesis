@@ -8,7 +8,7 @@ format:
             echo: false
         bibliography: ../../rehear.bib
 ---
-# Gravitational wave parameter estimation
+# Gravitational wave parameter estimation {#sec-gw-pe}
 
 This chapter will outline the basic tools used for the parameter estimation for gravitational waves. 
 

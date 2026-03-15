@@ -237,7 +237,7 @@ Moonquakes remain a significant issue, and it is likely that some fraction of th
 
 ![Comparison between a moonquake detected within the Apollo 12 mission and an earthquake. From @steinIntroductionSeismologyEarthquakes2009.](figures/moonquake.jpg){#fig-moonquake-duration width=60%}
 
-### The lunar seismic response
+### The lunar seismic response {#sec-lgwa-response}
 
 The fundamental normal mode, which describes quadrupolar vibration of the whole Moon, has a frequency just above $1 \text{mHz}$.
 While plenty of gravitational wave sources are expected at these frequencies, which are a target of the LISA mission, the LGWA detector concept is not expected to be very sensitive there, mostly due to thermal noise (see @fig-lgwa-displacement-noise).

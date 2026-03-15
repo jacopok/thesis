@@ -15,7 +15,7 @@ format:
 from thesis_scripts import *
 ```
 
-# Statistical methods {#statistical-methods}
+# Statistical methods {#sec-statistical-methods}
 
 {{< include sections/_pe-general.qmd >}}
 

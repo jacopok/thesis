@@ -18,6 +18,8 @@ format:
     documentclass: scrreprt
     colorlinks: true
     linkcolor: blue
+    fig-width: 4
+    fig-height: 3
     link-citations: true
     reference-section-title: "References"
     pdf-engine: xelatex

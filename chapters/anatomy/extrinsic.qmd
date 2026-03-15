@@ -358,6 +358,9 @@ $$
 $$
 
 ```{python}
+#| label: fig-luminosity-distance-priors
+#| fig-cap: "Cosmological priors for luminosity distance."
+
 import numpy as np
 import matplotlib.pyplot as plt
 from astropy.cosmology import Planck18 as cosmo

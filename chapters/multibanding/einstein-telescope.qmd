@@ -9,7 +9,7 @@ format:
         bibliography: ../../rehear.bib
 ---
 
-# Einstein Telescope
+# Einstein Telescope {#sec-einstein-telescope}
 
 The Einstein Telescope [@abacScienceEinsteinTelescope2025] is a planned next-generation (XG) detector in Europe.
 
