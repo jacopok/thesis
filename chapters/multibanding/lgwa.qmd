@@ -12,19 +12,44 @@ format:
 
 ## Detector concept
 
-The idea of using a planetary body as a gravitational wave detector
-was proposed by Joseph Weber [@weberDetectionGenerationGravitational1960], who led the efforts to deploy a gravimeter on the Moon with the Apollo 17 mission.
-The Lunar Surface Gravimeter was 
+The idea of using a resonant body as a gravitational wave detector
+was first proposed by Joseph Weber [@weberDetectionGenerationGravitational1960], following investigations on the effects of gravitational waves on matter by @piraniPhysicalSignificanceRiemann1956.
+
+Weber led the efforts to deploy a gravimeter on the Moon with the Apollo 17 mission, with the stated aim to detect gravitational waves.
+The Lunar Surface Gravimeter [@gigantiLunarSurfaceGravimeter1973] aimed for a sensitivity of around $10^{-10} \text{m}$ in vertical displacement when measuring vertical motion, around the $1.5\text{Hz}$ band. 
+
+![By NASA Apollo 17 photograph AS17-134-20501, Public Domain, https://commons.wikimedia.org/w/index.php?curid=7042350](figures/ALSEP_AS17-134-20501.jpg){#fig-lunar-surface-gravimeter width=60%}
+
+We now know that, even operating nominally, this would have been far too noisy to actually measure gravitational waves. 
+Furthermore, the sensor beam could not be stabilized upon deployment, due to some errors by the manufacturers when converting from terrestrial to lunar gravitational acceleration, which is approximately $g/6$. 
+
+
 
 First LGWA paper: [@harmsLunarGravitationalwaveAntenna2021]
 Whitepaper: [@ajithLunarGravitationalwaveAntenna2024]
 
 ### Site selection
 
-These parameters were obtained through a preliminary site selection study [@gobeSeismicInvestigationLunar2025].
+A preliminary site selection study was performed in 2025 by a team at ETH Zürich [@gobeSeismicInvestigationLunar2025].
+The choice of a site crucially depends on power generation: the main options are a radioisotope thermoelectric generator (RTG) and solar power.
+With the former option, a lander could directly target the deployment region; with the latter, a solar station would need to transmit power to the stations. 
 
-![LGWA proposed landing site (right blue dot) and PSR (left blue dot), in 3D perspective. The color on the lunar surface indicates maximum summer temperatures, ranging from 50K (deep blue), through 100K (white) to red (150K or more). The Earth's and Sun's apparent orbits are shown for reference. This figure was generated with `QuickMap` [@LunarLROCQuickMap].](figures/quickmap-lroc-2.png)
+They identified a potential landing site in the lunar north polar region, at latitude 88.389
+and longitude 280.76 degrees, which could be used to then deploy seismometers in a nearby Permanently Shadowed Region (PSR), around the latitude 88.50 and longitude 290.63 degrees.
+This PSR lies roughly between the Hermite A and Hinshelwood craters.
+We show these locations in figure @fig-lgwa-landing-site; useful free and interactive mapping tools to explore them include [LROC Norther Polar Mosaic](https://lroc.im-ldi.com/images/gigapan) and  [Quickmap](https://bit.ly/4bFltcB).
 
+![LGWA proposed landing site on the North Pole (right blue dot) and PSR (left blue dot), in 3D perspective. The color on the lunar surface indicates maximum summer temperatures, ranging from 50K (deep blue), through 100K (white) to red (150K or more). The Earth's and Sun's apparent orbits are shown for reference. The large crater whose rim is visible to the right is Hermite A. This figure was generated with `QuickMap` [@LunarLROCQuickMap].](figures/quickmap-lroc-2.png){#fig-lgwa-landing-site}
+
+The distance between the landing site and the PSR center is only around 8.6km, but their temperature profiles are significantly different.
+The landing site is a flat hilltop, illuminated for most of the (northern) summer months, April-September. In the winter, it receives at least a week of illumination every month, but it is predominantly in the shade, with continuous shade periods of up to 22.4 days. 
+Its temperatures range between 66K and 250K across the year.
+The PSR, on the other hand, has a mean temperature of 46K, with maximum recorded values of less than 60K. 
+A comparatively flat path connects the landing and deployment sites, with slopes of less than 15 degrees. 
+
+An alternative landing site near the South Pole was also explored, within the de Gerlache crater at latitude -88.381 and longitude 266.8.
+Both this deployment site and the North Pole sites are rather flat themselves, with maximum slopes of few degrees. 
+However, the South Pole is generally more rugged: the path from an illuminated landing site to the PSR location, which would likely have to be taken by a rover, nears slopes of 20 degrees. 
 
 ### Displacement noise
 
@@ -32,6 +57,8 @@ Seismic noise:
 Payload: [@vanheijningenPayloadLunarGravitationalwave2023]
 
 ![Upper bound on the lunar seismic spectrum, from [@coughlinConstrainingGravitationalWave2014].](figures/Moon-noise-spectrum.png)
+
+![Comparison between a moonquake detected within the Apollo 12 mission and an earthquake. From @steinIntroductionSeismologyEarthquakes2009.](figures/moonquake.jpg)
 
 ### The lunar seismic response
 
