@@ -186,6 +186,10 @@ QTDublinIrish.otf
 
 **/cell-*
 chapters/multibanding/presentations/*
+!chapters/multibanding/figures/*pdf
+!chapters/data-analysis/figures/*pdf
+chapters/data-analysis/figures/Figure_*.pdf
+!chapters/analysis/figures/*pdf
 
 *.webp
 thesis/chapters/anatomy/figures/S250114_m1_m2_grey.PNG
