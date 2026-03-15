@@ -69,6 +69,10 @@ $$
 \langle \lvert n(t) \rvert ^{2} \rangle = \int_{0}^{\infty} S_{n}(f) \text{d}f\,.
 $$
 We could have alternatively defined it without the $1 / 2$ factor, simultaneously extending the integral from $-\infty$ to $\infty$. The negative-frequency contribution to the integral is equal to the positive-frequency one, since the signal and noise are real.
+Sometimes, the _Amplitude Spectral Density_ (ASD) is also quoted, which is the square root of the PSD, with units of $\text{Hz}^{-1/2}$:^[More in general, the ASD has units of $x / \sqrt{ \text{Hz} }$, where $x$ is the unit of the time-domain noise. For example, if we were characterizing acceleration noise $x$ would be $\text{m/s}^2$.]
+$$
+A_{n}(f) = \sqrt{ S_{n}(f) }\,.
+$${#eq-amplitude-spectral-density}
 
 The PSD can be used for the characterization of the second moment of any stationary noise; if we further assume that the noise is Gaussian, we can obtain the Whittle approximation to the Gaussian likelihood [@whittleCurvePeriodogramSmoothing1957;@rouletInferringBinaryProperties2024]:
 
@@ -311,7 +315,7 @@ A common approach when looking for a signal in the data, is to look for high val
 If we fix the template $h$ we can also compute the expectation value of the SNR when varying the noise realization:
 $$
 \rho _\text{opt} = \mathbb{E}_{n} \left[ \frac{(d|h)}{\sqrt{ (h|h) }} \right] = \sqrt{ (h|h) }\,.
-$$
+$${#eq-optimal-snr}
 While this is called _optimal_ SNR, it involves no optimization procedure. 
 If a template with a given optimal SNR is injected into Gaussian noise, the matched-filter SNR is equally likely to be higher and lower than the optimal value.
 
@@ -363,6 +367,28 @@ For the purposes of forecasting, then, what SNR threshold should we consider
 as the minimum for detectability?
 Despite not knowing which glitches will affect our future detectors, 
 this sharp exponential behavior gives us confidence that values in the range of roughly 8 to 12 will be sufficient. 
+
+### Noise plotting and characteristic strain {#sec-characteristic-strain}
+
+A common task in gravitational wave analysis and forecasting is to compare signal and noise for a given observation as a function of frequency.
+Qualitatively, most detectors' noise PSDs $S_{n}(f)$ exhibit a sensitivity "bucket", a frequency range in which they are most sensitive, with noise rising to either side. 
+We would like to compare this bucket to the signal's Fourier spectrum, $\tilde{h}(f)$. 
+Unfortunately, simply showing them on the same axis does not make sense, even though they have the same unit of $\text{Hz}^{-1}$. To understand this, consider the equivalent scenario if we were comparing the PSD and a Fourier spectrum for displacement: then, the PSD would have units of $\text{m}^{2} / \text{Hz}$, while the Fourier domain signal would have units of $\text{m} / \text{Hz}$.
+This discrepancy is hidden by the fact that our signal, strain, is dimensionless, but it remains a conceptual problem.
+
+In order to show these quantities together in a useful manner, we can look at the integral which defines the optimal SNR in @eq-optimal-snr:
+$$
+\rho^{2} _\text{opt} = 4 \int \frac{|\tilde{h}(f)|^{2}}{S_{n}(f)} \text{d}f\,.
+$$
+
+The ratio in the integrand is the relevant comparison to determine the clarity of a signal with Fourier transform $|\tilde{h}(f)|$ measured by a detector with a PSD $S_{n}(f)$.
+This ratio still has units of $\text{Hz}^{-1}$, and we generally want to show this quantity as a function of logarithmic frequency: both of these issues are solved by rewriting the integral as 
+$$
+\rho^{2} _\text{opt} = \int \left(   \frac{2f |\tilde{h}(f)|}{\sqrt{ f S_{n}(f)}}  \right)^{2} \text{d} \log f
+= \int \frac{h_{c}^{2}(f)}{h_{n}^{2}(f)} \text{d}\log f
+\,.
+$$
+this defines the _characteristic signal strain_ $h_{c}(f) = 2 f |\tilde{h}(f)|$ and the _characteristic noise strain_ $h_{n}(f)=\sqrt{ f S_{n}(f) }$, both of which are dimensionless.
 
 ## Likelihood acceleration {#sec-likelihood-acceleration}
 

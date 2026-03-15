@@ -18,24 +18,31 @@ was first proposed by Joseph Weber [@weberDetectionGenerationGravitational1960],
 Weber led the efforts to deploy a gravimeter on the Moon with the Apollo 17 mission, with the stated aim to detect gravitational waves.
 The Lunar Surface Gravimeter [@gigantiLunarSurfaceGravimeter1973] aimed for a sensitivity of around $10^{-10} \text{m}$ in vertical displacement when measuring vertical motion, around the $1.5\text{Hz}$ band. 
 
-![By NASA Apollo 17 photograph AS17-134-20501, Public Domain, https://commons.wikimedia.org/w/index.php?curid=7042350](figures/ALSEP_AS17-134-20501.jpg){#fig-lunar-surface-gravimeter width=60%}
+[![The Lunar Surface Gravimeter, by NASA Apollo 17 photograph AS17-134-20501, Public Domain](figures/ALSEP_AS17-134-20501.jpg){#fig-lunar-surface-gravimeter width=60%}](https://commons.wikimedia.org/w/index.php?curid=7042350)
 
 We now know that, even operating nominally, this would have been far too noisy to actually measure gravitational waves. 
-Furthermore, the sensor beam could not be stabilized upon deployment, due to some errors by the manufacturers when converting from terrestrial to lunar gravitational acceleration, which is approximately $g/6$. 
+Furthermore, the sensor beam could not be stabilized upon deployment, due to some errors by the manufacturers when converting from terrestrial to lunar gravity. 
 
+Nevertheless, the Apollo program provided valuable insights into the structure of the Moon.
+In the following decades, both technology and our understanding of gravitational waves have advanced.
 
+@harmsLunarGravitationalwaveAntenna2021 proposed the concept for a Lunar Gravitational Wave Antenna, which uses seismometers to measure vibrations of the lunar surface induced by gravitational waves.
+The plan is to deploy this antenna in a Permanently Shadowed Region at the lunar pole (see @sec-lgwa-site-selection), in order to achieve low-noise cryogenic operation with a displacement noise ASD (@eq-amplitude-spectral-density) below one $\text{fm} / \sqrt{ \text{Hz} }$.
+Combined with a sufficiently strong lunar response to gravitational waves, this would be enough to directly measure gravitational waves in the deci-Hertz band.
 
-First LGWA paper: [@harmsLunarGravitationalwaveAntenna2021]
-Whitepaper: [@ajithLunarGravitationalwaveAntenna2024]
+In the following years, a collaboration has been formed to study the science of the Lunar Gravitational Wave Antenna; this has resulted in the publication of several works, among them the so-called "whitepaper" [@ajithLunarGravitationalwaveAntenna2024], which details several aspects of the possible science achievable in this band.
 
-### Site selection
+### Site selection {#sec-lgwa-site-selection}
 
-A preliminary site selection study was performed in 2025 by a team at ETH Zürich [@gobeSeismicInvestigationLunar2025].
+Permanently Shadowed Regions (PSRs) exist in the lunar polar regions: due to the low tilt of the Moon's orbit, the Sun remains close to the horizon throughout the year, therefore some low-elevation regions never receive direct sunlight.
+While some PSRs receive reflected sunlight, such as from a crater's rim, temperatures within them are typically extremely cold, in the range of tens of degrees Kelvin. 
+
+A preliminary site selection study for the LGWA was performed in 2025 by a team at ETH Zürich [@gobeSeismicInvestigationLunar2025].
 The choice of a site crucially depends on power generation: the main options are a radioisotope thermoelectric generator (RTG) and solar power.
-With the former option, a lander could directly target the deployment region; with the latter, a solar station would need to transmit power to the stations. 
+With the former option, a lander could directly target the deployment region; with the latter, a solar station would need to transmit power to the stations, for example with a long cable.
 
-They identified a potential landing site in the lunar north polar region, at latitude 88.389
-and longitude 280.76 degrees, which could be used to then deploy seismometers in a nearby Permanently Shadowed Region (PSR), around the latitude 88.50 and longitude 290.63 degrees.
+@gobeSeismicInvestigationLunar2025 identified a potential landing site in the lunar north polar region, at latitude 88.389
+and longitude 280.76 degrees, which could be used to then deploy seismometers in a nearby PSR, around the latitude 88.50 and longitude 290.63 degrees.
 This PSR lies roughly between the Hermite A and Hinshelwood craters.
 We show these locations in figure @fig-lgwa-landing-site; useful free and interactive mapping tools to explore them include [LROC Norther Polar Mosaic](https://lroc.im-ldi.com/images/gigapan) and  [Quickmap](https://bit.ly/4bFltcB).
 
@@ -51,25 +58,213 @@ An alternative landing site near the South Pole was also explored, within the de
 Both this deployment site and the North Pole sites are rather flat themselves, with maximum slopes of few degrees. 
 However, the South Pole is generally more rugged: the path from an illuminated landing site to the PSR location, which would likely have to be taken by a rover, nears slopes of 20 degrees. 
 
-### Displacement noise
+### Measurement principle and displacement noise
 
-Seismic noise: 
-Payload: [@vanheijningenPayloadLunarGravitationalwave2023]
+The operational principle for the LGWA is the measurement of horizontal seismic motion of the lunar surface, which will be performed along two orthogonal axes.
+This measurement requires a reference whose movement is inertial along the two measurement direction, whereas the surface will move non-inertially, due to the Moon being an elastic body.
 
-![Upper bound on the lunar seismic spectrum, from [@coughlinConstrainingGravitationalWave2014].](figures/Moon-noise-spectrum.png)
+This reference will be a mass suspended through a Watt's linkage [@bertoliniMechanicalDesignSingleaxis2006], 
+a compact way to achieve a low resonance frequency.
 
-![Comparison between a moonquake detected within the Apollo 12 mission and an earthquake. From @steinIntroductionSeismologyEarthquakes2009.](figures/moonquake.jpg)
+::: {#nte-watts-linkage .callout-note collapse="true"}
+##### Watt's linkage
+
+A Watt's linkage is, at its core, the combination of a pendulum and an inverted pendulum.
+
+![Watt's linkage diagram, from @bertoliniMechanicalDesignSingleaxis2006.](figures/watts-linkage.png){#fig-watts-linkage width=60%}
+
+The resonance angular velocity of the system depicted in @fig-watts-linkage is
+$$
+\omega_{0}^{\text{Watt's linkage}} = \sqrt{ \left( \frac{M_{1}}{L_{1}}- \frac{M_{2}}{L_{2}} \right) \frac{g}{(M_{1}+M_{2})}+\gamma }\,,
+$$
+where $g$ is the gravitational acceleration, $M_{i}$ and $L_{i}$ are the two masses and lengths shown in the figure, while $\gamma$  represents the effect of cumulative flex-joint stiffness.
+This allows for very low resonance frequencies with a comparatively small apparatus.
+For comparison, let us consider a simple pendulum: it achieves the same objective, but its resonance is at
+$$
+\omega_{0}^{\text{pendulum}} = \sqrt{ \frac{g}{L} }\,.
+$$
+
+To achieve the resonance angular velocity planned for the LGWA, $\omega_{0} \approx 1.57 \text{rad/s}$, it would require a length of $L \approx 0.66 \text{m}$, making it quite unwieldy.
+
+The formulas above are only valid in the small-angle regime; the plan with the LGWA is to have an actuator keep the linkage in this position.
+Then, the required output from this actuator will contain the displacement signal.
+
+:::
+
+In @fig-lgwa-station we show a conceptual overview of a single LGWA station; its subsystems and the tilt of the lunar surface are not to scale. 
+A platform leveling system is crucial in order to avoid vertical-to-horizontal coupling. 
+The expected operating temperatures for the proof masses are much lower than the ambient temperature; this can be achieved through sorption cooling, which involves no mechanical moving parts besides a few passive valves. 
+This is helpful both for the mission's lifetime and for vibration reduction. 
+
+![LGWA station diagram from @vanheijningenPayloadLunarGravitationalwave2023.](figures/LGWApayload.png){#fig-lgwa-station width=60%}
+
+The main source of readout noise at low frequencies ($\lesssim 0.7 \text{Hz}$) is expected to be suspension thermal noise, which scales as 
+$$
+S_\text{thermal}(\omega) = \frac{4 k_{B}T \omega_{0}^{2}  / Q}{m \omega \left[ (\omega_{0}^{2}- \omega^{2})^{2}  + \omega_{0}^{4} / Q^{2} \right] }\,,
+$$
+where $\omega$ is the angular frequency, $\omega_{0}$ is its resonance value, $k_{B}$ is the Boltzmann constant, $T$ is the temperature, while $Q$ is the mechanical quality factor [@ajithLunarGravitationalwaveAntenna2024; eq. 2.1]. 
+
+At higher frequency, readout noise starts to dominate; its specific spectral shape depends on the specific readout scheme adopted to measure relative displacement between ground and test mass. @fig-lgwa-station schematically depicts a SQUID readout, which makes use of superconducting magnets. In @fig-lgwa-displacement-noise we compare this choice with another candidate: laser-interferometric readout.
+
+```{python}
+#| layout-ncol: 2
+#| fig-cap: "Displacement noise estimates for the LGWA."
+#| fig-subcap: 
+#|   - "Pessimistic model: a Niobium suspension and laser readout."
+#|   - "Optimistic mode: a Silicon suspension and a SQUID readout."
+#| label: fig-lgwa-displacement-noise
+
+
+from thesis_scripts import *
+import numpy as np
+import matplotlib.pyplot as plt
+import astropy.units as u
+import astropy.constants as ac
+
+# there is an extra sqrt(2) in the shot noise, which is explained by the
+# fact that only one the two interferometer arms picks up the signal
+
+def get_noise_asd(ff, temperature, quality_factor, m, P, dL):
+	hbar = ac.hbar.si.value
+	kB = ac.k_B.si.value
+	c = ac.c.si.value
+	laser_wavelength = 1.064e-6
+	reference_frequency = 0.1
+
+	omega0 = 2*np.pi*c/laser_wavelength
+
+	n_shot = laser_wavelength/(2*np.pi)*np.sqrt(2*hbar*omega0/P)*np.sqrt((reference_frequency**2-ff**2)**2+(reference_frequency**2/quality_factor)**2)/ff**2
+
+	n_freq = dL*(4e4+5e4*(0.1/ff)**1.2)/omega0*np.sqrt((reference_frequency**2-ff**2)**2+(reference_frequency**2/quality_factor)**2)/ff**2
+
+	n_readout = np.sqrt(n_shot**2 + n_freq**2)
+	
+	n_therm = np.sqrt(4*kB*temperature*(2*np.pi*reference_frequency)**2/(m*quality_factor*2*np.pi*ff))/(2*np.pi*ff)**2
+
+	return n_readout, n_therm
+
+def get_noise_asd_squid(ff, energy_resolution, critical_frequency, coupling_efficiency, suspended_mass, quality_factor, temperature, natural_frequency):
+	hbar = ac.hbar.si.value
+	kB = ac.k_B.si.value
+	c = ac.c.si.value
+
+	n_therm = np.sqrt(
+		4*kB*temperature*(
+		2*np.pi*natural_frequency)**2
+		/(suspended_mass*quality_factor*2*np.pi*ff)
+	) / (2*np.pi*ff)**2
+
+	eA = energy_resolution * hbar
+	omega_0 = 2 * np.pi * natural_frequency
+	omega = 2 * np.pi * ff
+
+	n_squid = np.sqrt(
+		2*eA*(1+critical_frequency/ff)
+		/ (suspended_mass * omega_0 * coupling_efficiency )
+		 * (
+			(omega**2-omega_0**2)**2 + omega_0**2 / quality_factor
+		) / omega**4
+	)
+
+	return n_squid, n_therm
+
+def plot(ff, n_readout, n_therm, title):
+	n_total = np.sqrt(n_readout**2 + n_therm**2)
+	
+	plt.figure(figsize=(4, 3))
+
+	plt.loglog(ff,  n_readout, label='Readout', c='#FFC107')
+	plt.loglog(ff, n_therm, label='Thermal', c='#D81B60')
+	plt.loglog(ff, n_total, label='Total', c='#004D40', ls='--')
+
+	plt.ylim(1e-17, 1e-10)
+	plt.xlim(ff[0], ff[-1])
+
+	plt.grid()
+	plt.xlabel('Frequency [Hz]')
+	plt.ylabel('Noise ASD [$\\mathrm{{m}} /$ $\\sqrt{{\\mathrm{{Hz}}}}$]')
+	plt.legend()
+
+	plt.title(title)
+	plt.show()
+
+
+ff = np.logspace(-3,1,500)
+
+f_stab = 100
+
+noise_params_lgwa = {
+	'temperature': 4, 
+	'quality_factor': 1e4, 
+	'm': 10, 
+	'P': 5e-3, 
+	'dL': 1e-3/f_stab
+}
+
+noise_params_lgwa_si = {
+	'energy_resolution': 50,
+	'suspended_mass': 10,
+	'quality_factor': 1e6,
+	'critical_frequency': 0.1,
+	'natural_frequency': 0.25,
+	'coupling_efficiency': 0.25,
+	'temperature': 5,
+}
+
+plot(ff, *get_noise_asd(ff, **noise_params_lgwa), 'Niobium suspension')
+plot(ff, *get_noise_asd_squid(ff, **noise_params_lgwa_si), 'Silicon suspension')
+```
+
+#### Other noise sources
+
+Displacement sensitivity curves similar to those in @fig-lgwa-displacement-noise were adopted in all forecasting studies; no other noise sources were considered.
+
+While a PSR is undoubtedly a quiet place, it is warranted to ask whether the seismic environment of the Moon can interfere with gravitational wave measurements, or prevent them entirely.
+@coughlinConstrainingGravitationalWave2014 analyzed one year of data from the ALSEP mission, which consisted of four seismometers deployed on the near side of the Moon by the Apollo 12, 13, 14 and 16 missions.
+
+The seismic vibrations in this dataset were significantly driven by thermal stresses, which increase at local dawn and dusk. Furthermore, they included the effect of tidal stresses, moonquakes, and asteroid impacts.
+
+![Upper bound on the lunar seismic spectrum, from [@coughlinConstrainingGravitationalWave2014]. The dashed lines indicate the minimum and maximum for a model of seismic noise on the Earth.](figures/Moon-noise-spectrum.png){#fig-lunar-seismic-spectrum width=60%}
+
+In @fig-lunar-seismic-spectrum one can see the average of this measurement. 
+The value is a few orders of magnitude lower than the minimum one can get on the Earth, but also significantly higher than the required displacement sensitivity for the LGWA.
+This is a major challenge for the mission, and more measurements are needed to quantify its impact. We do, however, have reason to believe that the situation for the LGWA will be better than what taking this spectrum at face value would imply:
+
+1. operation in a PSR implies the absence of dawn and dusk, completely removing a significant contribution to the spectrum;
+2. the intra-station distance among the four seismometers is planned to be close enough that the seismic signal from GWs is strongly is correlated among them, but far enough that events such as meteorite impacts arrive at each station with measurably different amplitude and phase, and can therefore be subtracted.
+
+Moonquakes remain a significant issue, and it is likely that some fraction of the data will need to be unusable due to their effect. The low damping of the lunar regolith makes their duration much longer than what typically happens on Earth, as illustrated in @fig-moonquake-duration.
+
+![Comparison between a moonquake detected within the Apollo 12 mission and an earthquake. From @steinIntroductionSeismologyEarthquakes2009.](figures/moonquake.jpg){#fig-moonquake-duration width=60%}
 
 ### The lunar seismic response
 
-Formalism: [@ben-menahemExcitationEarthsEigenvibrations1983]
-Then discuss the results of [@biResponseMoonGravitational2024].
+The fundamental normal mode, which describes quadrupolar vibration of the whole Moon, has a frequency just above $1 \text{mHz}$.
+While plenty of gravitational wave sources are expected at these frequencies, which are a target of the LISA mission, the LGWA detector concept is not expected to be very sensitive there, mostly due to thermal noise (see @fig-lgwa-displacement-noise).
+Computing the lunar response at frequencies two to three orders of magnitude higher than the fundamental is challenging with the normal mode formalism, as one needs to include a very large number of modes.
 
+The standard treatement for the problem of an elastically coupled medium to gravitational waves was introduced by @dysonSeismicResponseEarth1969 and applied to the computation of the excitation of the normal modes of a planetary body by GWs by @ben-menahemExcitationEarthsEigenvibrations1983. 
+The recent years have seen significant theoretical and computational advancements in this regard.
+@belgacemCouplingElasticMedia2024 formulated the coupling problem with a fully relativistic  Effective Field Theory approach, which generalizes well to high frequencies beyond the normal-mode limit. 
+@biResponseMoonGravitational2024 investigated the impact of a layered geological structure using a half-space model, showing that it can significantly amplify the lunar response compared to a uniform Moon.
+A significant amount of work has also been recently performed regarding numerical simulations of the lunar response [@zhangThickLunarCrust2026; @zhangSuperAmplificationLunar2025;@zhangNumericalSimulationLunar2025].
 
+Here we limit ourselves to a simple justification, within Dyson's description of the problem in the transverse-traceless gauge as outlined by @biResponseMoonGravitational2024, of the geometry of the detection tensor.
+The LGWA sensors will be set up to measure horizontal vibration, as most of the seismic waves near the surface are expected to be vertically propagating shear waves.
+Within the Dyson description, gravitational waves couple to the elastic medium through the gradient of the shear modulus $\nabla _{i}\mu(\vec{r})$, giving rise to an effective force term in the form
+$$
+f_{i} = h_{ij} \nabla _{j}\mu(\vec{r})\,. 
+$$
 
-### Projected gravitational wave strain {#sec-lgwa-response}
+Then, if we want to compute horizontal acceleration along an axis $b$ we will need to consider forces along that direction. Then, the relevant component of the gravitational wave strain tensor will be 
+$$
+h_{ij} b_{i} \nabla_{j} \mu\,.
+$$
 
-The LGWA will consist of seismometers measuring displacement along the horizontal direction.
+The shear modulus will vary across geologic layers and across the surface: these are horizontally-placed strata, hence the gradient will be vertical.
+This is the origin of the geometric expression we use in @sec-lgwa-projection; corrections to it may be necessary based on local topography, but they are likely to be negligible compared to our uncertainty in the frequency-dependent part of the response.
+
+### Projected gravitational wave strain {#sec-lgwa-projection}
 
 As we anticipated in @sec-lgwa-antenna-patterns, the displacement corresponding to an impacting monochromatic gravitational wave can be modeled through a detection tensor
 $$
@@ -143,9 +338,9 @@ We store them in spherical coordinates, with which we can still directly compute
 ::: {#nte-lgwa-location .callout-note collapse="true"}
 ##### The position of the LGWA
 
-The precise location of the LGWA is a required input for the computation of these vectors as a function of time. It is defined by three angles: lunar latitude, lunar longitude and azimuth of one LGWA arm, the other being perpendicular to it. 
+The precise location of the LGWA is a required input for the computation of these vectors as a function of time. It is defined by three angles: lunar latitude, lunar longitude and azimuth of one LGWA sensing direction, with the other being perpendicular to it. 
 
-We choose a lunar latitude of 88.5 degrees, a longitude of 290 degrees, and an azimuth of 0.
+Based on the results discussed in @sec-lgwa-site-selection, we tentatively choose a lunar latitude of 88.5 degrees, a longitude of 290 degrees, and an azimuth of 0.
 
 :::
 
@@ -305,62 +500,90 @@ plt.legend()
 plt.show()
 ```
 
-### Projected waveforms
+The motion of the Moon over a day is comparable to the wavelength of a gravitational wave, band, hence incorrectly computing this time can lead to an error of several radians. 
+
+#### Projected waveforms
+
+We end the discussion on waveform projection by analyzing the projected waveform for an injection modeled after GW250114.
+The pattern in amplitude is illustrated in @fig-projected-waveforms-gw250114-ppd: the general scaling is $h_{c} \sim f^{-1/6}$, as expected since we are computing the characteristic strain amplitude of a source whose emission is dominated by low-order Post-Newtonian effects.
+On top of this trend we see modulations; their period in the time domain is a month (or rather half a month, since we are showing the absolute value of a sinusoid), and they are out of phase across the two LGWA channels.
+Along with them, we show the posterior predictive distribution obtained after performing an injection and recovery.
+
+![Posterior Predictive Distribution and injected waveforms for a GW250114-like injection with the LGWA](figures/lgwa_ppd_fb.pdf){#fig-projected-waveforms-gw250114-ppd}
+
+The phase of the response is more difficult to visualize, as it spans thousands of cycles during an observation.
+We illustrate one aspect of its variation by computing the ratio of two waveforms computed with identical parameters - again, the injection ones for GW250114 - but with a difference in 1 degree in right ascension. 
+In the upper panel of @fig-projected-lgwa-waveforms-ratio we see the ratio of amplitudes for both channels, with a periodicity of one month. 
+The phase, on the other hand, primarily exhibits variation with a slower period, which corresponds to the yearly modulation driven by the lunar orbit around the Sun.
 
 ```{python}
 #| label: fig-projected-lgwa-waveforms-ratio
-#| fig-cap: "Ratio of projected waveforms with slightly different declination (difference of 10 arcminutes)."
+#| fig-cap: "Ratio of projected waveforms, each compatible with GW250114, different declination (difference of 10 arcminutes)."
 
 from lgwa_response.likelihood import LunarLikelihood
+from lgwa_response.simple_waveforms import from_bilby
 import numpy as np
 import matplotlib.pyplot as plt
 
 like = LunarLikelihood(gps_time_range=(1500000000., 2000000000.))
 t0 = 1893024018.
 
-f = np.geomspace(1e-1, 3, num=100000)
-parameters = {
-	'chirp_mass': 1.2,
-	'mass_ratio': 1.,
-	'time_at_center': t0,
-	'inclination': 0.5,
-	'phase': 0.,
-	'right_ascension': 0.,
-	'declination': 0.,
-	'polarization': 0.,
-	'luminosity_distance': 1.,
-	'spin_1z': 0.,
-	'spin_2z': 0.,
-	'lambda_eff': 0.,
-	'd_lambda': 0.,
-}
+f = np.geomspace(0.02, 3, num=200000)
+mc = 31.27177785
+t0 = 1.42087814e+09
+ra = 2.33323452
+parameters = from_bilby({
+    "chirp_mass": mc,
+    "mass_ratio": 0.97828418,
+    "luminosity_distance": 413.79263441,
+    "theta_jn": 0.71793531,
+    "psi": 1.32899451,
+    "phase": 1.5664732,
+    "ra": ra,
+    "dec": 0.19024356,
+    "time_at_center": 0,
+    "time_at_center_baseline": t0,
+    'chi_1': -0.05063882, 
+    'chi_2': 0.01304105,
+	'lambda_1': 0.0,
+	'lambda_2': 0.0,
+})
+mod_parameters = parameters | {'right_ascension': ra + np.deg2rad(1)}
 
 hx, hy = like.projected_waveform(f, parameters)
-hx2, hy2 = like.projected_waveform(f, parameters | {'declination': np.deg2rad(10/60)})
+hx2, hy2 = like.projected_waveform(f, mod_parameters)
 
 fig, axs = plt.subplots(2, 1, sharex=True)
 
-axs[0].semilogx(f, abs(hx/hx2))
-# axs[0].semilogx(f, abs(hy/hy2))
+axs[0].semilogx(f, abs(hx/hx2), label='$x$ channel')
+axs[0].semilogx(f, abs(hy/hy2), label='$y$ channel')
 
-axs[1].semilogx(f, np.unwrap(np.angle(hx/hx2)), label='Center at SSB')
+# axs[1].semilogx(f, np.unwrap(np.angle(hx/hx2)), label='Center at SSB')
 # axs[1].semilogx(f, np.unwrap(np.angle(hy/hy2)))
 
 like.compute_center(t0)
 
 hx, hy = like.projected_waveform(f, parameters)
-hx2, hy2 = like.projected_waveform(f, parameters | {'declination': np.deg2rad(10/60)})
+hx2, hy2 = like.projected_waveform(f, mod_parameters)
 
-
-axs[1].semilogx(f, np.unwrap(np.angle(hx/hx2)), label='Center at merger-time detector location')
+axs[1].semilogx(f, np.unwrap(np.angle(hx2/hx)), label='Phase difference (equal for the channels)')
+# axs[1].set_ylim(-0.1, 2)
 # axs[1].semilogx(f, np.unwrap(np.angle(hy/hy2)))
-axs[1].legend()
+axs[0].legend()
+axs[1].set_xlabel('Frequency')
+axs[1].set_ylabel('$\phi_2(f) - \phi_1(f)$')
+axs[0].set_ylabel('$A_2(f) / A_1(f)$')
 plt.show()
 ```
 
 ## Scientific prospects
 
+### Candidate sources
+
 ### Sky localization
+
+### Mass constraints
+
 
 ## Reference frames for long observations
 
