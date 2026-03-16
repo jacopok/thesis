@@ -167,10 +167,12 @@ as long as we reabsorb the coefficients into the amplitude.
 #### Twisting: the construction of precessing frequency-domain waveforms {#sec-twisting}
 
 The construction of precessing gravitational waveforms is 
-generally performed by computing them in an inertial frame, aligned with the total angular momentum $\vec{J}$, and then converting to the non-inertial, precessing frame aligned with $\vec{L}$ by means of a time-dependent rotation [@prattenComputationallyEfficientModels2021, eq. 3.3]:
+generally performed by computing them in a non-inertial, precessing frame aligned with the orbital angular momentum $\vec{L}$, and then converting to the inertial, frame aligned with the total angular momentum $\vec{J}$ by means of a time-dependent rotation [@prattenComputationallyEfficientModels2021, eq. 3.3]:
 $$
-h_{\ell m}^{L} = \sum _{m'=-\ell}^{\ell} \mathcal{D}_{m'm}^{\ell}(\alpha, \beta, \gamma) h_{\ell m'}^{J}\,.
+h_{\ell m}^{J} = \sum _{m'=-\ell}^{\ell} \mathcal{D}_{m'm}^{\ell *}(\alpha, \beta, \gamma) h_{\ell m'}^{L}\,.
 $$
+
+This is useful because the gravitational waves in the precessing frame are quite close to those which would be emitted by a non-precessing binary. 
 
 The $\mathcal{D}_{m'm}^{\ell}$ are the Wigner D-matrices
 $$

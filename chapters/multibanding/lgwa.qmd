@@ -257,6 +257,12 @@ The recent years have seen significant theoretical and computational advancement
 @biResponseMoonGravitational2024 investigated the impact of a layered geological structure using a half-space model, showing that it can significantly amplify the lunar response compared to a uniform Moon.
 A significant amount of work has also been recently performed regarding numerical simulations of the lunar response [@zhangThickLunarCrust2026; @zhangSuperAmplificationLunar2025;@zhangNumericalSimulationLunar2025].
 
+The scalar lunar response $L(f)$ has units of length, and it is defined as
+$$
+L(f_{0}) = \frac{s(t;f_{0})}{h(t; f_{0})}\,,
+$$
+where 
+
 Here we limit ourselves to a simple justification, within Dyson's description of the problem in the transverse-traceless gauge as outlined by @biResponseMoonGravitational2024, of the geometry of the detection tensor.
 The LGWA sensors will be set up to measure horizontal vibration, as most of the seismic waves near the surface are expected to be vertically propagating shear waves.
 Within the Dyson description, gravitational waves couple to the elastic medium through the gradient of the shear modulus $\nabla _{i}\mu(\vec{r})$, giving rise to an effective force term in the form
@@ -271,6 +277,8 @@ $$
 
 The shear modulus will vary across geologic layers and across the surface: these are horizontally-placed strata, hence the gradient will be vertical.
 This is the origin of the geometric expression we use in @sec-lgwa-projection; corrections to it may be necessary based on local topography, but they are likely to be negligible compared to our uncertainty in the frequency-dependent part of the response.
+
+
 
 ### Projected gravitational wave strain {#sec-lgwa-projection}
 
@@ -460,11 +468,11 @@ t_\text{lowest order}(f) = - \frac{5}{256 \pi^{8/3}} \frac{1}{\mathcal{M}_{c}^{5
 $$
 
 The next-order correction to this expression for the phase comes with a factor of $v^{2}\propto f^{2/3}$, which carries over during the differentiation, leading to the leading term in the  error scaling with $f^{-2}$.
-In figure @fig-time-to-merger-error we show the error  it leads to errors of several hours to days in the deci-Hertz band for a light source.
+In figure @fig-time-to-merger-error we show the error in time we get by only looking at the leading order: it can reach several hours to days in the deci-Hertz band for a light source.
 
 ```{python}
 #| label: fig-time-to-merger-error
-#| fig-cap: "Error in the time to merger estimation by using the lowest-order Post-Newtonian term only. The source considered here is a neutron star binary with equal components, of 1.4 solar masses each."
+#| fig-cap: "Error in the time to merger estimation by using the lowest-order Post-Newtonian term only. The source considered here is a binary with equal components, of 1.4 solar masses each, compatible with neutron stars such as those in GW170817."
 
 import matplotlib.pyplot as plt
 from lgwa_response.simple_waveforms import time_to_merger, time_to_merger_simple, Phif3hPN, SUN_MASS_SECONDS
@@ -526,7 +534,7 @@ The phase, on the other hand, primarily exhibits variation with a slower period,
 
 ```{python}
 #| label: fig-projected-lgwa-waveforms-ratio
-#| fig-cap: "Ratio of projected waveforms, each compatible with GW250114, different declination (difference of 10 arcminutes)."
+#| fig-cap: "Ratio of projected waveforms, each compatible with GW250114, but with different right ascension by one degree."
 
 from lgwa_response.likelihood import LunarLikelihood
 from lgwa_response.simple_waveforms import from_bilby
@@ -598,22 +606,96 @@ The information available comes from the lunar near side, but it seems to point 
 Whether this is a genuine effect or an artefact of selection bias is an open question. 
 
 Furthermore, the LGWA would be able to precisely measure the excitation of lunar normal modes by Moonquakes.^[As discussed earlier, their excitation by gravitational waves would require an improbably strong signal.] This would provide insights into the lunar interior structure, enabling the exploration of lunar origin models.
-The formation mechanism of the Moon is not a settled debate: the giant impact scenario, in which a large planetary object dubbed Theia impacted a young Earth thus forming a disk of debris which coalesced into our satellite, is the dominant theory, but it does not stand unchallenged. 
+The formation mechanism of the Moon is not a settled debate: the giant impact scenario, in which a large planetary object dubbed _Theia_ impacted a young Earth thus forming a disk of debris which coalesced into our satellite, is the dominant theory, but it does not stand unchallenged. 
 The _isotopic crisis_ is the problem posed by the observation that the Earth and Moon's mantles have nearly identical ratios of isotopes such as $^{17}O / ^{16}O$, $^{50}Ti / ^{47}Ti$ and $^{182}W / ^{184}W$. This is unlike any other body in the Solar System, for which these ratios are significantly different, and is hard to explain under the giant impact scenario. 
 Mapping the composition of the lunar interior, which can be accomplished through seismic observations, will aid in the resolution of this problem.
 
 ### Gravitational wave sources
 
-![Horizon for equal mass black hole binaries as seen by the detectors for the next decade: Einstein Telescope, Lunar Gravitational Wave Antenna and LISA](figures/horizon_IMBH.pdf){#fig-horizon-multiband width=80%}
+#### Compact binaries
 
-![Time to merger as a function of mass, highlighting at which point various sources would cross the decihertz band.](figures/time_to_merger.pdf){#fig-time-to-merger-lgwa width=80%}
+The range of gravitational wave sources observable in the most sensitive band for the LGWA, $[0.05, 2]\text{Hz}$, is quite wide.
+Compact binaries are a natural candidate.
 
-### Parameter estimation
+![Time to merger as a function of mass, highlighting at which point various sources would cross the decihertz band. The sources are assumed to have equal mass and no spin - including these effects changes the results, but not the overall qualitative picture.](figures/time_to_merger.pdf){#fig-time-to-merger-lgwa width=80%}
+
+@fig-time-to-merger-lgwa illustrates their time to merger as a function of mass.
+It is truncated at 10 years, an approximate upper bound for the LGWA mission's duration. 
+We depict GW170817, the lightest binary whose merger has been detected to date, and GW190521, among the heaviest.
+These are at the edges of what are known as _stellar-mass binaries_, with component masses roughly between $1$ and $100 M_{\odot}$, whose population has been explored by ground-based observations.
+As illustrated in @fig-time-to-merger-lgwa, depending on their mass, they may cross the deci-Hertz band hours to years before their merger. 
+
+![The population of compact binaries in the GWTC-3 catalog, highlighting GW231123, compared to the noise curves of LGWA and ground-based detectors. From @iacovelliGravitationalwaveParameterEstimation2025.](figures/gw231123/GW231123-ASD.pdf){#fig-231123-asd-lgwa width=80%}
+
+In @fig-231123-asd-lgwa we further illustrate this aspect: a very massive binary like GW231123 would have been detectable by the LGWA, accumulating most of its SNR in the last day before merger.
+This figure is meant to give an order of magnitude comparison between detector noise and signal magnitude, but since it does so with several different detectors and binaries it cannot be an apples-to-apples comparison: we should compare _projected_ strain at the detector to the detector's noise, but this would mean showing several different strain curves for every signal, as the projection onto each detector will be different. 
+Here, instead, we are showing the amplitude of the strain polarizations before projection, $|h_{+}(f)+i h_{\times}(f)|$. 
+Nevertheless, it communicates the correct qualitative message, as the variation in amplitude due to projection does not significantly change the signal magnitude.
+
+We can also see that the "area" between signal and noise^[As we discussed in @sec-characteristic-strain, the integral $\int (h_{c} / h_{n})^{2} \text{d}\log f$ gives us the square SNR; in this plot we show both signal and noise strains divided by $\sqrt{ f }$, but this is immaterial as it leaves the integral unchanged.] is generally similar between LGWA and current ground based detectors. 
+Indeed, a more systematic analysis confirms this. 
+In @fig-gwtc-snr-lgwa we compute several realizations of a population compatible with the GWTC catalog, and compute their SNRs with various detectors, compared with the observed SNRs of the actual catalog.
+The SNRs obtained with the LGWA are indeed compatible, within catalog variance, with the original ones.
+
+![Cumulative SNR for the population of compact binaries in the GWTC catalogs. From @iacovelliGravitationalwaveParameterEstimation2025.](figures/gw231123/cumulative_detections_wErrorbars_LGWA_GB.pdf){#fig-gwtc-snr-lgwa width=80%}
+
+Despite their signal-to-noise ratios not being much higher than current observations, these low-frequency observations will provide qualitatively different information compared to high-frequency ones; we discuss this in more detail in @sec-lgwa-pe-stellar.
+
+The deci-Hertz band will also introduce the possibility to constrain the coalescence of heavier binaries, which are inaccessible to ground-based observatories. Specifically, its sensitivity is optimal for binaries in the middle of the Intermediate-Mass Black Hole range, $100$ to $10^{5}M_{\odot}$. 
+We illustrate this with a horizon plot in @fig-horizon-multiband: as a function of mass, we show the maximum redshift $z$ (and corresponding luminosity distance $d_{L}$, under a fixed cosmology compatible with Planck data) to which an optimally oriented binary with that mass would be detectable.
+
+![Horizon for equal mass black hole binaries as seen by the detectors for the next decade: Einstein Telescope, Lunar Gravitational Wave Antenna and LISA. From @ajithLunarGravitationalwaveAntenna2025.](figures/horizon_IMBH.pdf){#fig-horizon-multiband width=80%}
+
+The LGWA's optimal sensitivity is for binaries with total detector-frame mass $(1+z)M$ around $10^{4}M_{\odot}$ (see @sec-distance-redshift).
+At the moment, full injections and recoveries for binaries in this range has not been performed.
+At these masses, the signals' mergers will be in band, and the signals may well show signs of eccentricity or precession; several higher order modes will be necessary for a complete description of the signal. 
+Stellar mass binaries are comparatively simpler, as their low-frequency emission is dominated by the $\ell m = 22$ mode, hence we chose them as the first target for our studies.
+
+So far we discussed comparable-mass binaries, but Intermediate Mass Ratio Inspirals, binaries with mass ratios in the range $q=10^{-2}$ to $10^{-4}$, would also be a fascinating way to shed light into the formation of intermediate-mass black holes.
+
+
+#### Non-CBC sources
+
+Probing any previously unexplored region brings the possibility to find some completely new kinds of sources. 
+These may have been previously theorized, their electromagnetic signatures may be known, but they may also be completely serendipitous new discoveries.  
+While keeping in mind the last of these options is a possibility, it is useful think of the candidate sources of gravitational waves in this band based on our current knowledge, as was done in the LGWA whitepaper [@ajithLunarGravitationalwaveAntenna2025] as well as in earlier work such as the review by @branchesiLunarGravitationalWaveDetection2023.
+
+Mergers of white dwarfs (WDs) are an interesting event, as they may be the origin of certain supernovae. They generally happen when the binary is emitting GWs in the deciHertz band.
+Their collision is not preceded by a measurable "chirp", as the binary is still quite wide, but it generates a nuclear detonation or deflagration.
+Collisions of WDs with other compact objects, such as neutron stars, are also of interest, also because they would emit at higher frequencies, which places them closer to the best sensitivity of LGWA around 0.3Hz, whereas double white dwarf systems generally collide before this point.
+The main limitation in the study of their systems is their low rate: they are comparatively rare in the local Universe, the gravitational wave amplitudes they emit are not very high, meaning that they would need to be quite close - on the scale of a Megaparsec or less - to be detectable.
+
+Tidal disruption events also can involve white dwarfs, for example a WD being disrupted after orbiting an intermediate mass black hole would produce a short-lived signal peaking in the deci-Hertz band.
+
+Core-collapse supernovae may also exhibit significant emission in the deci-Hertz band, but current simulations typically last for a few seconds, and are therefore unable to resolve this part of the spectrum. 
+
+Finally, the LGWA could contribute to the detection of a stochastic cosmological background of gravitational waves, but it would give significant results only by correlating the measurements of stations with a large separation, for example located at either lunar pole.
+
+### Parameter estimation for stellar-mass binaries {#sec-lgwa-pe-stellar}
+
+We investigate the parameter estimation capabilities of the LGWA by performing injections and recoveries of some signals with parameters compatible with events detected by the LVK collaboration. 
+
+These injections are performed in zero noise, meaning that we investigate a Whittle likelihood (@sec-whittle-likelihood) in the form
+$$
+\log \mathcal{L}(\theta) = \mathrm{Re} (h(\theta)|h(\theta_{0})) - \frac{1}{2} (h(\theta)|h(\theta)) \,,
+$$
+where the scalar products are computed according to the estimated LGWA strain noise PSD, which is computed based on the displacement noise PSD for the optimistic Silicon model in @fig-lgwa-displacement-noise and the estimated response
+$$
+S_{n}^{\text{LGWA}}(f) = \frac{S_{n}^{\text{displacement}}(f)}{L(f)}\,.
+$$
+
 
 #### Sky localization
 
+![](figures/ra_dec_corner_gw170817.png){#fig-lgwa-gw170817-sky width=60%}
+
 #### Mass constraints
 
+![Posterior distribution for the chirp mass, mass ratio and effective spin parameters of our GW250114-like injection.](figures/mchirp_q_lgwa_vs_et.pdf){#fig-lgwa-gw250114-mqchi width=80%}
+
+
+
+#### Multibanding
 
 ## Reference frames for long observations
 
@@ -625,7 +707,6 @@ t_{i}^{f, r} = t_{i}^{\text{mrg}, r_0}
 + \frac{1}{2 \pi} \frac{ \text{d} \varphi_{22}(f; \theta_i)}{ \text{d} f}
 $$
 
-![](figures/ra_dec_corner_gw170817.png){#fig-lgwa-gw170817-sky width=80%}
 
 ![](figures/time_std_solar_system.pdf){#fig-timing-lgwa-solar-system width=80%}
 
@@ -635,12 +716,12 @@ $$
 
 ### Spanned area scaling validation
 
-![](trajectories.pdf){#fig-trajectories-lgwa-injections width=80%}
+![](figures/trajectories.pdf){#fig-trajectories-lgwa-injections width=80%}
 
-![](lgwa_waveforms_month_by_month.pdf){#fig-waveforms-lgwa-injections width=80%}
+![](figures/lgwa_waveforms_month_by_month.pdf){#fig-waveforms-lgwa-injections width=80%}
 
-![](sky_locs.pdf){#fig-injections-sky-areas width=80%}
+![](figures/sky_locs.pdf){#fig-injections-sky-areas width=80%}
 
-![](sky_loc_vs_theory.pdf){#fig-injections-vs-wen-chen width=80%}
+![](figures/sky_loc_vs_theory.pdf){#fig-injections-vs-wen-chen width=80%}
 
 z

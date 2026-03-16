@@ -141,7 +141,7 @@ We can also extract equally-weighted samples from weighted ones by __rejection s
 On average, this procedure will retain $n\langle w \rangle / \max w$ out of $n$ samples; if many of the weights are lower than their maximum, it can become quite inefficient. 
 In fact, under the realistic assumption of the weights being log-normally distributed, it can be shown that working with the weighted samples can be significantly more efficient than performing rejection sampling [@ashtonReconstructingResamplingGuide2025, fig. 3].
 
-#### $p$-$p$ plots {#sec-pp-plot}
+### $p$-$p$ tests {#sec-pp-plot}
 
 Mistrusting the results of our analysis pipelines is wise: we ought to put them through as many tests as possible in order to spot any issues. 
 
@@ -185,7 +185,7 @@ $$
 
 ```{python}
 #| label: fig-pp-plot-theory
-#| fig-cap: "Visualizations for a p-p test: histogram, empirical cdf, tilted empirical cdf. We also visualize the Kolmogorov-Smirnov test."
+#| fig-cap: "Visualizations for a p-p test: histogram, empirical cdf, tilted empirical cdf. We also visualize the two modes of the Kolmogorov-Smirnov test. This plot was inspired by the visualizations in @williamsNestedSamplingNormalising2021."
 
 from thesis_scripts import pp_plot
 import numpy as np
@@ -201,15 +201,18 @@ plt.show()
 Along with the plots we show the values, and corresponding $p$-values, for the one-sided Kolmogorov-Smirnov [@kolmogorovSullaDeterminazioneEmpirica1933;@smirnovTableEstimatingGoodness1948] statistics $D_{+}$ and $D_-$, defined in terms of the empirical CDF as
 
 $$
-D_{\pm} = \sup \left[ \pm \left( P_{\text{emp}}(u) - u \right)  \right]\,.
+D_{\pm} = \sup_{u} \left[ \pm \left( P_{\text{emp}}(u) - u \right)  \right]\,.
 $$
+We will always have $D_{\pm}\geq {0}$, since by definition $P _\text{emp}(0)= 0$, meaning that the set of values we are taking the $\text{sup}$ of includes 0. 
 One may also use the two-sided statistic
 $$
-D = \sup \lvert  P_{\text{emp}}(u) - u  \rvert\,.
+D = \sup_{u} \lvert  P_{\text{emp}}(u) - u  \rvert\,.
 $$
 
-We show the two one-sided versions since their values can be combinedly used to distinguish different types of misspecification, see @sec-pp-test-failure-modes. 
-The density function of the K-S statistics under the null hypothesis is shown in @fig-kolmogorov-smirnov-distribution.
+We show both one-sided tests as opposed to the two-sided one, since their values can be used together to distinguish different types of misspecification, as we illustrate in @sec-pp-test-failure-modes. 
+The density function of the K-S statistics under the null hypothesis is shown in @fig-kolmogorov-smirnov-distribution. 
+The densities for the $D_{\pm}$ functions are identical - the transformation $u \to 1-u$ maps one to the other, and the null hypothesis is invariant under this reflection.
+The scenario $D \approx 0$ is unlikely, as it would require the variates to precisely align themselves in an equally spaced pattern. On the other hand, $D_{\pm}$ being close to zero is plausible, as it only requires the realization to mostly be above the uniform CDF.
 
 ```{python}
 #| label: fig-kolmogorov-smirnov-distribution
@@ -225,27 +228,27 @@ plt.plot(D, stats.ksone.pdf(D, n=n), label=f'$D_{{\pm}}$ distribution for $n={{{
 plt.plot(D, stats.kstwo.pdf(D, n=n), label=f'$D$ distribution for $n={{{n}}}$')
 
 plt.legend()
+plt.ylim(0, 65)
 plt.xlabel('$D$ or $D_{\pm}$')
 plt.ylabel('Probability density')
 plt.show()
 ```
 
-These tests are common in the literature: they were performed, for example, with the software `BILBY` @romero-shawBayesianInferenceCompact2020; more details can also be found in @romero-shawWhenModelsFail2022.
+These tests are common in the literature: they were performed, for example, with the software `BILBY` [@romero-shawBayesianInferenceCompact2020]; more details can also be found in @romero-shawWhenModelsFail2022.
+Within `nessai` [@williamsNestedSamplingNormalising2021] a $p$-$p$ plot test is applied to the insertion indices of new nested samples, _i.e._ the index of the new sample when ranking all previous live points by likelihood. As we shall discuss in @sec-nested-sampling, the new sample should be drawn uniformly in the likelihood-constrained prior mass. If this is the case, and the previous samples are also uniform in the variable $X$ (which denotes prior mass), then this insertion index should be uniformly distributed between $0$ and $n _\text{live}$, which can be investigated with a $p$-$p$ plot.
+Note that in that case, overconstraining of the distribution being sampled will not correspond to overconstraining in terms of _insertion indices_, but instead be equivalent to an underestimation bias, with more quantiles near the top-end of the distribution.^[Also note that the nessai diagnostic plots are set up to show a quantity defined with an opposite sign compared to this work, equivalent to the difference $u - P(u)$.]
 
-#### Failure modes {#sec-pp-test-failure-modes}
+### $p$-$p$ test failure modes {#sec-pp-test-failure-modes}
 
 Let us now explore the way that $p$-$p$ plots look when the test fails. 
 
-For simplicity, we will always consider measurements
-for which the posterior distribution is Gaussian.
-
 However, while we will keep the distribution according to which the true parameter $\hat{\theta}$ is distributed fixed to the standard normal, centered on zero and with unit variance, we will explore how the $p$-$p$ plot can help us diagnose errors in the estimated posterior distribution.
 
-First, let us suppose we have a bias in our measurement, so that the posterior distribution is not centered at the true value, 0, but instead at a slightly higher one, say 0.2:
+First, let us suppose we have a bias in our measurement, so that the posterior distribution is not centered at the true value, 0, but instead at a slightly higher one, say 0.2. We will consider a simple Gaussian model, so that
 $$
 \begin{aligned}
-p(\theta|d) &= \mathcal{N}(\mu=0.2, \sigma=1)\\
-p(\hat{\theta}|d) &= \mathcal{N}(\mu=0, \sigma=1)\,.
+p(\theta|d) &= \mathcal{N}(\theta; \mu=0.2, \sigma=1)\\
+p(\hat{\theta}|d) &= \mathcal{N}(\theta; \mu=0, \sigma=1)\,.
 \end{aligned}
 $$
 
@@ -268,14 +271,14 @@ plt.show()
 Suppose instead that the bias is in the negative direction:
 $$
 \begin{aligned}
-p(\theta|d) &= \mathcal{N}(\mu=-0.2, \sigma=1)\\
-p(\hat{\theta}|d) &= \mathcal{N}(\mu=0, \sigma=1)\,.
+p(\theta|d) &= \mathcal{N}(\theta; \mu=-0.2, \sigma=1)\\
+p(\hat{\theta}|d) &= \mathcal{N}(\theta;\mu=0, \sigma=1)\,.
 \end{aligned}
 $$
 
 ```{python}
 #| label: fig-pp-plot-bias-negative
-#| fig-cap: "p-p plot in the scenario of a bias."
+#| fig-cap: "p-p plot in the scenario of an underestimation bias."
 
 from thesis_scripts import pp_plot
 import numpy as np
@@ -289,7 +292,7 @@ fig, ax = pp_plot.pp_plot(u, confidence_intervals=(.68, .95, .997))
 plt.show()
 ```
 
-Note that only one of the two KS tests gives extreme results in both cases. 
+Note that only one of the one-sided KS tests gives extreme results in either case. 
 
 Now let us consider a different scenario: when the mean of the posterior distribution is correctly estimated, but its variance is not. 
 If the variance is too high, we are _underconstraining_ the parameter, assigning a higher uncertainty to our measurement than is warranted: for example, if
@@ -347,7 +350,7 @@ The $\beta = 2$ case recovers the standard normal distribution.
 
 ```{python}
 #| label: fig-generalized-normal
-#| fig-cap: "Triangle and normal distributions with the same variance and mean."
+#| fig-cap: "Generalized normal and normal distributions with the same variance and mean."
 
 import numpy as np
 import matplotlib.pyplot as plt

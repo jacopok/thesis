@@ -390,6 +390,8 @@ $$
 $$
 this defines the _characteristic signal strain_ $h_{c}(f) = 2 f |\tilde{h}(f)|$ and the _characteristic noise strain_ $h_{n}(f)=\sqrt{ f S_{n}(f) }$, both of which are dimensionless.
 
+For more details on this and other ways to compare signal and noise, including for example computing the energy density contained in gravitational waves, see @mooreGravitationalwaveSensitivityCurves2015.
+
 ## Likelihood acceleration {#sec-likelihood-acceleration}
 
 This section will discuss common approaches which can be used to accelerate the computation of a frequency-domain Whittle likelihood.
