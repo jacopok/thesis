@@ -589,8 +589,8 @@ axs[1].semilogx(f, np.unwrap(np.angle(hx2/hx)), label='Phase difference (equal f
 # axs[1].set_ylim(-0.1, 2)
 # axs[1].semilogx(f, np.unwrap(np.angle(hy/hy2)))
 axs[0].legend()
-axs[1].set_xlabel('Frequency')
-axs[1].set_ylabel('$\phi_2(f) - \phi_1(f)$')
+axs[1].set_xlabel('Frequency [Hz]')
+axs[1].set_ylabel('$\phi_2(f) - \phi_1(f)$ [rad]')
 axs[0].set_ylabel('$A_2(f) / A_1(f)$')
 plt.show()
 ```
@@ -773,8 +773,9 @@ We expect this to mean it will be very effective at constraining other effects, 
 In @sec-timing-general we introduced the problem of choosing a reference frame to perform the analysis. LGWA observations of stellar mass binaries are generally at least a month long, therefore the curvature of the lunar orbit around the Sun is non-negligible: a frame centered on the Earth or Moon would be measurably accelerated compared to the source.
 
 This would seem to indicate that we should analyze our signals from the Solar System Barycenter frame; however, that is not actually necessary. 
-We need a frame that is _comoving_ with the SSB, but not necessarily _centered_ on the Sun, and this is an important distinction for the LGWA.
+We need a frame that is _comoving_ with the SSB, but not necessarily _centered_ there, and this is an important distinction for the LGWA.
 Let us consider again the example from @fig-projected-lgwa-waveforms-ratio, only now we shall compare the phases in two different reference frames: one centered at the SSB, and one comoving with the SSB, but centered close to the Moon's location when it receive the merger.
+For clarity, we also switch to a linear scale in frequency
 
 ```{python}
 #| label: fig-projected-lgwa-waveforms-ratio-ssb
@@ -815,16 +816,16 @@ hx2, hy2 = like.projected_waveform(f, mod_parameters)
 
 plt.figure(figsize=(6, 3))
 
-plt.semilogx(f, np.unwrap(np.angle(hx/hx2)), label='Center at SSB')
+plt.plot(f, np.unwrap(np.angle(hx/hx2)), label='Center at SSB')
 
 like.compute_center(t0)
 
 hx, hy = like.projected_waveform(f, parameters)
 hx2, hy2 = like.projected_waveform(f, mod_parameters)
 
-plt.semilogx(f, np.unwrap(np.angle(hx2/hx)), label="Center close to the Moon's position at merger")
+plt.plot(f, np.unwrap(np.angle(hx2/hx)), label="Center close to the Moon's position at merger")
 plt.legend()
-plt.xlabel('Frequency')
+plt.xlabel('Frequency [Hz]')
 plt.ylabel('$\phi_2(f) - \phi_1(f)$ [rad]')
 plt.show()
 ```
@@ -832,30 +833,141 @@ plt.show()
 In @fig-projected-lgwa-waveforms-ratio-ssb we can see how 
 the phase dramatically changes, even for a small fluctuation in the parameters, if the center is at the SSB.
 
-Why is this? 
+Furthermore, we can see that the change of phase is roughly linear in frequency. 
+Such a phase shift is equivalent to a global time shift: consider a frequency domain signal whose phase includes a linear component, $\tilde{h}(f) = A(f) e^{i(\phi(f) + xf)}$ for some constant $x$. Its inverse Fourier transform will be
+$$
+h(t) = \int \text{d}f A(f) e^{i(\phi(f) + xf) - 2 \pi i f t} = 
+\int \text{d}f A(f) e^{i\phi(f) - 2 \pi i f (t - \delta t)}\,,
+$$
+where $\delta t=x / 2 \pi$. This is the Fourier transform of the signal without the linear term, $A(f) e^{i \phi(f)}$, evaluated at a time $t - \delta t$. 
 
-### Shifting reference frame in post-processing
+We can visualize what is happening: if the reference frame center is at the SSB, that is where all times are measured. 
+In this example, we are moving the source position alone, keeping all other parameters constant, including the time. 
+A signal which reaches the Sun at a time $t_{0}$ will reach our detector at a time $t_{0} + \vec{r} \cdot \vec{k} / c$, as described in @sec-timing-general. Since $\vec{r}$ is large in magnitude, small perturbations in $\vec{k}$ change the arrival time of the signal significantly, which is what we are seeing here.
 
+In practice, using the SSB as a frame center entails considerable degeneracies between the sky position and the reference time, which is also less precisely measured.
+The situation can be significantly improved by finding a position where time is well measured, so that this effect will be minimized. Fortunately, we can do so without repeating the analysis several times, as detailed in @sec-time-shifting.
+
+We combine this with another possible optimization, which regards the choice of reference event within our waveform. 
+Typically, for the analysis of signals observed by ground-based interferometers, this event is the merger; however, this event is out of band for the LGWA, so one may wonder if there is a better choice. We can compute the SPA time at a given frequency based on @eq-spa-time-from-phase:
+$$
+t _\text{merger} - t_{22}(f;\theta) = \frac{1}{2\pi} \frac{\text{d}\phi_{22}(f;\theta)}{\text{d}f}\,.
+$$
+
+Then, we can parameterize our waveforms based on $t_{22}(f_{0}; \theta)$ as opposed to the merger time.
+
+### Shifting reference frame in post-processing {#sec-time-shifting}
+
+We start from the assumption of having a completed parameter estimation run, for which we measured merger time referring to some center $r_{0}$. 
+We can convert each timing posterior sample to one measuring $t_{22}(f)$ at a different position $r$ by the expression
 $$
 t_{i}^{f, r} = t_{i}^{\text{mrg}, r_0} 
 + \frac{(r-r_0 ) \cdot \hat{n}_{i}}{c}
-+ \frac{1}{2 \pi} \frac{ \text{d} \varphi_{22}(f; \theta_i)}{ \text{d} f}
++ \frac{1}{2 \pi} \frac{ \text{d} \varphi_{22}(f; \theta_i)}{ \text{d} f}\,.
 $$
 
+This gives us a new set of samples for the time, whose variance may be higher or lower than the baseline depending on the specifics of the signal. 
+The timing uncertainty is a function of four variables ($\vec{r}$, $f$) which we can visualize this in a few different ways, using the injection with GW250114 described in @sec-lgwa-pe-stellar as our reference example.
 
-![](figures/time_std_solar_system.pdf){#fig-timing-lgwa-solar-system width=80%}
+![Timing uncertainty by frequency for our GW250114 injection.](figures/timing_constraint_by_frequency_GW250114.pdf){#fig-timing-lgwa-by-frequency width=80%}
 
-![](figures/minimum_uncertainty_velocity.pdf){#fig-minimum-uncertainty-velocity width=80%}
+In @fig-timing-lgwa-by-frequency we vary the frequency $f$ and, for each of its values, we compute the position $r$ such that the 90% width of the samples $t^{f, r}$ is minimized. 
+We then show these 90% widths as a function of frequency. 
+One can see a minimum around 0.54Hz, just above the point where the LGWA's sensitivity is best.
 
-![](figures/timing_constraint_by_frequency_GW250114.pdf){#fig-timing-lgwa-by-frequency width=80%}
+![Spatial variation of the timing uncertainty for our GW250114 injection.](figures/time_std_solar_system.pdf){#fig-timing-lgwa-solar-system width=80%}
+
+In @fig-timing-lgwa-solar-system, instead, we show the spatial variation of the timing uncertainty by fixing three values of $f$, which include the frequency of the global minimum, one lower frequency, and the merger. 
+We also fix three orthogonal spatial slices, each passing through the global minimum, and compute the timing uncertainty in these slices, so as to show its 3D structure. 
+We align the $z$ axis in this frame with the injected source direction. 
+The global minimum in @fig-timing-lgwa-by-frequency represents a curve in this visualization, $\vec{r}_\text{min}(f)$. We show its projection onto each of the three planes in red, and similarly the trajectories of the Earth and Moon in green and grey. 
+Finally, black crosses denote the projected location of the minimum uncertainty at the given frequency.
+
+The shape of the iso-uncertainty ellipses generally extends further along the $z$ axis than along the others. We give an analytical justification for this in @nte-analytic-calculation-uncertainty-isocontours.
+
+::: {#nte-analytic-calculation-uncertainty-isocontours .callout-note collapse="true"}
+
+##### Analytic calculation of the uncertainty spatial distribution
+
+We start by re-parameterizing the sky coordinates, such that any sky position vector is given by $\hat{n} = (1-\gamma)\hat{m} + \alpha \hat{u} + \beta \hat{v}$, where $\hat{m}$ is the unit vector in the direction of the posterior distribution average, while $\hat{u}$ and $\hat{v}$ complete an orthonormal basis with it, and are rotated so that for our posterior distribution the covariance between $\alpha$ and $\beta$ is zero. 
+
+By this definition, $\alpha$ and $\beta$ have zero mean.
+Then, we assume that our time parameter also $t$ has zero mean. 
+The parameter $\gamma$ is always determined if $\alpha$ and $\beta$ are given by normalization, and for a tight localization $|\gamma| \ll |\alpha|, |\beta|$.  Nevertheless, we will include $\gamma$ in our calculations. 
+Therefore, we only write down the covariance matrix for $t$, $\alpha$ and $\beta$.
+We assume to be able to find a location such that this is diagonal:
+$$
+\Sigma = \begin{pmatrix}
+\sigma_{t}^{2} & 0 & 0 \\
+0 & \sigma_{\alpha}^{2} & 0 \\
+0 & 0 & \sigma_{\beta}^{2}  \\
+\end{pmatrix}\,.
+$$
+
+Then, the question is posed as follows: what happens to the timing variance under the transformation
+$$
+\tilde{t} = t + \frac{\Delta \vec{r}}{c} \cdot \left( \hat{m}(1-\gamma) + \alpha \hat{u} + \beta \hat{v} \right) ?
+$$
+
+The new timing mean will be $\mathbb{E}\left[ \tilde{t} \right] = \Delta \vec{r} \cdot \hat{m} (1-\bar{\gamma}) / c$, where $\bar{\gamma} = \mathbb{E}[\gamma]$, while the variance will be
+
+$$
+\begin{aligned}
+\mathbb{E}\left[\left(\widetilde{t}-\frac{\Delta \vec{r}\cdot \hat{m}}{c} (1-\bar{\gamma})\right)^2\right] &= \mathbb{E} \left[
+    \left(
+    t + \frac{\Delta \vec{r}}{c} \cdot \left(\hat{m}(\bar{\gamma}-\gamma) + \alpha \hat{u} + \beta \hat{v}\right)
+    \right)^2
+\right]  \\
+&= \sigma_t^2
++ \left(\frac{\Delta \vec{r} \cdot \hat{u}}{c}\right)^2 \sigma_\alpha^2 
++ \left(\frac{\Delta \vec{r} \cdot \hat{v}}{c}\right)^2 \sigma_\beta^2 + \\
+&\ + \left(\frac{\Delta \vec{r} \cdot \hat{m}}{c}\right)^2 \mathbb{E} \left[ (\bar{\gamma}-\gamma)^2  \right]  \\
+&\ - 2 \frac{\Delta \vec{r} \cdot \hat{m}}{c}
+\bigg(
+    \mathbb{E} \left[t (\gamma -\bar{\gamma})  \right] \\
+    &+ \frac{\Delta \vec{r} \cdot \hat{u}}{c} \mathbb{E} \left[ (\gamma-\bar{\gamma}) \alpha  \right]
+    + \frac{\Delta \vec{r} \cdot \hat{v}}{c} \mathbb{E} \left[ (\gamma-\bar{\gamma}) \beta   \right]
+\bigg)
+\,.
+\end{aligned}
+$$
+
+Neglecting the terms depending on $\gamma$, which is subdominant for a relatively tight localization, we can recognize the ellipses from @fig-timing-lgwa-solar-system.
+
+:::
+
+![Velocity of the minimum uncertainty position](figures/minimum_uncertainty_velocity.pdf){#fig-minimum-uncertainty-velocity width=80%}
+
+Finally, in @fig-minimum-uncertainty-velocity we show the velocity of the point $\vec{r}_\text{min} (t(f))$, where we compute the time associated with frequency $f$ based on a SPA of the injected signal. 
+We can see that, even though its motion is obtained exclusively by post-processing posterior samples, it retains a certain memory of the detector's trajectory through the Solar System. 
 
 ### Spanned area scaling validation
 
-![](figures/trajectories.pdf){#fig-trajectories-lgwa-injections width=80%}
+Fisher results (@eq-wen-chen-area) suggest that the sky localization obtained with a long observation scales with the inverse of the area, all else being equal.
 
-![](figures/lgwa_waveforms_month_by_month.pdf){#fig-waveforms-lgwa-injections width=80%}
+In order to validate this, we set up 12 injections with the same parameters as our baseline GW250114 analysis, except for the following:
 
-![](figures/sky_locs.pdf){#fig-injections-sky-areas width=80%}
+1. The lower frequency bound is always kept at $27.1 \text{mHz}$;
+2. the upper frequency bound is changed, so that the $i$-th injection lasts $i$ months in band;
+3. the luminosity distance $d_{L}$ is adjusted so that the SNR for each injection is constant: this requires all but the 12 month injection to be unrealistically close.
+
+The corresponding waveforms for the 11 and 12-month cases are shown in @fig-waveforms-lgwa-injections. 
+
+![Waveforms for the 11 and 12 month normalized injections.](figures/lgwa_waveforms_month_by_month.pdf){#fig-waveforms-lgwa-injections width=80%}
+
+According to @eq-wen-chen-area the sky localization area should scale inversely with $A_{\perp}$, which we compute by projecting the detector's orbit onto the plane orthogonal to the injected source's direction, and then taking its convex hull, as shown in @fig-trajectories-lgwa-injections.
+
+![Convex hulls for the 12 month normalized injections.](figures/trajectories.pdf){#fig-trajectories-lgwa-injections width=80%}
+
+We perform these injections in three setups:
+
+1. recovering __all parameters__ except for spin;
+2. recovering only sky position, time, phase (__simplified__);
+3. modifying the LGWA noise curve so that each month accumulates an equal amount of SNR (__simplified, uniform SNR__).
+
+The shapes of the localization areas are shown in @fig-injections-sky-areas, while @fig-injections-vs-wen-chen summarizes the comparison between these setups and the Fisher expression.
+
+![Sky localization areas for the 12 month normalized injections.](figures/sky_locs.pdf){#fig-injections-sky-areas width=80%}
 
 ![](figures/sky_loc_vs_theory.pdf){#fig-injections-vs-wen-chen width=80%}
 
