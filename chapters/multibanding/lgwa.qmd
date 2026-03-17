@@ -223,7 +223,7 @@ plot(ff, *get_noise_asd(ff, **noise_params_lgwa), 'Niobium suspension')
 plot(ff, *get_noise_asd_squid(ff, **noise_params_lgwa_si), 'Silicon suspension')
 ```
 
-#### Other noise sources
+#### Other noise sources {#sec-other-lgwa-noise}
 
 Displacement sensitivity curves similar to those in @fig-lgwa-displacement-noise were adopted in all forecasting studies; no other noise sources were considered.
 
@@ -245,6 +245,9 @@ Moonquakes remain a significant issue, and it is likely that some fraction of th
 
 ![Comparison between a moonquake detected within the Apollo 12 mission and an earthquake. From @steinIntroductionSeismologyEarthquakes2009.](figures/moonquake.jpg){#fig-moonquake-duration width=60%}
 
+Other sources of noise yet may affect the measurement, such as human activity from other nearby projects, magnetic noise from lunar dust and so forth. 
+Mitigating these will be a significant challenge as the mission is developed.
+
 ### The lunar seismic response {#sec-lgwa-response}
 
 The fundamental normal mode, which describes quadrupolar vibration of the whole Moon, has a frequency just above $1 \text{mHz}$.
@@ -255,13 +258,13 @@ The standard treatement for the problem of an elastically coupled medium to grav
 The recent years have seen significant theoretical and computational advancements in this regard.
 @belgacemCouplingElasticMedia2024 formulated the coupling problem with a fully relativistic  Effective Field Theory approach, which generalizes well to high frequencies beyond the normal-mode limit. 
 @biResponseMoonGravitational2024 investigated the impact of a layered geological structure using a half-space model, showing that it can significantly amplify the lunar response compared to a uniform Moon.
-A significant amount of work has also been recently performed regarding numerical simulations of the lunar response [@zhangThickLunarCrust2026; @zhangSuperAmplificationLunar2025;@zhangNumericalSimulationLunar2025].
+A significant amount of work has also been recently performed regarding numerical simulations of the lunar response [@zhangNumericalSimulationLunar2025; @zhangSuperAmplificationLunar2025; @zhangThickLunarCrust2026].
 
-The scalar lunar response $L(f)$ has units of length, and it is defined as
+The scalar lunar response $L$ is a function of frequency with units of length, and it is defined as the ratio between the amplitude of the surface displacement $s$ and the amplitude of the gravitational wave strain $h$ which drives it, assuming that both are monochromatic with a frequency $f_{0}$:
 $$
 L(f_{0}) = \frac{s(t;f_{0})}{h(t; f_{0})}\,,
 $$
-where 
+where the amplitude of the gravitational wave is obtained by contracting the gravitational wave strain tensor $h_{ij}$ with a geometric detector response $\hat{D}_{ij}$.
 
 Here we limit ourselves to a simple justification, within Dyson's description of the problem in the transverse-traceless gauge as outlined by @biResponseMoonGravitational2024, of the geometry of the detection tensor.
 The LGWA sensors will be set up to measure horizontal vibration, as most of the seismic waves near the surface are expected to be vertically propagating shear waves.
@@ -270,7 +273,7 @@ $$
 f_{i} = h_{ij} \nabla _{j}\mu(\vec{r})\,. 
 $$
 
-Then, if we want to compute horizontal acceleration along an axis $b$ we will need to consider forces along that direction. Then, the relevant component of the gravitational wave strain tensor will be 
+Then, if we want to compute horizontal acceleration along an axis $b$ we will need to consider forces along that direction. Then, the relevant component of the gravitational wave strain tensor will be proportional to
 $$
 h_{ij} b_{i} \nabla_{j} \mu\,.
 $$
@@ -530,7 +533,7 @@ Along with them, we show the posterior predictive distribution obtained after pe
 The phase of the response is more difficult to visualize, as it spans thousands of cycles during an observation.
 We illustrate one aspect of its variation by computing the ratio of two waveforms computed with identical parameters - again, the injection ones for GW250114 - but with a difference in 1 degree in right ascension. 
 In the upper panel of @fig-projected-lgwa-waveforms-ratio we see the ratio of amplitudes for both channels, with a periodicity of one month. 
-The phase, on the other hand, primarily exhibits variation with a slower period, which corresponds to the yearly modulation driven by the lunar orbit around the Sun.
+The phase, on the other hand, primarily exhibits variation with a slower period, which corresponds to the yearly modulation driven by the lunar orbit around the Sun.^[The phase is computed in a frame centered close to the Moon's location at merger - for the details, see @sec-lgwa-reference-frames.]
 
 ```{python}
 #| label: fig-projected-lgwa-waveforms-ratio
@@ -615,7 +618,7 @@ Mapping the composition of the lunar interior, which can be accomplished through
 #### Compact binaries
 
 The range of gravitational wave sources observable in the most sensitive band for the LGWA, $[0.05, 2]\text{Hz}$, is quite wide.
-Compact binaries are a natural candidate.
+Compact binaries are a natural candidate: they are significant emitters of gravitational waves, and their study is a blossoming field due to the wealth of data from ground-based observations.
 
 ![Time to merger as a function of mass, highlighting at which point various sources would cross the decihertz band. The sources are assumed to have equal mass and no spin - including these effects changes the results, but not the overall qualitative picture.](figures/time_to_merger.pdf){#fig-time-to-merger-lgwa width=80%}
 
@@ -679,25 +682,157 @@ These injections are performed in zero noise, meaning that we investigate a Whit
 $$
 \log \mathcal{L}(\theta) = \mathrm{Re} (h(\theta)|h(\theta_{0})) - \frac{1}{2} (h(\theta)|h(\theta)) \,,
 $$
-where the scalar products are computed according to the estimated LGWA strain noise PSD, which is computed based on the displacement noise PSD for the optimistic Silicon model in @fig-lgwa-displacement-noise and the estimated response
+where the scalar products are computed according to the estimated LGWA strain noise PSD, which is computed based on the displacement noise PSD for the optimistic Silicon model in @fig-lgwa-displacement-noise and the estimated response discussed in @sec-lgwa-response:
 $$
 S_{n}^{\text{LGWA}}(f) = \frac{S_{n}^{\text{displacement}}(f)}{L(f)}\,.
 $$
 
+We inject parameters compatible with two of the most notorious signals detected by the LVK collaboration:
+
+- GW170871, the best-constrained neutron star binary detected with gravitational waves, and the only multi-messenger detection to date [@abbottGW170817ObservationGravitational2017;@theligoscientificcollaborationPropertiesBinaryNeutron2019];
+- GW250114, the best-constrained black hole binary to date, which we discussed in detail in @sec-gw250114 [@abacGW250114TestingHawkings2025].
+
+We consider a 10-year observation of GW170817, which corresponds to the frequency band $[208.1, 3000]\text{mHz}$., and a 1-year observation of GW250114, in the band $[27.1, 3000]\text{mHz}$. 
+For GW170817, the limiting factor is the mission lifetime. 
+For GW250114 we could have chosen a longer observation, but as most of the SNR is accumulated in the last year before merger, we do not expect this would have led to significantly different results; truncating the observation this way highlights the fact that the constraints we see only require one year to be established.
+
+The total SNR for GW170817 as seen by LGWA is 21.9, that of GW250114 is 34.8.
+
+#### Limitations
+
+The procedure we employ regarding the response is equivalent to performing inference assuming that 
+
+1. the lunar response is given by our model $L(f)$;
+2. the lunar response is perfectly known during inference.
+
+The first assumption is necessary - 
+we need to establish a single reference model for the lunar response, 
+though of course improvements to it will be useful, 
+especially if they are driven by actual measurements 
+from upcoming lunar missions.
+The second assumption can in principle be relaxed by injecting a signal computed
+with a response from our model, and recovering it with a variable response inferred
+simultaneously with the signal parameters, analogously to what is currently 
+done for the calibration of ground-based detectors (@sec-calibration).
+
+Unfortunately, we have no reason to believe that a direct application 
+of the smooth Gaussian process envelopes used there would 
+be appropriate in this context. 
+On the contrary, a general feature observed in models and simulations 
+of the lunar response is small-scale frequency dependence - 
+the response is expected to be a "spiky" function of frequency.
+Defining an appropriate parametric model for it, therefore, is challenging, 
+and it will require future work.
+
+Another limitation of our analysis is a lack of data gaps. 
+As we discussed in @sec-other-lgwa-noise, moonquakes are likely to make sections of the data unusable, at an expected rate of roughly one hour every day.
+While this may not significantly reduce the overall SNR, it is not trivial computationally to perform a coherent analysis in this context. 
+@burkeMindGapAddressing2025 thoroughly investigate the problem in the context of LISA, 
+and it may be possible to investigate this problem using techniques borrowed from continuous wave science [@tenorioSFTsScalableDataanalysis2025]. 
+
+The zero-noise assumption is not expected to be a significant limitation. 
+Adding a noise realization would simply bias the expectation value of our parameter estimation results, but not their variance, which is the quantity of interest in forecasting.
+
+Working directly with the zero-noise likelihood ratio simplifies the problem, meaning that we never have to leave the frequency domain; this is a blessing and a curse, since it also means that we are not performing a full pipeline test, which would need to start from simulated time-domain data. 
+Furthermore, we are performing inference assuming that the signal's presence is known, and no other signals nor non-Gaussian noise sources are present in the data.
+As we transition from forecasting to developing the analysis infrastructure for the mission, these issues can be addressed, eventually leading to a realistic simulation and blind analysis of the time-domain seismometer data.
 
 #### Sky localization
 
-![](figures/ra_dec_corner_gw170817.png){#fig-lgwa-gw170817-sky width=60%}
+Based on analytical results [@eq-wen-chen-area], we expect these long observations to tightly constrain the sky position of the sources, due to the significant Doppler modulation of the signal through the year being heavily dependent on it.
 
-#### Mass constraints
+In the GW170817 case this is indeed the case, as shown in @fig-lgwa-gw170817-sky: the posterior is extremely tight, and it remains so when repeating the same experiment at the upper limit in frequency of $710\text{mHz}$, which corresponds to 14 days before merger. This only reduces the SNR from 21.9 to 21.3.
+
+![Sky localization for a GW170817-like injection with the LGWA. ](figures/ra_dec_corner_gw170817.png){#fig-lgwa-gw170817-sky width=60%}
+
+For GW250114, despite the higher SNR, the localization is much less precise.
+We can see two nearby modes in the sky, corresponding respectively to a face-on source with $\theta_{JN} < \pi / 2$ and a face-off source with $\theta_{JN}> \pi / 2$.
+The LVK posterior distribution exhibits the same qualitative behavior, which in both cases is due to the sky position being also constrained by the relative amplitude of the signal in two detectors (for the LVK) and in the two LGWA channels at various times.
+The Einstein Telescope in its 2L configuration would measure this position with extreme precision, due to its SNR of more than 600.
+
+![Sky localization and inclination angle for a GW250114-like injection. We compare the results with those obtained with other detectors: the Einstein Telescope in its 2L configuration, and the posterior distribution provided by the LVK collaboration for the real event.](figures/ra_dec_theta_jn_lgwa_vs_et.pdf){#fig-lgwa-gw250114-sky width=80%}
+
+#### Intrinsic parameter constraints
+
+An observation of the gravitational waves emitted by a binary system constrains both of the masses, but as discussed in @sec-masses the chirp mass is the lowest-order contribution, while the mass ratio has a higher PN order. 
+For stellar mass binaries, the LGWA provides extremely precise constraints on the chirp mass, while
+its constraints on higher order parameters are not as tight.
+
+In @fig-lgwa-gw250114-mqchi we show the posterior distribution on chirp mass, mass ratio and effective spin for GW250114. 
+The LGWA measurement of chirp mass is extremely precise, with a 90% width of $0.0002M_{\odot}$; for reference, the interval for the Einstein Telescope is roughly 20 times wider, and that in the original LVK analysis is 4000 times wider, at roughly $0.8M_{\odot}$.
+In contrast, the effective spin and mass ratio measurements from the LGWA have comparable precision with the LVK analysis, being respectively slightly narrower and wider.
+The Einstein Telescope exhibits extremely precise posterior distributions for both.
 
 ![Posterior distribution for the chirp mass, mass ratio and effective spin parameters of our GW250114-like injection.](figures/mchirp_q_lgwa_vs_et.pdf){#fig-lgwa-gw250114-mqchi width=80%}
 
+While the chirp mass itself does not have a particular astrophysical significance, these analyses provide an indication of the LGWA's sensitivity to tiny fluctuations at low PN order, which affect the long-duration frequency evolution of the signal.
+We expect this to mean it will be very effective at constraining other effects, such as contributions from dark matter in the environment, or eccentricity, both of which modify the frequency evolution.
 
+## Reference frames for long observations {#sec-lgwa-reference-frames}
 
-#### Multibanding
+In @sec-timing-general we introduced the problem of choosing a reference frame to perform the analysis. LGWA observations of stellar mass binaries are generally at least a month long, therefore the curvature of the lunar orbit around the Sun is non-negligible: a frame centered on the Earth or Moon would be measurably accelerated compared to the source.
 
-## Reference frames for long observations
+This would seem to indicate that we should analyze our signals from the Solar System Barycenter frame; however, that is not actually necessary. 
+We need a frame that is _comoving_ with the SSB, but not necessarily _centered_ on the Sun, and this is an important distinction for the LGWA.
+Let us consider again the example from @fig-projected-lgwa-waveforms-ratio, only now we shall compare the phases in two different reference frames: one centered at the SSB, and one comoving with the SSB, but centered close to the Moon's location when it receive the merger.
+
+```{python}
+#| label: fig-projected-lgwa-waveforms-ratio-ssb
+#| fig-cap: "Phase difference of projected waveforms, each compatible with GW250114, but with different right ascension by one degree, shown in two different frames."
+
+from lgwa_response.likelihood import LunarLikelihood
+from lgwa_response.simple_waveforms import from_bilby
+import numpy as np
+import matplotlib.pyplot as plt
+
+like = LunarLikelihood(gps_time_range=(1500000000., 2000000000.))
+t0 = 1893024018.
+
+f = np.geomspace(0.02, 3, num=200000)
+mc = 31.27177785
+t0 = 1.42087814e+09
+ra = 2.33323452
+parameters = from_bilby({
+    "chirp_mass": mc,
+    "mass_ratio": 0.97828418,
+    "luminosity_distance": 413.79263441,
+    "theta_jn": 0.71793531,
+    "psi": 1.32899451,
+    "phase": 1.5664732,
+    "ra": ra,
+    "dec": 0.19024356,
+    "time_at_center": 0,
+    "time_at_center_baseline": t0,
+    'chi_1': -0.05063882, 
+    'chi_2': 0.01304105,
+	'lambda_1': 0.0,
+	'lambda_2': 0.0,
+})
+mod_parameters = parameters | {'right_ascension': ra + np.deg2rad(1)}
+
+hx, hy = like.projected_waveform(f, parameters)
+hx2, hy2 = like.projected_waveform(f, mod_parameters)
+
+plt.figure(figsize=(6, 3))
+
+plt.semilogx(f, np.unwrap(np.angle(hx/hx2)), label='Center at SSB')
+
+like.compute_center(t0)
+
+hx, hy = like.projected_waveform(f, parameters)
+hx2, hy2 = like.projected_waveform(f, mod_parameters)
+
+plt.semilogx(f, np.unwrap(np.angle(hx2/hx)), label="Center close to the Moon's position at merger")
+plt.legend()
+plt.xlabel('Frequency')
+plt.ylabel('$\phi_2(f) - \phi_1(f)$ [rad]')
+plt.show()
+```
+
+In @fig-projected-lgwa-waveforms-ratio-ssb we can see how 
+the phase dramatically changes, even for a small fluctuation in the parameters, if the center is at the SSB.
+
+Why is this? 
 
 ### Shifting reference frame in post-processing
 
@@ -724,4 +859,3 @@ $$
 
 ![](figures/sky_loc_vs_theory.pdf){#fig-injections-vs-wen-chen width=80%}
 
-z

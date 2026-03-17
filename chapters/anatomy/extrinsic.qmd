@@ -412,7 +412,7 @@ $$
 
 The geocenter is included here for completeness, as it is standard to adopt it as a reference frame center in the analysis of ground-based data, but the barycenter of the Solar System (SSB) is also used in other applications. 
 
-It is unlikely that the motion of the source itself is measurably accelerated compared to its environment or its galaxy, but even if it was, we would not have ephemeris available to account for it, and any such effects would need to be modelled together with other intrinsic source parameters.
+It is possible, though unlikely, that the motion of the source itself is measurably accelerated compared to its environment or its galaxy [@tamaniniPeculiarAccelerationStellarorigin2020], but even in this case, we do not have ephemeris available to account for it, and any such effects need to be modeled together with other intrinsic source parameters.^[For a source subject to strong gravitational lensing, the Doppler shift due to velocity alone as opposed to acceleration may be measurable. The point above still applies, though: the velocity and lens parameters are unknown.]
 The motions of the Milky Way galaxy and of the Solar System within it all have very low accelerations: for the purposes of gravitational wave observation, the barycenter of the Solar System can be considered to be in uniform motion compared to the source, with an effective velocity vector
 $$
 \vec{v}_{\text{eff}} = 
@@ -426,14 +426,16 @@ Using a velocity vector $\vec{v} _{\text{galaxy} \to \text{MW}}$ is improper in 
 Let us compare the magnitude of these vectors:
 
 1. $\vec{v} _{\text{source} \to \text{galaxy}}$, the peculiar velocity of the source, is generally unknown and hard to model. As we shall discuss, gravitational observations alone offer little help in this regard.
-2. the magnitude of $\vec{v} _{\text{galaxy} \to \text{MW}}$ is related to the redshift as $1+z = \gamma (1+|\vec{v} _{\text{galaxy} \to \text{MW}}| / c)$, while its direction is radially outward. For the gravitational wave observations performed so far, this has ranged from $z=10^{-2}$ [@abbottGW170817ObservationGravitational2017], corresponding to $v \sim 10^{-2}c$, to $z \gtrsim 1$ [@theligoscientificcollaborationGWTC40UpdatingGravitationalWave2025], corresponding to $v \gtrsim 0.6c$. 
+2. the magnitude of $\vec{v} _{\text{galaxy} \to \text{MW}}$ is related to the redshift as $1+z = \gamma (1+|\vec{v} _{\text{galaxy} \to \text{MW}}| / c)$, while its direction is radially outward. For the gravitational wave observations performed so far, this has ranged from $z\approx10^{-2}$ [@abbottGW170817ObservationGravitational2017], corresponding to $v \sim 10^{-2}c$, to $z \gtrsim 1$ [@theligoscientificcollaborationGWTC40UpdatingGravitationalWave2025], corresponding to $v \gtrsim 0.6c$. 
 3. $\vec{v} _{\text{MW} \to \text{SSB}}$ is on the order of $2 \times 10^{5} \text{m/s}$, less than $10^{-3}c$.
 4. $\vec{v} _{\text{SSB} \to \text{geo}}$ is on the order of $3 \times 10^{4} \text{m/s}$, less than $10^{-4}c$.
 
-For typical CBC sources, then, the cosmological contribution is completely dominant among these effects.
+For typical CBC sources, the cosmological contribution is completely dominant among these effects.
 So, we can find a reference point^[By "point" here we mean both a point and its motion over time: in the language of General Relativity, a worldline.] within the Solar System, 
 whose motion can be considered to have constant velocity during the observation period to a sufficiently good approximation.
 Then, we can assume that this point receives a signal unaffected by Doppler modulations beyond a constant shift in frequency in the form $f \to f/(1+z)$.
+Typically, this point is chosen to be the geocenter for ground-based observations of compact binary coalescences, and the SSB for longer observations, such as those of continuous wave signals from spinning neutron stars, or observations with the Laser Interferometer Space Antenna (LISA). 
+In @sec-lgwa-reference-frames we will explore the options available in the context of the Lunar Gravitational Wave Antenna.
 
 Once the point has been fixed, it is straightforward to compute the time-dependent delay
 $$
@@ -446,6 +448,8 @@ $$
 t _\text{det} = t + t_{0} + \Delta t_{d}(t_\text{det})\,,
 $$
 where the constant reference time $t_{0}$ is chosen so that the reference frame center receives the event corresponding to $t=0$ in the waveform at $t_\text{det} = t_{0}$.
+
+For short observations, which includes all the signals measured so far by the LVK collaboration, the time dependence of $\Delta t_{d}$ is negligible.
 
 ## Stationary phase approximation {#sec-stationary-phase-approximation}
 
@@ -497,7 +501,7 @@ $$
 \end{aligned}
 $$
 
-## Calibration
+## Calibration {#sec-calibration}
 
 When analyzing data from a detector, 
 we need to estimate strain based on some other physical quantity,

@@ -132,7 +132,7 @@ An expression can also be computed in the case of a long observation by a single
 @wenGeometricalExpressionAngular2010 give this expression only in the limit of a short observation or one that is longer than an year; the expression for an arbitrary-length observation of a monochromatic signal with frequency $f_{0}$ reads @tissinoGeometryLunarGravitational2026
 $$
 \Delta\Omega = \frac{c^{2}}{2 \pi f_{0}^{2} \rho^{2}A_{\perp}}\,,
-$$
+$${#eq-wen-chen-area}
 where $A_{\perp}$ is the area spanned by the detector's motion within a plane perpendicular to the source direction.
 
 #### Correlation structure

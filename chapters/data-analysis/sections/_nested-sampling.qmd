@@ -352,6 +352,7 @@ $$
 In this case, the curvature of the data is strong enough for the Bayes Factor to favor the parabolic model (although not by much). 
 
 ```{python}
+from IPython.display import Markdown
 for sampler, name in zip([sampler_parabola, sampler_linear], ['parabola', 'line']):
 	print(f'{name}: Z = {sampler.results.logz[-1]:.2f} +- {sampler.results.logzerr[-1]:.2f}')
 
@@ -361,7 +362,7 @@ bf_error = np.sqrt(
 	sampler_linear.results.logzerr[-1]**2
 )
 
-print(f'log Bayes factor = {bayes_factor:.2f} +- {bf_error:.2f} nats for the parabolic model')
+Markdown(f'The log Bayes factor is {bayes_factor:.2f}$\pm$ {bf_error:.2f} nats in favor of the parabolic model.')
 ```
 
 Since the models we are considering were nested, we have a comparison point for our Bayes Factor: the Savage-Dickey density ratio; see @eq-savage-dickey-density-ratio.
@@ -675,11 +676,12 @@ $$
 $$
 
 The integral we need to compute $H$ is very similar. The sign is opposite, and instead of being over $\mathbb{R}^{2}$ it is only over $[0, 1]^{2}$. The region outside of this box is, however, more than $10\sigma$ from the mean, therefore its contribution is negligible.
-The results are compatible:
 
 ```{python}
-print(f'H obtained from sampling = {sampler.results.information[-1]}')
-print(f'Analytical estimate for H = {-ndim/2 * (1+np.log(2 * np.pi)) - .5 * np.log(np.linalg.det(C))}')
+from IPython.display import Markdown
+
+Markdown(f'The results are compatible: the value of $H$ obtained from sampling is {sampler.results.information[-1]:.2f}, while the'
+f'analytical estimate is {-ndim/2 * (1+np.log(2 * np.pi)) - .5 * np.log(np.linalg.det(C)):.2f}.')
 ```
 
 #### Algorithm termination

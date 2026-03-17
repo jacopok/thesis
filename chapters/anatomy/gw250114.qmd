@@ -49,6 +49,7 @@ import qnm
 import astropy.units as u
 import astropy.constants as ac
 import numpy as np
+from IPython.display import Markdown
 
 def get_f_tau(M, chi, l, m, n):
     q22 = qnm.modes_cache(-2, l, m, n)
@@ -62,10 +63,11 @@ M = 68.4*u.Msun
 chi = 0.68
 f_220, tau_220 = get_f_tau(M, chi, 2, 2, 0)
 
-print(f'For a remnant black hole with {M=:.1f} and {chi=:.2f}')
-print(f'the fundamental frequency is {f_220=:.2f}')
-print(f'and the damping time is {tau_220=:.2f}.')
+Markdown(f'For example, a remnant black hole with $M_f={M.to(u.Msun).value:.1f}M_\odot$ and $\chi_f={chi:.2f}$ '
+f'has a fundamental frequency of $f_{{220}}=${f_220.to_string(precision=3, format="latex_inline")} '
+f'and a damping time of $\\tau_{{220}}=\\mathrm{{{tau_220:.2f}}}$.')
 ```
+
 
 The fact that $f_{220} \approx 1/\tau_{220}$ means that the sinusoid corresponding to this mode is approximately suppressed by a factor $e$ every cycle.
 This decay is comparatively slow for a mode: most other QNMs are suppressed even faster [@bertiBlackHoleSpectroscopy2025, figure 2.3].

@@ -13,7 +13,7 @@ format:
 
 This section will continue in the dissection of the gravitational signal emitted by the coalescence of two compact objects by considering its intrinsic parameters, those relating to the source itself and not to its relation to the observer.
 
-## Component masses
+## Component masses {#sec-masses}
 
 The component masses, primary $m_{1}$ and secondary $m_{2}$ with $m_{1}>m_{2}$, are typically measured in units of the solar mass $M_{\odot} \approx 1.98841\times 10^{30} \text{kg}$.
 
