@@ -97,6 +97,21 @@ where `note` can be substituted by `warning`, `important`, `tip` or `caution`, s
 
 Info [here](https://nmfs-opensci.github.io/quarto_titlepages/).
 
+#### Programmatic paragraphs and tables
+
+See the [tables](https://quarto.org/docs/authoring/tables.html) documentation. 
+
+Simple example:
+
+```{python}
+import astropy.units as u
+from IPython.display import Markdown
+
+x = 10 * u.m
+
+Markdown(f'The value of $x$ is {x.to_string(precision=2, format="latex_inline")}')
+```
+
 ### Known issues
 
 - even when activating the `link-citations: true` option in the 
