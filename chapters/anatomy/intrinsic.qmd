@@ -466,7 +466,7 @@ with tidal effects --- a 5-dimensional parameter space, with parameters $(q, \ch
 As a surrogate, it is trained on the base model, which can be generated at arbitrary points. The surrogate's accuracy depends on the number of training data points, and it is measured in terms of the mismatch
 $$
 \bar{\mathcal{F}} = 1 - \max_{t_{0}, \phi_{0}} \frac{(h_\text{true}| h _\text{surr}(t_0, \phi_0))}{\sqrt{ (h _\text{true}| h _\text{true}) (h _\text{surr}| h _\text{surr})}}
-$$
+$${#eq-mismatch}
 where the scalar products are computed as in equation @eq-noise-weighted-inner-product, and maximized over reference time and coalescence phase.
 
 ![Reconstruction accuracy for `mlgw_bns` as a function of the number of training waveforms N. ](figures/mlgw_bns/fig06.pdf){#fig-mlgw-bns-accuracy}

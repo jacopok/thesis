@@ -690,13 +690,21 @@ $$
 We inject parameters compatible with two of the most notorious signals detected by the LVK collaboration:
 
 - GW170871, the best-constrained neutron star binary detected with gravitational waves, and the only multi-messenger detection to date [@abbottGW170817ObservationGravitational2017;@theligoscientificcollaborationPropertiesBinaryNeutron2019];
-- GW250114, the best-constrained black hole binary to date, which we discussed in detail in @sec-gw250114 [@abacGW250114TestingHawkings2025].
+- GW250114, the best-constrained black hole binary to date, whose detection by the LVK collaboration we discussed in detail in @sec-gw250114 [@abacGW250114TestingHawkings2025]. We also provide comparisons with the injections with the Einstein Telescope discussed in @sec-gw250114-et.
 
 We consider a 10-year observation of GW170817, which corresponds to the frequency band $[208.1, 3000]\text{mHz}$., and a 1-year observation of GW250114, in the band $[27.1, 3000]\text{mHz}$. 
 For GW170817, the limiting factor is the mission lifetime. 
-For GW250114 we could have chosen a longer observation, but as most of the SNR is accumulated in the last year before merger, we do not expect this would have led to significantly different results; truncating the observation this way highlights the fact that the constraints we see only require one year to be established.
+For GW250114 we could have chosen a longer observation, but as most of the SNR is accumulated in the last year before merger, this does not lead to significantly different results; truncating the observation this way highlights the fact that the constraints we see only require one year to be established.
 
 The total SNR for GW170817 as seen by LGWA is 21.9, that of GW250114 is 34.8.
+
+We perform these injections with the following software:
+
+- the likelihood, including waveform generation and projection onto the LGWA, is handled within the [`lgwa-response`](https://github.com/jacopok/lgwa-response) package;
+- prior distributions and interfacing across modules are handled through [`bilby`](https://github.com/bilby-dev/bilby) [@ashtonBilbyUserfriendlyBayesian2019];
+- for sampling we use [`nessai`](https://github.com/mj-will/nessai) [@williamsNestedSamplingNormalising2021].
+
+For more details on the specific priors and other details, see @tissinoGeometryLunarGravitational2026.
 
 #### Limitations {#sec-lgwa-pe-limitations}
 

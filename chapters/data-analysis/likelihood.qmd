@@ -461,9 +461,9 @@ In its presence it breaks down, since the smooth structure of the waveforms is n
 
 For an example of how the waveform ratio $r(f)$ looks, see @fig-projected-lgwa-waveforms-ratio, where it is computed with the Lunar Gravitational Wave Antenna.
 
-### Reduced order quadrature
+### Reduced order quadrature {#sec-reduced-order-quadrature}
 
-Whereas relative binning seeks to closely approximate the likelihood in the region where waveforms look like what was measured, reduced order quadrature allows us to obtain a representation which is valid for any point in the prior space [@morisakiRapidLocalizationInference2023].
+Whereas relative binning seeks to closely approximate the likelihood in the region where waveforms look like what was measured, reduced order quadrature allows us to obtain a representation which is valid for any point in the prior space [@tiglioReducedOrderSurrogate2022;@morisakiRapidLocalizationInference2023].
 
 The equations to approximate the terms in the likelihood are somewhat similar: some weights $\omega$ and $\psi$ are pre-computed, then the waveform is evaluated on a sparse grid and multiplied by these.
 $$
