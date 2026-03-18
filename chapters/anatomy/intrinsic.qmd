@@ -103,8 +103,9 @@ Also see @romero-shawBayesianInferenceCompact2020 for the definitions of these p
 
 ![Diagram of the angles involved in the description of generic spins, from @dupletsaValidatingPriorinformedFishermatrix2025. ](figures/spin-angles.pdf){#fig-spin-diagram}
 
-Due to precession, the orbital angular momentum $\vec{L}$ and the spins $\vec{S}$ are time-dependent. The total angular momentum $\vec{J}$, on the other hand, is conserved, so is its angle with the observation direction $\theta_{\text{JN}}$, as the magnitudes of the spins $a_{i}$.
-The four remaining parameters --- two tilts and two azimuthal angles --- evolve through precession, and thus need to be specified at a given reference frequency.
+Due to precession, the orbital angular momentum $\vec{L}$ and the spins $\vec{S}$ are time-dependent. The total angular momentum $\vec{J}$ is not exactly conserved for an inspiralling, precessing binary [@boyleGeometricApproachPrecession2011], but we can consider a reference frame aligned to its value early in the evolution of the binary, $\vec{J} = \lim_{ t \to -\infty }\vec{J}(t)$, so its angle with the observation direction $\theta_{\text{JN}}$ is a well-defined parameter [@prattenComputationallyEfficientModels2021].
+The magnitudes of the spins $a_{i}$ are exactly conserved. 
+The four remaining parameters --- two tilts and two azimuthal angles --- measurably evolve through precession, and thus need to be specified at a given reference frequency.
 
 The angle between orbital angular momentum and observation direction, or _inclination angle_, is denoted as $\iota = \arccos(\vec{L}\cdot \vec{N})$. In the aligned-spin case $\iota = \theta_{\text{JN}}$ is constant, but in general $\iota$ is a time-dependent quantity.
 

@@ -167,10 +167,11 @@ as long as we reabsorb the coefficients into the amplitude.
 #### Twisting: the construction of precessing frequency-domain waveforms {#sec-twisting}
 
 The construction of precessing gravitational waveforms is 
-generally performed by computing them in a non-inertial, precessing frame aligned with the orbital angular momentum $\vec{L}$, and then converting to the inertial, frame aligned with the total angular momentum $\vec{J}$ by means of a time-dependent rotation [@prattenComputationallyEfficientModels2021, eq. 3.3]:
+generally performed by computing them in a non-inertial, precessing frame aligned with the orbital angular momentum $\vec{L}$, and then converting to the approximately inertial frame aligned with the total angular momentum $\vec{J}$ by means of a time-dependent rotation [@prattenComputationallyEfficientModels2021, eq. 3.3]:
 $$
 h_{\ell m}^{J} = \sum _{m'=-\ell}^{\ell} \mathcal{D}_{m'm}^{\ell *}(\alpha, \beta, \gamma) h_{\ell m'}^{L}\,.
 $$
+This choice is not unique, and the $\vec{J}$ vector is not exactly conserved for an inspiralling, precessing system [@boyleGeometricApproachPrecession2011]; we can use its value at a given moment (such as $t \to - \infty$) as a reference.
 
 This is useful because the gravitational waves in the precessing frame are quite close to those which would be emitted by a non-precessing binary. 
 
@@ -181,6 +182,11 @@ $$
 $$
 where the $\mathcal{d}_{m'm}^{\ell}$ are the Wigner $d$-function, defined in @eq-wigner-d-functions. 
 The three Euler angles $\alpha$, $\beta$ and $\gamma$ are time-dependent.
+They allow for more freedom than necessary: we seek a rotation mapping $\vec{L}$ to $\vec{J}$, and several rotations accomplish this goal. Once the angles $\alpha$ and $\beta$ are determined to track the correct rotation, $\gamma$ can be gauge-fixed such that
+$$
+\dot{\gamma} = - \dot{\alpha} \cos \beta\,,
+$$
+which enforces a lack of rotation in the precessing frame about $\vec{L}$ [@boyleGeometricApproachPrecession2011]. 
 
 After some computation, one gets the following expression for the positive-frequency waveforms in the inertial frame:
 $$

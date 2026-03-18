@@ -698,7 +698,7 @@ For GW250114 we could have chosen a longer observation, but as most of the SNR i
 
 The total SNR for GW170817 as seen by LGWA is 21.9, that of GW250114 is 34.8.
 
-#### Limitations
+#### Limitations {#sec-lgwa-pe-limitations}
 
 The procedure we employ regarding the response is equivalent to performing inference assuming that 
 
@@ -765,8 +765,12 @@ The Einstein Telescope exhibits extremely precise posterior distributions for bo
 
 ![Posterior distribution for the chirp mass, mass ratio and effective spin parameters of our GW250114-like injection.](figures/mchirp_q_lgwa_vs_et.pdf){#fig-lgwa-gw250114-mqchi width=80%}
 
+An important technical aspect to note is the fact that the relative precision on the detector-frame chirp mass of this observation, better than one part in $10^{5}$, requires us to precisely account for the Doppler shift between reference frames in a multi-detector context: 
+as we discussed in @sec-timing-general, ground based observations often use a geocentric frame, which can be approximated as _moving with constant velocity_, but not as _stationary_ compared to the SSB: at this precision level on the chirp mass, the distinction is appreciable. 
+
 While the chirp mass itself does not have a particular astrophysical significance, these analyses provide an indication of the LGWA's sensitivity to tiny fluctuations at low PN order, which affect the long-duration frequency evolution of the signal.
 We expect this to mean it will be very effective at constraining other effects, such as contributions from dark matter in the environment, or eccentricity, both of which modify the frequency evolution.
+
 
 ## Reference frames for long observations {#sec-lgwa-reference-frames}
 
@@ -941,7 +945,7 @@ Neglecting the terms depending on $\gamma$, which is subdominant for a relativel
 Finally, in @fig-minimum-uncertainty-velocity we show the velocity of the point $\vec{r}_\text{min} (t(f))$, where we compute the time associated with frequency $f$ based on a SPA of the injected signal. 
 We can see that, even though its motion is obtained exclusively by post-processing posterior samples, it retains a certain memory of the detector's trajectory through the Solar System. 
 
-### Spanned area scaling validation
+### Spanned area scaling validation {#sec-area-validation}
 
 Fisher results (@eq-wen-chen-area) suggest that the sky localization obtained with a long observation scales with the inverse of the area, all else being equal.
 
@@ -967,7 +971,40 @@ We perform these injections in three setups:
 
 The shapes of the localization areas are shown in @fig-injections-sky-areas, while @fig-injections-vs-wen-chen summarizes the comparison between these setups and the Fisher expression.
 
-![Sky localization areas for the 12 month normalized injections.](figures/sky_locs.pdf){#fig-injections-sky-areas width=80%}
+![Sky localization areas for the 12 month normalized injections.](figures/sky_locs.pdf){#fig-injections-sky-areas width=90%}
 
-![](figures/sky_loc_vs_theory.pdf){#fig-injections-vs-wen-chen width=80%}
+![Comparison between the Fisher expectation for the sky localization and the injections performed in the three scenarios described in @sec-area-validation.](figures/sky_loc_vs_theory.pdf){#fig-injections-vs-wen-chen width=60%}
 
+The bimodality in sky position which we observe in the full injection (@fig-lgwa-gw250114-sky) is only retained in the 12 month case with all parameters. 
+The simplified scenarios fix the inclination angle and are therefore unable by construction to reproduce it. 
+In the runs lasting 11 months or less with all parameters, the SNR is more evenly distributed across the observation, enabling more precise localization through phase alone, thus removing the degeneracy with inclination.
+
+As a general pattern, we see how the qualitative Fisher prediction is validated for all but the 12 month case: the sky localization area decreases with the number of months, even though the SNR is kept constant, driven mostly by the change in area; the frequency increases slightly through the injections, but not nearly enough to explain the effect.
+
+The failure of the prediction in the 12 month case, with the localization worsening again, is due to the non-uniform accumulation of SNR, with most of it coming from the last few days of observation. 
+We validate this intuition through the __simplified, uniform SNR__ scenario, in which the SNR is accumulated at a constant rate over time - we obtain this by artificially setting a PSD in the form $S_{n}(f) \propto f^{4/3}$. 
+
+::: {#nte-uniform-snr-over-time .callout-note collapse="true"}
+
+##### How to obtain uniform SNR over time
+
+For the purpose of validating our intuition, we want to construct a PSD such that the accumulation of SNR over time is uniform, i.e. the SNR obtained in any given month is equivalent to another.  
+The $22$ mode of the signal has an amplitude scaling with $f^{-7/6}$;
+projecting the signal introduces month-long modulation, which we average over by only looking at integer numbers of months. 
+The SNR integrand in time, which we want to be constant, reads as follows when setting an arbitrary power-law PSD with $S_{n}(f) \propto f^{\kappa}$:
+$$
+\frac{|h(f)|^2}{S_n(f)} \text{d}{f} \propto \frac{f^{-14/6}}{f^{\kappa}} \frac{\text{d}{f}}{\text{d}{t}} \text{d}{t}\,,
+$$
+and we can obtain the next term by differentiating $t(f) \propto f^{-8/3}$. 
+This leads us to $\kappa=4 / 3$.
+
+:::
+
+In all cases, the Fisher approximation overestimates the sky sensitivity of our detector; however, it should be stressed that even when accounting for this effect, the LGWA can still achieve better sky localization than pairs of ground-based interferometers, despite lower SNRs.
+
+This analysis allows us to determine the crucial features of the signals which a deci-Hertz detector will precisely localize: they should be observed for a long time, at least a _few months_, and their SNR should be _well-distributed_ across the observation.
+This points to light sources, with component masses $M \lesssim 30 M_{\odot}$. 
+Heavier binaries will have high SNRs, and their intrinsic parameters will be well-constrained, but their localization will not be very precise.
+
+Another intuition we can get from this analysis is that that the hour-long data gaps the LGWA will likely experience, though not yet included in our simulations (see @sec-lgwa-pe-limitations), will not significantly impact sky localization, as long as we can maintain phase coherence across them.
+This is because the convex hull of the observation is not significantly affected by them, as on those scales the detector's motion is nearly linear.
