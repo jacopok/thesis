@@ -284,7 +284,10 @@ This result can lead us to reflect on the meaning of the prior on eccentricity: 
 
 ## Tidal parameters {#sec-tidal-parameters}
 
-Objects such as neutron stars can be deformed by the tidal gravitational field caused by the presence of a nearby object, such as the binary companion.
+Objects such as neutron stars can be deformed by the tidal gravitational field caused by the presence of a nearby object, such as the binary companion. 
+This deformation enhances the gravitational attraction between the two objects,
+but it is only effective at relatively short separations: the net effect, therefore,
+is to leave the early inspiral almost unchanged, while accelerating its late stages.
 
 In the static case, this tidal field can be expressed as $\mathcal{E}_{ij}=C_{0i0j}$, where $C$ is the Weyl curvature tensor [@misnerGravitation1973; eq. 13.50], the trace-free component of the Riemann curvature tensor. At leading order, this tidal field will induce a quadrupole moment $Q_{ij}$, given by 
 

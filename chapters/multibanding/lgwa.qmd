@@ -230,17 +230,25 @@ Displacement sensitivity curves similar to those in @fig-lgwa-displacement-noise
 While a PSR is undoubtedly a quiet place, it is warranted to ask whether the seismic environment of the Moon can interfere with gravitational wave measurements, or prevent them entirely.
 @coughlinConstrainingGravitationalWave2014 analyzed one year of data from the ALSEP mission, which consisted of four seismometers deployed on the near side of the Moon by the Apollo 12, 13, 14 and 16 missions.
 
-The seismic vibrations in this dataset were significantly driven by thermal stresses, which increase at local dawn and dusk. Furthermore, they included the effect of tidal stresses, moonquakes, and asteroid impacts.
-
 ![Upper bound on the lunar seismic spectrum, from [@coughlinConstrainingGravitationalWave2014]. The dashed lines indicate the minimum and maximum for a model of seismic noise on the Earth.](figures/Moon-noise-spectrum.png){#fig-lunar-seismic-spectrum width=60%}
 
 In @fig-lunar-seismic-spectrum one can see the average of this measurement. 
-The value is a few orders of magnitude lower than the minimum one can get on the Earth, but also significantly higher than the required displacement sensitivity for the LGWA.
-This is a major challenge for the mission, and more measurements are needed to quantify its impact. We do, however, have reason to believe that the situation for the LGWA will be better than what taking this spectrum at face value would imply:
+The flat spectrum at around $10^{-10} \text{m} / \sqrt{\text{Hz}}$ 
+is an upper limit, as the instrument's precision limited 
+the measurement from reaching lower values. 
+Despite this, it is considerably lower than the minimum achieved anywhere on Earth (dash-dotted curve).
 
-1. operation in a PSR implies the absence of dawn and dusk, completely removing a significant contribution to the spectrum;
-2. the intra-station distance among the four seismometers is planned to be close enough that the seismic signal from GWs is strongly is correlated among them, but far enough that events such as meteorite impacts arrive at each station with measurably different amplitude and phase, and can therefore be subtracted.
+From theoretical considerations, we expect the actual seismic background to be significantly lower;
+furthermore, a spectrum computed this way is not necessarily representative of the "typical" spectrum
+one would observe at any given time on the Moon: it is a root-mean-square taken over a year,
+which means it considers the contribution of loud events which are well-localized in time.
+For the purposes of the LGWA, these may simply lead to a fraction of the data, as opposed to making
+the entirety of the data too noisy. 
 
+The LGWA will also operate in a PSR without dawns or dusks, removing their thermal stresses as a noise source.
+Finally, the intra-station distance among the four seismometers is planned to be close enough that the seismic signal from GWs is strongly is correlated among them, but far enough that events such as meteorite impacts arrive at each station with measurably different amplitude and phase, and can therefore be subtracted.
+
+Nevertheless, more measurements are needed to quantify the impact of the lunar seismic background. 
 Moonquakes remain a significant issue, and it is likely that some fraction of the data will need to be unusable due to their effect. The low damping of the lunar regolith makes their duration much longer than what typically happens on Earth, as illustrated in @fig-moonquake-duration.
 
 ![Comparison between a moonquake detected within the Apollo 12 mission and an earthquake. From @steinIntroductionSeismologyEarthquakes2009.](figures/moonquake.jpg){#fig-moonquake-duration width=60%}
@@ -260,13 +268,28 @@ The recent years have seen significant theoretical and computational advancement
 @biResponseMoonGravitational2024 investigated the impact of a layered geological structure using a half-space model, showing that it can significantly amplify the lunar response compared to a uniform Moon.
 A significant amount of work has also been recently performed regarding numerical simulations of the lunar response [@zhangNumericalSimulationLunar2025; @zhangSuperAmplificationLunar2025; @zhangThickLunarCrust2026].
 
-The scalar lunar response $L$ is a function of frequency with units of length, and it is defined as the ratio between the amplitude of the surface displacement $s$ and the amplitude of the gravitational wave strain $h$ which drives it, assuming that both are monochromatic with a frequency $f_{0}$:
+For the remainder of this discussion, we will make two strong assumptions:
+
+1. the lunar response is _linear_, meaning that a gravitational wave at a frequency $f_0$ only induces a 
+	seismic response with the same frequency, without exciting any other vibration;
+1. the lunar response has zero phase: the vibration excited is in phase with its source.
+
+Neither of these are going to be exactly realized in practice, 
+and relaxing them is an important part of future efforts. 
+We expect that the zero-phase assumption will be significantly violated in practice,
+but this is immaterial for the purposes of the studies in this work. 
+As we will discuss in @sec-lgwa-pe-limitations, 
+we perform injections assuming the response is known, 
+which means that any assumption we could make about the response's phase would be exactly 
+cancelled within our likelihood. 
+
+Under these assumptions, the scalar lunar response $L$ is a function of frequency with units of length, and it is defined as the ratio between the amplitude of the surface displacement $s$ and the amplitude of the gravitational wave strain $h$ which drives it:
 $$
 L(f_{0}) = \frac{s(t;f_{0})}{h(t; f_{0})}\,,
 $$
-where the amplitude of the gravitational wave is obtained by contracting the gravitational wave strain tensor $h_{ij}$ with a geometric detector response $\hat{D}_{ij}$.
+where the amplitude of the gravitational wave is obtained by contracting the gravitational wave strain tensor $h_{ij}$ with a geometric detector response $\hat{D}_{ij}$, and where the strain is assumed to be a monochromatic wave with a frequency $f_{0}$.
 
-Here we limit ourselves to a simple justification, within Dyson's description of the problem in the transverse-traceless gauge as outlined by @biResponseMoonGravitational2024, of the geometry of the detection tensor.
+Here we limit ourselves to a simple justification, within Dyson's description of the problem in the transverse-traceless gauge as outlined by @biResponseMoonGravitational2024, of the geometry of the detection tensor $\hat{D}_{ij}$.
 The LGWA sensors will be set up to measure horizontal vibration, as most of the seismic waves near the surface are expected to be vertically propagating shear waves.
 Within the Dyson description, gravitational waves couple to the elastic medium through the gradient of the shear modulus $\nabla _{i}\mu(\vec{r})$, giving rise to an effective force term in the form
 $$
