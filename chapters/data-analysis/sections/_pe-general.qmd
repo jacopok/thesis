@@ -5,19 +5,19 @@ the backbone of all gravitational wave data analysis.
 This theory is of general validity, and it does not require us to 
 restrict ourselves to the gravitational wave application quite yet.
 
-When performing the analysis of some data $d$ according to some model $M$ parameterized by some finite number of parameters $\theta$, we employ Bayes' theorem, which is derived by expressing the joint probability $\text{prob}(d, \theta | M)$ in two different ways: 
+When performing the analysis of some data $d$ according to some model $M$ parameterized by a finite number of parameters $\theta$, we employ Bayes' theorem, which is derived by expressing the joint probability $\text{prob}(d, \theta | M)$ in two different ways: 
 
 $$ \text{prob}(d, \theta | M) = \mathcal{L}(d | \theta, M) \pi (\theta | M) = p(\theta | d, M) \mathcal{Z}(d | M)\,.
 $${#eq-bayes-theorem} 
 
 The entries in this equation are: 
 
-- the _likelihood_ $\mathcal{L}$ of the data given the model and a specific choice of its parameters - it is a probability distribution over the data (i.e. $\int \mathcal{L}(d|\theta, M) \text{d}d = 1$), but we interpret it as a function of the parameters $\theta$ while the data are fixed;
+- the _likelihood_ $\mathcal{L}$ of the data given the model and a specific choice of its parameters - it is a probability distribution over the data (i.e. $\int \mathcal{L}(d|\theta, M) \text{d}d = 1$), but we interpret it as a function of the parameters $\theta$, since the data we observed are fixed;
 - the _prior_ $\pi$ - a representation of our beliefs about the model's parameters before seeing the data, it is a probability distribution over the parameters;
 - the _posterior_ $p$ for the model's parameters - a representation of our updated beliefs about them after seeing the data, it is a probability distribution over the parameters;
 - the _evidence_ $\mathcal{Z}$ for the model - a normalization constant for the posterior, or the likelihood for the data marginalized over all the model's parameters.
 
-The likelihood and prior are part of the problem definition, and can often be readily computed at any given value of the parameters.^[This is not true for all approaches: in Simulation-Based Inference (SBI, see @sec-simulation-based-inference) the likelihood may be implicitly defined; nevertheless, Bayes' theorem underlies those analyses as well.]
+An explicit formulation of the likelihood and prior is generally part of the problem definition, and can often be readily computed at any given value of the parameters.^[This is not true for all approaches: in Simulation-Based Inference (SBI, see @sec-simulation-based-inference) the likelihood may be implicitly defined; nevertheless, Bayes' theorem underlies those analyses as well.]
 
 If the parameter space is high-dimensional, evaluating the posterior on a grid quickly becomes unpractical. 
 A common solution to this issue is to use stochastic methods, which allow us to obtain a set of samples $\theta _i$ distributed according to the posterior and from which we can obtain information as discussed in @sec-posterior-samples.
@@ -29,12 +29,13 @@ Machine learning-based methods such as Simulation-Based Inference (@sec-simulati
 ### Posterior samples {#sec-posterior-samples}
 
 What we refer to as "computing the posterior" means obtaining a useful representation for it.
-For example, a common quantity we are interested in are the _marginal distributions_ of single parameters. The marginal posterior for the parameter $\theta_{i}$ is defined by integrating over all the other parameters, _i.e._ _marginalizing_: 
+For example, we are often interested in the _marginal distributions_ of single parameters. 
+The marginal posterior for the parameter $\theta_{i}$ is defined by integrating over all the other parameters, _i.e._ _marginalizing_: 
 $$
 p(\theta_{i}|d) = \int \left( \prod_{k\neq i} \text{d}\theta_{k} \right) p(\theta| d)\,.
 $$
 The marginal distribution over two or more parameters can be defined analogously, by integrating along all dimensions except for the ones at hand.
-Marginal distributions are the best approximation for what out posterior belief about the given parameter(s) should be; they include all the uncertainty on that parameter driven by the uncertainty in other, related parameters. @fig-marginalizing-vs-conditioning illustrates this by comparing the marginal distribution with the _conditional_ distribution, obtained by fixing the values of the other parameters to some value: 
+Marginal distributions are the best approximation for what out posterior belief about the given parameter(s) should be; they include all the uncertainty on that parameter driven by the uncertainty in other, related parameters. @fig-marginalizing-vs-conditioning illustrates this by comparing the marginal distribution to the _conditional_ distribution, obtained by fixing the values of the other parameters to some value: 
 $$
 p(\theta_{i}|d, \left\{ \theta_{k}^{0} \right\}_{k \neq i})
 =
@@ -42,11 +43,11 @@ p(\theta|d) \text{ computed at } \left\{ \theta_{k} = \theta_{k}^{0} \right\}_{k
 \,.
 $$
 
-Conditional distributions generally have less variance than their respective marginals, but unless we have a reason (such as a different observation) to specifically choose a given value for the other parameters, they are inaccessible in real parameter estimation.
+Conditional distributions typically have less variance than their respective marginals, but unless we have a reason (such as a different observation) to specifically choose a given value for the other parameters, they are inaccessible in real parameter estimation.
 
 ```{python}
 #| label: fig-marginalizing-vs-conditioning
-#| fig-cap: "An illustration of the difference between marginalizing and conditioning in the case of a multivariate Gaussian distribution."
+#| fig-cap: "An illustration of the difference between marginalizing and conditioning for a multivariate Gaussian distribution."
 
 from thesis_scripts.multivariate_normal import MultivariateNormal
 n = MultivariateNormal([0, 0], [[1, 0.8], [0.8, 1]])
@@ -54,12 +55,13 @@ n.plot_2d_analytical(0, 0, .9)
 ```
 
 A set of $N$ samples^[We represent these samples with two indices: a lower one indicating the dimension in the parameter space, and an upper one in parenthesis indicating the number of the sample.] $\left\{ \theta^{(k)} \right\}_{k}$ can be used to represent a high-dimensional posterior distribution. 
-This is convenient, since we can marginal distributions are trivially obtained from these by only considering one of their entries, since $\left\{ \theta_{i}^{(k)} \right\} \sim p(\theta_{i}|d)$.
+This is convenient, since marginal distributions are trivially obtained from these by only considering one of their entries, since $\left\{ \theta_{i}^{(k)} \right\} \sim p(\theta_{i}|d)$.
 
 We can easily compute a number of summary statistics from samples, such as the expectation value of any function $f(\theta)$ [@thraneIntroductionBayesianInference2019]:
 
 $$ \langle f \rangle_{\theta \sim p(\theta | d, M)} \approx \frac{1}{N} \sum _{k=1}^N f(\theta^{(k)}) \,.
 $$
+
 This general expression can be used for many different applications:
 
 - the mean and variance of a parameter $\theta_{i}$ can be obtained by setting $f=\theta_{i}$ and $f= (\theta_{i} - \langle \theta_{i} \rangle)^{2} N/ (N-1)$ respectively;
@@ -68,12 +70,13 @@ This general expression can be used for many different applications:
 
 Working with samples also has disadvantages. 
 For example, conditional distributions, which we are sometimes interested in, are difficult to obtain. 
-Furthermore, in certain applications an estimate of the underlying density function is useful, 
-but it is hard to obtain, though some techniques exist including Kernel Density Estimation and normalizing flows (@sec-normalizing-flows).
+Furthermore, in certain applications an estimate of the underlying density function is necessary. 
+Techniques to obtain it exist, including Kernel Density Estimation and normalizing flows (@sec-normalizing-flows),
+but they are not closed-form computations and often require tuning.
 
 #### Credible regions {#sec-credible-regions}
 
-A common method to quantify the uncertainty in the estimate of a parameter is to compute some kind of Bayesian Credible Interval with a given confidence $X$; in the gravitational wave literature, $X=0.9$ is generally the standard choice. 
+A common method to quantify the uncertainty in the estimate of a parameter is to compute some kind of Bayesian Credible Interval with a given confidence $X$; in the gravitational wave literature, $X=0.9$ is generally the choice. 
 
 There are different ways to define such an interval, depending on the problem at hand. 
 If a parameter is bounded, and its posterior exhibits significant mass near the boundary, a single-sided interval is often given:
@@ -99,15 +102,18 @@ $$
 $$
 These kind of intervals are commonly adopted due to the ease of their computation, which reduces to computing quantiles of the $p(\theta_{i}|d)$ distribution, either at $X$ or $1-X$ (for the one-sided case) or at $(1-X) / 2$ and $(1+X) / 2$ (for the symmetric case).
 
-Another method to quantify the uncertainty on one or more parameters is the _Highest Probability Density_ )HPD region.
+Another method to quantify the uncertainty on one or more parameters is the _Highest Probability Density_ (HPD) region.
 This is a region defined as $R(X) = \left\{ \theta | p(\theta|d) \geq K(X) \right\}$, where the value of $K$ is chosen such that 
+
 $$
 \int_{R(X)} p(\theta|d) \text{d}\theta = X\,.
 $$
-For a univariate, unimodal distribution this is the shortest possible interval which contains a probability mass $X$, and it can be computed quickly by sorting the samples, computing all possible interval widths and choosing the minimum.
 
-However, this technique will fail with no warning if the posterior distribution is not unimodal.
-A computationally expensive but more expensive way to estimate this region is: 
+For a univariate and unimodal distribution, this is the shortest possible interval which contains a probability mass $X$, and it can be computed quickly by sorting the samples, computing all possible interval widths and choosing the minimum.
+
+However, this technique will fail with no warning if the posterior distribution is not unimodal, 
+since then the HPD may consist of disjoint intervals.
+A computationally expensive, but more accurate way to estimate this region is: 
 
 - discretizing the parameter space for the variables of interest into bins;
 - estimating the probability density in each bin (this is often performed with a KDE, since counting the samples in each bin is affected by high variance); 
@@ -118,7 +124,7 @@ The $n$ bins obtained will represent the desired region.
 
 #### Weighted samples {#sec-weighted-samples}
 
-Some algorithms, such as Nested Sampling [@sec-nested-sampling] or importance-sampled Neural Posterior Estimation [@sec-importance-sampling-npe], can return a set of _weighted_ samples. 
+Some algorithms, such as Nested Sampling (@sec-nested-sampling) or importance-sampled Neural Posterior Estimation (@sec-importance-sampling-npe), can return a set of _weighted_ samples. 
 This means that each sample $\theta_{i}$ is associated with a weight $w_{i}$.
 Weighted samples can also arise in the context of _reweighting_: slightly perturbing the assumptions underlying an analysis and thus obtaining a set of weights in the form
 $$
@@ -130,7 +136,7 @@ $$ \langle f \rangle_{\theta \sim p(\theta | d, M)} \approx \frac{\sum _{i=1}^N 
 $$
 Based on this, all the quantities that could be obtained as described in @sec-posterior-samples can be retrieved with weighted samples as well.
 
-We can also extract equally-weighted samples from weighted ones by __rejection sampling__ [@ashtonReconstructingResamplingGuide2025]:
+We can also extract equally-weighted samples from weighted ones by __rejection sampling__ [see _e.g._ @ashtonReconstructingResamplingGuide2025 for a review]:
 
 1. Establish the highest weight, $w _\text{max} = \max w_{i}$;
 2. for each sample $\theta_{i}$: 
@@ -139,15 +145,14 @@ We can also extract equally-weighted samples from weighted ones by __rejection s
 	3. if $r<x$, keep the sample $\theta_{i}$, otherwise, remove it.
 
 On average, this procedure will retain $n\langle w \rangle / \max w$ out of $n$ samples; if many of the weights are lower than their maximum, it can become quite inefficient. 
-In fact, under the realistic assumption of the weights being log-normally distributed, it can be shown that working with the weighted samples can be significantly more efficient than performing rejection sampling [@ashtonReconstructingResamplingGuide2025, fig. 3].
+In fact, under the realistic assumption of the weights being log-normally distributed, it can be shown that working with the weighted samples can be significantly more efficient than performing rejection sampling and then working with the resulting equally-weighted samples [@ashtonReconstructingResamplingGuide2025, fig. 3].
 
 ### $p$-$p$ tests {#sec-pp-plot}
 
 Mistrusting the results of our analysis pipelines is wise: we ought to put them through as many tests as possible in order to spot any issues. 
-
-
 A common test for self-consistency is the $p$-$p$ plot, which specifically regards the marginal distributions, $p(\theta_i | d)$ for a fixed $i$. 
-We can test this by performing a campaign of injections, for which the true value $\hat{\theta_{i}}$ is known: every time, we need to generate a realistic simulation of the data $d$ and analyze it feigning ignorance of the true value. 
+
+This test starts with a campaign of injections, for which the true value $\hat{\theta_{i}}$ is known: every time, we need to generate a realistic simulation of the data $d$ and analyze it, feigning ignorance of the true value. 
 Then, we may compute the percentile of the distribution at which the true value lies:
 $$
 u = \int_{-\infty}^{\hat{\theta}_{i}} p(\theta_{i}| d) \text{d}\theta = \text{CDF}_{p(\theta_{i}| d)}(\hat{\theta}_{i})\,.
@@ -177,7 +182,8 @@ The probability for each of them being smaller than $u$ is $u$ itself, so the pr
 $$
 p \left( P (u) = \frac{k}{N_\text{inj}} \right) = {k\choose N_\text{inj}} u^{k} (1-u)^{N _\text{inj}-k}
 $$
-Therefore we can easily compute its mean and variance, $\langle P(u) \rangle =u$ and
+
+Therefore we can easily compute its mean and variance: $\langle P(u) \rangle =u$ and
 $$
 \langle (P(u) -u)^{2} \rangle = \frac{u(1-u)}{N_\text{inj}}\,.
 $$
@@ -198,11 +204,15 @@ fig, ax = pp_plot.pp_plot(u, confidence_intervals=(.68, .95, .997))
 plt.show()
 ```
 
-Along with the plots we show the values, and corresponding $p$-values, for the one-sided Kolmogorov-Smirnov [@kolmogorovSullaDeterminazioneEmpirica1933;@smirnovTableEstimatingGoodness1948] statistics $D_{+}$ and $D_-$, defined in terms of the empirical CDF as
+Along with the visual tests, we can perform a Kolmogorov-Smirnov test, 
+which can give us a $p$-value computed under the null hypothesis of the distribution being uniform.
+
+In @fig-pp-plot-theory we show these for the one-sided Kolmogorov-Smirnov [@kolmogorovSullaDeterminazioneEmpirica1933;@smirnovTableEstimatingGoodness1948] statistics $D_{+}$ and $D_-$, defined in terms of the empirical CDF as
 
 $$
 D_{\pm} = \sup_{u} \left[ \pm \left( P_{\text{emp}}(u) - u \right)  \right]\,.
 $$
+
 We will always have $D_{\pm}\geq {0}$, since by definition $P _\text{emp}(0)= 0$, meaning that the set of values we are taking the $\text{sup}$ of includes 0. 
 One may also use the two-sided statistic
 $$
@@ -212,7 +222,7 @@ $$
 We show both one-sided tests as opposed to the two-sided one, since their values can be used together to distinguish different types of misspecification, as we illustrate in @sec-pp-test-failure-modes. 
 The density function of the K-S statistics under the null hypothesis is shown in @fig-kolmogorov-smirnov-distribution. 
 The densities for the $D_{\pm}$ functions are identical - the transformation $u \to 1-u$ maps one to the other, and the null hypothesis is invariant under this reflection.
-The scenario $D \approx 0$ is unlikely, as it would require the variates to precisely align themselves in an equally spaced pattern. On the other hand, $D_{\pm}$ being close to zero is plausible, as it only requires the realization to mostly be above the uniform CDF.
+The scenario $D \approx 0$ is unlikely, as it would require the variates to precisely align themselves in an equally spaced pattern. On the other hand, $D_{\pm}$ being close to zero is plausible, as it only requires the realization to mostly be above or below the uniform CDF.
 
 ```{python}
 #| label: fig-kolmogorov-smirnov-distribution
@@ -221,6 +231,8 @@ The scenario $D \approx 0$ is unlikely, as it would require the variates to prec
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
+
+plt.figure(figsize=(6, 2.5))
 
 D = np.linspace(0, 0.07, num=500)
 n = 1000
@@ -234,15 +246,15 @@ plt.ylabel('Probability density')
 plt.show()
 ```
 
-These tests are common in the literature: they were performed, for example, with the software `BILBY` [@romero-shawBayesianInferenceCompact2020]; more details can also be found in @romero-shawWhenModelsFail2022.
-Within `nessai` [@williamsNestedSamplingNormalising2021] a $p$-$p$ plot test is applied to the insertion indices of new nested samples, _i.e._ the index of the new sample when ranking all previous live points by likelihood. As we shall discuss in @sec-nested-sampling, the new sample should be drawn uniformly in the likelihood-constrained prior mass. If this is the case, and the previous samples are also uniform in the variable $X$ (which denotes prior mass), then this insertion index should be uniformly distributed between $0$ and $n _\text{live}$, which can be investigated with a $p$-$p$ plot.
+These tests are common in the literature: they were performed, for example, for the software `BILBY` [@romero-shawBayesianInferenceCompact2020]. 
+More details on them can also be found in @romero-shawWhenModelsFail2022.
+Within the sampler `nessai` [@williamsNestedSamplingNormalising2021], a $p$-$p$ plot test is applied to the insertion indices of new nested samples, _i.e._ the index of the new sample when ranking all previous live points by likelihood. As we shall discuss in @sec-nested-sampling, the new sample should be drawn uniformly in the likelihood-constrained prior mass. If this is the case, and the previous samples are also uniform in the variable $X$ (which denotes prior mass), then this insertion index should be uniformly distributed between $0$ and $n _\text{live}$, which can be investigated with a $p$-$p$ plot.
 Note that in that case, overconstraining of the distribution being sampled will not correspond to overconstraining in terms of _insertion indices_, but instead be equivalent to an underestimation bias, with more quantiles near the top-end of the distribution.^[Also note that the nessai diagnostic plots are set up to show a quantity defined with an opposite sign compared to this work, equivalent to the difference $u - P(u)$.]
 
 ### $p$-$p$ test failure modes {#sec-pp-test-failure-modes}
 
 Let us now explore the way that $p$-$p$ plots look when the test fails. 
-
-However, while we will keep the distribution according to which the true parameter $\hat{\theta}$ is distributed fixed to the standard normal, centered on zero and with unit variance, we will explore how the $p$-$p$ plot can help us diagnose errors in the estimated posterior distribution.
+We will keep the distribution according to which the true parameter $\hat{\theta}$ is distributed fixed to the standard normal, centered on zero and with unit variance, and we will explore how the $p$-$p$ plot can help us diagnose errors in the estimated posterior distribution.
 
 First, let us suppose we have a bias in our measurement, so that the posterior distribution is not centered at the true value, 0, but instead at a slightly higher one, say 0.2. We will consider a simple Gaussian model, so that
 $$
@@ -251,6 +263,8 @@ p(\theta|d) &= \mathcal{N}(\theta; \mu=0.2, \sigma=1)\\
 p(\hat{\theta}|d) &= \mathcal{N}(\theta; \mu=0, \sigma=1)\,.
 \end{aligned}
 $$
+
+The result is in @fig-pp-plot-bias-positive.
 
 ```{python}
 #| label: fig-pp-plot-bias-positive
@@ -268,7 +282,7 @@ fig, ax = pp_plot.pp_plot(u, confidence_intervals=(.68, .95, .997))
 plt.show()
 ```
 
-Suppose instead that the bias is in the negative direction:
+@fig-pp-plot-bias-negative shows what happens if the bias is in the negative direction:
 $$
 \begin{aligned}
 p(\theta|d) &= \mathcal{N}(\theta; \mu=-0.2, \sigma=1)\\
@@ -320,7 +334,8 @@ fig, ax = pp_plot.pp_plot(u, confidence_intervals=(.68, .95, .997))
 plt.show()
 ```
 
-In the opposite scenario, we are _overconstraining_, assigning a lower uncertainty to our measurement than is warranted: for example,
+@fig-pp-plot-bias-underconstrain shows the result. 
+In the opposite scenario, we are _overconstraining_ (@fig-pp-plot-bias-overconstrain), assigning a lower uncertainty to our measurement than is warranted: for example,
 $$
 \begin{aligned}
 p(\theta|d) &= \mathcal{N}(\mu=0, \sigma=0.8)\\
@@ -358,14 +373,17 @@ from scipy import stats
 
 beta = 2.5
 var = stats.gennorm.stats(beta, moments='v')
+plt.figure(figsize=(6, 2.5))
 
 dist = stats.gennorm(beta=beta, loc=0, scale=1/np.sqrt(var))
-vals = np.linspace(-4., 4., num=1000)
+vals = np.linspace(-4., 6., num=1000)
 plt.plot(vals, stats.norm(loc=0, scale=1).pdf(vals), label='Standard normal')
 plt.plot(vals, dist.pdf(vals), label=f'Generalized normal with $\\beta={beta}$')
 plt.ylim(0,0.5)
-plt.xlim(-4, 4)
+plt.xlim(vals[0], vals[-1])
 plt.legend()
+plt.xlabel('$\\theta$')
+plt.ylabel('$p(\\theta)$')
 plt.show()
 ```
 
@@ -389,7 +407,7 @@ fig, ax = pp_plot.pp_plot(u, confidence_intervals=(.68, .95, .997))
 plt.show()
 ```
 
-The distribution looks similar to the underconstrained case, as for the bulk of the probability mass (-2 to +2 in figure @fig-generalized-normal) the difference between these distribution is analogous to underconstraining. 
+The distribution looks similar to the underconstrained case, as for the bulk of the probability mass (-2 to +2 in  @fig-generalized-normal) the difference between these distribution is analogous to underconstraining. 
 However, close to the edges in @fig-pp-plot-bias-distributional we can see the trend reverse. 
 
 ### Model comparison {#sec-model-comparison}
@@ -397,13 +415,13 @@ However, close to the edges in @fig-pp-plot-bias-distributional we can see the t
 Why should we care about the evidence $\mathcal{Z}$ when performing inference?
 It is helpful when comparing models. 
 In a realistic scenario, our model $M$ may not adequately capture the behavior of the system at hand,
-but in equation @eq-bayes-theorem, all the terms are conditional on it: 
+but in @eq-bayes-theorem, all the terms are conditional on it: 
 an analysis performed under the assumption that the model is true cannot 
-inform us on its validity by construction.
+inform us on its validity, by construction.
 If more than one model is available, we can make some steps toward 
 addressing this problem by comparing them; still, we should remember that 
 our results are dependent on the set of models we used, and it is possible they may 
-all miss some important aspect.
+_all_ miss some important aspect.
 
 We can write an anologous expressio to @eq-bayes-theorem for both models $M_{1}$ and $M_{2}$:
 $$
@@ -446,8 +464,11 @@ from thesis_scripts import *
 import numpy as np
 import matplotlib.pyplot as plt
 
+plt.figure(figsize=(6, 2.5))
+
 p = np.linspace(5e-3, 1-5e-3, num=500)
 plt.xlabel('$\\mathrm{{logit}}(p)$')
+plt.ylim(0, 1)
 
 plt.plot(np.log(p / (1-p)), p)
 plt.xlabel('$\\mathrm{{logit}}(p)$')
@@ -456,7 +477,7 @@ plt.grid()
 plt.show()
 ```
 
-The logit of a probability $\text{logit}(p) \in \mathbb{R}$, also called __log-odds__, 
+The logit of a probability, $\text{logit}(p) \in \mathbb{R}$, is also called __log-odds__ 
 can be argued to be more natural way to express it than $p\in (0, 1)$. 
 Probabilities very close to 0 or 1 are extreme statements: in this parameterization, they are accordingly very far from the origin, and absolutes such as $p=0, 1$ are divergent towards $\pm \infty$.
 :::
@@ -477,8 +498,11 @@ $$
 $${#eq-savage-dickey-density-ratio}
 Here, model 1 is the special case of model 2 in which parameter $\theta$ equals $\theta_{0}$, $p_{2}$ is the marginal posterior distribution for the parameter $\theta$ under model 2, while $\pi_{2}$ is the marginal prior distribution for the parameter $\theta$ under model 2.
 
+The value of $\pi_2$ computed at any given point is sensitive to how wide the prior is, since it must be a normalized probability distribution. For example, the density of a uniform prior over an interval $A$ is precisely $1/A$.
+
 This formulation illustrates the general fact that Bayes Factors are heavily dependent on the width of the prior distribution.
 This is a well-known feature of Bayesian inference, known as the Occam Factor or Penalty: 
 the preferred models are the "simplest", in the sense that they are compatible with the data for a large fraction of their prior mass; a model which is able to fit a plethora of different scenarios is disfavored compared to one which fits the current one and few others.
 
 A negative consequence of this arises if the prior distributions cannot be selected in a principled way, though: if they are set too wide, the data may seem to favor the baseline model even in the presence of a deviation.
+Then, by the way Bayes Factors are constructed, if the BF for any single observation favors the baseline model, combining many of them from different observations only accumulates evidence against a deviation, even if a small deviation is present and could be detected by a simultaneous analysis of all events.

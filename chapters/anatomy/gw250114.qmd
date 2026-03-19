@@ -11,9 +11,9 @@ format:
 
 # Tests of General Relativity with GW250114 {#sec-gw250114}
 
-On January 14th, 2025, the LIGO-Virgo-KAGRA collaboration detected the clearest binary black hole merger to date. Its signal to noise ratio was almost 80.
+On January 14th, 2025, the LIGO-Virgo-KAGRA collaboration detected the clearest binary black hole merger to date: its signal to noise ratio was higher than 75.
 
-The signal is clearly visible with minimal processing: @fig-gw250114-whitened-strain-simplified shows whitened strain data (see @sec-strain-whitening) from the Hanford and Livingston detectors.
+The signal is clearly visible in the data with minimal processing: @fig-gw250114-whitened-strain-simplified shows whitened strain data (see @sec-strain-whitening) from the Hanford and Livingston detectors.
 
 ![Whitened strain for GW250114 in the Livingston and Hanford detectors. Adapted from @abacGW250114TestingHawkings2025.](figures/Figure_1_simplified.pdf){#fig-gw250114-whitened-strain-simplified width=100%}
 

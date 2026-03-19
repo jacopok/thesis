@@ -67,7 +67,7 @@ def pp_plot(u, confidence_intervals = (.68, .95, .997), ks_test_labels='floating
     theoretical_cdf = x
     estimated_cdf = stats.ecdf(u).cdf.evaluate(x)
 
-    fig, ax = plt.subplots(1, ncols=3, figsize=(8, 8/3))
+    fig, ax = plt.subplots(1, ncols=3, figsize=(8, 2.5))
     nbins = min(len(np.histogram_bin_edges(u, "auto")) - 1, 1000)
 
     # Plot the analytic p.m.f first
@@ -200,6 +200,11 @@ def pp_plot(u, confidence_intervals = (.68, .95, .997), ks_test_labels='floating
     for a in ax:
         # a.legend(loc="lower right")
         a.set_xlim([0, 1])
-        a.set_xlabel("Uniform variates")
+        a.set_xlabel("$u$")
+        
+    ax[0].set_title('Histogram')
+    ax[1].set_title('CDF $P(u)$')
+    ax[2].set_title('Shifted CDF $P(u)-u$')
+    ax[2].yaxis.tick_right()
 
     return fig, ax

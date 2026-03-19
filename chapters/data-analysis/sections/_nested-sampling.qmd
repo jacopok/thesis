@@ -65,6 +65,8 @@ from matplotlib.ticker import FixedLocator, FixedFormatter
 import numpy as np
 import matplotlib.pyplot as plt
 
+plt.figure(figsize=(6, 2.5))
+
 n = 1
 log_t = np.linspace(-3/n, 0)
 p_of_log_t = n * np.exp( n * log_t)
@@ -140,6 +142,8 @@ logX_min = -4
 
 n_live_numbers = [100, 50]
 colors = ['grey', 'black']
+
+plt.figure(figsize=(6, 3.))
 
 for n_live, color in zip(n_live_numbers, colors):
 
@@ -353,16 +357,15 @@ In this case, the curvature of the data is strong enough for the Bayes Factor to
 
 ```{python}
 from IPython.display import Markdown
-for sampler, name in zip([sampler_parabola, sampler_linear], ['parabola', 'line']):
-	print(f'{name}: Z = {sampler.results.logz[-1]:.2f} +- {sampler.results.logzerr[-1]:.2f}')
-
 bayes_factor = sampler_parabola.results.logz[-1] - sampler_linear.results.logz[-1]
 bf_error = np.sqrt(
 	sampler_parabola.results.logzerr[-1]**2 + 
 	sampler_linear.results.logzerr[-1]**2
 )
 
-Markdown(f'The log Bayes factor is {bayes_factor:.2f}$\pm$ {bf_error:.2f} nats in favor of the parabolic model.')
+Markdown(
+	'In this case, the curvature of the data is strong enough for the Bayes Factor to favor the parabolic model (although not by much): '
+	f'The log Bayes factor is ${bayes_factor:.2f}\pm$ {bf_error:.2f}$ nats in favor of the parabolic model.')
 ```
 
 Since the models we are considering were nested, we have a comparison point for our Bayes Factor: the Savage-Dickey density ratio; see @eq-savage-dickey-density-ratio.
@@ -475,6 +478,7 @@ else:
 	sampler = NestedSampler(loglike, ptform, ndim, nlive=400)
 	sampler.run_nested(dlogz=0.01)
 	sampler.save(str(fname))
+
 ```
 
 #### Run plot
@@ -493,7 +497,7 @@ The first diagnostic tool is the _run plot_, where we see the accumulation of th
 from dynesty import plotting as dyplot
 lnz_truth = 0
 fig, axes = dyplot.runplot(sampler.results, lnz_truth=lnz_truth)
-fig.set_size_inches(8, 12)
+fig.set_size_inches(8, 8)
 ```
 
 
@@ -520,7 +524,7 @@ fig, axes = dyplot.traceplot(
 	connect=True,
 	connect_highlight=range(2)
 )
-fig.set_size_inches(8, 6)
+fig.set_size_inches(6, 3.5)
 
 ```
 
@@ -533,7 +537,7 @@ It shows the marginal density plot for all our parameters, as well as for each p
 #| label: fig-nested-sampling-cornerplot
 #| fig-cap: A corner plot, showing correlations in the posterior distribution.
 
-_ = dyplot.cornerplot(
+fig, axs = dyplot.cornerplot(
 	sampler.results, 
 	color='blue', 
 	truths=np.zeros(ndim),
@@ -542,6 +546,7 @@ _ = dyplot.cornerplot(
 	max_n_ticks=3, 
 	quantiles=None,
 )
+fig.set_size_inches(5, 3)
 ```
 
 #### Posterior predictive density plot
