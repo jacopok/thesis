@@ -135,7 +135,7 @@ $$
 $${#eq-wen-chen-area}
 where $A_{\perp}$ is the area spanned by the detector's motion within a plane perpendicular to the source direction.
 
-#### Correlation structure
+#### Correlation structure {#sec-correlation-structure}
 
 The Fisher matrix can aid in understanding the correlation structure
 of the posterior distribution. 
