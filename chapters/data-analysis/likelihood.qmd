@@ -10,7 +10,7 @@ format:
 ---
 # Gravitational wave parameter estimation {#sec-gw-pe}
 
-This chapter will outline the basic tools used for the parameter estimation for gravitational waves. 
+This chapter will outline the basic tools used for the estimation of gravitational wave signal parameters. 
 
 The starting point for our analysis is typically an estimate for the gravitational wave strain observed by one or more detectors, which is expressed as a discretized time series $d(i \Delta t)$, with integer $i$. 
 Each of the entries in this time series is noisy, and they cannot be considered in isolation: due to the wide-band nature of the noise, any given pair of points $d(i \Delta t)$ and $d(j\Delta t)$ will in general be _correlated_.
@@ -28,18 +28,18 @@ $${#eq-fourier-transform-discrete}
 ::: {#nte-fourier-transform-periodicity .callout-note collapse="true"}
 ##### Fourier transform periodicity and range
 
-While this  can be computed for any $m \in \mathbb{Z}$, it only contains independent information for $0 \leq m < N / 2$: since our time domain signal is real-valued $\tilde{h}(-m / T) = \tilde{h}^{*}( m / T)$, and $\tilde{h}(m /T) = \tilde{h}( (m+N) / T)$. 
+While @eq-fourier-transform-discrete can be computed for any $m \in \mathbb{Z}$, it only contains independent information for $0 \leq m < N / 2$: since our time domain signal is real-valued we have $\tilde{h}(-m / T) = \tilde{h}^{*}( m / T)$, and by the periodicity of the complex exponential $\tilde{h}(m /T) = \tilde{h}( (m+N) / T)$. 
 
 Starting from $N$ real-valued samples in time we then get $N / 2$ complex-valued ones in frequency.
 The frequency samples are spaced by $1 / T$, while the highest frequency available is $1 / 2 \Delta t$, the Nyquist frequency. 
-Any signal with frequency higher than this would experience _aliasing_, since its period would be faster than the sample rate. 
+Any signal with frequency higher than this will experience _aliasing_. 
 :::
 
 
 The Fast Fourier Transform algorithm allows us to compute this relatively quickly, in $O(N \log N)$ operations [@heidemanGaussHistoryFast1984].
 
-Under some assumptions, the Fourier components of the data are uncorrelated, which reduces the computational complexity to $O(N)$.
-Because of this, we will start our discussion with the Fourier-domain Whittle likelihood (@sec-whittle-likelihood), but also describe the way parameter estimation can be performed when those assumptions break down (@sec-time-domain-pe).
+Under some assumptions, the Fourier components of the noise are uncorrelated among each other.
+Because of this, we will start our discussion with the Fourier-domain Whittle likelihood (@sec-whittle-likelihood), which has an $O(N)$ complexity, but also describe the way parameter estimation can be performed when those assumptions break down and the Fourier-domain noise is not diagonal (@sec-time-domain-pe).
 
 ## The Whittle likelihood {#sec-whittle-likelihood}
 
@@ -68,7 +68,7 @@ As defined, this is the _one-sided_ PSD, which satisfies
 $$
 \langle \lvert n(t) \rvert ^{2} \rangle = \int_{0}^{\infty} S_{n}(f) \text{d}f\,.
 $$
-We could have alternatively defined it without the $1 / 2$ factor, simultaneously extending the integral from $-\infty$ to $\infty$. The negative-frequency contribution to the integral is equal to the positive-frequency one, since the signal and noise are real.
+We could have alternatively defined it without the $1 / 2$ factor, simultaneously extending the integral from $-\infty$ to $\infty$. The negative-frequency contribution to the integral is equal to the positive-frequency one, since the signal and noise are real-valued.
 Sometimes, the _Amplitude Spectral Density_ (ASD) is also quoted, which is the square root of the PSD, with units of $\text{Hz}^{-1/2}$:^[More in general, the ASD has units of $x / \sqrt{ \text{Hz} }$, where $x$ is the unit of the time-domain noise. For example, if we were characterizing acceleration noise $x$ would be $\text{m/s}^2$.]
 $$
 A_{n}(f) = \sqrt{ S_{n}(f) }\,.
@@ -222,7 +222,7 @@ The recovery was performed only varying the luminosity distance of the signals.
 
 ![_p_-_p_ plot for the distance-only injections with and without the correction. Adapted from @talbotInferenceFiniteTime2025.](figures/pp-test.pdf)
 
-![K-S test _p_-value as a function of the number of injected signals, adapted from @talbotInferenceFiniteTime2025.](figures/pvalue_logit.pdf)
+![K-S test _p_-value as a function of the number of injected signals, adapted from @talbotInferenceFiniteTime2025. The _p_-value is shown on a logit scale (@nte-odds-logits).](figures/pvalue_logit.pdf)
 
 :::
 
@@ -276,7 +276,7 @@ It is common for data analysts to wish to start their description of some signal
 Being able to show unprocessed data is also useful in the context of scientific communication, since it allows the presenter to show a figure which can be immediately understood.
 
 This task is made tricky in the context of gravitational wave analysis by the nature of the noise.
-The sensitivity "bucket" in the frequency domain means that the magnitude of the noise outside a given band completely overwhelms the time-domain data: while typical strain magnitudes are on the order of $10^{-21}$ or less, raw time-domain strain data is often $> 10^{-18}$.
+The sensitivity "bucket" in the frequency domain means that the magnitude of the noise outside a given band completely overwhelms the time-domain data: in ground-based observations, while typical strain magnitudes are on the order of $10^{-21}$ or less, raw time-domain strain data is often $> 10^{-18}$.
 
 If we are determined to show strain, we need to filter the series: @fig-strain-gw250114 shows this for GW250114. A Butterworth band-pass filter between $35 \text{Hz}$ and $350 \text{Hz}$ was applied twice to the data, in addition to a notch filter at $60 \text{Hz}$ to remove power grid-driven noise.
 The original detection paper for GW150914 [@ligoscientificcollaborationandvirgocollaborationObservationGravitationalWaves2016] used many more hand-tuned notches to eliminate the numerous spectral features present in the noise at that time, which have fortunately been reduced nowadays.
@@ -284,12 +284,13 @@ The original detection paper for GW150914 [@ligoscientificcollaborationandvirgoc
 ![GW250114, shown in the same way as the first figure from the discovery paper for GW150914, @ligoscientificcollaborationandvirgocollaborationObservationGravitationalWaves2016.](figures/Figure_1_gw250114.png){#fig-strain-gw250114}
 
 Besides the apparent technical complexity of this approach and its many parameters, its residuals are problematic. 
-Residuals computed subtracting a filtered model from filtered strain data have little meaning, since their distribution is hard to model and frequency-dependent: one should refrain from trying to draw conclusions based on their patterns and magnitude, which essentially removes all of their utility.
+Residuals computed subtracting a filtered model from filtered strain data have little meaning, since their distribution is hard to model and frequency-dependent: one should refrain from trying to draw visual conclusions based on their patterns and magnitude, which essentially removes all of the potential utility in showing them.
 
-A significant advantage of showing filtered data is being able to show the actual signal magnitude, on the order of $10^{-21}$, on the $y$-axis.
+A significant advantage of showing filtered data, on the other hand, is being able to show the actual signal magnitude, on the order of $10^{-21}$, on the $y$-axis.
 The alternative approach, which has become the standard nowadays, does not share this. 
 
-_Whitening_ the data means normalizing it to the noise, so that in the absence of a signal it becomes white noise. 
+_Whitening_ the data means normalizing it to the noise. 
+Applying the whitening procedure to a noise-only data stream returns white noise. 
 In the frequency domain, whitening a series $h(f)$ means defining
 $$
 h_{w}(f) = h(f) \sqrt{ \frac{4}{T S_{n}(f)} }\,,
@@ -310,13 +311,13 @@ $$\rho _\text{MF} = \frac{(d | h)}{\sqrt{(h|h)}}
 $$
 in terms of the scalar products defined in @eq-noise-weighted-inner-product.
 
-A common approach when looking for a signal in the data, is to look for high values in this quantity for a large set of templates $h$.
+A common approach, when looking for a signal in the data, is to look for high values in this quantity for a large set of templates $h$.
 
 If we fix the template $h$ we can also compute the expectation value of the SNR when varying the noise realization:
 $$
 \rho _\text{opt} = \mathbb{E}_{n} \left[ \frac{(d|h)}{\sqrt{ (h|h) }} \right] = \sqrt{ (h|h) }\,.
 $${#eq-optimal-snr}
-While this is called _optimal_ SNR, it involves no optimization procedure. 
+This is called _optimal_ SNR, though it involves no optimization procedure. 
 If a template with a given optimal SNR is injected into Gaussian noise, the matched-filter SNR is equally likely to be higher and lower than the optimal value.
 
 Since the optimal SNR depends on an integral in the form $\rho _\text{opt}^2 \sim \int |h|^2 / S \text{d}f$, independent SNRs (such as ones from different detectors, or different frequency bands considered independently) add in quadrature:
@@ -324,7 +325,7 @@ $$
 \rho _\text{tot}^{2} =  \sum_{i} \rho_{i}^{2}\,.
 $$
 
-The highest SNR for a gravitational wave signal, as of early 2026, was achieved by the event GW250114 [@abacGW250114TestingHawkings2025], which reached a value of nearly 80 when combining the Livingston and Hanford LIGO detectors.
+The highest SNR for a gravitational wave signal, as of early 2026, was achieved by the event GW250114 [@abacGW250114TestingHawkings2025], which reached a value higher than 75 when combining the Livingston and Hanford LIGO detectors.
 
 ### SNR thresholds
 
@@ -351,7 +352,7 @@ With this, we can compute the false-alarm rate (FAR) associated to a given SNR t
 It should be noted that real searches are significantly more sophisticated than SNR maximizers; for example, `PyCBC` requires
 that each frequency band contributes appropriately to the SNR [@nitzRapidDetectionGravitational2018], which allows us to discard many loud glitches.
 
-Nevertheless, high SNR is correlated with low FAR, and the scaling of the FAR as a function of SNR, in the absence of large outliers, is typically exponential [@lynchObservationalImplicationsLowering2018]:
+Nevertheless, high SNR is correlated with low FAR for real signals, and the scaling of the FAR as a function of SNR, in the absence of large outliers, is typically exponential [@lynchObservationalImplicationsLowering2018]:
 $$ \text{FAR} \approx \text{FAR}_8 \exp \left( - \frac{\rho - 8}{\alpha}\right) \,.
 $$
 
@@ -374,7 +375,7 @@ A common task in gravitational wave analysis and forecasting is to compare signa
 Qualitatively, most detectors' noise PSDs $S_{n}(f)$ exhibit a sensitivity "bucket", a frequency range in which they are most sensitive, with noise rising to either side. 
 We would like to compare this bucket to the signal's Fourier spectrum, $\tilde{h}(f)$. 
 Unfortunately, simply showing them on the same axis does not make sense, even though they have the same unit of $\text{Hz}^{-1}$. To understand this, consider the equivalent scenario if we were comparing the PSD and a Fourier spectrum for displacement: then, the PSD would have units of $\text{m}^{2} / \text{Hz}$, while the Fourier domain signal would have units of $\text{m} / \text{Hz}$.
-This discrepancy is hidden by the fact that our signal, strain, is dimensionless, but it remains a conceptual problem.
+This discrepancy is hidden by the fact that our signal, strain, is dimensionless, but it remains a conceptual problem, and qualitatively the orders of magnitude of these two quantities make it very obvious.
 
 In order to show these quantities together in a useful manner, we can look at the integral which defines the optimal SNR in @eq-optimal-snr:
 $$
@@ -388,7 +389,8 @@ $$
 = \int \frac{h_{c}^{2}(f)}{h_{n}^{2}(f)} \text{d}\log f
 \,.
 $$
-this defines the _characteristic signal strain_ $h_{c}(f) = 2 f |\tilde{h}(f)|$ and the _characteristic noise strain_ $h_{n}(f)=\sqrt{ f S_{n}(f) }$, both of which are dimensionless.
+
+This defines the _characteristic signal strain_ $h_{c}(f) = 2 f |\tilde{h}(f)|$ and the _characteristic noise strain_ $h_{n}(f)=\sqrt{ f S_{n}(f) }$, both of which are dimensionless.
 
 For more details on this and other ways to compare signal and noise, including for example computing the energy density contained in gravitational waves, see @mooreGravitationalwaveSensitivityCurves2015.
 
@@ -396,7 +398,7 @@ For more details on this and other ways to compare signal and noise, including f
 
 This section will discuss common approaches which can be used to accelerate the computation of a frequency-domain Whittle likelihood.
 
-The two terms we need to compute for the likelihood ratio [@eq-likelihood-ratio] are the following integrals:
+The two terms we need to compute for the likelihood ratio (@eq-likelihood-ratio) are the following integrals:
 $$
 \mathrm{Re}(h(\theta)| d) = 4 \mathrm{Re}\int_{0}^{f_\text{max}} \frac{h(f; \theta) d^*(f)}{S_{n}(f)} \text{d}f\,,
 $$
@@ -410,10 +412,10 @@ The baseline approach is to evaluate these as Riemann sums on the full Fourier-d
 This becomes less and less practical the longer the data segment is. 
 
 Several approaches to accelerate this computation have been proposed, see section 3 in @rouletInferringBinaryProperties2024 for a review. 
-Here we will outline two of the most popular approaches: relative binning and reduced order quadrature.
+Here we will outline two of the most popular: relative binning and reduced order quadrature.
 
 The efficacy of both approaches is fundamentally driven by their ability to decrease the number of frequencies at which the waveform approximant is evaluated. 
-This will generally reduce the total evaluation time, but only to a point: in @fig-mlgw-bns-compared-timing we illustrate the general scaling of waveform model evaluation: $t = t_1 + N t_{2}$, where $N$ is the number of grid points.
+This will generally reduce the total evaluation time, but only to a point: in @fig-mlgw-bns-compared-timing we illustrate that the general scaling of waveform model evaluation takes the form $t = t_1 + N t_{2}$, where $N$ is the number of grid points.
 Decreasing $N$ significantly below $t_{1} / t_{2}$ is going to exhibit diminishing returns.
 
 ### Relative binning
@@ -421,10 +423,12 @@ Decreasing $N$ significantly below $t_{1} / t_{2}$ is going to exhibit diminishi
 Relative binning [@zackayRelativeBinningFast2018] is a technique to accelerate the evaluation of the integrals in the likelihood using the key idea that, while the waveform itself may be highly oscillatory, all the waveforms which are compatible with the data will be quite similar to each other (in a specific sense).
 
 Starting from a reference waveform $h_{0}(f)$, we define the ratio $r(f) = h(f)  / h_{0}(f)$ of the generic waveform $h$ to the reference one $h_{0}$. 
+A good reference waveform can be computed, for example, by looking for the maximum value of the likelihood. This is still a "cheap" operation compared to sampling, and can be performed at full resolution.
+
 Then, we can define a relatively coarse grid in frequency, and approximate $r(f)$ to linear order within each bin $b$: for all frequencies $f$ in the bin,
 $$
 r(f) = r_{0}(b) + r_{1}(b) (f-f_{m}(b)),
-$$
+$${#eq-relative-binning-approximation}
 where $f_{m}(b)$ is the central frequency in the bin.
 
 Then, we compute some summary statistics: for each bin $b$, define
@@ -457,13 +461,13 @@ Crucially, this depends on the ratio $r(f)$ being relatively smooth across the f
 This is expected to be approximately true for all the relevant points in the posterior, potentially not if we stray from its peak.
 
 The formulation given here works well in the absence of orbital precession. 
-In its presence it breaks down, since the smooth structure of the waveforms is not preserved - the residual $r(f)$, directly computed, is not smooth enough for . However, this can be counteracted by performing a mode-by-mode decomposition in the orbital frame of the binary (see @sec-twisting) [@narolaRelativeBinningComplete2023].
+In its presence it breaks down, since the smooth structure of the waveforms is not preserved - the residual $r(f)$, directly computed, is not smooth enough for @eq-relative-binning-approximation to be a good approximation. However, this can be counteracted by performing a mode-by-mode decomposition in the orbital frame of the binary (see @sec-twisting) and then approximating those ratios as smoothly varying [@narolaRelativeBinningComplete2023].
 
-For an example of how the waveform ratio $r(f)$ looks, see @fig-projected-lgwa-waveforms-ratio, where it is computed with the Lunar Gravitational Wave Antenna.
+For an example of how the waveform ratio $r(f)$ looks, see @fig-projected-lgwa-waveforms-ratio, where it is computed in a specific case for the Lunar Gravitational Wave Antenna.
 
 ### Reduced order quadrature {#sec-reduced-order-quadrature}
 
-Whereas relative binning seeks to closely approximate the likelihood in the region where waveforms look like what was measured, reduced order quadrature allows us to obtain a representation which is valid for any point in the prior space [@tiglioReducedOrderSurrogate2022;@morisakiRapidLocalizationInference2023].
+Whereas relative binning seeks to closely approximate the likelihood in the region where waveforms "look similar to each other", reduced order quadrature allows us to obtain a representation which is valid for any point in the prior space [@tiglioReducedOrderSurrogate2022;@morisakiRapidLocalizationInference2023].
 
 The equations to approximate the terms in the likelihood are somewhat similar: some weights $\omega$ and $\psi$ are pre-computed, then the waveform is evaluated on a sparse grid and multiplied by these.
 $$
@@ -485,7 +489,7 @@ the integral over said parameter can sometimes be performed analytically
 [@singerRapidBayesianPosition2016;@thraneIntroductionBayesianInference2019;@LIGOT1300326v1AnalyticMarginalisation].
 This procedure is generally applied to reference phase $\phi$, distance $d_{L}$ and reference time $t_{0}$ [@thraneIntroductionBayesianInference2019].
 
-With some more advanced techniques, it is possible to marginalize over all extrinsic parameter in order to minimize the number of times an expensive model for the intrinsic ones is evaluated [@rouletInferringBinaryProperties2024; @langeRapidAccurateParameter2018].
+With some more advanced techniques, it is possible to marginalize over all extrinsic parameters in order to minimize the number of times an expensive model for the intrinsic ones is evaluated [@rouletInferringBinaryProperties2024; @langeRapidAccurateParameter2018].
 
 Here we will outline the analytic marginalization procedure only for the relatively simple case of reference phase, as we used this in @tissinoGeometryLunarGravitational2026.
 
@@ -515,6 +519,6 @@ $$
 
 Since the analytical likelihood is known, it is possible to sample the phase after having performed a run with a phase-marginalized likelihood [@thraneIntroductionBayesianInference2019]. 
 
-For any given sample $\theta$ from a phase-marginalized posterior we can write the posterior as a function of $\phi_{c}$, conditioned on $\theta$: the integrand in equation @eq-phase-marginalized-likelihood. 
+For any given sample $\theta$ from a phase-marginalized posterior we can write the posterior as a function of $\phi_{c}$, conditioned on all other parameters $\theta$: the integrand in @eq-phase-marginalized-likelihood. 
 
-
+This only requires one evaluation of the intrinsic waveform, since the values are all related by a simple known phase shift; it therefore cheap to explicitly compute the inverse CDF of this distribution and extract a sample from it.

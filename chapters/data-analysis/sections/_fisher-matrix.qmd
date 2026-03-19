@@ -53,7 +53,7 @@ a quantity in the form
 $$
 \frac{4f}{S_{n}(f)} \bigg| \frac{ \partial h }{ \partial \theta_{i} } \bigg|^{2}
 $$
-can be integrated in $\text{d}\log f$ to yield the $i$-th entry in the diagonal of the Fisher matrix, which contributes to the computation of the variance of the $i$-th parameter.
+can be integrated in $\text{d}\log f$ to yield the $i$-th entry in the diagonal of the Fisher matrix, whose inverse contributes to the computation of the variance of the $i$-th parameter.
 It is incomplete information, since it does not account for correlations with other parameters; still, it can provide some qualitative understanding and diagnostics.
 We used this tool to describe the way information on the sky position of the source accumulates as a function of time with the Lunar Gravitational Wave Antenna [@cozzumboOpportunitiesLimitsLunar2024].
 
@@ -94,7 +94,7 @@ This area is a solid angle defined as
 $$
 \Delta \Omega_{1\sigma} = 2 \pi \sqrt{ \langle \delta n_{x}^{2} \rangle \langle \delta n_{y} ^{2} \rangle - \langle \delta n_{x} \delta n_{y} \rangle ^{2} } = 2 \pi \sqrt{ \det C_{\text{sky}} } \,,
 $$
-where $C_\text{sky}$ is the two-dimensional covariance matrix for the two components of the sky position position vector, $n_{X}$ and $n_{Y}$, which are orthogonal to its true value $n_{z}$.
+where $C_\text{sky}$ is the two-dimensional covariance matrix for the two components of the sky position position vector, $n_{x}$ and $n_{y}$, which are orthogonal to its true value $n_{z}$.
 In a spherical coordinate system with right ascension $\alpha$ and declination $\delta$ we need to add a factor $|\cos \delta|$ to get the correct area element [@iacovelliForecastingDetectionCapabilities2022]. 
 This area is defined such that the the probability contained within a similarly shaped contour of area $\Delta\Omega$ around the center is $P(\Delta\Omega) = \exp(-\Delta \Omega / \Delta\Omega_{1\sigma})$, therefore the equivalent area at the $X$ credible level is
 $$
@@ -109,7 +109,7 @@ where the indices $JKLM$ span the available detectors, $\Omega$ is the angular f
 $$
 \Delta_{IJ} = \langle \Omega d_{I} | \Omega d_{J} \rangle \delta_{IJ} - \langle \Omega d_{I}| \partial_{k} d_{J} \rangle \langle \partial_{l} d_{J} | \Omega d_{J}\rangle  F_{kl}^{-1}
 $$
-where $F_{kl}$ is the Fisher matrix on all the parameters describing the signal except for they sky position.
+where $F_{kl}$ is the Fisher matrix on all the parameters describing the signal except for the sky position.
 
 The term $|(\mathbf{r}_{KJ} \times \mathbf{r}_{ML}) \cdot \mathbf{n} |$ is twice the area formed
 by the projections of the detectors $J$, $K$, $L$, $M$ onto
@@ -129,9 +129,9 @@ $$
 Here, $\rho_{N} = \sqrt{ \sum_{i} \rho_{i}^{2} }$ is the network SNR, the sum in quadrature of the individual SNRs (see @sec-snr); the quantities $D_{\perp}$ and $A_{\perp}$ are respectively the distance between detectors or their area, projected onto a plane orthogonal to the propagation direction $n$.
 
 An expression can also be computed in the case of a long observation by a single detector, since its orbit around the Sun will effectively make it akin to a large network of detectors. 
-@wenGeometricalExpressionAngular2010 give this expression only in the limit of a short observation or one that is longer than an year; the expression for an arbitrary-length observation of a monochromatic signal with frequency $f_{0}$ reads @tissinoGeometryLunarGravitational2026
+@wenGeometricalExpressionAngular2010 give this expression only in the limit of a short observation or one that is longer than an year; the expression for an arbitrary-length observation of a monochromatic signal with frequency $f_{0}$ reads [@tissinoGeometryLunarGravitational2026]
 $$
-\Delta\Omega = \frac{c^{2}}{2 \pi f_{0}^{2} \rho^{2}A_{\perp}}\,,
+\Delta\Omega = \frac{c^{2}}{f_{0}^{2} \rho^{2}A_{\perp}}\,,
 $${#eq-wen-chen-area}
 where $A_{\perp}$ is the area spanned by the detector's motion within a plane perpendicular to the source direction.
 

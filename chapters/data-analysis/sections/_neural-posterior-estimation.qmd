@@ -1,16 +1,17 @@
 ## Simulation-based inference {#sec-simulation-based-inference} 
 Simulation-based inference (SBI) encompasses a broad range of approaches to inference which lack an explicit, analytic likelihood.
-While they still strive to produce results according to Bayes' theorem [@eq-bayes-theorem], they learn the likelihood implicitly, through the process of training a machine learning model.
+While they still strive to produce results according to Bayes' theorem (@eq-bayes-theorem), they learn the likelihood implicitly, through the process of training a machine learning model.
 All SBI approaches require the presence of a _simulator_, i.e. a way to simulate data $d$ conditional on a set of parameters $\theta$, distributed according to the likelihood: $d \sim p(d|\theta)$.
-This need not be based on an analytic likelihood: for instance, in the gravitational wave case, one may inject signals into realistic detector noise [@daxRealtimeGravitationalwaveScience2021], [@emmaRNLEResidualNeural2026].
+This need not be based on an analytic likelihood: for instance, in the gravitational wave case, one may inject signals into realistic detector noise [@daxRealtimeGravitationalwaveScience2021;@emmaRNLEResidualNeural2026].
 
 Several SBI methods exist, the main ones being [@liangRecentAdvancesSimulationbased2025]:
 
-- __Neural Posterior Estimation__, the focus of @sec-neural-posterior-estimation, in which a density estimator $q(\theta|d)$ is trained to directly model the posterior density $p(\theta|d)$.
+- __Neural Posterior Estimation__ (NPE), the focus of @sec-neural-posterior-estimation, in which a density estimator $q(\theta|d)$ is trained to directly model the posterior density $p(\theta|d)$.
 - __Neural Ratio Estimation__, in which a classifier is trained to distinguish between the joint distribution of parameters and data, $p(\theta, d)$ and the product of their marginals, $p(\theta)p(d)$. The optimal Bayesian classifier operates based on the decision function $f(\theta, d) = p(\theta, d) / (p(\theta, d) + p(\theta)p(d))$, from which the likelihood-to-evidence ratio $r(\theta, d) = p(d|\theta) / p(d) = f / (1-f)$ can be easily recovered. This approach requires a stochastic sampling step.
 - __Neural Likelihood Estimation__, in which a density estimator $q(d|\theta)$ directly learns the likelihood function. This approach also requires a stochastic sampling step.
 
-Other approaches include __Flow Matching Posterior Estimation__ and __Consistency Model Posterior Estimation__.
+Other approaches include Flow Matching Posterior Estimation and Consistency Model Posterior Estimation.
+The appeal of NPE specifically is in its promise to remove the stochastic sampling step, _i.e._ the requirement to use MCMC, nested sampling or other methods, thus providing an extreme gain in speed.
 
 ### Normalizing flows {#sec-normalizing-flows}
 
@@ -41,9 +42,9 @@ A significant advantage of the normalizing flow architecture is that it enables 
 
 The objective of neural posterior estimation is to be able to directly model the posterior distribution based on an observation $d$. 
 This is achieved through a network architecture dubbed a _neural density estimator_ $q(\theta|d)$, which defines a normalized density function on the parameters $\theta$ conditioned on the data $d$.
-This is often a normalizing flow: see section @sec-normalizing-flows.
+This is often a normalizing flow: see @sec-normalizing-flows.
 
-The loss function for this, in the simplest case, is [@papamakariosFastEpsilonFree2016], [@daxGroupEquivariantNeural2023]:
+The loss function for this, in the simplest case, is [@papamakariosFastEpsilonFree2016;@daxGroupEquivariantNeural2023]:
 $$
  \mathcal{L}_{\text{NPE}} = 
  \mathbb{E}_{\theta \sim \pi(\theta)}
@@ -53,13 +54,11 @@ $${#eq-simple-npe-loss}
 
 The expectation values can be numerically approximated by repeatedly sampling the parameters $\theta$ from their prior distribution $\pi(\theta)$, and then computing a set of data $d$ by fixing the parameters and simulating a noise realization through the likelihood $p(d|\theta)$.
 
-
-
 In practice, directly employing the loss in @eq-simple-npe-loss is impractical. 
 Some parameters, such as the sky position of the signal, significantly alter the observed waveform in each detector by shifting it in time; 
 This dependence, however, is known and can be amortized during training @daxGroupEquivariantNeural2023, leading to significantly improved performance. 
 Additionally, the detector's power spectral density $S_{n}$ is varied during training, so that conditioning can be performed at inference time [@wildbergerAdaptingNoiseDistribution2023].
-With this approach, the actual loss function for `DINGO` [@daxRealtimeGravitationalwaveScience2021, equation 3] is
+With this approach, the actual loss function for the state-of-the art NPE model `DINGO` ("Deep Inference for Gravitational-wave Observations") [@daxRealtimeGravitationalwaveScience2021, equation 3] is
 $$
  \mathcal{L}_{\text{GNPE}} = 
  \mathbb{E}_{\theta \sim \pi(\theta)} 
@@ -73,13 +72,13 @@ Here, $t_{I}(\theta)$ is the arrival time of the gravitational wave signal at a 
 The subscript notation $d_{-t_{I}(\theta)-\delta t_{I}}$ denotes time-shifted data. 
 This procedure makes it so that, in all the training data available to the model, waveforms are all approximately time-aligned. 
 
-Recently, a new transformer-based architecture for `DINGO` has been proposed [@koflerFlexibleGravitationalWaveParameter2025] as an alternative to . 
+Recently, a new transformer-based architecture for `DINGO` has been proposed [@koflerFlexibleGravitationalWaveParameter2025] as an alternative to the approach described above. 
 By tokenizing the data across detectors and frequency grid sections, a single network can be used for different detector configurations (one, two or three detectors), as well as for different frequency intervals.
 
 
 ### Importance sampling {#sec-importance-sampling}
 
-Taken alone, neural posterior estimation often yields accurate estimates of the posterior distribution, but it does not do so in every case, and we have no guarantee that it did so for any specific signal of interest.
+Taken alone, neural posterior estimation often yields fairly accurate estimates of the posterior distribution, but it does not do so in _every_ case, and we have no guarantee that it did so for any _specific_ signal of interest.
 
 This is the motivation behind the introduction of neural importance sampling [@daxNeuralImportanceSampling2022], which allows us to re-weight the posterior samples, estimate the evidence and correct the posterior distribution.
 
@@ -89,17 +88,16 @@ Importance sampling is a common integration technique, based on the fundamental 
 $$
 \int f(x) g(x) \text{d}x \approx \sum_{x_{i} \sim g(x)} f(x_{i})\,,
 $$
-where $x$ is a variable in $\mathbb{R}^{n}$, $p(x)$ is a probability distribution on it, while $f(x)$ is an arbitrary function of $x$. 
+where $x$ is a variable in $\mathbb{R}^{n}$, $g(x)$ is a probability distribution on it, while $f(x)$ is an arbitrary function of $x$. 
 Reframing this equality, if we want to compute an integral in the form $\int f(x)\text{d}x$, we can do so by identifying an auxiliary density $g$, and then evaluating 
 $$
 \int f(x) \text{d}x = \int \frac{f(x)}{g(x)} g(x) \text{d}x \approx \sum_{x_{i}\sim g(x)} \frac{f(x_{i})}{g(x_{i})}\,.
 $${#eq-importance-sampling}
-The quality of this as an integration technique varies depending on the quality of the proposal $g$. In fact, it can be shown that the estimator's variance is related to the variance of $f(x_{i}) / g(x_{i})$ [@augustinekongNoteImportanceSampling1992].
-The closer the proposal $g$ is to the integrand $f$, the better
+The quality of this as an integration technique varies depending on the quality of the proposal $g$. In fact, it can be shown that the estimator's variance is related to the variance of $f(x_{i}) / g(x_{i})$ [@augustinekongNoteImportanceSampling1992]:
+the closer the proposal $g$ approximates the integrand $f$ (up to a constant multiplicative factor), the better.
 
-This approach is not immediately applicable to gravitational wave inference, since there we only have direct access to the integrand function, $f=\mathcal{L}(d|\theta_i) \pi(\theta_{i})$, not to the posterior density.
-
-Neural posterior estimation, though, provides us with an estimate $q(\theta|d)$ of the posterior density, which we may use as in place of the proposal $g$ since its density is also available.
+This approach is applicable to gravitational wave inference if we are using NPE: we have direct access to the integrand function, $f=\mathcal{L}(d|\theta_i) \pi(\theta_{i})$, 
+and neural posterior estimation provides us with an estimate $q(\theta|d)$ of the posterior density, which we may use as in place of the proposal $g$, since its density is also available.
 
 The procedure is then as follows: we extract $n$ samples $\theta_{i} \sim q(\theta|d)$, and assign them weights 
 
@@ -111,22 +109,23 @@ $$
 Z(d) \approx \frac{1}{n} \sum_{i=1}^{n} w_{i}\,.
 $$
 While this is an unbiased estimator, its variance may be high if the proposal distribution is not close enough to the function we are integrating.
-Let us define the number of __effective samples__ @augustinekongNoteImportanceSampling1992 will be
+Let us define the number of __effective samples__ [@augustinekongNoteImportanceSampling1992]:
 
 $$
 n_\text{eff} = \frac{\left( \sum_{i}w_{i} \right)^{2}}{\sum_{i}w_{i}^{2}}\,,
 $$
+
 and the __sample efficiency__  $\epsilon =n_\text{eff} / n$.
 
 ::: {#nte-importance-sampling-examples .callout-note collapse="true"}
 ##### Examples and intuition
 
-The optimal situation is if the proposal distribution $q$ perfectly matches the posterior $p(\theta|d)$: in that case, all the weights will be identical and equal to $Z$. 
+The optimal situation is when the proposal distribution $q$ perfectly matches the posterior $p(\theta|d)$: in that case, all the weights will be identical and equal to $Z$. 
 Then, the effective sample size will be $n _\text{eff} = (nZ)^{2} / (n Z^{2}) = n$, and the efficiency $\epsilon$ will equal 1.
 
-If the proposal poorly models the posterior, we have no strict mathematical guarantees. In principle, depending on the likelihood's shape, it is possible for the weights to be roughly constant, despite none of the samples lying in the posterior's typical region.
+If the proposal poorly models the posterior, we have no strict mathematical guarantees on what the efficiency will be. In principle, depending on the likelihood's shape, it is possible for the weights to be roughly constant, despite none of the samples lying in the posterior's typical region.
 
-In practice, though, gravitational wave likelihoods exhibit extreme variations far from their typical regions. The log-likelihood ratio in @eq-likelihood-ratio will range at the very least from $-\rho^{2} /2$ to $\rho^{2} / 2$; even for low-SNR detections with $\rho \approx 10$, this is on the order of 100 in the logarithm of the likelihood.
+In practice, though, gravitational wave likelihoods exhibit extreme variations far from their typical regions. The log-likelihood ratio in @eq-likelihood-ratio will range at the very least from $-\rho^{2} /2$ to $\rho^{2} / 2$; even for low-SNR detections with $\rho \approx 10$, this is a variation of 100 in the _logarithm_ of the likelihood.
 We observe that, when the proposal poorly models the posterior distribution, one weight tends to completely dominate the sum, so that (for instance) $w_{1} \gg w_{i}$ for any $i \neq 1$.
 If this is the case, we get $n _\text{eff} \approx w_{1}^{2} / w_{1}^{2} = 1$ and $\epsilon = 1 / n$.
 
@@ -178,7 +177,7 @@ import numpy as np
 
 proposal_locs = [2.5, 0.3]
 
-fig, axs = plt.subplots(2, 1, sharex=True)
+fig, axs = plt.subplots(2, 1, sharex=True, figsize=(6, 4))
 
 for loc, ax in zip(proposal_locs, axs):
 
@@ -231,3 +230,6 @@ While bringing a significant advantage in terms of robustness and trustworthines
 this approach --- if applied with a Gaussian likelihood 
 --- negates any benefits that could be gained from training 
 the neural network on anything other than Gaussian noise. 
+
+Analyzing a signal with `DINGO-IS` can be both significantly faster and significantly slower than performing the same analysis with stochastic methods such as nested sampling: 
+when the sample efficiency is low, the number of samples required for unbiased inference can quickly become impractical.

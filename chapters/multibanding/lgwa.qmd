@@ -770,7 +770,7 @@ As we transition from forecasting to developing the analysis infrastructure for 
 
 #### Sky localization
 
-Based on analytical results [@eq-wen-chen-area], we expect these long observations to tightly constrain the sky position of the sources, due to the significant Doppler modulation of the signal through the year being heavily dependent on it.
+Based on analytical results (@eq-wen-chen-area), we expect these long observations to tightly constrain the sky position of the sources, due to the significant Doppler modulation of the signal through the year being heavily dependent on it.
 
 In the GW170817 case this is indeed the case, as shown in @fig-lgwa-gw170817-sky: the posterior is extremely tight, and it remains so when repeating the same experiment at the upper limit in frequency of $710\text{mHz}$, which corresponds to 14 days before merger. This only reduces the SNR from 21.9 to 21.3.
 

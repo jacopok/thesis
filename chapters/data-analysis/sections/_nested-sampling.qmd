@@ -123,7 +123,7 @@ Compactly, we can then write $\log t = (-1 \pm 1) / k$.
 
 If we sample $k$ points from the prior (with total volume $X_{0}$) and remove the one with the worst likelihood, the remaining prior volume will be $X_{1} = t_{1}X_{0}$, where $\log t_{1}$ has an expectation value of $-1 /k$. This will be true at every iteration, so [@skillingNestedSamplingGeneral2006, section 5]
 $$
-\log X_{i} = \sum_{j\leq i} \log t_{j} \approx -\frac{i}{k} \pm \frac{\sqrt{ i }}{k}
+\log X_{i} = \sum_{j\leq i} \log t_{j} \approx -\frac{i}{k} \pm \frac{\sqrt{ i }}{k}\,.
 $$
 
 The prior is compressed exponentially, which is desirable since the typical set for the posterior is often several orders of magnitude smaller than the prior.
@@ -184,12 +184,12 @@ plt.show()
 
 This allows us to construct a procedure to evaluate the integral in @eq-evidence-integral, as long as we are able to do the following:
 
-1. sample uniformly $k$ points from the prior
-2. find the lowest-likelihood point $\theta_{1}$ and discard it: now the prior volume is approximately $X_{1} = e^{-1/k}$; let us denote its likelihood as $L_{1}$
-3. sample a new point $\theta_{2}$ uniformly from the prior, constrained to $L_{2} = L(\theta_{2}) > L_{1}$
+1. sample uniformly $k$ points from the prior;
+2. find the lowest-likelihood point $\theta_{1}$ and discard it: now the prior volume is approximately $X_{1} = e^{-1/k}$, let us denote its likelihood as $L_{1}$;
+3. sample a new point $\theta_{2}$ uniformly from the prior, constrained to $L_{2} = L(\theta_{2}) > L_{1}$;
 4. repeat from point 2.
 
-We are constructing a sequence of points $\theta_{i}$ with corresponding likelihoods $L_{i}$ and approximate associated interior prior volumes $X_{i} \approx e^{-i/k}$. 
+We are constructing a sequence of discarded ("dead") points $\theta_{i}$ with corresponding likelihoods $L_{i}$ and approximate associated interior prior volumes $X_{i} \approx e^{-i/k}$. 
 At this stage, we still need to discuss how step 3 is performed, as well as when the iteration should stop - for now, suppose that happens at some stage $n_\text{iter}$.
 
 For the evidence, we can simply use a trapezoidal integration rule: 
@@ -203,9 +203,9 @@ These weights can also be used to estimate the posterior as follows: take the po
 $$
 p_{i} = \frac{w_{i} L_{i}}{Z}\,.
 $$
-It is readily seen that these weights add to 1, and heuristically they are computed as one might expect, by multiplying the prior mass and likelihood value for each of the regions we have subdivided the prior volume into.
 
-Often one is be interested in a set of equally-weighted samples: these can be obtained, for example, through density estimation methods.
+These weighted samples (see @sec-weighted-samples) represent the posterior.
+It is readily seen that these weights add to 1, and heuristically they are computed as one might expect, by multiplying the prior mass and likelihood value for each of the regions we have subdivided the prior volume into.
 
 ### Sampling options {#sec-ns-sampling-options}
 
@@ -214,10 +214,10 @@ This problem is called Likelihood-Restricted Prior Sampling.
 
 A review of several possible options can be found in [@buchnerNestedSamplingMethods2021, section 5] or [@ashtonNestedSamplingPhysical2022, table 2]. Roughly speaking, they can be classified into:
 
-- MCMC-based methods
-- region-based methods
-- hybrid methods
-- ML-based methods
+- MCMC-based methods;
+- region-based methods;
+- machine learning-based methods.
+- hybrid methods;
 
 While the current set of live points is often used as a guide, the statistical properties of nested sampling hold as long as the new point is uncorrelated from the previous ones.
 
@@ -246,7 +246,7 @@ Typically, we use priors with known analytical expressions.
 ### Model comparison with nested sampling
 
 In order to illustrate the process of model comparison, let us define a simple problem: 
-suppose we have a set of data points $(x_{i}, y_{i})$ with constant uncertainties $\sigma_{y}$ on the $y$ values.
+suppose we have a set of data points $(x_{i}, y_{i})$ with constant, known and Gaussian uncertainties $\sigma_{y}$ on the $y$ values.
 
 We will compare two simple _nested_ models, namely a parabolic one with $y = f(x; a, b, c) = a x^{2}+bx+c$ and a linear one with $y = f(x; b, c) = bx+c$. 
 Model comparison can also be performed for non-nested models, but the nested case has some nice properties we will showcase later.
@@ -353,7 +353,6 @@ $$
 = \text{BF}^{\text{parabola}}_{\text{line}} \underbrace{ \frac{p(M_{\text{parabola}})}{p(M_{\text{line}})} }_{ \text{prior odds} }\,.
 $$
 
-In this case, the curvature of the data is strong enough for the Bayes Factor to favor the parabolic model (although not by much). 
 
 ```{python}
 from IPython.display import Markdown
@@ -365,7 +364,7 @@ bf_error = np.sqrt(
 
 Markdown(
 	'In this case, the curvature of the data is strong enough for the Bayes Factor to favor the parabolic model (although not by much): '
-	f'The log Bayes factor is ${bayes_factor:.2f}\pm$ {bf_error:.2f}$ nats in favor of the parabolic model.')
+	f'the log Bayes factor is ${bayes_factor:.2f}\pm$ {bf_error:.2f} nats in favor of the parabolic model.')
 ```
 
 Since the models we are considering were nested, we have a comparison point for our Bayes Factor: the Savage-Dickey density ratio; see @eq-savage-dickey-density-ratio.
@@ -431,8 +430,7 @@ _ = axins.plot(a_values, kde(a_values), alpha=.5, color=cmap(1.))
 ### Commonly used plots
 
 The quantities we discussed can be tracked through a Nested Sampling run as a useful diagnostic. 
-Here we show some commonly used plots, based on a two-dimensional example run with a Gaussian covariance.
-
+Here we show some commonly used plots, based on a two-dimensional example where the likelihood is Gaussian in the parameters.
 The assumptions are as follows: 
 
 - our prior is a $2$-dimensional uniform distribution $\pi \sim \mathcal{U}([0,1]^2)$;
@@ -445,6 +443,7 @@ C = 3 \times 10^{-2} \begin{pmatrix}
 $$
 
 We use 400 live points, and stop iterating when the contribution to the integral from a single iteration reaches $\Delta \log Z_{i} < 0.01$.
+We use the `dynesty` sampler [@speagleDYNESTYDynamicNested2020].
 
 ```{python}
 import numpy as np
@@ -488,7 +487,7 @@ The first diagnostic tool is the _run plot_, where we see the accumulation of th
 - the number of live points, which is constant up to the point where the nested sampling run is stopped: then, the remaining points are reused;
 - the likelihood $L_i$, which is strictly increasing as expected;
 - the posterior mass $w_i L_i / Z$, which increases and then decreases: first, the likelihood's increase dominates, but at some point its values start tapering, and the decrease in prior volume $w_i$ dominates;
-- the accumulation of evidence, with a corresponding error estimated as discussed in @sec-information-gain
+- the accumulation of evidence, with a corresponding error estimated as discussed in @sec-information-gain.
 
 ```{python}
 #| label: fig-nested-sampling-runplot
@@ -507,7 +506,7 @@ The following plot is called a _trace plot_, which relates the evolution in prio
 For each parameter, we get a scatter plot of its value as a function of the prior compression, and we can see its range shrink as we reach higher and higher values of the likelihood.
 
 More specifically, this plot is showing the locations of the _dead points_, i.e. the lowest-likelihood points that get discarded at each iteration.
-When one of them gets replaced it will be assigned a new likelihood in the range $[L_{i}, L_\text{max}]$, and after a certain number of iterations it will be replaced again. This is what the red lines are showing; they should be moving "randomly" across the parameter space, if we were to see them remain in a given region in the parameter space we would have an indication that our replacement algorithm is not performing properly.
+When one of them gets replaced, it will be assigned a new likelihood in the range $[L_{i}, L_\text{max}]$, and after a certain number of iterations it will be replaced again. This is what the red lines are showing; they should be moving "randomly" across the parameter space, if we were to see them remain in a given region in the parameter space we would have an indication that our replacement algorithm is not performing properly.
 
 The points are colored by their importance weights, $w_{i}L_{i} / Z$, and to the right we see a density estimate plot for the posterior distribution of each parameter together with a 95% confidence interval.
 
@@ -685,13 +684,15 @@ The integral we need to compute $H$ is very similar. The sign is opposite, and i
 ```{python}
 from IPython.display import Markdown
 
-Markdown(f'The results are compatible: the value of $H$ obtained from sampling is {sampler.results.information[-1]:.2f}, while the'
-f'analytical estimate is {-ndim/2 * (1+np.log(2 * np.pi)) - .5 * np.log(np.linalg.det(C)):.2f}.')
+Markdown(
+	'Comparing the analytical result with an estimate computed during the run by the sampler, we see that '
+	f'they are quite similar: the value of $H$ obtained during sampling is {sampler.results.information[-1]:.2f}, while the '
+	f'analytical estimate is {-ndim/2 * (1+np.log(2 * np.pi)) - .5 * np.log(np.linalg.det(C)):.2f}.')
 ```
 
 #### Algorithm termination
 
-As described, the nested sampling algorithm could continue in its compression forever, with ever-smaller compression $\log X$. However, if the likelihood function is bounded, after a certain number of iterations the prior volume will be concentrated around its maximum value, with all the live points having similar likelihood values, as @fig-nested-sampling-termination shows.
+The nested sampling algorithm we described above could continue forever, with ever-smaller compression $\log X$. However, if the likelihood function is bounded, after a certain number of iterations the prior volume will be concentrated around its maximum value, with all the live points having similar likelihood values, as @fig-nested-sampling-termination shows.
 
 ```{python}
 #| label: fig-nested-sampling-termination
@@ -701,12 +702,12 @@ fig, axs = plt.subplots(nrows=2, ncols=1, sharex=True, gridspec_kw={'hspace': 0 
 axs[1].plot(sampler.results.logvol, sampler.results.logl)
 axs[1].set_ylim(-10, sampler.results.logl[-1]+2)
 axs[1].set_xlabel('Prior volume compression $\log X$')
-axs[1].set_ylabel('Log-likelihood $\log \mathcal{L}$')
+axs[1].set_ylabel('$\log \mathcal{L}$')
 axs[1].set_xlim(*reversed(axs[1].get_xlim()))
 
 axs[0].plot(sampler.results.logvol, sampler.results.logz)
 axs[0].set_ylim(-10, np.max(sampler.results.logz)+2)
-axs[0].set_ylabel('Log-evidence $\log \mathcal{Z}$')
+axs[0].set_ylabel('$\log \mathcal{Z}$')
 
 for ax in axs:
 	x0, x1 = -10, ax.get_xlim()[1]
@@ -718,14 +719,14 @@ for ax in axs:
 		alpha=.1
 	)
 axs[0].arrow(-10, -4, -3, 0, width=.1, color='black')
-_ = axs[0].text(-10.5, -6, 'Little contribution to the integral')
+_ = axs[0].text(-10.5, -6, 'Little contribution\nto the integral')
 ```
 
 
-Thus, we can find a termination condition based on diagnosing whether this is happening: for example, we can compute the contribution to the evidence integral from the current live points, and stop iterating when that becomes smaller than a given threshold --- this is the default in `dynesty` [@speagleDYNESTYDynamicNested2020].
+Thus, we can find a termination condition by diagnosing whether this is happening: for example, we can compute the contribution to the evidence integral from the current live points, and stop iterating when that becomes smaller than a given threshold --- this is the default in `dynesty` [@speagleDYNESTYDynamicNested2020].
 
 Since this is a stochastic algorithm, there is always a chance we are making a mistake when terminating: for example, there could be a region with very low volume but high likelihood that none of the live points have happened upon, but which could give a significant contribution to the evidence.
-There is no general solution to this issue, besides increasing the number of live points in order to improve the chances that some of them will happen upon the high-likelihood region.
+There is no general solution to this issue, besides increasing the number of live points in order to improve the chances that some of them will happen upon the high-likelihood region. 
 
 ### Acceleration
 

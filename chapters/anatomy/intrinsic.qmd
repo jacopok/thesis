@@ -9,7 +9,7 @@ format:
         bibliography: ../../rehear.bib
 ---
 
-# Intrinsic parameters and waveform modelling {#sec-intrinsic}
+# Intrinsic parameters and waveform modeling {#sec-intrinsic}
 
 This section will continue in the dissection of the gravitational signal emitted by the coalescence of two compact objects by considering its intrinsic parameters, those relating to the source itself and not to its relation to the observer.
 

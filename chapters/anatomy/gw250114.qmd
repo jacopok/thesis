@@ -25,7 +25,7 @@ We can visually identify the sections of the waveform emitted by a black hole co
 - a _merger_, where the signal's amplitude peaks;
 - a _ringdown_, characterized by strongly damped oscillations.
 
-Indeed, if we overlay the general relativistic prediction for a binary merger [@fig-gw250114-whitened-strain] we can see that it matches very closely.
+Indeed, if we overlay the general relativistic prediction for a binary merger (@fig-gw250114-whitened-strain) we can see that it matches very closely.
 
 ![Upper panel: whitened strain for GW250114 in the Livingston and Hanford detectors, along with modelled and unmodelled waveform reconstructions. Lower panel: a time-frequency spectrogram of the whitened data. Adapted from @abacGW250114TestingHawkings2025.](figures/Figure_1.pdf){#fig-gw250114-whitened-strain width=100%}
 
@@ -38,7 +38,7 @@ In @sec-extrinsic we will bring the signal from source to detector, discussing t
 
 After the coalescence of two Kerr black holes, the remnant quickly settles into a quiescent state, emitting gravitational radiation in a process called _ringdown_.
 
-![Whitened strain in the ringdown of GW250114. The data from the Hanford detector was shifted in time and inverted to account for its different position and antenna pattern.](figures/overlapped_strains.pdf){#fig-whitened-strain-ringdown-gw250114}
+![Whitened strain in the ringdown of GW250114. The data from the Hanford detector was shifted in time and inverted to account for its different position and antenna patterns compared to Livingston.](figures/overlapped_strains.pdf){#fig-whitened-strain-ringdown-gw250114}
 
 The qualitative behaviour of this regime, a damped sinusoid, is apparent in @fig-whitened-strain-ringdown-gw250114. 
 
@@ -68,7 +68,6 @@ f'has a fundamental frequency of $f_{{220}}=${f_220.to_string(precision=3, forma
 f'and a damping time of $\\tau_{{220}}=\\mathrm{{{tau_220:.2f}}}$.')
 ```
 
-
 The fact that $f_{220} \approx 1/\tau_{220}$ means that the sinusoid corresponding to this mode is approximately suppressed by a factor $e$ every cycle.
 This decay is comparatively slow for a mode: most other QNMs are suppressed even faster [@bertiBlackHoleSpectroscopy2025, figure 2.3].
 
@@ -79,9 +78,9 @@ $$
 Predicting the amplitudes of these modes is in general hard, doing so in the generic-orbit case is in fact an open problem [@carulloBlackHoleSpectroscopy2025].
 
 Ringdown analyses may be performed at several levels of model-dependence, ranging from a purely data-driven fit with damped sinusoids to imposing a prescription for the Kerr spectrum as well as the mode amplitudes [@bertiBlackHoleSpectroscopy2025, table 7].
-The fits in @sec-gw250114-overtone are model-dependent, imposing a Kerr spectrum but not the mode amplitudes.
+The fits we will describe in @sec-gw250114-overtone are model-dependent, imposing a Kerr spectrum but not the mode amplitudes.
 
-In order to isolate the ringdown, one generally analyzes data starting after the coalescence, with the time domain data analysis techniques described in @sec-time-domain-pe. But what should the start time be?
+In order to isolate the ringdown, one generally analyzes data starting after the coalescence, with the time domain data analysis techniques described in @sec-time-domain-pe. But what should the start time be, exactly?
 The initial spacetime at the collision is highly dynamical and nonlinear, and asymptotically approaches the perturbative regime in which the QNM description is formulated. 
 This is at the core of a fundamental tension in ringdown science: the perturbative assumption is better verified the further along one starts, but the signal is quickly decaying and starting too late means losing valuable data.
 
@@ -105,7 +104,7 @@ more than the entirety of some other gravitational wave signals.
 ## Detection of the 221 overtone {#sec-gw250114-overtone}
 
 The exceptional SNR of GW250114 allowed for the confident detection of the $\ell m n = 221$ overtone in the data. 
-Its amplitude was constrained to be non-vanishing: @fig-gw250114-mode-amplitudes illustrates posterior distributions on the amplitudes of the 220 and 221. 
+Its amplitude was constrained to be non-vanishing: @fig-gw250114-mode-amplitudes illustrates posterior distributions on the 220 and 221 amplitudes. 
 There is a temporal window, between 6 and 8 $t_{M_{f}}$ after the peak, during which the overtone amplitude is constrained to be larger than 0 at more than $3 \sigma$.
 
 ![Posterior distributions for the amplitudes of the fundamental and first overtone of GW250114. Adapted from @abacGW250114TestingHawkings2025.](figures/spectroscopy_10.5M.pdf){#fig-gw250114-mode-amplitudes}
@@ -146,9 +145,9 @@ This law is fundamentally related to the second law of thermodynamics, $\text{d}
 The entropy $S$ of a black hole is encoded in its surface area $A$ [@hawkingGravitationalRadiationColliding1971], as $S = k_{B} c^{3} A / 4 G \hbar$. 
 
 Quantum effects at the horizon (_i.e._ Hawking radiation) can be incorporated in a generalized second law [@bekensteinGeneralizedSecondLaw1974], though they are negligible at the scales we are probing.
-Hawking's law be drawn based on some assumptions:
+Probing Hawking's law means probing its assumptions:
 
-1. General Relativity, a metric theory of driven governed by Einstein's equations $G_{\mu \nu} = 8 \pi G c^{-4} T_{\mu \nu}$, which derive from an action in the form $S = \int R \text{d}^{4}x$.
+1. General Relativity, a metric theory of driven governed by Einstein's equations $G_{\mu \nu} = 8 \pi G c^{-4} T_{\mu \nu}$, which derive from an action in the form $S = \int R \text{d}^{4}x$, holds.
 2. The observed objects are black holes and follow the weak censorship principle, which disallows the existence of naked singularities.
 3. The null-energy condition holds, meaning that for any null vector field $\xi$ (_i.e._ satisfying $g_{\mu \nu}\xi^{\mu} \xi^{\nu} = 0$) the stress tensor satisfies $T_{\mu \nu} \xi^{\mu} \xi^{\nu} \geq 0$.
 
@@ -162,7 +161,7 @@ Furthermore, we need to assume that General Relativity provides a good descripti
 
 We do _not_, however, need to assume that our understanding of GR is correct in its strong-field regime, at merger: the exceptionally high SNR of this signal allows us to excise the merger part of our signal, and extract the component and remnant areas from independent analyses of the early inspiral and late ringdown.
 The fractions of data analyzed can be seen in the inset of @fig-area-law-posterior .
-In order to have a statistically sound analysis of the truncated data, we need to use time-domain techniques (@sec-time-domain-pe).
+In order to have a statistically sound analysis of the truncated data, we need to use time-domain techniques (@sec-time-domain-pe) both for the inspiral and for the ringdown.
 
 In the context of a binary coalescence, Hawking's law translates to the statement that the remnant area should be larger than the sum of the component areas: 
 $$
