@@ -15,9 +15,10 @@ This section will continue in the dissection of the gravitational signal emitted
 
 ## Component masses {#sec-masses}
 
-The component masses, primary $m_{1}$ and secondary $m_{2}$ with $m_{1}>m_{2}$, are typically measured in units of the solar mass $M_{\odot} \approx 1.98841\times 10^{30} \text{kg}$.
+The two objects giving rise to the coalescence are labelled "primary" and "secondary" based on their masses, respectively $m_{1}$ and $m_{2}$ with $m_{1}>m_{2}$. 
+These masses are typically measured in units of the solar mass $M_{\odot} \approx 1.99\times 10^{30} \text{kg}$.
 
-Some common combinations include the total mass $M = m_{1}+m_{2}$, the mass ratio $q=m_{2} / m_{1} \leq 1$,^[Conventions for this parameter differ, with some authors using $q=m_{1} / m_{2}>1$, but within `BILBY`, the standard piece of software for gravitational wave inference it is defined to be less than 1 [@romero-shawBayesianInferenceCompact2020].] the reduced mass $\mu = m_{1} m_{2} / M$ and the symmetric mass ratio $\nu = \mu / M = m_{1} m_{2} / M^{2}$.
+Some common combinations of these include the total mass $M = m_{1}+m_{2}$, the mass ratio $q=m_{2} / m_{1} \leq 1$,^[Conventions for this parameter differ, with some authors using $q=m_{1} / m_{2}>1$, but within `BILBY`, the standard piece of software for gravitational wave inference, it is defined to be less than 1 [@romero-shawBayesianInferenceCompact2020].] the reduced mass $\mu = m_{1} m_{2} / M$ and the symmetric mass ratio $\nu = \mu / M = m_{1} m_{2} / M^{2}$.
 
 The waveform at low frequencies is most affected by their combination called _chirp mass_ $\mathcal{M}$, which is defined as follows:
 
@@ -49,9 +50,9 @@ However, due to the improvements in the detectors' sensitivity over the decade b
 At very low frequencies we might expect to only be able to constrain the chirp mass, with a large uncertainty on the mass ratio and all other parameters appearing later in the Post-Newtonian expansion such as spin.
 While this is qualitatively true, an interesting observation 
 [@toubianaParameterEstimationStellarmass2020]
-is that low frequency data will exhibit a strong correlation between chirp mass and mass ratio.
+is that low frequency posterior distributions can still exhibit strong correlations between chirp mass and mass ratio.
 
-If chirp mass were the only parameter allowed to vary, the frequency derivative of the signal $\dot{f}$, or equivalently, in the SPA approximation @sec-stationary-phase-approximation, the second derivative of the FD phase $\Psi''$ in @eq-post-newtonian-phase-generic, would be sufficient to constrain it.
+If chirp mass were the only parameter allowed to vary, the frequency derivative of the signal $\dot{f}$, or equivalently (in the SPA approximation @sec-stationary-phase-approximation) the second derivative of the FD phase $\Psi''$ in @eq-post-newtonian-phase-generic, would be sufficient to constrain it.
 However, in general, fixing this frequency derivative will determine a surface - for example, a 1D curve in the $(\mathcal{M}, \nu)$ space, or a 2D surface in the $(\mathcal{M}, \nu, \chi _\text{eff})$ space.
 
 @toubianaParameterEstimationStellarmass2020 show this curve in the $\mathcal{M}, \nu$ plane, in the case of a stellar-mass black hole binary observed by LISA. 
@@ -66,12 +67,26 @@ $$
 \pi(\mathcal{M}, q) = \mathcal{M} \frac{(1+q)^{2/5}}{q^{6/5}}\,.
 $$
 
+When sampling, it is also importanto to identify which object is the primary and which is the
+secondary [@gerosaWhichWhichIdentification2025]. 
+The distinction would be well-specified if we had access to the exact masses of the objects, $m_1$ and $m_2$, 
+but due to measurement error we do not: any given posterior sample will describe two objects
+with masses $m_a$ and $m_b$ and corresponding spins $\vec{chi}_a$ and $\vec{chi}_b$.
+
+The current standard approach is to establish the correspondence $a \iff 1$ and $b \iff 2$
+based on the criterion that $m_a > m_b$, on a sample-by-sample basis.
+If the masses are well-distinguished (_i.e._ the mass ratio is considerable) this can be reliable,
+but for comparable masses and low SNRs it is prone to bias inference.
+A generic, nonparametric and non-data-driven labelling procedure is not currently available.
+A practical stopgap approach is to discuss results based on relabeling invariant
+parameters. 
+
 ## Spin and orbital angular momentum {#sec-spin}
 
 In a generic binary with orbital angular momentum $\vec{L}$, the component objects will have two spin vectors $\vec{S}_{1,2}$. These three vectors will generally not be aligned, neither to each other nor with the observation direction $\vec{N}$.^[In this section we shall use this letter for the observation direction to conform with the convention, though elsewhere we use $m$.]  
 
 In principle we could use Cartesian coordinates to describe these spins; 
-however gravitational wave analyses typically use the following parameters, which are better behaved:
+however in gravitational wave analysis it is more convenient use the following decomposition:
 
 3. $a_{1} = \lvert \vec{S}_{1} \rvert / m_{1}^{2}$, 
     the dimensionless _magnitude_ of the primary object's spin;
@@ -107,7 +122,7 @@ Due to precession, the orbital angular momentum $\vec{L}$ and the spins $\vec{S}
 The magnitudes of the spins $a_{i}$ are exactly conserved. 
 The four remaining parameters --- two tilts and two azimuthal angles --- measurably evolve through precession, and thus need to be specified at a given reference frequency.
 
-The angle between orbital angular momentum and observation direction, or _inclination angle_, is denoted as $\iota = \arccos(\vec{L}\cdot \vec{N})$. In the aligned-spin case $\iota = \theta_{\text{JN}}$ is constant, but in general $\iota$ is a time-dependent quantity.
+The angle between orbital angular momentum and observation direction, or _inclination angle_, is denoted as $\iota = \arccos(\vec{L}\cdot \vec{N})$. In the aligned-spin case it is constant and equal to $\theta_{\text{JN}}$, but in general it is a time-dependent quantity.
 
 The best-constrained spin-related quantity is generally the effective spin parameter
 $$
@@ -120,9 +135,18 @@ $$
 $$
 where $\chi_{i}^{\perp} = |a_{1} \sin(\theta_{i})|$ denotes the magnitude of the in-plane component of the spins.
 
+![Effective and precessing spin parameters for GW250114, from @abacGW250114TestingHawkings2025.](figures/four_waveforms_S250114_chi_eff_chi_p.pdf){#fig-chip-chieff-gw250114 width=70%}
+
+In @fig-chip-chieff-gw250114 we show the posterior distribution on these parameters
+for GW250115, obtained with several different waveform approximants. 
+Qualitatively, $\chi_{\text{eff}}$ was slighty negative while $\chi_p$ was small.
+The apparent decrease in posterior mass for $\chi_p \to 0$ is an artefact of the prior used 
+on the component spins (@sec-spin-priors), whose distribution in terms of $\chi_p$ is shown
+in grey: the data prefer small values of $\chi_p$. 
+
 Modelling precession is generally accomplished through a change in reference frame: a waveform is obtained in a co-precessing frame, whose $z$ axis is the orbital angular momentum, and then transformed to an inertial frame by means of a time-dependent transformation, which can efficiently be computed with a Post-Newtonian approximation. We give more details on the procedure in @sec-twisting.
 
-### Prior distribution
+### Prior distribution {#sec-spin-priors}
 
 The prior to adopt for spin variables is a matter of convention. 
 Within `BILBY` [@romero-shawBayesianInferenceCompact2020], it is defined so that the dimensionless spin magnitudes $a_{i}$ are uniformly distributed in the range $[0, 0.99]$, while the spins are uniformly distributed on the sphere, meaning that $\phi_{12}$, $\phi_{JL}$, $\cos \theta_{1}$, $\cos \theta_{2}$ are uniformly distributed.
@@ -142,7 +166,7 @@ $$
 r = \frac{p}{1 + e\cos f}\,,
 $$
 where $f$ is a polar angle in the orbital plane, measured  from the center of mass of the system, while $r = |r_{1}-r_{2}|$ is the distance between the two objects.
-The motion of either body can easily be recovered from this equation: their radii as measured from the center of mass will always have opposite signs, and magnitudes $r_{1} = q r / (1+q)$ and $r_{2} = r / (1+q)$, where $q$ is the mass ratio. 
+The motion of either body can easily be recovered from this equation: their position vectors measured from the center of mass will always have opposite signs, and magnitudes $r_{1} = q r / (1+q)$ and $r_{2} = r / (1+q)$, where $q$ is the mass ratio. 
 The constants of motion $p$ and $e$ are called _semilatus rectus_ and _eccentricity_. 
 The former has the dimensions of a length and it characterizes the orbit's scale; the latter is a pure number, which determines the type of conic section the orbit describes:
 
@@ -155,9 +179,7 @@ Systems with $e<1$ are _bound_, they repeat their motion and have negative total
 Let us define some parameters for the elliptical case: the points $(x, y)$ of an ellipse with semimajor axis $a$ and semiminor axis $b$ obey
 $$\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1$$
 
-The *eccentricity* $e$ is given by $e^2 = 1- ( b / a)^2$.
-The *focal distance* $c$ is $c = \sqrt{ a^{2} - b^{2} }$.
-The _semilatus rectum_ $p$ is $p=a \sqrt{ 1-e^{2} }$. 
+In terms of these variables, the *eccentricity* $e$ is given by $e^2 = 1- ( b / a)^2$, the *focal distance* $c$ by $c = \sqrt{ a^{2} - b^{2} }$, and the _semilatus rectum_ $p$ by $p=a \sqrt{ 1-e^{2} }$. 
 
 We have previously used the *true anomaly* $f$ as a polar angle: it is the angle from the periastron to the orbiting body, measured using the *focus of the ellipse* as the center. 
 There are some other choices: the *eccentric anomaly* $E$ is the angle from the periastron to the *projection* of the orbiting body onto the smallest circle containing the ellipse, measured using the *center of the ellipse* as the center.
@@ -194,17 +216,21 @@ when gravity is strong eccentricity is not a constant of motion, nor is it covar
 orbits are also not exactly elliptical, due to both precession and gravitational wave emission [@favataGravitationalwaveMemoryEccentric2011].
 
 Furthermore, the strict classification of Newtonian binaries breaks down in General Relativity: 
+eccentricity decreases in a process known as _circularization_, and an unbound system can 
+become bound if the gravitational wave emission during a hyperbolic encounter is 
+enough to make its total energy negative.^[In GR this Newtonian condition should be phrased as: "make the total energy of the system $E$ smaller than the sum of the rest masses of the components, $M$."]
 
-It is possible to define a notion of eccentricity based on the evolution of the emission frequency of the binary, which is monotonic when the orbit is quasi-circular, while it exhibits peaks and trophs on the orbital timescale for eccentric orbits [@shaikhDefiningEccentricityGravitational2023].
+It is possible to define a notion of eccentricity based on the evolution of the emission frequency of the binary.
+This frequency is monotonic when the orbit is quasi-circular, while for eccentric orbits it exhibits peaks and trophs on the orbital timescale [@shaikhDefiningEccentricityGravitational2023].
 
-Within the `TEOBResumS-DAlí` EOB waveform model [@boninoInferringEccentricityEvolution2022], 
+Within the `TEOBResumS-DAlí` waveform model [@boninoInferringEccentricityEvolution2022;@albanesiEffectiveonebodyModelingGeneric2025], 
 eccentricity and relativistic anomaly are used as an initial condition for the EOB variables, which are then evolved with fully relativistic prescriptions (see also @sec-eob). 
 
-@gambaRevisitingGW150914Nonplanar2025 performed a first-of-its-kind reanalysis of the first-ever detection GW150914 with a model including both eccentricity and precessing spins. 
+@gambaRevisitingGW150914Nonplanar2025 performed a first-of-its-kind reanalysis of the event GW150914 with a model including both eccentricity and precessing spins. 
 Beyond the regular 15 parameters describing a precessing black hole binary,^[For convenience we give the list here: 2 masses, 6 independent spin components, 7 extrinsic parameters (inclination $\theta_{JN}$, phase $\phi_{0}$, 2 sky coordinates, luminosity distance $d_{L}$, polarization $\psi$, time of coalescence $t_{0}$.)] this analysis required two more: eccentricity and (true) anomaly.
 The constraints on these two parameters are shown in @fig-ecc-zeta-gw150914.
 
-![Eccentricity and true anomaly posterior for GW150914, from @gambaRevisitingGW150914Nonplanar2025.](figures/ecc_zeta.pdf){#fig-ecc-zeta-gw150914}
+![Eccentricity and true anomaly posterior for GW150914, from @gambaRevisitingGW150914Nonplanar2025.](figures/ecc_zeta.pdf){#fig-ecc-zeta-gw150914 width=70%}
 
 ### At lower frequencies
 
@@ -246,7 +272,7 @@ This is done with a simple Post-Newtonian approach, namely Peters' equations [@p
 from thesis_scripts import peters_evolution, data_path
 import matplotlib.pyplot as plt
 
-fig, axs = plt.subplots(2, 1, sharex=True)
+fig, axs = plt.subplots(2, 1, sharex=True, figsize=(6, 4))
 
 
 fname_cache = data_path / 'cache' / 'gw250114_eccentricity_extrapolation.npy'
@@ -274,7 +300,7 @@ axs[1].set_xlabel('Frequency [Hz]')
 plt.show()
 ```
 
-While the limits and analysis quoted in the paper [@abacGW250114TestingHawkings2025] used a uniform prior in $e$, 
+While the limits and analysis quoted in the discovery paper [@abacGW250114TestingHawkings2025] used a uniform prior in $e$, 
 a conservative choice, we also show results obtained with a log-uniform prior $p(e) \propto 1/e$.
 The qualitative scenario is similar in both cases: eccentricities on the order of $e \sim 0.5$ are plausible in the deci-hertz band.
 However, the prior significantly affects whether these lie on the edge of the distribution or along its bulk.
@@ -289,7 +315,7 @@ This deformation enhances the gravitational attraction between the two objects,
 but it is only effective at relatively short separations: the net effect, therefore,
 is to leave the early inspiral almost unchanged, while accelerating its late stages.
 
-In the static case, this tidal field can be expressed as $\mathcal{E}_{ij}=C_{0i0j}$, where $C$ is the Weyl curvature tensor [@misnerGravitation1973; eq. 13.50], the trace-free component of the Riemann curvature tensor. At leading order, this tidal field will induce a quadrupole moment $Q_{ij}$, given by 
+In the static case, this tidal field can be expressed as $\mathcal{E}_{ij}=C_{0i0j}$, where $C$ is the Weyl curvature tensor [@misnerGravitation1973, eq. 13.50], the trace-free component of the Riemann curvature tensor. At leading order, this tidal field will induce a quadrupole moment $Q_{ij}$, given by 
 
 $$
 Q_{ij} = - \Lambda M^{5} \mathcal{E}_{ij}
@@ -303,7 +329,7 @@ $${#eq-tidal-polarizability}
 
 where $R$ is the radius of the object, while $\kappa_{2}$ is its $\ell=2$ dimensionless tidal Love number, which for neutron stars is generally on the order of 0.1.
 
-The main tidal contribution to the waveform is through the effective tidal parameter [@wadeSystematicStatisticalErrors2014]:
+The main tidal contribution to the waveform is through the effective tidal parameter, which comes in at 5PN order [@wadeSystematicStatisticalErrors2014]:
 $$
 \tilde{\Lambda} = \frac{8}{13} \left[ 
 (1+7\nu -31\nu^{2}) (\Lambda_{1}+\Lambda_{2})
@@ -333,11 +359,11 @@ GW250114 provided an opportunity to test this prediction:
 if it had a measurable deviation from $\tilde{\Lambda}=0$, 
 it would have indicated a potential violation of 
 General Relativity or some other missing aspect in our description
-of this binary. 
+of this binary, such as the components not being black holes but other compact objects. 
 @andres-carcasonaNoLoveBlack2025 have shown this not 
-to be necessary for the data currently available, 
+to be the case within current experimental uncertainties, 
 constraining $\tilde{\Lambda}$ to be less than 
-155 (with uniform priors) or 35 (with log-uniform priors).
+155 (with uniform priors) or 35 (with log-uniform priors) for this event.
 
 ## Waveform modelling
 
@@ -350,13 +376,24 @@ There are several approaches to waveform modelling,
 with varying degrees of computational complexity, 
 completeness in the inclusion of physical effects,
 and accuracy.
-Beyond the ones listed here, we also note the existence of __Numerical Relativity surrogates__ and __phenomenological models__.
+Often, these approaches are calibrated or validated against full Numerical Relativity simulations. 
+These have been possible for around 20 years as of this writing [@pretoriusEvolutionBinaryBlack2005;@gourgoulhon3+1FormalismBases2007], and despite being a gold standard suffer from their own set of uncertainties. 
 
-### Post-Newtonian
+Gravitational waves can be extracted from them based on the Weyl scalar $\Psi_4 = C_{abcd} m^a m^b n^c n^d$, where $m$ and $n$ are component vectors of a null tetrad while $C$ is the Weyl tensor. 
+At large separations from the binary, this is related to the gravitational time-domain polarizations $h_+ - i h_\times$ by
+
+$$ -\Psi_4 = \dott{h}_+ - i \dott{h}_\times\,,
+$$
+
+so this scalar must be computed at the edges of the simulation, integrated twice in the time variable, and then decomposed into spherical harmonics [@lofflerEinsteinToolkitCommunity2012]. 
+
+We will focus on the Post-Newtonian (@sec-post-newtonian) and EOB (@sec-eob) approaches to waveform generation; we also note the existence of Numerical Relativity surrogates and phenomenological models for comparable mass binaries, and the gravitational self-force formalism for extreme mass ratios.
+
+### Post-Newtonian {#sec-post-newtonian}
 
 Post-Newtonian waveforms are obtained by analytically expanding Einstein's equations in powers of $v/c$. Thanks to the SPA approximation, this can lead to an analytical expression for the amplitude and phase as a function of frequency. 
 
-@buonannoComparisonPostNewtonianTemplates2009 give a comparison of some commonly used Post-Newtonian templates, including the frequency-domain one `TaylorF2`, whose waveforms read @messinaQuasi55PNTaylorF2Approximant2019:
+@buonannoComparisonPostNewtonianTemplates2009 give a comparison of some commonly used Post-Newtonian templates, including the frequency-domain one `TaylorF2`, whose waveforms read [@messinaQuasi55PNTaylorF2Approximant2019]:
 $$
 \tilde{h}(f) = \sqrt{ \frac{5}{24} }\frac{c}{\pi^{2/3} d_{L}} \left( \frac{G\mathcal{M}}{c^{3}} \right)^{5/6}  f^{-7/6} \left( 1 + \sum_{n=2}^{n_\text{max}} A_{n} \left( \pi M f \right) ^{n} \right)  e^{i \Psi(f)}\,,
 $$
@@ -371,7 +408,7 @@ The following description will mainly describe the components of the `TEOBResumS
 
 The problem is described in a Hamiltonian setting,
 in terms of the dimensionless variables $(r, p_{r}, \varphi, p_{\varphi})$, 
-which are rescaled relative polar coordinates in the orbital plane [@nagarTimedomainEffectiveonebodyGravitational2018]. 
+which are rescaled relative polar coordinates in the orbital plane. 
 
 The effective Hamiltonian of the problem is given by [@nagarTimedomainEffectiveonebodyGravitational2018]:
 $$
@@ -392,7 +429,8 @@ where the following quantities appear:
 
 The potentials $A$ and $B$ are computed with Padé resummation in order to improve stability where the Taylor approximant would diverge. 
 
-Notably, the equations of motion are not conservative, as they include _radiation reaction_ terms which affect the evolution of the momenta.
+Since we are working within General Relativity the equations of motion are not conservative: they include _radiation reaction_ terms which affect the evolution of the momenta. 
+These terms also need to be computed to high order and Padé-resummed.
 
 ::: {#nte-pade-approximant .callout-note collapse="true"}
 ##### Padé approximation
@@ -410,7 +448,7 @@ $$
 for all $r \leq n+m$.
 In fact, a Taylor series is a special case of a Padé approximant with $m=0$. 
 
-One advantage of using Padé approximants is that, for large values of $x$, they have a lower asymptotic order, and thus tend towards less "extreme" behavior.
+One advantage of using Padé approximants is that, for large values of $x$, they have a lower asymptotic order, and thus tend towards less "extreme" behavior, as @fig-pade-approximant shows.
 
 ```{python}
 #| label: fig-pade-approximant
@@ -431,7 +469,7 @@ taylor_sine = np.poly1d(list(reversed(sine_taylor_coefficients)))
 x = np.linspace(-10, 10, num=1000)
 
 plt.plot(x, np.sin(x), label='$\sin(x)$', c='black')
-plt.plot(x, taylor_sine(x), label='Taylor series', ls='--')
+plt.plot(x, taylor_sine(x), label='Taylor series to order 7', ls='--')
 plt.plot(x, pade_sine(x), label='Padé $(3, 4)$ approximant')
 plt.legend()
 plt.ylim(-10, 10)
@@ -443,16 +481,18 @@ plt.show()
 
 The waveform obtained by computing a solution to the EOB dynamics 
 is then completed with corrections for the "plunge" regime [@damourFaithfulEffectiveonebodyWaveforms2007], 
-and a smooth connection to the ringdown [@damourIntroductoryLecturesEffective2008], which is modelled as a superposition of 
+and - for black hole binaries - a smooth connection to the ringdown [@damourIntroductoryLecturesEffective2008], which is modelled as a superposition of 
 quasi-normal modes as described in @sec-ringdown.
+The treatment for the post-merger regime of other compact objects such as neutron stars is significantly more complex, as the phenomenology is much more variable and not currently constrained by observational data. 
+Nevertheless, approaches have been proposed to handle it [@breschiKilohertzGravitationalWaves2022].
 
 A numerical solution to the EOB evolution equations is not always necessary: 
 @nagarRushInspiralEfficient2019 showed that a post-adiabatic approximation allows for the 
 analytic solution to these equations. 
-Then @gambaFastFaithfulFrequencydomain2020 applied a SPA [@sec-stationary-phase-approximation]
+@gambaFastFaithfulFrequencydomain2020 further applied a stationary phase approximation (SPA, see @sec-stationary-phase-approximation)
 to these waveforms, allowing for direct generation in the frequency domain.
 
-This approach is not always feasible: for example, eccentric-hyperbolic binaries
+The SPA approach is not always feasible: for example, eccentric-hyperbolic binaries
 do not satisfy the requirements for the SPA, and their waveforms need to 
 be computed in the time domain [@nagarEffectiveonebodyWaveformModel2024, @gambaRevisitingGW150914Nonplanar2025].
 
@@ -464,23 +504,25 @@ The evaluation of gravitational waveform models is commonly a bottleneck for the
 
 As an example, we show results from `mlgw_bns` [@tissinoCombiningEffectiveonebodyAccuracy2023],
 a surrogate of the frequency-domain model `TEOBResumSPA` [@gambaFastFaithfulFrequencydomain2020] for aligned-spin neutron star binaries
-with tidal effects --- a 5-dimensional parameter space, with parameters $(q, \chi_1, \chi_2, \Lambda_1, \Lambda_2)$, since all others can be included analytically in the waveform.
+with tidal effects --- a 5-dimensional parameter space, with parameters $(q, \chi_1, \chi_2, \Lambda_1, \Lambda_2)$, since all others can be modeled analytically.
 
-As a surrogate, it is trained on the base model, which can be generated at arbitrary points. The surrogate's accuracy depends on the number of training data points, and it is measured in terms of the mismatch
+As a surrogate, it is trained on the base model, which can be evaluated at arbitrary points in the parameter space. 
+The surrogate's accuracy depends on the number of training data points, and it is measured in terms of the mismatch
 $$
 \bar{\mathcal{F}} = 1 - \max_{t_{0}, \phi_{0}} \frac{(h_\text{true}| h _\text{surr}(t_0, \phi_0))}{\sqrt{ (h _\text{true}| h _\text{true}) (h _\text{surr}| h _\text{surr})}}
 $${#eq-mismatch}
-where the scalar products are computed as in equation @eq-noise-weighted-inner-product, and maximized over reference time and coalescence phase.
+where the scalar products are computed as in equation @eq-noise-weighted-inner-product, and generally maximized over reference time and coalescence phase - this is equivalent to allowing the surrogate model to have a different parameterization for timing and phase than its baseline. 
+This is generally acceptable, since timing and phase have no astrophysical meaning.
 
-![Reconstruction accuracy for `mlgw_bns` as a function of the number of training waveforms N. ](figures/mlgw_bns/fig06.pdf){#fig-mlgw-bns-accuracy}
+![Reconstruction accuracy for `mlgw_bns` as a function of the number of training waveforms N. ](figures/mlgw_bns/fig06.pdf){#fig-mlgw-bns-accuracy width=60%}
 
-Whereas the mismatch is a global metric, reconstruction accuracy can also be locally measured by directly comparing the predictions with those of the base model. We show this in @fig-mlgw-bns-reconstruction-fd; the high accuracy achieved at low frequencies is by construction, as the model is constructed by incorporating an analytic Post-Newtonian baseline and only fitting the residual error.
+Whereas the mismatch is a global metric, reconstruction accuracy can also be locally measured by directly comparing the predictions with those of the base model. We show this in @fig-mlgw-bns-reconstruction-fd: the high accuracy achieved at low frequencies is by construction, as the model is constructed by incorporating an analytic Post-Newtonian baseline and only fitting the residual error.
 
-![Reconstruction accuracy for `mlgw_bns` in the frequency domain. ](figures/mlgw_bns/fig07.pdf){#fig-mlgw-bns-reconstruction-fd}
+![Reconstruction accuracy for `mlgw_bns` in the frequency domain. ](figures/mlgw_bns/fig07.pdf){#fig-mlgw-bns-reconstruction-fd width=60%}
 
 The surrogate model should also be faster to evaluate: this was indeed the case, as @fig-mlgw-bns-compared-timing shows.
-The number of gridpoints has a significant impact on the evaluation time for all models, as is inevitable given the increased number of floating point operations.
+The number of grid points in frequency has a significant impact on the evaluation time for all models, as is inevitable given the increased number of floating point operations.
 Therefore, we separate out the constant-time contribution to the evaluation time from the one scaling with the number of grid points.
 
-![Evaluation time for `mlgw_bns` compared to its reference model `TEOBResumSPA` and some others. ](figures/mlgw_bns/fig12.pdf){#fig-mlgw-bns-compared-timing}
+![Evaluation time for `mlgw_bns` compared to its reference model `TEOBResumSPA` and some others. ](figures/mlgw_bns/fig12.pdf){#fig-mlgw-bns-compared-timing width=60%}
 
