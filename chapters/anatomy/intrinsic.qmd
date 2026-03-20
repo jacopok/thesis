@@ -53,7 +53,7 @@ While this is qualitatively true, an interesting observation
 is that low frequency posterior distributions can still exhibit strong correlations between chirp mass and mass ratio.
 
 If chirp mass were the only parameter allowed to vary, the frequency derivative of the signal $\dot{f}$, or equivalently (in the SPA approximation @sec-stationary-phase-approximation) the second derivative of the FD phase $\Psi''$ in @eq-post-newtonian-phase-generic, would be sufficient to constrain it.
-However, in general, fixing this frequency derivative will determine a surface - for example, a 1D curve in the $(\mathcal{M}, \nu)$ space, or a 2D surface in the $(\mathcal{M}, \nu, \chi _\text{eff})$ space.
+However, in general, fixing this frequency derivative will determine a surface --- for example, a 1D curve in the $(\mathcal{M}, \nu)$ space, or a 2D surface in the $(\mathcal{M}, \nu, \chi _\text{eff})$ space.
 
 @toubianaParameterEstimationStellarmass2020 show this curve in the $\mathcal{M}, \nu$ plane, in the case of a stellar-mass black hole binary observed by LISA. 
 Qualitatively, it is very "shallow": a variation of $\nu$ from 0.2 to 0.25 (a 25% increase) only corresponds to a variation in $\mathcal{M}$ by $10^{-3}M_{\odot}$ (a 0.003% increase). 
@@ -135,7 +135,7 @@ $$
 $$
 where $\chi_{i}^{\perp} = |a_{1} \sin(\theta_{i})|$ denotes the magnitude of the in-plane component of the spins.
 
-![Effective and precessing spin parameters for GW250114, from @abacGW250114TestingHawkings2025.](figures/four_waveforms_S250114_chi_eff_chi_p.pdf){#fig-chip-chieff-gw250114 width=70%}
+![Effective and precessing spin parameters for GW250114, from @abacGW250114TestingHawkings2025.](figures/four_waveforms_S250114_chi_eff_chi_p.pdf){#fig-chip-chieff-gw250114 width=50%}
 
 In @fig-chip-chieff-gw250114 we show the posterior distribution on these parameters
 for GW250115, obtained with several different waveform approximants. 
@@ -272,7 +272,10 @@ This is done with a simple Post-Newtonian approach, namely Peters' equations [@p
 from thesis_scripts import peters_evolution, data_path
 import matplotlib.pyplot as plt
 
-fig, axs = plt.subplots(2, 1, sharex=True, figsize=(6, 4))
+fig, axs = plt.subplots(
+    1, 2, sharey=True, figsize=(6, 2.5),
+    gridspec_kw={'wspace':0.1}
+    )
 
 
 fname_cache = data_path / 'cache' / 'gw250114_eccentricity_extrapolation.npy'
@@ -292,10 +295,10 @@ for ax in axs:
     ax.set_xscale('log')
     ax.set_xlim(2e-2, 13.33)
     ax.set_ylim(0, 1)
-    ax.set_ylabel('Eccentricity')
-    ax.legend()
+    ax.set_xlabel('Frequency [Hz]')
+axs[0].set_ylabel('Eccentricity')
+axs[1].legend()
 axs[1].set_title('Log-uniform prior on $e$')
-axs[1].set_xlabel('Frequency [Hz]')
 
 plt.show()
 ```
@@ -382,7 +385,7 @@ These have been possible for around 20 years as of this writing [@pretoriusEvolu
 Gravitational waves can be extracted from them based on the Weyl scalar $\Psi_4 = C_{abcd} m^a m^b n^c n^d$, where $m$ and $n$ are component vectors of a null tetrad while $C$ is the Weyl tensor. 
 At large separations from the binary, this is related to the gravitational time-domain polarizations $h_+ - i h_\times$ by
 
-$$ -\Psi_4 = \dott{h}_+ - i \dott{h}_\times\,,
+$$ -\Psi_4 = \ddot{h}_+ - i \ddot{h}_\times\,,
 $$
 
 so this scalar must be computed at the edges of the simulation, integrated twice in the time variable, and then decomposed into spherical harmonics [@lofflerEinsteinToolkitCommunity2012]. 
@@ -481,7 +484,7 @@ plt.show()
 
 The waveform obtained by computing a solution to the EOB dynamics 
 is then completed with corrections for the "plunge" regime [@damourFaithfulEffectiveonebodyWaveforms2007], 
-and - for black hole binaries - a smooth connection to the ringdown [@damourIntroductoryLecturesEffective2008], which is modelled as a superposition of 
+and --- for black hole binaries --- a smooth connection to the ringdown [@damourIntroductoryLecturesEffective2008], which is modelled as a superposition of 
 quasi-normal modes as described in @sec-ringdown.
 The treatment for the post-merger regime of other compact objects such as neutron stars is significantly more complex, as the phenomenology is much more variable and not currently constrained by observational data. 
 Nevertheless, approaches have been proposed to handle it [@breschiKilohertzGravitationalWaves2022].
@@ -511,7 +514,7 @@ The surrogate's accuracy depends on the number of training data points, and it i
 $$
 \bar{\mathcal{F}} = 1 - \max_{t_{0}, \phi_{0}} \frac{(h_\text{true}| h _\text{surr}(t_0, \phi_0))}{\sqrt{ (h _\text{true}| h _\text{true}) (h _\text{surr}| h _\text{surr})}}
 $${#eq-mismatch}
-where the scalar products are computed as in equation @eq-noise-weighted-inner-product, and generally maximized over reference time and coalescence phase - this is equivalent to allowing the surrogate model to have a different parameterization for timing and phase than its baseline. 
+where the scalar products are computed as in equation @eq-noise-weighted-inner-product, and generally maximized over reference time and coalescence phase --- this is equivalent to allowing the surrogate model to have a different parameterization for timing and phase than its baseline. 
 This is generally acceptable, since timing and phase have no astrophysical meaning.
 
 ![Reconstruction accuracy for `mlgw_bns` as a function of the number of training waveforms N. ](figures/mlgw_bns/fig06.pdf){#fig-mlgw-bns-accuracy width=60%}
@@ -520,7 +523,7 @@ Whereas the mismatch is a global metric, reconstruction accuracy can also be loc
 
 ![Reconstruction accuracy for `mlgw_bns` in the frequency domain. ](figures/mlgw_bns/fig07.pdf){#fig-mlgw-bns-reconstruction-fd width=60%}
 
-The surrogate model should also be faster to evaluate: this was indeed the case, as @fig-mlgw-bns-compared-timing shows.
+The surrogate model should also be faster to evaluate: this is indeed the case, as @fig-mlgw-bns-compared-timing shows.
 The number of grid points in frequency has a significant impact on the evaluation time for all models, as is inevitable given the increased number of floating point operations.
 Therefore, we separate out the constant-time contribution to the evaluation time from the one scaling with the number of grid points.
 

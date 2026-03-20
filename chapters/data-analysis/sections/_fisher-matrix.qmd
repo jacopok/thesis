@@ -85,7 +85,7 @@ $$
 \sigma_{t} = \frac{1}{2\pi\rho\sigma_{f}}\,.
 $$
 
-#### Angular resolution
+#### Angular resolution {#sec-angular-resolution}
 
 Localizing gravitational wave sources is crucial, and it is quite useful to analytically understand which effects drive it in order to inform detector design.
 @wenGeometricalExpressionAngular2010 computed a general Fisher expression for the angular area of a source observed by a network of detectors.

@@ -24,19 +24,6 @@ observer relative to the orbital plane.
 In order to better understand their effect, the rest of this section will describe
 them in relation to the way a waveform is decomposed in spherical harmonics.
 
-The reference phase from a compact binary merger is a crucial parameter for its description, 
-which however brings little physical insight @LIGOT1300326v1AnalyticMarginalisation.
-This has led to efforts to simplify its treatment. 
-If the signal only includes the $\ell |m| = 22$ harmonic, 
-it is possible to derive a formulation of the likelihood which is analytically 
-marginalized over phase, see @sec-analytic-marginalization-phase.
-
-Phase is also difficult to infer when using neural posterior estimation ([@sec-neural-posterior-estimation]): the network tends to be unable to infer it, and returns the prior instead, 
-despite correctly constraining the remaining parameters.
-To this end, @daxNeuralImportanceSampling2023 introduced a resampling method, 
-in which the phase is synthetically sampled by evaluating the likelihood
-on a grid in phase.
-
 #### Spherical harmonic decomposition
 
 The two time-domain polarizations of a gravitational wave, 
@@ -49,7 +36,7 @@ $${#eq-spherical-harmonic-decomposition}
 
 This decomposition is performed around the _orbital_ angular momentum,
 which is not conserved in the generic, precessing case.
-If the binary is spin-aligned, then it is also symmetric about the orbital plane, 
+If the binary is spin-aligned, on the other hand, it is also symmetric about the orbital plane, 
 which leads to the relation $h_{\ell m}= (-1)^{\ell}h^{*}_{\ell -m}$ [@prattenComputationallyEfficientModels2021]. 
 For the expressions of the spin-weighted harmonics, see @nte-spherical-harmonics.
 
@@ -78,10 +65,13 @@ $${}^{(-s)}Y_{\ell m} = (-1)^s \sqrt{\frac{2 \ell + 1}{4 \pi }} d^\ell_{m, s} (\
 $$
 
 where $d^\ell_{m, s} (\iota )$ is called a Wigner $d$-function, given by
-$$ d^\ell_{m, s} (\iota ) = \sum _{k=k_1 }^{k_2 }
-\frac{(-1)^k \sqrt{(\ell+m)! (\ell-m)! (\ell+s)! (\ell-s)!}}{(\ell+m-k)! (\ell-s-k)! k! (k+s-m)!} 
-\left(\cos (\iota / 2)\right)^{2 \ell + m -s - 2k}
-\left(\sin (\iota / 2)\right)^{2 k + s - m}\,,/
+$$ 
+\begin{aligned}
+d^\ell_{m, s} (\iota ) = \sum _{k=k_1 }^{k_2 }
+& \bigg[ \frac{(-1)^k \sqrt{(\ell+m)! (\ell-m)! (\ell+s)! (\ell-s)!}}{(\ell+m-k)! (\ell-s-k)! k! (k+s-m)!}  \\
+&\left(\cos (\iota / 2)\right)^{2 \ell + m -s - 2k}
+\left(\sin (\iota / 2)\right)^{2 k + s - m} \bigg]\,,
+\end{aligned}
 $${#eq-wigner-d-functions}
 
 where $k_1 = \max(0, m-s)$ and $k_2 = \min (\ell + m, \ell - s)$.
@@ -164,6 +154,21 @@ as long as we reabsorb the coefficients into the amplitude.
 
 :::
 
+#### Inferring phase
+
+The reference phase from a compact binary merger is a crucial parameter for its description, 
+which however brings little physical insight [@LIGOT1300326v1AnalyticMarginalisation].
+This has led to efforts to simplify its treatment. 
+If the signal only includes the $\ell |m| = 22$ harmonic, 
+it is possible to derive a formulation of the likelihood which is analytically 
+marginalized over phase, see @sec-analytic-marginalization-phase.
+
+Phase is also difficult to infer when using neural posterior estimation ([@sec-neural-posterior-estimation]): the network tends to be unable to infer it, and returns the prior instead, 
+despite correctly constraining the remaining parameters.
+To this end, @daxNeuralImportanceSampling2023 introduced a resampling method, 
+in which the phase is synthetically sampled by evaluating the likelihood
+on a grid in phase.
+
 #### Twisting: the construction of precessing frequency-domain waveforms {#sec-twisting}
 
 The construction of precessing gravitational waveforms is 
@@ -182,7 +187,7 @@ $$
 $$
 where the $\mathcal{d}_{m'm}^{\ell}$ are the Wigner $d$-function, defined in @eq-wigner-d-functions. 
 The three Euler angles $\alpha$, $\beta$ and $\gamma$ are time-dependent.
-They allow for more freedom than necessary: we seek a rotation mapping $\vec{L}$ to $\vec{J}$, and several rotations accomplish this goal. Once the angles $\alpha$ and $\beta$ are determined to track the correct rotation, $\gamma$ can be gauge-fixed such that
+They allow for more freedom than necessary: the rotation mapping $\vec{L}$ to $\vec{J}$ is not unique. Once the angles $\alpha$ and $\beta$ are determined to track the correct rotation, $\gamma$ can be gauge-fixed such that
 $$
 \dot{\gamma} = - \dot{\alpha} \cos \beta\,,
 $$
@@ -222,7 +227,10 @@ We can recognize this structure in @eq-fourier-domain-precessing-waveforms.
 
 ### Sky position and polarization
 
-The strain from a gravitational wave moving along a fixed direction has two independent polarizations, and it can be written as 
+Within General Relativity, the strain from a gravitational wave moving along a fixed 
+direction only has two independent polarizations. Alternative theories of gravity allow 
+for the excitation of up to six [@nishizawaProbingNontensorialPolarizations2009], 
+but we will focus on the GR case, where the strain tensor is decomposed as
 $$
 h_{ij}(t) = h_+ (t) e_{ij}^{+} + h_\times (t) e_{ij}^{\times}
 $$ {#eq-strain-tensor-decomposition}
@@ -274,17 +282,11 @@ where the sky position is parameterized by an azimuth $\phi \in [0, 2 \pi)$ and 
 
 ![Diagram of the right ascension and declination coordinates, from @dupletsaValidatingPriorinformedFishermatrix2025.](figures/ra-dec.pdf){#fig-ra-dec-diagram}
 
-Typically, we do not actually care about the error in the sky coordinates themselves but about 
-the sky localization area, the minimal solid angle that can be chosen such that the probability
-that the signal lies within it is $X$, where $X$ is some conventionally chosen number such as $90\%$.
-
-
-For GW170817, this area was roughly $\Delta \Omega \approx 28 \text{deg}^2$.
-Since this value is relatively small, it can also be obtained in the Gaussian approximation: 
-$$ \Delta \Omega \approx - 2 \pi \log(1 - 0.9) |\cos(\text{dec})| \sqrt{\sigma _{\text{ra}}^2 \sigma_{\text{dec}}^2 - \text{cov}_{\text{ra, dec}}^2} \times \left( \frac{180\ \text{deg}}{\pi\ \text{rad}}\right)^2
-$$
-
-
+When constraining the sky position of a given gravitational wave source, 
+we typically do not actually care about the error in the coordinates themselves but about 
+the sky localization _area_, the minimal solid angle that can be chosen such that the probability
+that the signal lies within it is $X$, where $X$ is some conventionally chosen number such as $90\%$;
+see @sec-angular-resolution and @sec-credible-regions for more details.
 
 #### Priors 
 
@@ -306,7 +308,7 @@ Therefore, it is customary to only consider $\psi \in [0, \pi]$ with $\pi(\psi) 
 In flat spacetime, gravitational wave amplitudes decay proportionally to $1/d$, where $d$ is the distance to the source. 
 
 Like electromagnetic signals, however, binaries at cosmological distances are expected to be affected by cosmological redshift. This affects their propagation, modifying their frequencies. 
-We generally work under the assumption that, on large enough scales, the Universe is described by a Friedmann-Lemaître-Robertson-Walker FLRW cosmological model, whose metric in spherical coordinates is
+We generally work under the assumption that, on large enough scales, the Universe is described by a Friedmann-Lemaître-Robertson-Walker (FLRW) cosmological model, whose metric in spherical coordinates is
 $$
 \text{d}s^{2} = -c^{2}\text{d}t^{2} + a^{2}(t) 
 \left[ \frac{\text{d}r^{2}}{1-kr^{2}} + r^{2}\text{d}\theta^{2} + r^{2} \sin ^{2}\theta \text{d}\phi^{2} \right] \,.
@@ -317,7 +319,7 @@ The parameter $a(t)$ is the _scale factor_.
 The following prescriptions are required to consider cosmological effects in the analysis of a signal
 [@maggioreGravitationalWavesVolume2007, section 4.1.4].
 
-The Euclidean notion of distance $d$ should be replaced by _luminosity distance_ $d_{L}$. This is defined by the requirement that radiation flux from any source, as measured in the observer's frame, should decay proportionally to $1 / d_{L}^{2}$; in FLRW cosmology it is 
+The Euclidean notion of distance $d$ should be replaced by _luminosity distance_ $d_{L}$. This is defined by the requirement that radiation flux from any source, as measured in the observer's frame, should decay proportionally to $1 / d_{L}^{2}$; in FLRW cosmology it can be computed as
 $$
 d_{L}(z) = c(1+z) \int_{0}^{z} \frac{\text{d}z'}{H(z')}\,,
 $$
@@ -337,14 +339,15 @@ A significant issue in modern cosmology is the precise determination of the expa
 
 Measurements of distance associated with redshift in the form $(d_{L}, z)_{i}$ would be sufficient to uniquely determine it. However, the observation of gravitational waves from a black hole binary only provides estimates of $(d_{L}, (1+z)\mathcal{M})$. 
 Much of the field of gravitational wave cosmology is devoted to the disentanglement of these contributions. 
-The approaches proposed to this end in the literature include [@abacScienceEinsteinTelescope2025]:
+There are several proposed methods for this [@abacScienceEinsteinTelescope2025], 
+some of which have already provided constraints on the local Hubble rate $H_0$.
 
 - Source galaxy association, i.e. _bright sirens_: if the sky position of the source 
     is measured well enough that an electromagnetic counterpart is detected 
     and associated with a galaxy, 
-    we can use standard spectroscopic methods to determine the redshift of that galaxy 
+    we can use standard spectroscopic methods to determine the redshift $z$ of that galaxy 
     and associate it to the source. 
-    This was done with GW170817 @abbottGW170817ObservationGravitational2017, 
+    This was done for GW170817 [@abbottGW170817ObservationGravitational2017], 
     the only gravitational wave source with an electromagnetic counterpart to date.
 - Spectral methods based on the mass distribution, i.e. _dark sirens_: 
     even if we do not know the mass of any specific source, 
@@ -363,7 +366,7 @@ would correspond to $\pi(d) \propto d^2$.
 In an expanding Universe, the equivalent requirement is for the prior to be uniform in comoving volume as well as source frame time; this leads to [@romero-shawBayesianInferenceCompact2020]:
 $$
 \pi(d_{L}) = \frac{1}{1+z} \frac{\text{d}V_{c}}{\text{d}z} \frac{\text{d}z}{\text{d}d_{L}}\,.
-$$
+$${#eq-uniform-source-frame-volume}
 
 ```{python}
 #| label: fig-luminosity-distance-priors
@@ -374,6 +377,7 @@ import matplotlib.pyplot as plt
 from astropy.cosmology import Planck18 as cosmo
 import astropy.constants as ac
 import astropy.units as u
+from thesis_scripts import *
 
 z = np.linspace(0, 1, num=1000)
 
@@ -390,9 +394,15 @@ plt.plot(dL, normalize(dV_dz / dd_dz), label='Comoving frame volume')
 plt.legend()
 plt.yticks([])
 plt.xlabel('Distance [Gpc]')
-plt.ylabel('Normalized probability density')
+plt.ylabel('Probability density, arbitrary scale')
 plt.show()
 ```
+
+In @fig-luminosity-distance-priors we visually compare some options for cosmological distance priors:
+
+- the Euclidean "luminosity volume" prior $\pi(d_L) \propto d_L^2$;
+- the "comoving frame volume" prior, uniform in $\text{d}V_c / \text{d}d_L$;
+- the "source frame volume" prior, given in @eq-uniform-source-frame-volume.
 
 ### Timing {#sec-timing-general}
 
@@ -401,25 +411,32 @@ on the precise moment a given signal has arrived at a reference position.
 For short signals this is indeed the case, and the timing parameter's effect
 can be straightforwardly implemented. For long observations, though, some more care needs to be taken.
 
+Priors on this parameter are generally chosen to be uniform.
+
 #### Detector motion and reference frame choice
 
 In order to quantify the effect of detector motion on the signal, 
 we need to describe the relative motion of source and detector.
 We will focus on the case of extragalactic signals, as those encompass the totality of 
+confirmed gravitational wave observations so far; galactic sources would require a slightly
+different but analogous treatment.
 
 It is useful to think of their relative motion as a composition of relative displacements as follows:
 $$ \text{source} \to 
 \text{galaxy} \to 
 \text{Milky Way} \to 
-\text{Solar System } \to 
+\text{SSB} \to 
 \text{(geocenter)} \to 
-\text{detector}
+\text{detector},
 $$
 
-The geocenter is included here for completeness, as it is standard to adopt it as a reference frame center in the analysis of ground-based data, but the barycenter of the Solar System (SSB) is also used in other applications. 
+where by "galaxy" we refer to the source's galaxy.
+The center of the Earth (geocenter) is included here for completeness, 
+as it is standard to adopt it as a reference frame center in the analysis of ground-based data, 
+but the barycenter of the Solar System (SSB) is used directly in some cases, bypassing it. 
 
 It is possible, though unlikely, that the motion of the source itself is measurably accelerated compared to its environment or its galaxy [@tamaniniPeculiarAccelerationStellarorigin2020], but even in this case, we do not have ephemeris available to account for it, and any such effects need to be modeled together with other intrinsic source parameters.^[For a source subject to strong gravitational lensing, the Doppler shift due to velocity alone as opposed to acceleration may be measurable. The point above still applies, though: the velocity and lens parameters are unknown.]
-The motions of the Milky Way galaxy and of the Solar System within it all have very low accelerations: for the purposes of gravitational wave observation, the barycenter of the Solar System can be considered to be in uniform motion compared to the source, with an effective velocity vector
+The motions of the Milky Way galaxy and of the Solar System within it all have very low accelerations: for the purposes of gravitational wave observation lasting at most a few years, the barycenter of the Solar System can be considered to be in uniform motion compared to the source, with an effective velocity vector
 $$
 \vec{v}_{\text{eff}} = 
 \vec{v} _{\text{source} \to \text{galaxy}} 
@@ -427,7 +444,7 @@ $$
 + \vec{v} _{\text{MW} \to \text{SSB}} 
 + \vec{v} _{\text{SSB} \to \text{geo}}\,.
 $$
-Using a velocity vector $\vec{v} _{\text{galaxy} \to \text{MW}}$ is improper in a general-relativistic sense, but for the purposes of data analysis a signal affected by cosmological redshift is indistinguishable from one affected by a Doppler shift.
+Using an effective velocity vector $\vec{v} _{\text{galaxy} \to \text{MW}}$ is improper in a general-relativistic sense, but for the purposes of data analysis a signal affected by cosmological redshift is indistinguishable from one affected by a Doppler shift.
 
 Let us compare the magnitude of these vectors:
 
@@ -485,10 +502,12 @@ The conditions required for this approximation to hold are [@chassande-mottinSta
 
 ### SPA as linearization in frequency
 
-The SPA can be viewed as a linearization in phase of the sidebands due to a slow modulation. We show this with an example borrowed from the work of @chenFastFrequencydomainExpression2024.
+The SPA can be viewed as a linearization in phase 
+of the sidebands arising due to a slow modulation. 
+We show this with an example discussed by @chenFastFrequencydomainExpression2024.
 
 Let us consider the case of a signal $h(t)$, with known Fourier transform $\tilde{h}(f)$, modulated by a sinusoid as $h_{s}(t) = \sin(2 \pi F t) h(t)$, with $F \ll f$.
-This is a simplified model for the effect of the detector's orbit on a long-lived signal.
+This is a simplified model for the effect of the detector's orbit on a long-lived, high frequency signal.
 
 The exact Fourier transform of the modulated signal includes contributions from two sidebands to either side of the signal:
 $$
@@ -503,7 +522,7 @@ $$
 \exp \left( i\Psi(f) + i\Psi'(f) F \right) -
 \exp \left( i\Psi(f) - i\Psi'(f) F \right) 
  \right] \\
-&= \sin(\Psi'(f) F) \tilde{h}_{s}^{\text{SPA}}(f)
+&= \sin(\Psi'(f) F) \tilde{h}_{s}^{\text{SPA}}(f)\,.
 \end{aligned}
 $$
 
@@ -511,7 +530,8 @@ $$
 
 When analyzing data from a detector, 
 we need to estimate strain based on some other physical quantity,
-such as the number of photons arriving at a photodiode.
+such as the number of photons arriving at a photodiode
+or the displacement measured by a seismometer.
 This will come with some uncertainty 
 in the amplitude and phase of the measured strain.
 
@@ -522,7 +542,9 @@ $$
 
 It is common practice to model the functions $\delta A(f)$ and $\delta \phi(f)$ through a Gaussian Process [@cahillaneCalibrationUncertaintyAdvanced2017], whose parameters are inferred together with those of the gravitational wave source.
 
-Over the first observing runs, the typical order of magnitude for the $1\sigma$ width of the posterior predictive distribution on the calibration envelope was $\delta A \sim \text{few} \times 10^{-2}$ and $\delta \phi \sim \text{few deg}$.
+Over the first observing runs for the LVK collaboration, 
+the typical order of magnitude for the $1\sigma$ width of the posterior predictive distribution 
+on the calibration envelope was $\delta A \sim \text{few} \times 10^{-2}$ and $\delta \phi \sim \text{few deg}$.
 
 ## Antenna patterns {#sec-antenna-patterns}
 
@@ -542,9 +564,13 @@ $$
 h(t; f_{0}) = h_{ij} (t; f_{0}) D_{ij}(t; f_{0})\,.
 $$
 
-In many applications, this dependence is slow enough to be either ignored completely, or applied as an amplitude correction directly in the frequency domain through a Stationary Phase Approximation [@iacovelliForecastingDetectionCapabilities2022]. 
+In many applications, this dependence is slow enough to be either ignored completely.
+When this is not the case, it can often be modelled as an amplitude correction 
+directly in the frequency domain through a Stationary Phase Approximation 
+[@iacovelliForecastingDetectionCapabilities2022]. 
 
-If the strain tensor is decomposed as in @eq-strain-tensor-decomposition, we can express the detection tensor in terms of its effect on the two gravitational wave polarizations:
+If the strain tensor is decomposed as in @eq-strain-tensor-decomposition, 
+we can express the detection tensor in terms of its effect on the two gravitational wave polarizations:
 $$
 F_{+ / \times} = D_{ij} e_{ij}^{+ / \times}\,.
 $$
@@ -560,7 +586,7 @@ $$
 \frac{\delta L }{L} = \frac{\delta L_{x}- \delta L_{y}}{L} = \underbrace{ \frac{1}{2} (e_{i}^{x} e_{j}^{x} - e_{i}^{y} e_{j}^{y}) }_{ D_{ij} } h_{ij}\,.
 $$
 
-For high-frequency observations performed with next generation detectors, the long wavelength approximation starts to break down. @fig-long-wavelength-essick illustrates this: already at a few kHz, for the Einstein Telescope ignoring this effect would correspond to a bias of tens of degrees in phase.
+For high-frequency observations performed with next generation detectors, the long wavelength approximation starts to break down. @fig-long-wavelength-essick illustrates this: already at a few kHz, ignoring this effect would correspond to a bias of tens of degrees in phase for the Einstein Telescope.
 @essickFrequencydependentResponsesThird2017 have pointed out that, for sources localized by a network of detectors, neglecting this effect would lead to a bias in the estimate of the arrival time at the detectors, which would in turn bias sky localization.
 
 ```{python}
@@ -668,9 +694,11 @@ $$
 s(t;f_{0}) = \mathcal{D}_{ij} h_{ij}\,.
 $$
 
-This response tensor is then given by
+This response tensor can be approximated as
 $$
 D_{ij}(f_{0}) = \hat{b}_{i} \hat{n}_{j}L(f_{0})\,,
 $$
-where $\hat{b}$ is a horizontal unit vector along the lunar surface, along whose direction the seismometer is measuring displacement, while $\hat{n}$ is the normal unit vector to the surface.
-The function $L(f_{0})$ quantifies the lunar response. 
+where $\hat{b}$ is a horizontal unit vector along the lunar surface, 
+along whose direction the seismometer is measuring displacement, 
+while $\hat{n}$ is the normal unit vector to the surface, and the function $L(f_{0})$ quantifies the lunar response. 
+We will motivate this expression in @sec-lgwa-response.

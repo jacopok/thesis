@@ -18,7 +18,7 @@ was first proposed by Joseph Weber [@weberDetectionGenerationGravitational1960],
 Weber led the efforts to deploy a gravimeter on the Moon with the Apollo 17 mission, with the stated aim to detect gravitational waves.
 The Lunar Surface Gravimeter [@gigantiLunarSurfaceGravimeter1973] aimed for a sensitivity of around $10^{-10} \text{m}$ in vertical displacement when measuring vertical motion, around the $1.5\text{Hz}$ band. 
 
-[![The Lunar Surface Gravimeter, by NASA Apollo 17 photograph AS17-134-20501, Public Domain](figures/ALSEP_AS17-134-20501.jpg){#fig-lunar-surface-gravimeter width=60%}](https://commons.wikimedia.org/w/index.php?curid=7042350)
+[![The Lunar Surface Gravimeter, by NASA Apollo 17 photograph AS17-134-20501, Public Domain.](figures/ALSEP_AS17-134-20501.jpg){#fig-lunar-surface-gravimeter width=60%}](https://commons.wikimedia.org/w/index.php?curid=7042350)
 
 We now know that, even operating nominally, this would have been far too noisy to actually measure gravitational waves. 
 Furthermore, the sensor beam could not be stabilized upon deployment, due to some errors by the manufacturers when converting from terrestrial to lunar gravity. 
@@ -30,14 +30,14 @@ In the following decades, both technology and our understanding of gravitational
 The plan is to deploy this antenna in a Permanently Shadowed Region at the lunar pole (see @sec-lgwa-site-selection), in order to achieve low-noise cryogenic operation with a displacement noise ASD (@eq-amplitude-spectral-density) below one $\text{fm} / \sqrt{ \text{Hz} }$.
 Combined with a sufficiently strong lunar response to gravitational waves, this would be enough to directly measure gravitational waves in the deci-Hertz band.
 
-In the following years, a collaboration has been formed to study the science of the Lunar Gravitational Wave Antenna; this has resulted in the publication of several works, among them the so-called "whitepaper" [@ajithLunarGravitationalwaveAntenna2024], which details several aspects of the possible science achievable in this band.
+In the following years, a collaboration has been formed to study the science of the Lunar Gravitational Wave Antenna; this has resulted in the publication of several works, among them the _whitepaper_ [@ajithLunarGravitationalwaveAntenna2024], which details several aspects of the possible science achievable in this band.
 
 This chapter will focus on the full LGWA mission and its projected sensitivity, 
 but a preliminary mission, dubbed Soundcheck, is also planned.
 Whereas the LGWA will require advancements in sensor technology compared to the current
 state of the art, Soundcheck will use off-the-shelf components. 
 Even so, if deployed at the lunar pole, it will provide extremely valuable data, 
-though the chance a gravitational wave signal strong enough to be is detected by it comes is slim.
+though the chance it will detect gravitational waves is slim.
 The Soundcheck mission has been included in the Reserve Pool of Activities by the European Space Agency.
 
 ### Site selection {#sec-lgwa-site-selection}
@@ -57,10 +57,11 @@ We show these locations in figure @fig-lgwa-landing-site; useful free and intera
 ![LGWA proposed landing site on the North Pole (right blue dot) and PSR (left blue dot), in 3D perspective. The color on the lunar surface indicates maximum summer temperatures, ranging from 50K (deep blue), through 100K (white) to red (150K or more). The Earth's and Sun's apparent orbits are shown for reference. The large crater whose rim is visible to the right is Hermite A. This figure was generated with `QuickMap` [@LunarLROCQuickMap].](figures/quickmap-lroc-2.png){#fig-lgwa-landing-site}
 
 The distance between the landing site and the PSR center is only around 8.6km, but their temperature profiles are significantly different.
-The landing site is a flat hilltop, illuminated for most of the (northern) summer months, April-September. In the winter, it receives at least a week of illumination every month, but it is predominantly in the shade, with continuous shade periods of up to 22.4 days. 
+The landing site is a flat hilltop, illuminated for most of the (northern) summer months, April-September. In the winter, it receives at least a week of illumination every month, but it is predominantly in the shade, with continuous darkness for up to 22.4 days. 
 Its temperatures range between 66K and 250K across the year.
 The PSR, on the other hand, has a mean temperature of 46K, with maximum recorded values of less than 60K. 
-A comparatively flat path connects the landing and deployment sites, with slopes of less than 15 degrees. 
+A comparatively flat path connects the landing and deployment sites, with slopes of less than 15 degrees,
+though the elevation difference between them is significant.
 
 An alternative landing site near the South Pole was also explored, within the de Gerlache crater at latitude -88.381 and longitude 266.8.
 Both this deployment site and the North Pole sites are rather flat themselves, with maximum slopes of few degrees. 
@@ -69,7 +70,7 @@ However, the South Pole is generally more rugged: the path from an illuminated l
 ### Measurement principle and displacement noise
 
 The operational principle for the LGWA is the measurement of horizontal seismic motion of the lunar surface, which will be performed along two orthogonal axes.
-This measurement requires a reference whose movement is inertial along the two measurement direction, whereas the surface will move non-inertially, due to the Moon being an elastic body.
+This measurement requires a reference whose movement is inertial along the two measurement directions, whereas the surface will move non-inertially, due to the Moon being an elastic body.
 
 This reference will be a mass suspended through a Watt's linkage [@bertoliniMechanicalDesignSingleaxis2006], 
 a compact way to achieve a low resonance frequency.
@@ -110,7 +111,7 @@ The main source of readout noise at low frequencies ($\lesssim 0.7 \text{Hz}$) i
 $$
 S_\text{thermal}(\omega) = \frac{4 k_{B}T \omega_{0}^{2}  / Q}{m \omega \left[ (\omega_{0}^{2}- \omega^{2})^{2}  + \omega_{0}^{4} / Q^{2} \right] }\,,
 $$
-where $\omega$ is the angular frequency, $\omega_{0}$ is its resonance value, $k_{B}$ is the Boltzmann constant, $T$ is the temperature, while $Q$ is the mechanical quality factor [@ajithLunarGravitationalwaveAntenna2024; eq. 2.1]. 
+where $\omega$ is the angular frequency, $\omega_{0}$ is its resonance value, $k_{B}$ is the Boltzmann constant, $T$ is the temperature, while $Q$ is the mechanical quality factor [@ajithLunarGravitationalwaveAntenna2024, eq. 2.1]. 
 
 At higher frequency, readout noise starts to dominate; its specific spectral shape depends on the specific readout scheme adopted to measure relative displacement between ground and test mass. @fig-lgwa-station schematically depicts a SQUID readout, which makes use of superconducting magnets. In @fig-lgwa-displacement-noise we compare this choice with another candidate: laser-interferometric readout.
 
@@ -228,6 +229,7 @@ plot(ff, *get_noise_asd_squid(ff, **noise_params_lgwa_si), 'Silicon suspension')
 Displacement sensitivity curves similar to those in @fig-lgwa-displacement-noise were adopted in all forecasting studies; no other noise sources were considered.
 
 While a PSR is undoubtedly a quiet place, it is warranted to ask whether the seismic environment of the Moon can interfere with gravitational wave measurements, or prevent them entirely.
+Unfortunately, the current data on this is quite limited. 
 @coughlinConstrainingGravitationalWave2014 analyzed one year of data from the ALSEP mission, which consisted of four seismometers deployed on the near side of the Moon by the Apollo 12, 13, 14 and 16 missions.
 
 ![Upper bound on the lunar seismic spectrum, from [@coughlinConstrainingGravitationalWave2014]. The dashed lines indicate the minimum and maximum for a model of seismic noise on the Earth.](figures/Moon-noise-spectrum.png){#fig-lunar-seismic-spectrum width=60%}
@@ -240,13 +242,13 @@ Despite this, it is considerably lower than the minimum achieved anywhere on Ear
 
 From theoretical considerations, we expect the actual seismic background to be significantly lower;
 furthermore, a spectrum computed this way is not necessarily representative of the "typical" spectrum
-one would observe at any given time on the Moon: it is a root-mean-square taken over a year,
-which means it considers the contribution of loud events which are well-localized in time.
+one would observe at any given time on the Moon: it is a root-mean-square of values observed over a year,
+which means it includes the contribution of loud events which are well-localized in time.
 For the purposes of the LGWA, these may simply lead to a fraction of the data, as opposed to making
 the entirety of the data too noisy. 
 
 The LGWA will also operate in a PSR without dawns or dusks, removing their thermal stresses as a noise source.
-Finally, the intra-station distance among the four seismometers is planned to be close enough that the seismic signal from GWs is strongly is correlated among them, but far enough that events such as meteorite impacts arrive at each station with measurably different amplitude and phase, and can therefore be subtracted.
+Finally, the intra-station distance among the four seismometers is planned to be close enough that the seismic signal from GWs is strongly correlated among them, but far enough that events such as meteorite impacts arrive at each station with measurably different amplitude and phase, and can therefore be subtracted.
 
 Nevertheless, more measurements are needed to quantify the impact of the lunar seismic background. 
 Moonquakes remain a significant issue, and it is likely that some fraction of the data will need to be unusable due to their effect. The low damping of the lunar regolith makes their duration much longer than what typically happens on Earth, as illustrated in @fig-moonquake-duration.
@@ -258,13 +260,14 @@ Mitigating these will be a significant challenge as the mission is developed.
 
 ### The lunar seismic response {#sec-lgwa-response}
 
-The fundamental normal mode, which describes quadrupolar vibration of the whole Moon, has a frequency just above $1 \text{mHz}$.
+The fundamental lunar normal mode, which describes quadrupolar vibration of the whole Moon, has a frequency just above $1 \text{mHz}$.
 While plenty of gravitational wave sources are expected at these frequencies, which are a target of the LISA mission, the LGWA detector concept is not expected to be very sensitive there, mostly due to thermal noise (see @fig-lgwa-displacement-noise).
-Computing the lunar response at frequencies two to three orders of magnitude higher than the fundamental is challenging with the normal mode formalism, as one needs to include a very large number of modes.
+Computing the lunar response at frequencies two to three orders of magnitude higher than the fundamental is challenging with the normal mode formalism, as one needs to include a very large number of modes, 
+and local topography is expected to play a significant role.
 
 The standard treatement for the problem of an elastically coupled medium to gravitational waves was introduced by @dysonSeismicResponseEarth1969 and applied to the computation of the excitation of the normal modes of a planetary body by GWs by @ben-menahemExcitationEarthsEigenvibrations1983. 
-The recent years have seen significant theoretical and computational advancements in this regard.
-@belgacemCouplingElasticMedia2024 formulated the coupling problem with a fully relativistic  Effective Field Theory approach, which generalizes well to high frequencies beyond the normal-mode limit. 
+Recent years have seen significant theoretical and computational advancements in this regard.
+@belgacemCouplingElasticMedia2024 formulated the coupling problem with a fully relativistic  Effective Field Theory approach, which generalizes well to high frequencies beyond the reach of the normal-mode approach. 
 @biResponseMoonGravitational2024 investigated the impact of a layered geological structure using a half-space model, showing that it can significantly amplify the lunar response compared to a uniform Moon.
 A significant amount of work has also been recently performed regarding numerical simulations of the lunar response [@zhangNumericalSimulationLunar2025; @zhangSuperAmplificationLunar2025; @zhangThickLunarCrust2026].
 
@@ -301,10 +304,11 @@ $$
 h_{ij} b_{i} \nabla_{j} \mu\,.
 $$
 
-The shear modulus will vary across geologic layers and across the surface: these are horizontally-placed strata, hence the gradient will be vertical.
-This is the origin of the geometric expression we use in @sec-lgwa-projection; corrections to it may be necessary based on local topography, but they are likely to be negligible compared to our uncertainty in the frequency-dependent part of the response.
-
-
+The shear modulus will vary across geologic layers and across the surface: 
+these are horizontally-placed strata, hence the gradient is expected to be vertical.
+This is the origin of the geometric expression we use in @sec-lgwa-projection; 
+corrections to it will be necessary based on local topography,
+but for the purposes of current studies the uncertainty in the scalar response is the dominant one.
 
 ### Projected gravitational wave strain {#sec-lgwa-projection}
 
@@ -313,7 +317,7 @@ $$
 \mathcal{D}_{ij}(t; f_{0}) = n_{i}(t) b_{j}(t) L(f_{0}) = \hat{D}_{ij}(t; f_{0})L(f_{0}) \,,
 $$
 where $n_{i}(t)$ is the normal to the lunar surface at the detector location at time $t$, while $b_{j}(t)$ is a vector parallel to the lunar surface and aligned to the measurement channel.
-We compute all vectors in a fixed frame, so that the source's position is constant.
+We compute all vectors in an ICRS-aligned frame (where the spherical angles are right ascension and declination), so that the source's position is constant.
 
 In @sec-timing-general we outlined the effect of detector motion on the waveform in the time domain. Applying a Stationary Phase Approximation, we can combine the effect of a moving detector and a rotating antenna pattern in the frequency domain: the measured frequency-domain strain will satisfy
 $$
@@ -325,14 +329,14 @@ where:
 - $h_{ij}(f)$ is the frequency-domain gravitational wave strain tensor;
 - $\hat{m}$ is the _propagation_ unit vector (which has opposite sign to the _source position_ unit vector, and points "inward");^[As a sanity check, consider the relative signs of $t_{0}$ and this phase term: increasing $t_{0}$ means the introduction of a delay, and accordingly increasing the scalar product $\vec{r} \cdot \hat{n}$ means moving the detector further from the source, which also delays the signal's arrival.]
 - $\vec{r}(t)$ is the position of the detector as a function of time, measured in an ICRS-aligned coordinate frame, centered at some point in space;
-- $t_{0}$ is the reference time, _i.e._ the time at which the event which occurs at $t=0$ in the time-domain waveform $h_{ij}(t)$ reaches the center of the reference frame, $\vec{r}=0$.
+- $t_{0}$ is the reference time, _i.e._ the time at which the event which occurs at $t=0$ in the time-domain waveform $h(t)$ reaches the center of the reference frame, $\vec{r}=0$.
 
 Let us define an orthonormal reference frame at the lunar surface: $(a, b, n)$, where $n$ is aligned to the local normal direction, while $a$ and $b$ define the horizontal measurement directions of the two LGWA channel.
 In order to compute the geometric portion of the antenna pattern tensor, $\hat{D}_{ij}$, we need to know these vectors as a function of time.
-Once we have them, computed these vectors, we can recover the strain through the antenna pattern functions, which are obtained as described in @sec-antenna-patterns:
+Once we have them, we can recover the strain through the antenna pattern functions, which are obtained as described in @sec-antenna-patterns:
 $$
 \begin{aligned}
-F_{+} &= (n\cdot u)(b\cdot u)-(n\cdot v)(b\cdot v)) \\
+F_{+} &= (n\cdot u)(b\cdot u)-(n\cdot v)(b\cdot v) \\
 F_{\times} &= (n\cdot u)(b\cdot v)+(n\cdot v)(b\cdot u)\,.
 \end{aligned}
 $$
@@ -443,6 +447,7 @@ import warnings
 warnings.filterwarnings('ignore', module='erfa')
 
 
+
 like = LunarLikelihood()
 t_0 = 1577491218.
 
@@ -456,7 +461,7 @@ moon.representation_type = 'cartesian'
 
 x, y, z = like.get_detector_position(times)
 
-fig, axs = plt.subplots(3, 1, sharex=True, gridspec_kw={'hspace': .3})
+fig, axs = plt.subplots(3, 1, sharex=True, gridspec_kw={'hspace': .3}, figsize=(7, 5))
 
 x_color = '#332288'
 y_color = '#44AA99'
@@ -487,7 +492,7 @@ _ = axs[2].set_xlabel('Time from January 1 2030 (lunar months)')
 
 In the Stationary Phase Approximation, the time left until merger for a source whose phase in the frequency domain is known is given by @eq-spa-time-from-phase. 
 
-One may think that. for these purposes, a precise description of the phase to a high PN order is not necessary. 
+One may think that, for the purpose of computing the time to merger, a precise description of the phase to a high PN order is not necessary, since high-PN order corrections only affect the late stages of the binary's evolution. 
 If we only consider the leading order in the phase (@eq-post-newtonian-phase-generic), we get the following expression for the time to merger:
 $$
 t_\text{lowest order}(f) = - \frac{5}{256 \pi^{8/3}} \frac{1}{\mathcal{M}_{c}^{5/3}} \frac{1}{f^{8/3}}\,.
@@ -548,15 +553,16 @@ The motion of the Moon over a day is comparable to the wavelength of a gravitati
 
 We end the discussion on waveform projection by analyzing the projected waveform for an injection modeled after GW250114.
 The pattern in amplitude is illustrated in @fig-projected-waveforms-gw250114-ppd: the general scaling is $h_{c} \sim f^{-1/6}$, as expected since we are computing the characteristic strain amplitude of a source whose emission is dominated by low-order Post-Newtonian effects.
-On top of this trend we see modulations; their period in the time domain is a month (or rather half a month, since we are showing the absolute value of a sinusoid), and they are out of phase across the two LGWA channels.
-Along with them, we show the posterior predictive distribution obtained after performing an injection and recovery.
+On top of this trend we see modulations; their period in the time domain is a month (or rather half a month, since we are showing the absolute value of a sinusoid), and they are out of phase across the two LGWA channels, which measure displacement in two orthogonal horizontal direction.
+
+Along with the injected waveform, we show the posterior predictive distribution obtained after performing an injection and recovery.
 
 ![Posterior Predictive Distribution and injected waveforms for a GW250114-like injection with the LGWA](figures/lgwa_ppd_fb.pdf){#fig-projected-waveforms-gw250114-ppd}
 
 The phase of the response is more difficult to visualize, as it spans thousands of cycles during an observation.
-We illustrate one aspect of its variation by computing the ratio of two waveforms computed with identical parameters - again, the injection ones for GW250114 - but with a difference in 1 degree in right ascension. 
+We illustrate one aspect of its variation by computing the ratio of two waveforms computed with identical parameters --- again, the injection ones for GW250114 --- but with a difference in 1 degree in right ascension. 
 In the upper panel of @fig-projected-lgwa-waveforms-ratio we see the ratio of amplitudes for both channels, with a periodicity of one month. 
-The phase, on the other hand, primarily exhibits variation with a slower period, which corresponds to the yearly modulation driven by the lunar orbit around the Sun.^[The phase is computed in a frame centered close to the Moon's location at merger - for the details, see @sec-lgwa-reference-frames.]
+The phase, on the other hand, primarily exhibits variation with a slower period, which corresponds to the yearly modulation driven by the lunar orbit around the Sun.^[The phase is computed in a frame centered close to the Moon's location at merger --- for the details, see @sec-lgwa-reference-frames.]
 
 ```{python}
 #| label: fig-projected-lgwa-waveforms-ratio
@@ -626,14 +632,17 @@ The scientific potential of a very sensitive seismometer array at the lunar pole
 does not only include gravitational wave science [@ajithLunarGravitationalwaveAntenna2024].
 Indeed, all the seismic motion which is a nuisance for gravitational wave observations
 would include valuable data on seismic events on the Moon.
+Here we give a brief glimpse into what problems may be probed thanks to LGWA data.
 
 The seismometers deployed by the Apollo mission detected thousands of moonquakes, originating both near the surface (shallow moonquakes) and near the core (deep moonquakes).
 The information available comes from the lunar near side, but it seems to point to an asymmetry between it and the far side in terms of moonquake event rate. 
 Whether this is a genuine effect or an artefact of selection bias is an open question. 
 
-Furthermore, the LGWA would be able to precisely measure the excitation of lunar normal modes by Moonquakes.^[As discussed earlier, their excitation by gravitational waves would require an improbably strong signal.] This would provide insights into the lunar interior structure, enabling the exploration of lunar origin models.
-The formation mechanism of the Moon is not a settled debate: the giant impact scenario, in which a large planetary object dubbed _Theia_ impacted a young Earth thus forming a disk of debris which coalesced into our satellite, is the dominant theory, but it does not stand unchallenged. 
-The _isotopic crisis_ is the problem posed by the observation that the Earth and Moon's mantles have nearly identical ratios of isotopes such as $^{17}O / ^{16}O$, $^{50}Ti / ^{47}Ti$ and $^{182}W / ^{184}W$. This is unlike any other body in the Solar System, for which these ratios are significantly different, and is hard to explain under the giant impact scenario. 
+Furthermore, the LGWA would be able to precisely measure the excitation of lunar normal modes by Moonquakes.^[As discussed earlier, their excitation by gravitational waves would require an improbably strong signal.] 
+This would provide insights into the lunar interior structure, enabling the exploration of lunar origin models.
+
+The formation mechanism of the Moon could also be investigated, as is not a settled debate: the giant impact scenario, in which a large planetary object dubbed _Theia_ impacted a young Earth forming a disk of debris which coalesced into our satellite, is the dominant theory, but it does have issues. 
+The _isotopic crisis_ is the problem posed by the observation that the Earth and Moon's mantles have nearly identical ratios of isotopes such as $^{17}\text{O} / ^{16}\text{O}$, $^{50}\text{Ti} / ^{47}\text{Ti}$ and $^{182}\text{W} / ^{184}\text{W}$. This is unlike any other body in the Solar System, for which these ratios are significantly different, and is hard to explain under the giant impact scenario. 
 Mapping the composition of the lunar interior, which can be accomplished through seismic observations, will aid in the resolution of this problem.
 
 ### Gravitational wave sources
@@ -643,7 +652,7 @@ Mapping the composition of the lunar interior, which can be accomplished through
 The range of gravitational wave sources observable in the most sensitive band for the LGWA, $[0.05, 2]\text{Hz}$, is quite wide.
 Compact binaries are a natural candidate: they are significant emitters of gravitational waves, and their study is a blossoming field due to the wealth of data from ground-based observations.
 
-![Time to merger as a function of mass, highlighting at which point various sources would cross the decihertz band. The sources are assumed to have equal mass and no spin - including these effects changes the results, but not the overall qualitative picture.](figures/time_to_merger.pdf){#fig-time-to-merger-lgwa width=80%}
+![Time to merger as a function of mass, highlighting at which point various sources would cross the decihertz band. The sources are assumed to have equal mass and no spin --- including these effects changes the results, but not the overall qualitative picture.](figures/time_to_merger.pdf){#fig-time-to-merger-lgwa width=80%}
 
 @fig-time-to-merger-lgwa illustrates their time to merger as a function of mass.
 It is truncated at 10 years, an approximate upper bound for the LGWA mission's duration. 
@@ -653,17 +662,16 @@ As illustrated in @fig-time-to-merger-lgwa, depending on their mass, they may cr
 
 ![The population of compact binaries in the GWTC-3 catalog, highlighting GW231123, compared to the noise curves of LGWA and ground-based detectors. From @iacovelliGravitationalwaveParameterEstimation2025.](figures/gw231123/GW231123-ASD.pdf){#fig-231123-asd-lgwa width=80%}
 
-In @fig-231123-asd-lgwa we further illustrate this aspect: a very massive binary like GW231123 would have been detectable by the LGWA, accumulating most of its SNR in the last day before merger.
-This figure is meant to give an order of magnitude comparison between detector noise and signal magnitude, but since it does so with several different detectors and binaries it cannot be an apples-to-apples comparison: we should compare _projected_ strain at the detector to the detector's noise, but this would mean showing several different strain curves for every signal, as the projection onto each detector will be different. 
+In @fig-231123-asd-lgwa we further illustrate this aspect: a very massive binary like GW231123 would have been detectable by the LGWA, accumulating most of its SNR in the last day before merger.^[This figure is meant to give an order of magnitude comparison between detector noise and signal magnitude, but since it does so with several different detectors and binaries it cannot be an apples-to-apples comparison: we should compare _projected_ strain at the detector to the detector's noise, but this would mean showing several different strain curves for every signal, as the projection onto each detector will be different. 
 Here, instead, we are showing the amplitude of the strain polarizations before projection, $|h_{+}(f)+i h_{\times}(f)|$. 
-Nevertheless, it communicates the correct qualitative message, as the variation in amplitude due to projection does not significantly change the signal magnitude.
+Nevertheless, it communicates the correct qualitative message, as the variation in amplitude due to projection does not significantly change the signal magnitude.]
 
 We can also see that the "area" between signal and noise^[As we discussed in @sec-characteristic-strain, the integral $\int (h_{c} / h_{n})^{2} \text{d}\log f$ gives us the square SNR; in this plot we show both signal and noise strains divided by $\sqrt{ f }$, but this is immaterial as it leaves the integral unchanged.] is generally similar between LGWA and current ground based detectors. 
 Indeed, a more systematic analysis confirms this. 
-In @fig-gwtc-snr-lgwa we compute several realizations of a population compatible with the GWTC catalog, and compute their SNRs with various detectors, compared with the observed SNRs of the actual catalog.
+In @fig-gwtc-snr-lgwa we compute several realizations of a population compatible with the Gravitational Wave Transient Catalog, and compute their SNRs with various detectors, compared with the observed SNRs of the actual catalog.
 The SNRs obtained with the LGWA are indeed compatible, within catalog variance, with the original ones.
 
-![Cumulative SNR for the population of compact binaries in the GWTC catalogs. From @iacovelliGravitationalwaveParameterEstimation2025.](figures/gw231123/cumulative_detections_wErrorbars_LGWA_GB.pdf){#fig-gwtc-snr-lgwa width=80%}
+![Cumulative SNR for the population of compact binaries in the GWTC catalogs. From @iacovelliGravitationalwaveParameterEstimation2025.](figures/gw231123/cumulative_detections_wErrorbars_LGWA_GB.pdf){#fig-gwtc-snr-lgwa width=70%}
 
 Despite their signal-to-noise ratios not being much higher than current observations, these low-frequency observations will provide qualitatively different information compared to high-frequency ones; we discuss this in more detail in @sec-lgwa-pe-stellar.
 
@@ -674,8 +682,8 @@ We illustrate this with a horizon plot in @fig-horizon-multiband: as a function 
 
 The LGWA's optimal sensitivity is for binaries with total detector-frame mass $(1+z)M$ around $10^{4}M_{\odot}$ (see @sec-distance-redshift).
 At the moment, full injections and recoveries for binaries in this range has not been performed.
-At these masses, the signals' mergers will be in band, and the signals may well show signs of eccentricity or precession; several higher order modes will be necessary for a complete description of the signal. 
-Stellar mass binaries are comparatively simpler, as their low-frequency emission is dominated by the $\ell m = 22$ mode, hence we chose them as the first target for our studies.
+At these masses, the signals' mergers will be in band, therefore (like with current observatories) several higher order modes will be necessary for a complete description of the signal. 
+Stellar mass binaries are comparatively simpler, as their low-frequency emission is dominated by the $\ell |m| = 22$ mode, hence we chose them as the first target for our studies.
 
 So far we discussed comparable-mass binaries, but Intermediate Mass Ratio Inspirals, binaries with mass ratios in the range $q=10^{-2}$ to $10^{-4}$, would also be a fascinating way to shed light into the formation of intermediate-mass black holes.
 
@@ -687,9 +695,10 @@ These may have been previously theorized, their electromagnetic signatures may b
 While keeping in mind the last of these options is a possibility, it is useful think of the candidate sources of gravitational waves in this band based on our current knowledge, as was done in the LGWA whitepaper [@ajithLunarGravitationalwaveAntenna2025] as well as in earlier work such as the review by @branchesiLunarGravitationalWaveDetection2023.
 
 Mergers of white dwarfs (WDs) are an interesting event, as they may be the origin of certain supernovae. They generally happen when the binary is emitting GWs in the deciHertz band.
-Their collision is not preceded by a measurable "chirp", as the binary is still quite wide, but it generates a nuclear detonation or deflagration.
-Collisions of WDs with other compact objects, such as neutron stars, are also of interest, also because they would emit at higher frequencies, which places them closer to the best sensitivity of LGWA around 0.3Hz, whereas double white dwarf systems generally collide before this point.
-The main limitation in the study of their systems is their low rate: they are comparatively rare in the local Universe, the gravitational wave amplitudes they emit are not very high, meaning that they would need to be quite close - on the scale of a Megaparsec or less - to be detectable.
+Their collision is not preceded by a measurable "chirp", as the binary is still quite wide then, due to the large radius of white dwarfs: three to four orders of magnitude larger than black holes with the same mass.
+The nuclear detonation or deflagration which is expected as the two WDs impact each other is hard to model, with accurate 3D simulations of this scenario becoming available only recently.
+Collisions of WDs with other compact objects, such as neutron stars, are also of interest: they would emit at higher frequencies, which places them closer to the best sensitivity of LGWA around 0.3Hz, whereas double white dwarf systems generally collide before this point.
+The main limitation in the study of their systems is their low rate: they are comparatively rare in the local Universe, and the gravitational wave amplitudes they emit are not very high, meaning that they would need to be quite close --- on the scale of a Megaparsec or less --- to be detectable.
 
 Tidal disruption events also can involve white dwarfs, for example a WD being disrupted after orbiting an intermediate mass black hole would produce a short-lived signal peaking in the deci-Hertz band.
 
@@ -736,7 +745,7 @@ The procedure we employ regarding the response is equivalent to performing infer
 1. the lunar response is given by our model $L(f)$;
 2. the lunar response is perfectly known during inference.
 
-The first assumption is necessary - 
+The first assumption is necessary --- 
 we need to establish a single reference model for the lunar response, 
 though of course improvements to it will be useful, 
 especially if they are driven by actual measurements 
@@ -750,7 +759,7 @@ Unfortunately, we have no reason to believe that a direct application
 of the smooth Gaussian process envelopes used there would 
 be appropriate in this context. 
 On the contrary, a general feature observed in models and simulations 
-of the lunar response is small-scale frequency dependence - 
+of the lunar response is small-scale frequency dependence --- 
 the response is expected to be a "spiky" function of frequency.
 Defining an appropriate parametric model for it, therefore, is challenging, 
 and it will require future work.
@@ -1013,7 +1022,7 @@ In the runs lasting 11 months or less with all parameters, the SNR is more evenl
 As a general pattern, we see how the qualitative Fisher prediction is validated for all but the 12 month case: the sky localization area decreases with the number of months, even though the SNR is kept constant, driven mostly by the change in area; the frequency increases slightly through the injections, but not nearly enough to explain the effect.
 
 The failure of the prediction in the 12 month case, with the localization worsening again, is due to the non-uniform accumulation of SNR, with most of it coming from the last few days of observation. 
-We validate this intuition through the __simplified, uniform SNR__ scenario, in which the SNR is accumulated at a constant rate over time - we obtain this by artificially setting a PSD in the form $S_{n}(f) \propto f^{4/3}$. 
+We validate this intuition through the __simplified, uniform SNR__ scenario, in which the SNR is accumulated at a constant rate over time --- we obtain this by artificially setting a PSD in the form $S_{n}(f) \propto f^{4/3}$. 
 
 ::: {#nte-uniform-snr-over-time .callout-note collapse="true"}
 

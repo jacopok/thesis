@@ -14,18 +14,18 @@ format:
 The Einstein Telescope [@punturoEinsteinTelescopeThirdgeneration2010] is a planned next-generation (XG) gravitational wave detector in Europe.
 It will consist of interferometers, like current ground-based detectors, but with several improvements enabling a ten-fold improvement in sensitivity [@hildSensitivityStudiesThirdgeneration2011]:
 
-- it will be built underground, allowing for a significant reduction in seismic and anthropogenic noise noise;
+- it will be built underground, allowing for a significant reduction in seismic and anthropogenic noise;
 - it will have a xylophone design: each detector will consist of two colocated interferometers, one operating cryogenically with low laser power to be sensitive at low frequencies, and one operating at room temperature at higher power to be sensitive at high frequencies;
 - it will have longer arms, of 10km or more in length depending on the design.
 
 There are currently two main proposed designs for it. 
 One option is a set of three interferometers, each with an aperture angle of 60 degrees, forming an equilateral triangle. This is called ET-$\Delta$. 
 The alternative consists of two L-shaped detectors, each with an aperture angle of 90 degrees, in two different locations within Europe, with a distance of little more than 1000km.
-These two detectors may be aligned, like the two LIGO detectors, or misaligned - the choice between these configurations involves, among other considerations, a trade-off between sensitivity to compact binary sources and stochastic backgrounds [@branchesiScienceEinsteinTelescope2023].
+These two detectors may be aligned, like the two LIGO detectors, or misaligned --- the choice between these configurations involves, among other considerations, a trade-off between sensitivity to compact binary sources and stochastic backgrounds [@branchesiScienceEinsteinTelescope2023].
 
 There are different sites which may, as of this writing, host the Einstein Telescope within Europe [@serraLUSATIAOFFICIALLYTHIRD2025]:
 
-- the Sos Enattos mine in the northeast of Sardinia, Italy, near the villages of Bitti, Onanì and Lula - we depict this in @fig-einstein-telescope-location;
+- the Sos Enattos mine in the northeast of Sardinia, Italy, near the villages of Bitti, Onanì and Lula --- we depict this in @fig-einstein-telescope-location;
 - the Euregio Meuse-Rhine (EMR) at the border of Luxembourg, Belgium and Germany, near the towns of Maastricht and Liège;
 - the Lusatia region in Saxony, Germany. 
 
@@ -33,7 +33,7 @@ There are different sites which may, as of this writing, host the Einstein Teles
 
 The scientific potential for a detector as sensitive as the Einstein Telescope is extremely wide. To quote @branchesiScienceEinsteinTelescope2023:
 
-> ET, in its reference configuration, is a superb detector, with an extraordinary discovery potential in the domains of astrophysics, cosmology and fundamental physics.
+> _ET, in its reference configuration, is a superb detector, with an extraordinary discovery potential in the domains of astrophysics, cosmology and fundamental physics._
 
 A full description of this potential is beyond the scope of this thesis; we refer the reader to some among the many works which describe it in detail [@branchesiScienceEinsteinTelescope2023;@abacScienceEinsteinTelescope2025;@ronchiniPerspectivesMultimessengerAstronomy2022].
 
@@ -96,34 +96,38 @@ We inject a waveform corresponding to the maximum likelihood point from the LVK 
 We analyze the data using the software [`bilby`](https://github.com/bilby-dev/bilby) [@ashtonBilbyUserfriendlyBayesian2019] combined with the sampler [`nessai`](https://github.com/mj-will/nessai) [@williamsNestedSamplingNormalising2021].
 Our analysis does not include time- nor frequency-dependent antenna patterns.
 
-![Injection of a GW250114-like event into one component of a triangular ET: ASD comparison (frequency domain) and whitened strain (time domain).](figures/einstein-telescope/GW250114_data_ET-dingo1_waveform.pdf){#fig-gw250114-et-injection}
+![Injection of a GW250114-like event into one component of a triangular ET: ASD comparison (frequency domain) and whitened strain (time domain). Figure produced by Filippo Santoliquido.](figures/einstein-telescope/GW250114_data_ET-dingo1_waveform.pdf){#fig-gw250114-et-injection width=70%}
 
-@fig-gw250114-et-injection shows the whitened strain of the injection: by construction, it is quite similar to @fig-gw250114-whitened-strain, but we can visually notice a slower decay in amplitude as we move further back in time. 
+@fig-gw250114-et-injection shows the whitened strain of the injection: by construction, it is quite similar to the original data (@fig-gw250114-whitened-strain), but we can visually notice a slower decay in amplitude as we move further back in time. 
 This is due to the whitening procedure: the amplitude here is not the intrinsic one of the signal, but the ratio of the signal's amplitude (which is identical in both cases) and the detector's noise. 
-This illustrates the fact that ET's noise curve is not just lower overall, it is also shallower.
+This illustrates the fact that ET's noise curve is not just lower overall, it is also shallower as a function of frequency.
+
+![Posterior distribution on the sky position for our GW250114 injection. Figure produced by Filippo Santoliquido.](figures/einstein-telescope/skymap_samples_t_geocent.pdf){#fig-bimodal-sky-gw250114-et width=70%}
 
 This signal would have an SNR of approximately 680 when combining the three detectors.
 In @sec-et-delta we describe how such a short signal is expected to exhibit an 8-fold multimodality in the sky; however, we only observe two modes in the sky for this injection, symmetrically across the local horizon. 
 This is due to the fact that, in our simulation, the Einstein Telescope is made up of three detectors separated by 10km each which, due to the long-wavelength approximation, are effectively point-like. The temporal resolution for the arrival time of the signal at each them is so precise, on the scale of tens of microseconds, that is allows the our simulation of the ET to _triangulate_ the signal, despite its extremely short baseline of $33 \upmu \text{s} \times c$. 
 
+![Posterior distribution on the arrival times at the three ET beamsplitters in our GW250114 injection. Figure produced by Filippo Santoliquido.](figures/einstein-telescope/arrival_times_Delta.pdf){#fig-arrival-times-gw250114-et width=70%}
+
 The temporal resolution of the measurement being this tight indicates that the long wavelength approximation used for this injection is not appropriate, and in future work we shall repeat this analysis with frequency-dependent antenna patterns.
 
 ## Neural posterior estimation for high-mass black holes
 
-In order to investigate the possible configurations for the Einstein Telescope, we [@santoliquidoFastAccurateParameter2025; @santoliquidoComparingNextgenerationDetector2025] performed several injection campaigns with neural posterior estimation (@sec-neural-posterior-estimation).
-With the current technology, this is possible for a population of high-mass signals at high redshift, which last for a short time in the detector band and have generally low SNRs.
-Though we inject sources in the chirp mass and distance ranges $\mathcal{M} \in [40, 1100] M_{\odot}$ and $d_{L} \in [5, 500] \text{Gpc}$, we are forced to discard most sources with masses $\mathcal{M} \lesssim 150 M_{\odot}$ and distances $d_{L} \lesssim 6 \text{Gpc}$, due to their low sample efficiency, shown in @fig-sample-efficiency-et. 
+In order to investigate the possible configurations for the Einstein Telescope, we [@santoliquidoFastAccurateParameter2025; @santoliquidoComparingNextgenerationDetector2025] performed several injection campaigns with neural posterior estimation (@sec-neural-posterior-estimation), which provide full parameter estimation results for each of the sources.
+With the current technology, this is possible for a population of high-mass black holes at high redshift, which last for a short time in the detector band and have generally low SNRs.
+Though we inject sources in the chirp mass and distance ranges $\mathcal{M} \in [40, 1100] M_{\odot}$ and $d_{L} \in [5, 500] \text{Gpc}$, we are forced to discard most sources with chirp masses $\mathcal{M} \lesssim 150 M_{\odot}$ and distances $d_{L} \lesssim 6 \text{Gpc}$, due to their low sample efficiency, shown in @fig-sample-efficiency-et. 
 Specifically, we discard any source for which the sample efficiency, defined in @sec-importance-sampling, is lower than $10^{-2}$.
 
-![Sample efficiency for the sources considered by @santoliquidoComparingNextgenerationDetector2025 as a function of SNR, distance and chirp mass.](figures/einstein-telescope/SNR_vs_sample_efficiency.png){#fig-sample-efficiency-et width=60%}
+![Sample efficiency for the sources considered by @santoliquidoComparingNextgenerationDetector2025 as a function of SNR, distance and chirp mass.](figures/einstein-telescope/SNR_vs_sample_efficiency_cropped.png){#fig-sample-efficiency-et width=70%}
 
 Sources similar to these are expected to make up the "bulk" of black holes observed by the Einstein Telescope. 
-Black holes are expected to form at high redshift from several processes, among which the collapse of the nearly metal-free first generation of stars (Population III) has interesting astrophysical implications. @santoliquidoBinaryBlackHole2023 investigated their formation history, highlighting the uncertainties in our understanding of these early stars.
+Black holes are expected to form at high redshift from several processes, among them the collapse of the nearly metal-free first generation of stars (Population III). @santoliquidoBinaryBlackHole2023 investigated their formation history, highlighting the uncertainties in our understanding of these early stars.
+Constraining the properties of these black holes thus has interesting astrophysical implications. 
 
-While an investigation including only a specific kind of source can surely only provide partial information, . Still, this population is missing some key features: 
-Nevertheless, the issues this analysis highlights enable a more complete understanding of the detector's capabilities.
+While an investigation including only a specific kind of source can only provide partial information, it can still highlight some important characteristics of each detector network's capabilities.
 
-![Summary statistics for source position constraints by various configurations. From @santoliquidoComparingNextgenerationDetector2025.](figures/einstein-telescope/Big_Panel.pdf){#fig-einstein-telescope-design-comparison-statistics width=80%}
+![Summary statistics for source position constraints by various configurations. From @santoliquidoComparingNextgenerationDetector2025.](figures/einstein-telescope/Big_Panel.pdf){#fig-einstein-telescope-design-comparison-statistics width=70%}
 
 In @fig-einstein-telescope-design-comparison-statistics we provide some summary statistics for several configurations of Einstein Telescope, also combining it with other detectors. 
 Among these metrics we include the information gain (@sec-information-gain), which summarizes the global volumetric ratio between prior and posterior. 
@@ -136,10 +140,10 @@ Let us focus specifically on three configurations:
 For the analysis of the events in our sample, the misaligned 2L configuration is globally more informative about the signals, though the $\Delta$ configuration typically constrains their distance more precisely. 
 The misaligned 2L configuration is, however, the most precise in constraining sky position, which translates to smaller values of the comoving localization volume.
 
-We started from the extrinsic parameters - distance and sky position - as they are the most dependent on detector configutation. As we see in @fig-einstein-telescope-design-comparison-statistics-intrinsic, the errors in most intrinsic parameters obtained with different configurations are quite stable, as they depend on the source SNR alone. 
-This can also be understood from the correlation structure of the Fisher matrix, see @sec-correlation-structure.
+We started from the extrinsic parameters --- distance and sky position --- as they are the most dependent on detector configutation. As we see in @fig-einstein-telescope-design-comparison-statistics-intrinsic, the errors in most intrinsic parameters obtained with different configurations are quite stable, as they depend on the source SNR alone. 
+This can also be understood from the correlation structure of the posterior distributions: see @sec-correlation-structure.
 
-![Summary statistics for intrinsic parameter constraints by various configurations. From @santoliquidoComparingNextgenerationDetector2025.](figures/einstein-telescope/Big_Panel_appendix.pdf){#fig-einstein-telescope-design-comparison-statistics-intrinsic width=80%}
+![Summary statistics for intrinsic parameter constraints by various configurations. From @santoliquidoComparingNextgenerationDetector2025.](figures/einstein-telescope/Big_Panel_appendix.pdf){#fig-einstein-telescope-design-comparison-statistics-intrinsic width=70%}
 
 The only parameter for which we see significant differences in @fig-einstein-telescope-design-comparison-statistics-intrinsic is the inclination angle, which depends on the ratio of amplitudes observed by different detectors. 
 
@@ -153,7 +157,7 @@ that is, determine the position of a gravitational wave source with high precisi
 without making use of travel-time measurements between detectors.
 
 For the many of the expected CBC sources expected, though, this 
-precise localization is sullied by an eight-fold multimodality [@santoliquidoFastAccurateParameter2025], which was also previously highlighted in the context of LISA [@marsatExploringBayesianParameter2021].
+precise localization is sullied by an eight-fold multimodality [@santoliquidoFastAccurateParameter2025], which was also previously highlighted in the context of LISA [@marsatExploringBayesianParameter2021], which shares the triangular geometry.
 An example of this multimodality is shown in @fig-einstein-telescope-delta-sky-time.
 
 ![Sky position posterior colored by time at geocenter. From @santoliquidoFastAccurateParameter2025.](figures/einstein-telescope/5_skymap_252_geocent_ET-1.png){#fig-einstein-telescope-delta-sky-time width=80%}
@@ -165,7 +169,7 @@ These degeneracies are driven by symmetries in the antenna patterns, and they ar
 - Very high SNRs, which make the non-point-like nature of the detector appreciable, as in @sec-gw250114-et, though this aspect remains under investigation.
 
 We now turn to the geometric reasoning behind the multimodalities.
-In terms of the local azimuth $\lambda$, altitude $\beta$, and the polarization angle $\psi$ of the incoming gravitational wave, the antenna pattern functions read [@regimbauMockDataChallenge2012]:^[In @santoliquidoFastAccurateParameter2025 the labels "altitude" and "azimuth" are flipped.]
+In terms of the local azimuth $\lambda$, altitude $\beta$, and the polarization angle $\psi$ of the incoming gravitational wave, the antenna pattern functions read [@regimbauMockDataChallenge2012]:^[In @santoliquidoFastAccurateParameter2025 the labels "altitude" and "azimuth" are inverted when defining these antenna patterns.]
 $$
 \begin{aligned}
 F_{+}^{\text{ET-1}}(\beta, \lambda, \psi) &= - \frac{\sqrt{ 3 }}{4}[(1+\cos ^{2}\beta)\sin 2\lambda \cos 2 \psi + 2 \cos \beta \cos 2 \lambda \sin 2 \psi] \\
@@ -186,16 +190,16 @@ The bimodality in $\beta$, then, is propagated to geocentric time. This can be s
 
 In @fig-einstein-telescope-sky-multimodality we summarize the number of modes in the sky location posterior distribution for the various configurations considered. 
 A noticeable fraction of sources exhibits eight-fold multimodality with the $\Delta$ configuration. 
-Not all of them do, since in some cases the posterior may be so broad as to not qualify as "multimodal" even if it is symmetric; alternatively, for sources close to the local horizon the modes with positive and negative $\beta$ may not be distinguishable, leading to a 4-fold multimodality.
+Not all of them do, since in some cases the posterior may be broad enough not to qualify as "multimodal" with the clustering algorithm we are using even if it is symmetric; alternatively, for sources close to the local horizon the modes with positive and negative $\beta$ may not be distinguishable, leading to a 4-fold multimodality.
 
 ### 2L shape {#sec-et-2l}
 
-While the 2L configuration does not suffer from the same eight-fold ones as the $\Delta$, it is not free from multimodalities, as is apparent from @fig-einstein-telescope-sky-multimodality.
+While the 2L configuration does not exhibit the eight-fold multimodalities we see with the $\Delta$, it is not free from them, as is apparent from @fig-einstein-telescope-sky-multimodality.
 
 The baseline between the two sites is $|\Delta \vec{r}| = 1166\text{km} \approx 3.9 \text{ms} \times c$. 
-If  $\Delta \vec{r} \cdot \hat{m}$, where $\hat{m}$ is the source direction, is significantly longer than the uncertainty on the arrival time of the signal at our detectors $\sigma_{t}$, the time delay can significantly inform the sky localization of the source.
-If this is not the case, the only information available to this end comes comparing the amplitude of the observed waveform at the various detectors.
-For the high-mass black holes in our sample, the timing uncertainties are generally significant, and therefore we typically find ourselves in this scenario.
+If  $\Delta \vec{r} \cdot \hat{m}$, where $\hat{m}$ is the source direction, is significantly longer than the uncertainty on the arrival time of the signal at our detectors $\sigma_{t}$, the time delay can inform the sky localization of the source.
+If this is not the case, the only information available to this end comes from comparing the amplitude of the observed waveform at the various detectors.
+For the high-mass black holes in our sample, the timing uncertainties are generally large, and therefore we typically find ourselves in this scenario.
 
 The amplitude of the signal, however, is also affected by its distance and inclination angle. 
 This can lead to correlated multimodalities in the joint posterior distribution of sky position and distance, as illustrated in @fig-einstein-telescope-2l-sky.

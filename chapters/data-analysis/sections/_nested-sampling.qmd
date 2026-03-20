@@ -190,7 +190,7 @@ This allows us to construct a procedure to evaluate the integral in @eq-evidence
 4. repeat from point 2.
 
 We are constructing a sequence of discarded ("dead") points $\theta_{i}$ with corresponding likelihoods $L_{i}$ and approximate associated interior prior volumes $X_{i} \approx e^{-i/k}$. 
-At this stage, we still need to discuss how step 3 is performed, as well as when the iteration should stop - for now, suppose that happens at some stage $n_\text{iter}$.
+At this stage, we still need to discuss how step 3 is performed, as well as when the iteration should stop --- for now, suppose that happens at some stage $n_\text{iter}$.
 
 For the evidence, we can simply use a trapezoidal integration rule: 
 $$
@@ -698,7 +698,8 @@ The nested sampling algorithm we described above could continue forever, with ev
 #| label: fig-nested-sampling-termination
 #| fig-cap: An illustration of the conditions for termination in nested sampling.
 
-fig, axs = plt.subplots(nrows=2, ncols=1, sharex=True, gridspec_kw={'hspace': 0 })
+import matplotlib.pyplot as plt
+fig, axs = plt.subplots(nrows=2, ncols=1, sharex=True, gridspec_kw={'hspace': 0 }, figsize=(6, 3))
 axs[1].plot(sampler.results.logvol, sampler.results.logl)
 axs[1].set_ylim(-10, sampler.results.logl[-1]+2)
 axs[1].set_xlabel('Prior volume compression $\log X$')
@@ -718,7 +719,7 @@ for ax in axs:
 		c='grey', 
 		alpha=.1
 	)
-axs[0].arrow(-10, -4, -3, 0, width=.1, color='black')
+axs[0].arrow(-10, -2.5, -3, 0, width=.1, color='black')
 _ = axs[0].text(-10.5, -6, 'Little contribution\nto the integral')
 ```
 
@@ -732,7 +733,7 @@ There is no general solution to this issue, besides increasing the number of liv
 
 The information gain provides an estimate of the expected volumetric compression: we expect to be sampling from the bulk of the posterior mass when $\log X \sim -H$, which will take approximately $n_\text{live}H \pm \sqrt{ n_\text{live}H }$ iterations due to Poisson variability.
 
-If $n_\text{live}H$ is large, we expect the dominant source of uncertainty to be the one on the compression reached  at that stage - it will be much larger than the uncertainty on the compression in the $\mathcal{O}(\sqrt{ n_\text{live}H })$ iterations required to traverse the posterior mass.
+If $n_\text{live}H$ is large, we expect the dominant source of uncertainty to be the one on the compression reached  at that stage --- it will be much larger than the uncertainty on the compression in the $\mathcal{O}(\sqrt{ n_\text{live}H })$ iterations required to traverse the posterior mass.
 This leads us to the estimate
 $$
 \mathtt{std}(\log Z) \approx \sqrt{ \frac{H}{n_\text{live}} } \,.

@@ -78,7 +78,7 @@ $$
 ::: {#wrn-title .callout-warning collapse="true"}
 ##### Unproven
 
-I'm quite confident it works like this but I haven't proven it formally - probably there is some function composition gymnastics to do.
+I'm quite confident it works like this but I haven't proven it formally --- probably there is some function composition gymnastics to do.
 :::
 
 therefore the weight as a function of $u$ is given by 

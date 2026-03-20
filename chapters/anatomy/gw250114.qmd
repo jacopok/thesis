@@ -129,7 +129,7 @@ This allowed the two modes to freely vary, independently of each other.
 In the right panel of @fig-spectroscopy we show the posterior distribution on the deviation parameter $\delta f_{221}$: it is constrained to be close to zero, a null result.
 The prior on the deviation parameter is also shown. We can visually compare the ratio of posterior and prior, which constitutes the evidence based on this data against a deviation from General Relativity (see @eq-savage-dickey-density-ratio). The precise value of this number depends on many analysis details; qualitatively, we can say we found weak evidence against a deviation from General Relativity.
 
-The left panel offers an alternative perspective on the same result: we show the two-dimensional posterior distribution on the frequencies $(1+z)f_{220}$ and $(1+z)f_{221}$.^[The quantities in the plot are the measured frequencies at the detector. Due to cosmological effects we expect them to be redshifted by a factor $(1+z)$ - see also @sec-distance-redshift.]
+The left panel offers an alternative perspective on the same result: we show the two-dimensional posterior distribution on the frequencies $(1+z)f_{220}$ and $(1+z)f_{221}$.^[The quantities in the plot are the measured frequencies at the detector. Due to cosmological effects we expect them to be redshifted by a factor $(1+z)$ --- see also @sec-distance-redshift.]
 The grey diagonal band shows the range of possible combinations of values under the Kerr assumption. 
 
 The two estimated frequencies change as a function of detector-frame remnant mass $(1+z)M_{f}$ and spin $\chi_{f}$; these are free parameters, informed only by the ringdown, hence their wide posterior distributions. 
