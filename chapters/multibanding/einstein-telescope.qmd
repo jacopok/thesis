@@ -90,7 +90,7 @@ This level of accuracy is currently beyond the reach of any waveform model; the 
 
 Overall, significant work remains to be done in the next decade in order to prepare for the fast and unbiased analysis of Einstein Telescope data.
 
-### GW250114 as seen by Einstein Telescope {#sec-gw250114-et}
+### GW250114 as seen by a triangular Einstein Telescope {#sec-gw250114-et}
 
 We inject a waveform corresponding to the maximum likelihood point from the LVK analysis of the gravitational wave event GW250114 into the data of a triangular Einstein Telescope.
 We analyze the data using the software [`bilby`](https://github.com/bilby-dev/bilby) [@ashtonBilbyUserfriendlyBayesian2019] combined with the sampler [`nessai`](https://github.com/mj-will/nessai) [@williamsNestedSamplingNormalising2021].
