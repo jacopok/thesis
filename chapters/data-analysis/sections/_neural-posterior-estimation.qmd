@@ -1,5 +1,5 @@
 ## Simulation-based inference {#sec-simulation-based-inference} 
-Simulation-based inference (SBI) encompasses a broad range of approaches to inference which lack an explicit, analytic likelihood.
+Simulation-based inference (SBI) encompasses a broad range of approaches to inference which do not require an explicit, analytic likelihood.
 While they still strive to produce results according to Bayes' theorem (@eq-bayes-theorem), they learn the likelihood implicitly, through the process of training a machine learning model.
 All SBI approaches require the presence of a _simulator_, i.e. a way to simulate data $d$ conditional on a set of parameters $\theta$, distributed according to the likelihood: $d \sim p(d|\theta)$.
 This need not be based on an analytic likelihood: for instance, in the gravitational wave case, one may inject signals into realistic detector noise [@daxRealtimeGravitationalwaveScience2021;@emmaRNLEResidualNeural2026].
@@ -72,7 +72,7 @@ Here, $t_{I}(\theta)$ is the arrival time of the gravitational wave signal at a 
 The subscript notation $d_{-t_{I}(\theta)-\delta t_{I}}$ denotes time-shifted data. 
 This procedure makes it so that, in all the training data available to the model, waveforms are all approximately time-aligned. 
 
-Recently, a new transformer-based architecture for `DINGO` has been proposed [@koflerFlexibleGravitationalWaveParameter2025] as an alternative to the approach described above. 
+Recently, a new transformer-based architecture for `DINGO` has been proposed [@koflerFlexibleGravitationalWaveParameter2025] as an alternative to the GNPE approach described above. 
 By tokenizing the data across detectors and frequency grid sections, a single network can be used for different detector configurations (one, two or three detectors), as well as for different frequency intervals.
 
 

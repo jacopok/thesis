@@ -32,9 +32,9 @@ The expectation value of the noise covariance is then
 $$
 \langle \delta\theta_{i} \delta\theta_{j} \rangle _{p(\theta|d)} = F_{ij}^{-1} + \mathcal{O}\left(  \frac{1}{\rho^{3}} \right)\,;
 $$
-with the addition of a Gaussian prior $\pi(\delta\theta) \propto \exp\left( - \frac{1}{2} P_{ij} \delta\theta_{i} \delta\theta_{j} \right)$ it becomes 
+with the addition of a Gaussian prior $\pi(\delta\theta) \propto \exp\left( - \frac{1}{2} P_{ij} \delta\theta_{i} \delta\theta_{j} \right)$ it becomes [@vallisneriUseAbuseFisher2008, eq. 39]:
 $$
-\langle \delta\theta_{i} \delta\theta_{j} \rangle _{p(\theta|d)} = \left( F_{ij} + \frac{P_{ij}}{\rho^{2}} \right)^{-1} + \mathcal{O}\left(  \frac{1}{\rho^{3}} \right)\,.
+\langle \delta\theta_{i} \delta\theta_{j} \rangle _{p(\theta|d)} = \left( F_{ij} + P_{ij} \right)^{-1} + \mathcal{O}\left(  \frac{1}{\rho^{3}} \right)\,.
 $$
 
 The Fisher matrix can be complemented by the addition of information from a generic prior distribution by performing rejection sampling on samples extracted from the Gaussian distribution it defines [@iacovelliForecastingDetectionCapabilities2022; @dupletsaValidatingPriorinformedFishermatrix2025].
@@ -48,7 +48,7 @@ Nevertheless, the Fisher matrix can be a useful tool, especially in the context 
 It provides a metric on the parameter space, which can be useful when generating template banks, see e.g. @phukonGeometricTemplateBank2025.
 In some cases it can be computed analytically, which is useful for the theoretical understanding of the behavior of data analysis pipelines, see @sec-analytic-fisher-calculations.
 
-Fisher integrands are also a useful tools for the understanding of parameter constraints: 
+Fisher integrands are also a useful tool for the understanding of parameter constraints: 
 a quantity in the form
 $$
 \frac{4f}{S_{n}(f)} \bigg| \frac{ \partial h }{ \partial \theta_{i} } \bigg|^{2}
@@ -109,7 +109,7 @@ where the indices $JKLM$ span the available detectors, $\Omega$ is the angular f
 $$
 \Delta_{IJ} = \langle \Omega d_{I} | \Omega d_{J} \rangle \delta_{IJ} - \langle \Omega d_{I}| \partial_{k} d_{J} \rangle \langle \partial_{l} d_{J} | \Omega d_{J}\rangle  F_{kl}^{-1}
 $$
-where $F_{kl}$ is the Fisher matrix on all the parameters describing the signal except for the sky position.
+where $F_{kl}$ is the Fisher matrix on all the parameters describing the signal except for sky position.
 
 The term $|(\mathbf{r}_{KJ} \times \mathbf{r}_{ML}) \cdot \mathbf{n} |$ is twice the area formed
 by the projections of the detectors $J$, $K$, $L$, $M$ onto
@@ -144,7 +144,7 @@ For example, @singerRapidBayesianPosition2016 used it to come to the conclusion 
 from the intrinsic ones (for definitions see @sec-intrinsic and @sec-extrinsic). 
 This is qualitatively due to the fact that the extrinsic parameters are generally measured by _inter-detector_ amplitude
 and time of arrival _differences_, while intrinsic parameters are generally measured by _averages_ of amplitude
-and phase.
+and phase across detectors.
 
 We can validate this by computing the Pearson correlation matrix of a full parameter estimation run:
 $$ \rho_{ij} = \frac{C_{ij}}{\sigma_i \sigma_j} \,,
