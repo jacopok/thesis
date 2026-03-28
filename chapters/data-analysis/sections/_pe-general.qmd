@@ -1,6 +1,6 @@
 ## Inference and model comparison {#sec-inference-model-comparison}
 
-This section contains an outline the basic aspects of Bayesian parameter estimation,
+This section contains the basic aspects of Bayesian parameter estimation,
 the backbone of all gravitational wave data analysis.
 This theory is of general validity, and it does not require us to 
 restrict ourselves to the gravitational wave application quite yet.
@@ -35,7 +35,7 @@ $$
 p(\theta_{i}|d) = \int \left( \prod_{k\neq i} \text{d}\theta_{k} \right) p(\theta| d)\,.
 $$
 The marginal distribution over two or more parameters can be defined analogously, by integrating along all dimensions except for the ones at hand.
-Marginal distributions are the best approximation for what out posterior belief about the given parameter(s) should be; they include all the uncertainty on that parameter driven by the uncertainty in other, related parameters. @fig-marginalizing-vs-conditioning illustrates this by comparing the marginal distribution to the _conditional_ distribution, obtained by fixing the values of the other parameters to some value: 
+Marginal distributions are the best approximation for what our posterior belief about the given parameter(s) should be; they include all the uncertainty on that parameter driven by the uncertainty in other, related parameters. @fig-marginalizing-vs-conditioning illustrates this by comparing the marginal distribution to the _conditional_ distribution, obtained by fixing the values of the other parameters to some value: 
 $$
 p(\theta_{i}|d, \left\{ \theta_{k}^{0} \right\}_{k \neq i})
 =
@@ -54,7 +54,7 @@ n = MultivariateNormal([0, 0], [[1, 0.8], [0.8, 1]])
 n.plot_2d_analytical(0, 0, .9)
 ```
 
-A set of $N$ samples^[We represent these samples with two indices: a lower one indicating the dimension in the parameter space, and an upper one in parenthesis indicating the number of the sample.] $\left\{ \theta^{(k)} \right\}_{k}$ can be used to represent a high-dimensional posterior distribution. 
+A set of $N$ samples^[We represent these samples with two indices: a lower one indicating the dimension in the parameter space, and an upper one in parenthesis indicating the number of the sample.] $\left\{ \theta_i^{(k)} \right\}_{k}$ can be used to represent a high-dimensional posterior distribution. 
 This is convenient, since marginal distributions are trivially obtained from these by only considering one of their entries, since $\left\{ \theta_{i}^{(k)} \right\} \sim p(\theta_{i}|d)$.
 
 We can easily compute a number of summary statistics from samples, such as the expectation value of any function $f(\theta)$ [@thraneIntroductionBayesianInference2019]:
@@ -66,7 +66,7 @@ This general expression can be used for many different applications:
 
 - the mean and variance of a parameter $\theta_{i}$ can be obtained by setting $f=\theta_{i}$ and $f= (\theta_{i} - \langle \theta_{i} \rangle)^{2} N/ (N-1)$ respectively;
 - the covariance matrix of the whole parameter space can be obtained by setting $f = (\theta_{i}-\langle \theta_{i} \rangle)(\theta_{j} - \langle \theta_{j} \rangle) N/(N-1)$;
-- an histogram for the parameter $\theta_{i}$ can be obtained with a set of functions which return the height of bin $m$: $f_{m} = [ \theta^{\text{min}}_{m} \leq \theta_{i}^{(k)} < \theta^{\text{max}}_{m}]$,^[This expression is using the Iverson bracket [@knuthTwoNotesNotation1992] which returns 1 if the statement inside is true and 0 otherwise.].
+- a histogram for the parameter $\theta_{i}$ can be obtained with a set of functions which return the height of bin $m$: $f_{m} = [ \theta^{\text{min}}_{m} \leq \theta_{i}^{(k)} < \theta^{\text{max}}_{m}]$,^[This expression is using the Iverson bracket [@knuthTwoNotesNotation1992] which returns 1 if the statement inside is true and 0 otherwise.].
 
 Working with samples also has disadvantages. 
 For example, conditional distributions, which we are sometimes interested in, are difficult to obtain. 
@@ -100,7 +100,7 @@ $$
 \int_{\theta_{i}^{\text{min}}}^{y_{1}} p(\theta_{i}|d) \text{d}\theta_{i} 
 = \frac{1-X}{2}\,.
 $$
-These kind of intervals are commonly adopted due to the ease of their computation, which reduces to computing quantiles of the $p(\theta_{i}|d)$ distribution, either at $X$ or $1-X$ (for the one-sided case) or at $(1-X) / 2$ and $(1+X) / 2$ (for the symmetric case).
+These intervals are commonly adopted due to the ease of their computation, which reduces to computing quantiles of the $p(\theta_{i}|d)$ distribution, either at $X$ or $1-X$ (for the one-sided case) or at $(1-X) / 2$ and $(1+X) / 2$ (for the symmetric case).
 
 Another method to quantify the uncertainty on one or more parameters is the _Highest Probability Density_ (HPD) region.
 This is a region defined as $R(X) = \left\{ \theta | p(\theta|d) \geq K(X) \right\}$, where the value of $K$ is chosen such that 
@@ -145,7 +145,7 @@ We can also extract equally-weighted samples from weighted ones by __rejection s
 	3. if $r<x$, keep the sample $\theta_{i}$, otherwise, remove it.
 
 On average, this procedure will retain $n\langle w \rangle / \max w$ out of $n$ samples; if many of the weights are lower than their maximum, it can become quite inefficient. 
-In fact, under the realistic assumption of the weights being log-normally distributed, it can be shown that working with the weighted samples can be significantly more efficient than performing rejection sampling and then working with the resulting equally-weighted samples [@ashtonReconstructingResamplingGuide2025, fig. 3].
+In fact, under the realistic assumption of the weights being log-normally distributed, it can be shown that working with all weighted samples can be significantly more efficient than performing rejection sampling and then working with the resulting equally-weighted samples [@ashtonReconstructingResamplingGuide2025, fig. 3].
 
 ### $p$-$p$ tests {#sec-pp-plot}
 
@@ -163,10 +163,10 @@ Repeating this procedure $N_\text{inj}$ times, we will get a set of values $u_{j
 If our analysis is self-consistent, and $p(\theta_{i}|d)$ is the probability density for the true value, then the $u_{j}$ should be uniformly distributed in the interval $[0, 1]$.
 
 There are a few ways to check whether this is the case, both visual and statistical. 
-The simplest is probably to histogram the $u_{j}$ and visually check for uniformity. This is not a very powerful method, however, since it is hard to tell by eye which level of fluctuation is "acceptable", and there is a dependence on the size of the bins used for the histogram.
+The simplest is probably to create a histogram of the $u_{j}$ and visually check for uniformity. This is not a very powerful method, however, since it is hard to tell by eye which level of fluctuation is "acceptable", and there is a dependence on the size of the bins used for the histogram.
 A better choice is to compute the empirical cumulative distribution function: 
 $$
-P(u) = \frac{\text{number of }u_{j} \leq u}{N_\text{inj}}
+P_{\text{emp}}(u) = \frac{\text{number of }u_{j} \leq u}{N_\text{inj}}
 $$
 
 This is a "stepwise", locally constant function. For a perfectly uniform distribution, and an asymptotically high number of injections, it asymptotically tends toward $P(u) = u$. 
@@ -177,10 +177,10 @@ A useful variant of this is to plot $u$ on the horizontal axis and $P(u) - u$ on
 This allows for the resolution of small fluctuations from the diagonal. 
 
 In order to help in the visual check, we need something to compare against: what is the magnitude of the expected fluctuations of $P(u)$ under the null hypothesis, i.e. if the distribution is indeed uniform?
-If we fix a value of $u$, the question can be reframed as follows: out of $N_\text{inj}$ independent and identically distributed uniform random variates, how many are smaller than $u$?
+If we fix a value of $u$, the question can be reframed as follows: out of $N_\text{inj}$ independent and identically distributed draws from the distribution $\mathcal{U}([0, 1])$, how many are smaller than $u$?
 The probability for each of them being smaller than $u$ is $u$ itself, so the probability mass function describing this scenario will be binomial, but scaled by $N_\text{inj}$:
 $$
-p \left( P (u) = \frac{k}{N_\text{inj}} \right) = {k\choose N_\text{inj}} u^{k} (1-u)^{N _\text{inj}-k}
+p  \left( P (u) = \frac{k}{N_\text{inj}} \right) = {k\choose N_\text{inj}} u^{k} (1-u)^{N _\text{inj}-k}
 $$
 
 Therefore we can easily compute its mean and variance: $\langle P(u) \rangle =u$ and
@@ -222,7 +222,7 @@ $$
 We show both one-sided tests as opposed to the two-sided one, since their values can be used together to distinguish different types of misspecification, as we illustrate in @sec-pp-test-failure-modes. 
 The density function of the K-S statistics under the null hypothesis is shown in @fig-kolmogorov-smirnov-distribution. 
 The densities for the $D_{\pm}$ functions are identical - the transformation $u \to 1-u$ maps one to the other, and the null hypothesis is invariant under this reflection.
-The scenario $D \approx 0$ is unlikely, as it would require the variates to precisely align themselves in an equally spaced pattern. On the other hand, $D_{\pm}$ being close to zero is plausible, as it only requires the realization to mostly be above or below the uniform CDF.
+The scenario $D \approx 0$ is unlikely, as it would require the draws to precisely align themselves in an equally spaced pattern. On the other hand, $D_{\pm}$ being close to zero is plausible, as it only requires the realization to mostly be above or below the uniform CDF.
 
 ```{python}
 #| label: fig-kolmogorov-smirnov-distribution
@@ -423,7 +423,7 @@ addressing this problem by comparing them; still, we should remember that
 our results are dependent on the set of models we used, and it is possible they may 
 _all_ miss some important aspect.
 
-We can write an anologous expressio to @eq-bayes-theorem for both models $M_{1}$ and $M_{2}$:
+We can write an anologous expression to @eq-bayes-theorem for both models $M_{1}$ and $M_{2}$:
 $$
 p(M_{i}|d) p(d) = p(d| M_{i}) p(M_{i});
 $$

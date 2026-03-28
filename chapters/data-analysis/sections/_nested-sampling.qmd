@@ -31,7 +31,7 @@ p([X_{0}, X_{1}]) = \int _{L(X_{0}) < \mathcal{L}(d|\theta, M) < L(X_{1})} \pi (
 $$
 
 where we computed the integral on a likelihood "ring" by subtracting the inside volume from the outside one.
-This is useful to us, since it means that if we distribute points uniformly according to the prior their $X$ values will also be uniformly distributed in $[0, 1]$. 
+This is useful to us, since it means that if we distribute points according to the prior their $X$ values will also be uniformly distributed in $[0, 1]$. 
 More formally, the probability we are assigning to $X$ is the _push-forward_ probability measure associated to the mapping from $\theta$ to $X$ defined by $X(\theta) = X(L(\theta))$.
 For a discussion on this, see [@ashtonNestedSamplingPhysical2022, box 2].
 
@@ -184,9 +184,9 @@ plt.show()
 
 This allows us to construct a procedure to evaluate the integral in @eq-evidence-integral, as long as we are able to do the following:
 
-1. sample uniformly $k$ points from the prior;
+1. sample $k$ points from the prior;
 2. find the lowest-likelihood point $\theta_{1}$ and discard it: now the prior volume is approximately $X_{1} = e^{-1/k}$, let us denote its likelihood as $L_{1}$;
-3. sample a new point $\theta_{2}$ uniformly from the prior, constrained to $L_{2} = L(\theta_{2}) > L_{1}$;
+3. sample a new point $\theta_{2}$ from the prior, constrained to $L_{2} = L(\theta_{2}) > L_{1}$;
 4. repeat from point 2.
 
 We are constructing a sequence of discarded ("dead") points $\theta_{i}$ with corresponding likelihoods $L_{i}$ and approximate associated interior prior volumes $X_{i} \approx e^{-i/k}$. 
@@ -381,7 +381,7 @@ We can approximate the posterior density based on the samples with tools like a 
 
 ```{python}
 #| label: fig-savage-dickey
-#| fig-cap: "Consistency of the Savage-Dickey density ratio and Nested Sampling estimates for the Bayes Factor. "
+#| fig-cap: "Consistency of the Savage-Dickey density ratio and Nested Sampling estimates for the Bayes Factor. The blue curve is the prior on _a_ under the parabolic model, the dark and light red curves are respectively a KDE reconstruction and histogram of the posterior distribution on _a_ under the parabolic model. The dashed vertical line is the true value of _a_. Finally, the black dot represents the equivalent posterior-to-prior ratio to the Bayes Factor obtained through nested sampling. The value is broadly consistent with what one can obtain by approximating the posterior, but it is much more precise and its error is better quantified."
 
 from scipy.stats import gaussian_kde
 a_samples = sampler_parabola.results.samples[:, 0]
