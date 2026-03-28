@@ -69,7 +69,7 @@ $$
 \langle \lvert n(t) \rvert ^{2} \rangle = \int_{0}^{\infty} S_{n}(f) \text{d}f\,.
 $$
 We could have alternatively defined it without the $1 / 2$ factor, simultaneously extending the integral from $-\infty$ to $\infty$. The negative-frequency contribution to the integral is equal to the positive-frequency one, since the signal and noise are real-valued.
-Sometimes, the _Amplitude Spectral Density_ (ASD) is also quoted, which is the square root of the PSD, with units of $\text{Hz}^{-1/2}$:^[More in general, the ASD has units of $x / \sqrt{ \text{Hz} }$, where $x$ is the unit of the time-domain noise. For example, if we were characterizing acceleration noise $x$ would be $\text{m/s}^2$.]
+Sometimes, the _Amplitude Spectral Density_ (ASD) is also quoted, which in gravitational wave data analysis is defined as the square root of the PSD, with units of $\text{Hz}^{-1/2}$:^[More in general, the ASD has units of $x / \sqrt{ \text{Hz} }$, where $x$ is the unit of the time-domain noise. For example, if we were characterizing acceleration noise $x$ would be $\text{m/s}^2$.]
 $$
 A_{n}(f) = \sqrt{ S_{n}(f) }\,.
 $${#eq-amplitude-spectral-density}
@@ -193,7 +193,7 @@ axs[1].loglog(abs(np.fft.rfft(y_tuk)), c=c2,
 label='Tukey window, $\\alpha=0.25$')
 axs[1].set_ylim(1e-3, 5e3)
 axs[1].set_title('Frequency domain')
-axs[1].set_xlabel('Frequency bins [log]')
+axs[1].set_xlabel('Frequency bins [log scale]')
 axs[1].set_ylabel('$\log|\\tilde{{w}}(f)|$')
 axs[1].set_yticklabels([])
 axs[1].legend()
