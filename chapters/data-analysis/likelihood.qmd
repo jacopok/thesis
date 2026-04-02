@@ -74,7 +74,7 @@ $$
 A_{n}(f) = \sqrt{ S_{n}(f) }\,.
 $${#eq-amplitude-spectral-density}
 
-The PSD can be used for the characterization of the second moment of any stationary noise; if we further assume that the noise is Gaussian, we can obtain the Whittle approximation to the Gaussian likelihood [@whittleCurvePeriodogramSmoothing1957;@rouletInferringBinaryProperties2024]:
+The PSD can be used for the characterization of the second moment of any stationary noise; if we further assume that the noise is Gaussian and the data are periodic,^[For a detailed discussion of the periodicity assumption, see @sec-windowing.] we can obtain the Whittle approximation to the Gaussian likelihood [@whittleCurvePeriodogramSmoothing1957;@rouletInferringBinaryProperties2024]:
 
 $$
 \begin{aligned}
@@ -123,7 +123,7 @@ $$ {#eq-likelihood-ratio}
 
 and the evidence we will obtain, the integral of $\mathcal{L}_{r}(d|\theta) \pi(\theta) \text{d}\theta$ over the parameter space, will actually be a Bayes Factor, $Z_\text{signal and model} / Z_\text{noise}$.
 
-### Periodic data: windowing
+### Non-periodic data: windowing {#sec-windowing}
 
 The Fourier transform in equation @eq-fourier-transform-discrete is, technically speaking, only appropriate if the data is _periodic_. 
 This is not the case for realistic data: on the contrary, we only want to consider a given segment in time around our event. Then, the noise matrix will not be exactly diagonalized by the Fourier transform.

@@ -41,8 +41,7 @@ After the coalescence of two Kerr black holes, the remnant quickly settles into 
 ![Whitened strain in the ringdown of GW250114. The data from the Hanford detector was shifted in time and inverted to account for its different position and antenna patterns compared to Livingston.](figures/overlapped_strains.pdf){#fig-whitened-strain-ringdown-gw250114}
 
 The qualitative behaviour of this regime, a damped sinusoid, is apparent in @fig-whitened-strain-ringdown-gw250114. 
-
-This radiation can be described, at the perturbative level, in terms of quasi-normal modes (QNMs), whose complex frequencies $\omega_{\ell mn} = 2 \pi f_{\ell mn} - i / \tau_{\ell mn}$ are well-understood functions of the black hole properties: mass $M_{f}$ and spin magnitude $\chi_{f}$.
+Indeed, the dominant late-time behavior of this radiation can be described, at the perturbative level, in terms of quasi-normal modes (QNMs), whose complex frequencies $\omega_{\ell mn} = 2 \pi f_{\ell mn} - i / \tau_{\ell mn}$ are well-understood functions of the black hole properties: mass $M_{f}$ and spin magnitude $\chi_{f}$.^[Even at the perturbative level, this description is not complete, especially at early times [@deamicisDynamicalQuasinormalMode2026].]
 
 ```{python}
 import qnm
@@ -80,9 +79,9 @@ Predicting the amplitudes of these modes is in general hard, doing so in the gen
 Ringdown analyses may be performed at several levels of model-dependence, ranging from a purely data-driven fit with damped sinusoids to imposing a prescription for the Kerr spectrum as well as the mode amplitudes [@bertiBlackHoleSpectroscopy2025, table 7].
 The fits we will describe in @sec-gw250114-overtone are model-dependent, imposing a Kerr spectrum but not the mode amplitudes.
 
-In order to isolate the ringdown, one generally analyzes data starting after the coalescence, with the time domain data analysis techniques described in @sec-time-domain-pe. But what should the start time be, exactly?
-The initial spacetime at the collision is highly dynamical and nonlinear, and asymptotically approaches the perturbative regime in which the QNM description is formulated. 
-This is at the core of a fundamental tension in ringdown science: the perturbative assumption is better verified the further along one starts, but the signal is quickly decaying and starting too late means losing valuable data.
+In order to isolate the ringdown, one generally analyzes data starting after the coalescence, with the time domain data analysis techniques described in @sec-time-domain-pe. 
+Choosing a start time, however, poses a conundrum: the initial spacetime at the collision is highly dynamical and nonlinear, and it only approaches the perturbative regime in which the QNM description is formulated asymptotically. 
+This is at the core of a fundamental tension in ringdown science: the perturbative assumption is better verified the further along in time one starts, but the signal is quickly decaying and starting too late means losing valuable data.
 
 ![Frequencies, damping times and SNRs as a function of analysis start time in the ringdown of GW250114. Adapted from @abacGW250114TestingHawkings2025.](figures/fs_gs_snrs_vs_time.pdf){#fig-gw250114-fs-gs-snrs width=100%}
 
