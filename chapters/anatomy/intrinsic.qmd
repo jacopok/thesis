@@ -71,7 +71,7 @@ When sampling, it is also importanto to identify which object is the primary and
 secondary [@gerosaWhichWhichIdentification2025]. 
 The distinction would be well-specified if we had access to the exact masses of the objects, $m_1$ and $m_2$, 
 but due to measurement error we do not: any given posterior sample will describe two objects
-with masses $m_a$ and $m_b$ and corresponding spins $\vec{chi}_a$ and $\vec{chi}_b$.
+with masses $m_a$ and $m_b$ and corresponding spins $\vec{\chi}_a$ and $\vec{\chi}_b$.
 
 The current standard approach is to establish the correspondence $a \iff 1$ and $b \iff 2$
 based on the criterion that $m_a > m_b$, on a sample-by-sample basis.

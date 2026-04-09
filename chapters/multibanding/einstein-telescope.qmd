@@ -105,12 +105,13 @@ This illustrates the fact that ET's noise curve is not just lower overall, it is
 ![Posterior distribution on the sky position for our GW250114 injection. Figure produced by Filippo Santoliquido.](figures/einstein-telescope/skymap_samples_t_geocent.pdf){#fig-bimodal-sky-gw250114-et width=70%}
 
 This signal would have an SNR of approximately 680 when combining the three detectors.
-In @sec-et-delta we describe how such a short signal is expected to exhibit an 8-fold multimodality in the sky; however, we only observe two modes in the sky for this injection, symmetrically across the local horizon. 
+In @sec-et-delta we describe how such a short signal is expected to exhibit an 8-fold multimodality in the sky; however, we only observe two modes in the sky for this injection, symmetrically across the local horizon, as shown in @fig-bimodal-sky-gw250114-et. 
 This is due to the fact that, in our simulation, the Einstein Telescope is made up of three detectors separated by 10km each which, due to the long-wavelength approximation, are effectively point-like. The temporal resolution for the arrival time of the signal at each them is so precise, on the scale of tens of microseconds, that is allows the our simulation of the ET to _triangulate_ the signal, despite its extremely short baseline of $33 \upmu \text{s} \times c$. 
+In order to show this, in @fig-arrival-times-gw250114-et we show the posterior distribution on the arrival time of the merger at the three beamsplitters. 
 
 ![Posterior distribution on the arrival times at the three ET beamsplitters in our GW250114 injection. Figure produced by Filippo Santoliquido.](figures/einstein-telescope/arrival_times_Delta.pdf){#fig-arrival-times-gw250114-et width=70%}
 
-The temporal resolution of the measurement being this tight indicates that the long wavelength approximation used for this injection is not appropriate, and in future work we shall repeat this analysis with frequency-dependent antenna patterns.
+The temporal resolution of the measurement being this tight indicates that the long wavelength approximation used for this injection is not appropriate: this analysis should be performed with frequency-dependent antenna patterns.
 
 ## Neural posterior estimation for high-mass black holes
 
@@ -140,7 +141,7 @@ Let us focus specifically on three configurations:
 For the analysis of the events in our sample, the misaligned 2L configuration is globally more informative about the signals, though the $\Delta$ configuration typically constrains their distance more precisely. 
 The misaligned 2L configuration is, however, the most precise in constraining sky position, which translates to smaller values of the comoving localization volume.
 
-We started from the extrinsic parameters --- distance and sky position --- as they are the most dependent on detector configutation. As we see in @fig-einstein-telescope-design-comparison-statistics-intrinsic, the errors in most intrinsic parameters obtained with different configurations are quite stable, as they depend on the source SNR alone. 
+We started from the extrinsic parameters --- distance and sky position --- as they are the most dependent on detector configuration. As we see in @fig-einstein-telescope-design-comparison-statistics-intrinsic, the errors in most intrinsic parameters obtained with different configurations are quite stable, as they depend on the source SNR alone. 
 This can also be understood from the correlation structure of the posterior distributions: see @sec-correlation-structure.
 
 ![Summary statistics for intrinsic parameter constraints by various configurations. From @santoliquidoComparingNextgenerationDetector2025.](figures/einstein-telescope/Big_Panel_appendix.pdf){#fig-einstein-telescope-design-comparison-statistics-intrinsic width=70%}

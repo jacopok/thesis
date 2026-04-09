@@ -80,16 +80,20 @@ $$
 \begin{aligned}
 \log \mathcal{L}(n) &= \log \mathcal{N_{1}} + \sum_{m>0} \left[  \log \left(\frac{2}{\pi T S_{n}(f_{m})} \right) - \frac{2 |n(f_{m})|^{2}}{T S_{n}(f_{m})} \right]  \\
 &= \log \mathcal{N_{2}} - \frac{1}{2} \int_{0}^{f_\text{max}} \frac{4 |n(f)|^{2}}{S_{n}(f)} \text{d}f\\
-&= \log \mathcal{N_{2}} - \frac{1}{2} (n|n)\,.
+&= \log \mathcal{N_{2}} - \frac{1}{2} (n|n)\,,
 \end{aligned}
 $$
+
+where $T$ denotes the duration of the data segment.
 
 The normalization terms $\mathcal{N_{1}}$ and $\mathcal{N_{2}}$ are different, but crucially they only depend on the Power Spectral Density, not on the specific noise realization.
 
 In the last equation, we introduced the notation $(\cdot | \cdot)$ for the noise-weighed inner product between waveforms, defined as 
 
-$$ (a | b) = 4 \Re \int_0^\infty \frac{a(f) b^*(f)}{S_n(f)}\text{d}f \,.
+$$ (a | b) = 4 \Re \int_0^\infty \frac{a(f) b^*(f)}{S_n(f)}\text{d}f \,,
 $${#eq-noise-weighted-inner-product}
+
+where $z^*$ is the complex conjugate of $z$, while $\Re$ denotes the real part operator, defined so that $\Re z = (z+z^*) / 2$.
 
 More specifically, this likelihood answers the question: 
 
@@ -218,15 +222,33 @@ The second point was shown through a pp-plot.
 For a few thousand times, a signal was injected and recovered in a data segment, with or without the correction.
 The recovery was performed only varying the luminosity distance of the signals. 
 
-::: {layout-ncol=2}
+```{python}
+#| label: fig-windowing-pp-test
+#| fig-cap: "Tests of the impact of the window factor on parameter estimation, adapted from @talbotInferenceFiniteTime2025."
+#| fig-subcap: 
+#|   - "_p_-_p_ plot for the distance-only injections with and without the correction."
+#|   - "K-S test _p_-value as a function of the number of injected signals. The _p_-value is shown on a logit scale (@nte-odds-logits)."
+#| layout-ncol: 2
 
-![_p_-_p_ plot for the distance-only injections with and without the correction. Adapted from @talbotInferenceFiniteTime2025.](figures/pp-test.pdf)
+import matplotlib.pyplot as plt
+from thesis_scripts import data_path
+scale = 500
 
-![K-S test _p_-value as a function of the number of injected signals, adapted from @talbotInferenceFiniteTime2025. The _p_-value is shown on a logit scale (@nte-odds-logits).](figures/pvalue_logit.pdf)
+img = plt.imread('figures/pp-test.webp')
+plt.figure(figsize=(img.shape[0]/scale, img.shape[1]/scale))
+plt.imshow(img, aspect='equal')
+plt.axis('off')
+plt.show()
 
-:::
+img = plt.imread('figures/pvalue_logit.webp')
+plt.figure(figsize=(img.shape[0]/scale, img.shape[1]/scale))
+plt.imshow(img, aspect='equal')
+plt.axis('off')
+plt.show()
 
-It shows signs of overconstraing: compare with the example in @fig-pp-plot-bias-overconstrain.
+```
+
+It shows signs of overconstraining: compare with the example in @fig-pp-plot-bias-overconstrain.
 Rescaling the data is equivalent to multiplying the log-likelihood by $1/ \beta$, which makes its peak artificially too narrow.
 
 
@@ -234,9 +256,10 @@ Rescaling the data is equivalent to multiplying the log-likelihood by $1/ \beta$
 
 The procedure of windowing and tapering the data works well enough for the analysis of a full gravitational wave signal, for which we can consider a relatively long segment around the event. 
 However, in some cases we do not have that luxury: 
-for example, in the analysis of the ringdown,
-it is crucial to be able to isolate the perturbative regime, 
-which only describes the data well starting a certain time after the merger (@sec-ringdown).
+for example, the ringdown is the last section of the signal from a black hole coalescence, 
+in which the remnant black hole settles to a quiescent state (see @sec-ringdown).
+In the analyis of this part of the data, it is crucial to be able to isolate the perturbative regime, 
+which only describes the data well starting a certain time after the merger.
 
 To this end, we want to only analyze data starting from a specific point in time which "cuts off" part of the signal in the region where it is stronger. 
 Trying to impose this kind of sharp time-domain cut in the frequency domain is a losing endeavour.
@@ -497,8 +520,9 @@ Here we will outline the analytic marginalization procedure only for the relativ
 
 Reference phase does not have any astrophysical significance, despite being crucial for a complete description of the signal [@LIGOT1300326v1AnalyticMarginalisation].
 
-If the waveform is dominated by the $\ell |m| = 22$ mode of emission, 
-its dependence on the coalescence phase $\phi_c$ is simply $h(\phi_c, \theta) = h(\phi_c=0, \theta) e^{2 \mathrm{i} \phi_c}$. 
+As we will outline in @sec-phase-inclination-angle, the emission from a compact binary can be decomposed in harmonics, each of which has a different scaling with orbital phase.
+If we only consider the dominant, $\ell |m| = 22$ mode of emission,
+the waveform's dependence on the coalescence phase $\phi_c$ is simply $h(\phi_c, \theta) = h(\phi_c=0, \theta) e^{2 \mathrm{i} \phi_c}$. 
 For convenience, we shall denote the waveform at a reference phase, $h(\phi_{c}=0, \theta)$, simply as $h(\theta)$.
 
 Therefore, the marginalized likelihood reads 

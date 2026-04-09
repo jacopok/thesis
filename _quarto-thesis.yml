@@ -37,6 +37,7 @@ book:
       chapters:
       - chapters/multibanding/einstein-telescope.qmd
       - chapters/multibanding/lgwa.qmd
+    - conclusions.qmd
     - chapters/references.qmd
   page-navigation: true
   repo-url: https://github.com/jacopok/thesis

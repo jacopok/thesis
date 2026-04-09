@@ -9,7 +9,7 @@ format:
         bibliography: rehear.bib
 ---
 
-# Preface {.unnumbered}
+# Introduction  
 
 We offer the reader a tour of the gravitational wave astronomy 
 enabled by the study of compact binary coalescences.

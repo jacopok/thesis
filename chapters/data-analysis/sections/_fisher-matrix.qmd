@@ -19,7 +19,7 @@ $$
 h(\theta) = h(\theta_{0}) + \delta\theta_{i} \frac{\partial h}{\partial \theta_{i}} + \mathcal{O}((\delta\theta)^{2})\,.
 $$
 
-In the approximation of , the Whittle likelihood is written as 
+In this approximation, the Whittle likelihood is written as 
 $$ \log\mathcal{L}(d | \theta) = -\frac{1}{2} (n|n) + \delta\theta_{i} \left( n\bigg|   \frac{\partial h}{\partial \theta_{i}} \right) - \frac{1}{2} \delta \theta^i \delta \theta^j \mathcal{F}_{ij} + \mathcal{O}((\delta\theta)^{3}) \,.
 $$
 This is the expression of a multivariate normal distribution, with covariance matrix $\mathcal{C}_{ij} = \mathcal{F}_{ij}^{-1}$.

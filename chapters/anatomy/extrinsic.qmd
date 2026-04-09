@@ -15,7 +15,7 @@ format:
 
 This chapter will discuss the extrinsic parameterization of the signal from a compact binary coalescence (CBC). 
 
-### Phase and inclination angle
+### Phase and inclination angle {#sec-phase-inclination-angle}
 
 As we introduced in @sec-spin,
 the reference orbital phase of the signal $\phi_{0}$
