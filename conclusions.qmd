@@ -1,2 +1,22 @@
 # Conclusions
 
+Major results: 
+
+- working with current detectors, involvement in the LVK
+    - GW250114 paper writing
+    - improvements to data analysis pipelines: windowing factor
+    - interfacing waveform models: TEOBResumS-DALí, and analyses done with it
+- understanding and helping the problems we will have when doing PE with ET
+    - waveform accuracy requirements (bluebook)
+    - fast PE requirements
+    - `mlgw_bns`, accurate fast surrogate
+    - fast PE for massive BBH with DINGO
+    - Fisher matrix limitations
+- defining the science case for the LGWA
+    - sky position and timing for early warning
+    - chirp mass as a proxy for low-PN order effects, eccentricity, environmental effects and so forth
+    - massive sources and horizons
+- understanding and helping the problems we will have when doing PE with LGWA
+    - understanding how the detector's operational principle relates to its science case
+    - timing: dependence on what and where, and effect on sampling
+
