@@ -29,6 +29,7 @@ dependencies = [
     "numdifftools>=0.9.41",
     "numpy>=1.26.4",
     "pandas>=1.4.1",
+    "plotly>=6.7.0",
     "pyqt6>=6.10.2",
     "pytest>=8.3.5",
     "qnm>=0.4.4",
