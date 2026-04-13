@@ -29,7 +29,7 @@ There are different sites which may, as of this writing, host the Einstein Teles
 - the Euregio Meuse-Rhine (EMR) at the border of Luxembourg, Belgium and Germany, near the towns of Maastricht and Liège;
 - the Lusatia region in Saxony, Germany. 
 
-![Sardinian candide site for the Einstein Telescope](figures/einstein-telescope/ET-map.pdf){#fig-einstein-telescope-location width=80%}
+![Sardinian candidate site for the Einstein Telescope](figures/einstein-telescope/ET-map.pdf){#fig-einstein-telescope-location width=80%}
 
 The scientific potential for a detector as sensitive as the Einstein Telescope is extremely wide. To quote @branchesiScienceEinsteinTelescope2023:
 
