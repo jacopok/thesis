@@ -135,9 +135,11 @@ h(t) &= \frac{1}{d_L} \sqrt{ \frac{5}{64 \pi }}
     2 \Re \widetilde{H}_{22} (t) (1 + \cos^2 \iota ) +
     4 i \Im \widetilde{H}_{22} (t) \cos \iota 
 \right) \\
-&= h_+ - i h_\times
+&= h_+ - i h_\times\,,
 \end{aligned}
 $$
+
+where $\Re$ and $\Im$ denote the real and imaginary parts.
 
 At this point, we can identify the real and imaginary components, as well as expressing 
 $\widetilde{H}_{22} = H_{22} e^{2 i \phi_0 } = A_{22}(t) e^{i \phi_{22}(t) + 2i \phi_0 }$: 

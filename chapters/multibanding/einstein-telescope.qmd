@@ -29,17 +29,15 @@ There are different sites which may, as of this writing, host the Einstein Teles
 - the Euregio Meuse-Rhine (EMR) at the border of Luxembourg, Belgium and Germany, near the towns of Maastricht and Liège;
 - the Lusatia region in Saxony, Germany. 
 
-![Sardinian candidate site for the Einstein Telescope](figures/einstein-telescope/ET-map.pdf){#fig-einstein-telescope-location width=80%}
+![Sardinian candidate site for the Einstein Telescope, the configuration used for the simulations discussed in @sec-gw250114-et.](figures/einstein-telescope/ET-map.pdf){#fig-einstein-telescope-location width=80%}
 
-The scientific potential for a detector as sensitive as the Einstein Telescope is extremely wide. To quote @branchesiScienceEinsteinTelescope2023:
-
-> _ET, in its reference configuration, is a superb detector, with an extraordinary discovery potential in the domains of astrophysics, cosmology and fundamental physics._
-
-A full description of this potential is beyond the scope of this thesis; we refer the reader to some among the many works which describe it in detail [@branchesiScienceEinsteinTelescope2023;@abacScienceEinsteinTelescope2025;@ronchiniPerspectivesMultimessengerAstronomy2022].
+The scientific potential for the Einstein Telescope is extremely wide, including 
+CBC population studies, precision cosmology, multimessenger observations, and tests of general relativity. 
+A full description is beyond the scope of this thesis, and we refer the reader to some among the many works which describe it in detail [@branchesiScienceEinsteinTelescope2023;@abacScienceEinsteinTelescope2025;@ronchiniPerspectivesMultimessengerAstronomy2022].
 
 In the remainder of this chapter we shall discuss the challenges which come when trying to perform parameter estimation with such a sensitive detector, and how some recent advancements in these techniques are allowing for systematic forecasting studies, which can help in informing the urgent choices that need to be made regarding the construction of this instrument.
 
-## Data analysis challenges
+## Data analysis challenges {#sec-einstein-telescope-challenges}
 
 This section will give a brief summary of the primary challenges that remain unsolved in the data analysis of compact binary signals with the Einstein Telescope. 
 They are described in significantly more detail in chapters 8 and 10 of @abacScienceEinsteinTelescope2025, which also outlines some problems we will not consider here, such as the detection of CBCs and the analysis of different types of signals like continuous waves or stochastic backgrounds.

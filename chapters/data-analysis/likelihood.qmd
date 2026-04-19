@@ -107,7 +107,7 @@ In such a case, we can rewrite the likelihood in terms of the signal $h(\theta) 
 $$
 \begin{aligned}
 \log \mathcal{L}(d | \theta) &= \log \mathcal{N_{2}} - \frac{1}{2} (d-h(\theta)| d- h(\theta)) \\
-&= \log \mathcal{N_{2}} - \frac{1}{2} (d| d) + \mathrm{Re}(h(\theta)|d) - \frac{1}{2} (h(\theta)|h(\theta))\,.
+&= \log \mathcal{N_{2}} - \frac{1}{2} (d| d) + \Re(h(\theta)|d) - \frac{1}{2} (h(\theta)|h(\theta))\,.
 \end{aligned}
 $$
 
@@ -122,7 +122,7 @@ Since we are assuming the PSD is fixed, this model has zero parameters, and this
 Therefore, we can perform parameter estimation using the likelihood ratio
 
 $$
-\log \mathcal{L}_{r} (d|\theta) = \log \frac{\mathcal{L}(d|h(\theta))}{Z _\text{noise}} = \mathrm{Re}(h(\theta)| d) - \frac{1}{2} (h(\theta)| h(\theta))\,,
+\log \mathcal{L}_{r} (d|\theta) = \log \frac{\mathcal{L}(d|h(\theta))}{Z _\text{noise}} = \Re(h(\theta)| d) - \frac{1}{2} (h(\theta)| h(\theta))\,,
 $$ {#eq-likelihood-ratio}
 
 and the evidence we will obtain, the integral of $\mathcal{L}_{r}(d|\theta) \pi(\theta) \text{d}\theta$ over the parameter space, will actually be a Bayes Factor, $Z_\text{signal and model} / Z_\text{noise}$.
@@ -423,7 +423,7 @@ This section will discuss common approaches which can be used to accelerate the 
 
 The two terms we need to compute for the likelihood ratio (@eq-likelihood-ratio) are the following integrals:
 $$
-\mathrm{Re}(h(\theta)| d) = 4 \mathrm{Re}\int_{0}^{f_\text{max}} \frac{h(f; \theta) d^*(f)}{S_{n}(f)} \text{d}f\,,
+\Re(h(\theta)| d) = 4 \Re\int_{0}^{f_\text{max}} \frac{h(f; \theta) d^*(f)}{S_{n}(f)} \text{d}f\,,
 $$
 and
 
@@ -468,11 +468,11 @@ These integrals need to be computed at maximum resolution in frequency, but only
 With these at hand, the two terms are approximated as follows, in terms of a set of frequencies $b = \left\lbrace f_{i}\right\rbrace$:
 
 $$
- \mathcal{L}_{hd} = \mathrm{Re} \sum_{b} (A_{0}(b) r_{0}^{*}(b) + A_{1}(b) r_{1}^{*} (b))
+ \mathcal{L}_{hd} = \Re \sum_{b} (A_{0}(b) r_{0}^{*}(b) + A_{1}(b) r_{1}^{*} (b))
 $$
 and
 $$
-\mathcal{L}_{hh} = \sum_{b} ( B_{0}(b) |r_{0}(b)|^{2} + 2 B_{1}(b) \mathrm{Re}(r_{0}(b) r_{1}^{*}(b)))\,.
+\mathcal{L}_{hh} = \sum_{b} ( B_{0}(b) |r_{0}(b)|^{2} + 2 B_{1}(b) \Re(r_{0}(b) r_{1}^{*}(b)))\,.
 $$
 The values of the constant and linear coefficients for each bin, $r_{0}$ and $r_{1}$, can be be computed from the values of the ratio at the bin edges as
 $$
@@ -494,7 +494,7 @@ Whereas relative binning seeks to closely approximate the likelihood in the regi
 
 The equations to approximate the terms in the likelihood are somewhat similar: some weights $\omega$ and $\psi$ are pre-computed, then the waveform is evaluated on a sparse grid and multiplied by these.
 $$
-\mathrm{Re} (d|h) \approx \sum_{j=1}^{N_{L}} h(f_{j}, \theta) \omega_{j}
+\Re (d|h) \approx \sum_{j=1}^{N_{L}} h(f_{j}, \theta) \omega_{j}
 $$
 $$
 (h|h) = \sum_{i=1}^{N_{Q}} |h(f_{i}, \theta)|^{2} \psi_{i}\,.

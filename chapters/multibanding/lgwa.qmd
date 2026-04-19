@@ -712,7 +712,7 @@ We investigate the parameter estimation capabilities of the LGWA by performing i
 
 These injections are performed in zero noise, meaning that we investigate a Whittle likelihood ratio (@sec-whittle-likelihood) in the form
 $$
-\log \mathcal{L}(\theta) = \mathrm{Re} (h(\theta)|h(\theta_{0})) - \frac{1}{2} (h(\theta)|h(\theta)) \,,
+\log \mathcal{L}(\theta) = \Re (h(\theta)|h(\theta_{0})) - \frac{1}{2} (h(\theta)|h(\theta)) \,,
 $$
 where the scalar products are computed according to the estimated LGWA strain noise PSD, which is computed based on the displacement noise PSD for the optimistic Silicon model in @fig-lgwa-displacement-noise and the estimated response discussed in @sec-lgwa-response:
 $$
@@ -1037,6 +1037,9 @@ As a general pattern, we see how the qualitative Fisher matrix prediction is val
 
 The failure of the prediction in the 12 month case, with the localization worsening again, is due to the non-uniform accumulation of SNR, with most of it coming from the last few days of observation. 
 We validate this intuition through the __simplified, uniform SNR__ scenario, in which the SNR is accumulated at a constant rate over time --- we obtain this by artificially setting a PSD in the form $S_{n}(f) \propto f^{4/3}$. 
+
+$$ \text{SNR}^{2} = \int \underbrace{ \frac{|h(f)|^{2}}{S_{n}(f)} \frac{\text{d}f}{\text{d}t} }_{ w(t) } \text{d}t
+$$
 
 ::: {#nte-uniform-snr-over-time .callout-note collapse="true"}
 

@@ -5,7 +5,7 @@ the backbone of all gravitational wave data analysis.
 This theory is of general validity, and it does not require us to 
 restrict ourselves to the gravitational wave application quite yet.
 
-When performing the analysis of some data $d$ according to some model $M$ parameterized by a finite number of parameters $\theta$, we employ Bayes' theorem, which is derived by expressing the joint probability $\text{prob}(d, \theta | M)$ in two different ways: 
+When performing the analysis of some data $d$ according to some model $M$ parameterized by a finite number of parameters $\theta$, we employ Bayes' theorem, which is derived by expressing the joint probability $\text{prob}(d, \theta | M)$ in two different ways, making use of the identity $\text{prob}(a, b) = \text{prob}(a|b)\text{prob}(b)$: 
 
 $$ \text{prob}(d, \theta | M) = \mathcal{L}(d | \theta, M) \pi (\theta | M) = p(\theta | d, M) \mathcal{Z}(d | M)\,.
 $${#eq-bayes-theorem} 
@@ -501,8 +501,11 @@ Here, model 1 is the special case of model 2 in which parameter $\theta$ equals 
 The value of $\pi_2$ computed at any given point is sensitive to how wide the prior is, since it must be a normalized probability distribution. For example, the density of a uniform prior over an interval $A$ is precisely $1/A$.
 
 This formulation illustrates the general fact that Bayes Factors are heavily dependent on the width of the prior distribution.
-This is a well-known feature of Bayesian inference, known as the Occam Factor or Penalty: 
-the preferred models are the "simplest", in the sense that they are compatible with the data for a large fraction of their prior mass; a model which is able to fit a plethora of different scenarios is disfavored compared to one which fits the current one and few others.
+This is a well-known feature of Bayesian inference, known as the Occam Factor or Penalty.
+Among two models which fit the data equally well (_i.e._ the maximum values of their likelihoods are equal),
+the preferred one is the one for which the likelihood has high values for a larger fraction of the prior space.
+Qualitatively, this penalizes flexible models, which are able to fit many different scenarios beside the observed one,
+in favor of ones which only fit the observed scenario and few others.
 
 A negative consequence of this arises if the prior distributions cannot be selected in a principled way, though: if they are set too wide, the data may seem to favor the baseline model even in the presence of a deviation.
 Then, by the way Bayes Factors are constructed, if the BF for any single observation favors the baseline model, combining many of them from different observations only accumulates evidence against a deviation, even if a small deviation is present and could be detected by a simultaneous analysis of all events.

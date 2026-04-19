@@ -18,6 +18,8 @@ the statistical and computational methods
 used to robustly infer the properties of the astrophysical objects 
 whose emission we are able to measure.
 
+
+
 @sec-statistical-methods introduces the general statistical tools required for this inference; 
 @sec-gw-pe illustrates how they can be applied to the analysis of timeseries.
 In both, we take outline what approaches can improve computational efficiency,
@@ -47,3 +49,47 @@ which can be seen directly within the website, but is omitted from the PDF.
 This literate programming-like approach [@knuthLiterateProgramming1984] 
 allows for reproducibility and transparency.
 Its source code is publically available [here](https://github.com/jacopok/thesis).
+
+## Personal contributions
+
+This thesis was deliberately written weaving established results 
+and novel contributions, in order to improve its logical flow and, hopefully, its readability.
+This operation may obfuscate which results are indeed novel:
+here we adresses the problem by explicitly outlining them.
+For clarity, the rest of this section is be written in the first person;
+while in the rest of the thesis, the pronoun "we" is used. 
+This is primarily because all the results presented were obtained 
+with at least some degree of collaboration, even for 
+the papers I led.
+
+I am part of several collaborations: LIGO-Virgo-KAGRA, Einstein Telescope 
+and the Lunar Gravitational Wave Antenna. 
+All three of these have recently published major works, which 
+are formally authored by the whole collaboration.
+
+The LIGO-Virgo-KAGRA collaboration recently concluded its fourth observing run, 
+whose data is currently being analyzed.
+I was part of the team which wrote the discovery paper for the 
+exceptional gravitational wave event GW250114 (@sec-gw250114) [@abacGW250114TestingHawkings2025]. 
+I also contributed to the collaboration in other ways, 
+such as acting as an internal paper and waveform model reviewee;
+by writing an interface for the eccentric waveform model `TEOBResumS-Dalí` 
+I contributed to a reanalysis of the first gravitational wave event performed including both eccentricity and orbital precession [@gambaRevisitingGW150914Nonplanar2025].
+
+The Einstein Telescope collaboration (@sec-einstein-telescope) published a white paper [@abacScienceEinsteinTelescope2025]
+outlining the detector's capabilities. I contributed to its section 8,
+with a discussion of the computational bottlenecks related to waveform evaluation.
+These are reported in this thesis' @sec-einstein-telescope-challenges, 
+which also includes the results of a series of papers
+led by Filippo Santoliquido [@santoliquidoClassifyingBinaryBlack2024;@santoliquidoFastAccurateParameter2025;@santoliquidoComparingNextgenerationDetector2025], 
+with whom I closely collaborated, related to 
+population-scale data analysis with the Einstein Telescope.
+
+The Lunar Gravitational Wave Antenna collaboration also published a white paper
+[@ajithLunarGravitationalwaveAntenna2025]
+
+[@cozzumboOpportunitiesLimitsLunar2024]
+
+[@tissinoGeometryLunarGravitational2026]
+
+Short-authorlist stuff: [@tissinoCombiningEffectiveonebodyAccuracy2023]
