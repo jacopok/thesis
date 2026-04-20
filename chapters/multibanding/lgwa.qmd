@@ -1065,3 +1065,6 @@ Heavier binaries will generally have high SNRs, and their intrinsic parameters w
 
 Another conclusion we can draw from this analysis is that that the hour-long data gaps the LGWA is expected to experience (@sec-other-lgwa-noise), though not yet included in our simulations (see @sec-lgwa-pe-limitations), will not significantly impact sky localization, as long as we can maintain phase coherence across them.
 This is because the convex hull of the observation is not significantly affected if a small fraction of the perimeter is removed.
+
+### Effect on sampling
+
