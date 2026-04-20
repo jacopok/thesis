@@ -48,7 +48,4 @@ members = ["thesis_scripts/thesis_scripts"]
 [tool.uv.sources]
 thesis-scripts = { path = "thesis_scripts", editable = true }
 lgwa_response = { path = "../Documents/lgwa-response", editable = true }
-gwfish = { path = "../Documents/GWFish" }
-ultranest = { path = "../Documents/UltraNest", editable = true }
-teobresums = { path = "../Documents/Dali/Python" }
 
