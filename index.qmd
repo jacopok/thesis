@@ -53,9 +53,9 @@ Its source code is publically available [here](https://github.com/jacopok/thesis
 ## Personal contributions
 
 This thesis was deliberately written weaving established results 
-and novel contributions, in order to improve its logical flow and, hopefully, its readability.
-This operation may obfuscate which results are indeed novel:
-here we adresses the problem by explicitly outlining them.
+and novel personal contributions in order to improve its logical flow and, hopefully, its readability.
+This operation may obfuscate the distinction:
+this section adresses the problem by explicitly outlining them.
 For clarity, the rest of this section is be written in the first person;
 while in the rest of the thesis, the pronoun "we" is used. 
 This is primarily because all the results presented were obtained 
@@ -63,7 +63,7 @@ with at least some degree of collaboration, even for
 the papers I led.
 
 I am part of several collaborations: LIGO-Virgo-KAGRA, Einstein Telescope 
-and the Lunar Gravitational Wave Antenna. 
+and Lunar Gravitational Wave Antenna. 
 All three of these have recently published major works, which 
 are formally authored by the whole collaboration.
 
@@ -71,6 +71,9 @@ The LIGO-Virgo-KAGRA collaboration recently concluded its fourth observing run,
 whose data is currently being analyzed.
 I was part of the team which wrote the discovery paper for the 
 exceptional gravitational wave event GW250114 (@sec-gw250114) [@abacGW250114TestingHawkings2025]. 
+The analysis of this event helped in identifying an issue (@sec-windowing)
+in the way parameter estimation was performed in the collaboration,
+and I coauthored the paper which outlined its fix [@talbotInferenceFiniteTime2025].
 I also contributed to the collaboration in other ways, 
 such as acting as an internal paper and waveform model reviewee;
 by writing an interface for the eccentric waveform model `TEOBResumS-Dalí` 
@@ -85,11 +88,31 @@ led by Filippo Santoliquido [@santoliquidoClassifyingBinaryBlack2024;@santoliqui
 with whom I closely collaborated, related to 
 population-scale data analysis with the Einstein Telescope.
 
-The Lunar Gravitational Wave Antenna collaboration also published a white paper
-[@ajithLunarGravitationalwaveAntenna2025]
+The Lunar Gravitational Wave Antenna (LGWA) collaboration also published a white paper
+[@ajithLunarGravitationalwaveAntenna2025]. 
+I contributed to sections of it relating to sky localization 
+capabilities and the detection of binaries containing white dwarfs.
+The problem of performing parameter estimation with the 
+LGWA has been a long-standing one. 
+I included some preliminary results on it both in the white paper
+[@ajithLunarGravitationalwaveAntenna2025] and in a 
+work we published comparing different concepts for lunar gravitational wave detection [@cozzumboOpportunitiesLimitsLunar2024]; 
+in the latter, I also contributed to the analysis of some 
+concepts other than the seismic one, such as the 
+effect of dust on an unshielded laser-interferometric detector.
+I am currently leading a paper on the generic solution to the LGWA parameter estimation problem [@tissinoGeometryLunarGravitational2026], where
+we show that it must generically be performed in a coordinate frame comoving with the Solar System Barycenter, but centered elsewhere.
+I was also involved in a recent work which performed parameter estimation 
+for a massive black hole binary [@iacovelliGravitationalwaveParameterEstimation2025], 
+which lasted for a short enough time in band not to require 
+an accurate treatment of the lunar orbit around the Sun.
 
-[@cozzumboOpportunitiesLimitsLunar2024]
+I contributed to the development and maintenance of the software package `GWFish` [@dupletsaGwfishSimulationSoftware2023], 
+and in the validation of the parameter estimation 
+forecasts it produced against GWTC-3 analyses [@dupletsaValidatingPriorinformedFishermatrix2025]. 
+I helped in constructing a procedure to extract information
+from summary data from the LHAASO collaboration [@banerjeeCamelidaeBOATObservation2024].
 
-[@tissinoGeometryLunarGravitational2026]
-
-Short-authorlist stuff: [@tissinoCombiningEffectiveonebodyAccuracy2023]
+Finally, this thesis includes (@sec-mlgw-bns) the results from a paper I led [@tissinoCombiningEffectiveonebodyAccuracy2023] related 
+to surrogate modelling for the gravitational waveforms emitted by neutron
+star binaries. 

@@ -501,7 +501,7 @@ be computed in the time domain [@nagarEffectiveonebodyWaveformModel2024, @gambaR
 
 The EOB approach is also amenable to being extended with beyond-GR parameters, see e.g. @chiaramelloParametrizedModelGravitational2025. 
 
-### Surrogate models: the `mlgw_bns` example
+### Surrogate models: the `mlgw_bns` example {#sec-mlgw-bns}
 
 The evaluation of gravitational waveform models is commonly a bottleneck for the likelihood, therefore significant efforts have been devoted to the development of _surrogate models_, which reproduce the results from a computationally expensive model.
 
