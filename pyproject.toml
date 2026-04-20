@@ -6,7 +6,6 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "astropy>=5.3.2",
-    "bilby>=2.3.0",
     "cartopy>=0.23.0",
     "cmcrameri>=1.9",
     "dynesty>=2.1.4",
