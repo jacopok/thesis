@@ -10,7 +10,6 @@ dependencies = [
     "cartopy>=0.23.0",
     "cmcrameri>=1.9",
     "dynesty>=2.1.4",
-    "emcee>=3.1.6",
     "getdist>=1.5.4",
     "gw-frequencies>=0.1.1",
     "gwfish",
@@ -23,7 +22,6 @@ dependencies = [
     "lgwa_response",
     "lunarsky>=0.2.1",
     "matplotlib>=3.9.2",
-    "nessai>=0.15.2",
     "numba>=0.60.0",
     "numdifftools>=0.9.41",
     "numpy>=1.26.4",
@@ -35,10 +33,8 @@ dependencies = [
     "quarto-cli>=1.5.57",
     "scipy>=1.13.1",
     "snakeviz>=2.2.2",
-    "teobresums",
     "thesis-scripts",
     "tqdm>=4.67.1",
-    "ultranest",
 ]
 
 [tool.uv.workspace]
