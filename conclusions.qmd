@@ -22,10 +22,10 @@ Major results:
 
 This thesis summarizes several novel findings in gravitational wave science,
 related to the detection and analysis of recent gravitational wave events and 
-to the preparation of data analysis techniques required for future detectors.
+the preparation of data analysis techniques required for future detectors.
 
 The author was part of the paper writing team for the GW250114 detection paper, 
 published in Physical Review Letters [@abacGW250114TestingHawkings2025], whose
 results are summarized in @sec-gw250114. 
 This event set the current record for clarity, which allowed for precision 
-analyses of the ringdown and 
+analyses of the ringdown and inspiral. 

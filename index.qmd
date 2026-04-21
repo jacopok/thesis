@@ -53,12 +53,13 @@ Its source code is publically available [here](https://github.com/jacopok/thesis
 ## Personal contributions
 
 This thesis was deliberately written weaving established results 
-and novel personal contributions in order to improve its logical flow and, hopefully, its readability.
+and novel, personal contributions in order to improve its logical flow 
+and, hopefully, its readability.
 This operation may obfuscate the distinction:
-this section adresses the problem by explicitly outlining them.
-For clarity, the rest of this section is be written in the first person;
+this section adresses the problem by explicitly outlining it.
+For clarity, this is written in the first person;
 while in the rest of the thesis, the pronoun "we" is used. 
-This is primarily because all the results presented were obtained 
+I opted for it because all the results presented were obtained 
 with at least some degree of collaboration, even for 
 the papers I led.
 
@@ -75,8 +76,8 @@ The analysis of this event helped in identifying an issue (@sec-windowing)
 in the way parameter estimation was performed in the collaboration,
 and I coauthored the paper which outlined its fix [@talbotInferenceFiniteTime2025].
 I also contributed to the collaboration in other ways, 
-such as acting as an internal paper and waveform model reviewee;
-by writing an interface for the eccentric waveform model `TEOBResumS-Dalí` 
+such as acting as an internal paper and waveform model reviewee.
+By writing an interface for the eccentric waveform model `TEOBResumS-Dalí`,
 I contributed to a reanalysis of the first gravitational wave event performed including both eccentricity and orbital precession [@gambaRevisitingGW150914Nonplanar2025].
 
 The Einstein Telescope collaboration (@sec-einstein-telescope) published a white paper [@abacScienceEinsteinTelescope2025]
