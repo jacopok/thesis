@@ -10,3 +10,8 @@ all:
 	uv run quarto render --profile thesis
 	mv _book thesis
 	tar -cvf thesis.tar thesis/*
+refresh:
+	rm -rf thesis
+	uv run quarto render --profile thesis --cache-refresh
+	mv _book thesis
+	tar -cvf thesis.tar thesis/*
