@@ -161,7 +161,7 @@ It significantly decreases spectral leakage compared to the rectangular window, 
 #| fig-cap: "A comparison of a rectangular and Tukey window function in the time and frequency domains."
 
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 
 
 N = 1000
@@ -230,7 +230,7 @@ The recovery was performed only varying the luminosity distance of the signals.
 #|   - "K-S test _p_-value as a function of the number of injected signals. The _p_-value is shown on a logit scale (@nte-odds-logits)."
 #| layout-ncol: 2
 
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 from thesis_scripts import data_path
 scale = 500
 

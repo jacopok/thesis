@@ -172,7 +172,7 @@ from thesis_scripts import *
 
 from scipy.stats import norm
 
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 import numpy as np
 
 proposal_locs = [2.5, 0.3]

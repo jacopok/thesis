@@ -244,7 +244,7 @@ GW250114 was one such example: parameter estimation performed with an eccentric 
 #| fig-cap: "Eccentricity posterior distribution for GW250114. A vertical line shows the location of the 90% upper limit on eccentricity."
 
 from thesis_scripts import peters_evolution
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 import numpy as np
 from scipy.stats import gaussian_kde
 
@@ -270,7 +270,7 @@ This is done with a simple Post-Newtonian approach, namely Peters' equations [@p
 #| fig-cap: "Backward-extrapolated eccentricity evolution for GW250114."
 
 from thesis_scripts import peters_evolution, data_path
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 
 fig, axs = plt.subplots(
     1, 2, sharey=True, figsize=(6, 2.5),
@@ -461,7 +461,7 @@ import numpy as np
 from scipy.interpolate import pade
 from scipy.special import factorial
 
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 
 sine_taylor_coefficients = [0, 1, 0, -1/factorial(3), 0, +1/factorial(5), 0]
 

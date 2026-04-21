@@ -375,7 +375,7 @@ $${#eq-uniform-source-frame-volume}
 #| fig-cap: "Cosmological priors for luminosity distance."
 
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 from astropy.cosmology import Planck18 as cosmo
 import astropy.constants as ac
 import astropy.units as u
@@ -599,7 +599,7 @@ from thesis_scripts import *
 import astropy.units as u
 import astropy.constants as ac
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 
 L = 10*u.km
 f = np.geomspace(200, 25000, num=10000) * u.Hz

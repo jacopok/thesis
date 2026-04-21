@@ -65,7 +65,7 @@ from thesis_scripts import *
 
 from scipy.stats import norm
 
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 import numpy as np
 
 
@@ -132,7 +132,7 @@ from thesis_scripts import *
 from scipy.stats import norm
 from scipy.special import erfinv
 
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 import numpy as np
 
 from dynesty import DynamicNestedSampler

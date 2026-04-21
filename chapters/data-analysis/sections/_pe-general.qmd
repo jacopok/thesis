@@ -195,7 +195,7 @@ $$
 
 from thesis_scripts import pp_plot
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 
 rng = np.random.default_rng(seed=1)
 u = rng.uniform(size=1000)
@@ -229,7 +229,7 @@ The scenario $D \approx 0$ is unlikely, as it would require the draws to precise
 #| fig-cap: "Distribution for the K-S statistics."
 
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 from scipy import stats
 
 plt.figure(figsize=(6, 2.5))
@@ -272,7 +272,7 @@ The result is in @fig-pp-plot-bias-positive.
 
 from thesis_scripts import pp_plot
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 from scipy import stats
 
 rng = np.random.default_rng(seed=1)
@@ -296,7 +296,7 @@ $$
 
 from thesis_scripts import pp_plot
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 from scipy import stats
 
 rng = np.random.default_rng(seed=1)
@@ -323,7 +323,7 @@ $$
 
 from thesis_scripts import pp_plot
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 from scipy import stats
 
 rng = np.random.default_rng(seed=1)
@@ -348,7 +348,7 @@ $$
 
 from thesis_scripts import pp_plot
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 from scipy import stats
 
 rng = np.random.default_rng(seed=1)
@@ -368,7 +368,7 @@ The $\beta = 2$ case recovers the standard normal distribution.
 #| fig-cap: "Generalized normal and normal distributions with the same variance and mean."
 
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 from scipy import stats
 
 beta = 2.5
@@ -396,7 +396,7 @@ As this shift is harder to detect than the ones before, we need to raise the sta
 
 from thesis_scripts import pp_plot
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 from scipy import stats
 
 rng = np.random.default_rng(seed=1)
@@ -462,7 +462,7 @@ $$
 
 from thesis_scripts import *
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 
 plt.figure(figsize=(6, 2.5))
 

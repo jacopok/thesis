@@ -63,7 +63,7 @@ This distribution is shown in @fig-nested-sampling-volume-compression-distributi
 
 from matplotlib.ticker import FixedLocator, FixedFormatter
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 
 plt.figure(figsize=(6, 2.5))
 
@@ -134,7 +134,7 @@ For a visualization of this compression see @fig-nested-sampling-volume-compress
 #| fig-cap: "Volume compression by iteration. The number of points is denoted here as $n_{\\mathrm{live}} = k$. Note how horizontal slices of this ensemble are thinner when we have more live points: increasing them will decrease the uncertainty at a fixed prior compression. After reaching a logarithmic volume compression of $- \\log X = 4$ the runs are truncated, and the remaining points are shown: these are distributed uniformly and not geometrically in $X$, therefore they taper off in this logarithmic plot."
 
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 
 rng = np.random.default_rng(seed=1)
 
@@ -261,7 +261,7 @@ Model comparison can also be performed for non-nested models, but the nested cas
 #| fig-cap: Toy model, with data coming from a parabolic function and Gaussian errors.
 
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 from thesis_scripts import data_path
 
 kwargs = {
@@ -701,7 +701,7 @@ The nested sampling algorithm we described above could continue forever, with ev
 #| label: fig-nested-sampling-termination
 #| fig-cap: An illustration of the conditions for termination in nested sampling.
 
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 fig, axs = plt.subplots(nrows=2, ncols=1, sharex=True, gridspec_kw={'hspace': 0 }, figsize=(6, 3))
 axs[1].plot(sampler.results.logvol, sampler.results.logl)
 axs[1].set_ylim(-10, sampler.results.logl[-1]+2)
