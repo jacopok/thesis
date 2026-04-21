@@ -3,7 +3,7 @@
 #| fig-cap: "Signal-to-noise ratio for a detection of GW170817 with LGWA. The detector is assumed to run for 10 years, but most of this signal-to-noise ratio is accumulated in the last year. In both scenarios, the phase and polarization parameters are randomized. The true location of the event appeared to be favorable for LGWA, which is why randomizing it leads to SNR loss on average."
 
 import h5py
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 import numpy as np
 from tqdm import tqdm
 from thesis_scripts.lgwa_pe.lgwa_likelihood import LunarLikelihood
@@ -125,7 +125,7 @@ _ = plt.title('GW170817')
 #| fig-cap: "Signal-to-noise ratio for a detection of GW150914 with LGWA. The detector is assumed to run for 10 years, but most of this signal-to-noise ratio is accumulated in the last months. In both scenarios, the phase and polarization parameters are randomized. The true location of the event appeared to be unfavorable for LGWA, which is why randomizing it leads to SNR gain on average."
 
 import h5py
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 import numpy as np
 from tqdm import tqdm
 from thesis_scripts.lgwa_pe.lgwa_likelihood import LunarLikelihood
@@ -618,7 +618,7 @@ from bilby.gw.prior import BNSPriorDict
 from scipy.spatial import ConvexHull
 import astropy.units as u
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 
 from thesis_scripts import data_path
 from thesis_scripts.postprocess import area_from_samples
@@ -788,7 +788,7 @@ This would be the full FFT grid, however we know that
 from thesis_scripts import data_path
 from thesis_scripts.lgwa_pe.lgwa_likelihood import LunarLikelihood
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 from tqdm import tqdm
 
 like = LunarLikelihood((1500000000., 2000000000.))
@@ -861,7 +861,7 @@ plt.show()
 from thesis_scripts import data_path
 from thesis_scripts.lgwa_pe.lgwa_likelihood import LunarLikelihood
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 from tqdm import tqdm
 
 from cmcrameri import cm

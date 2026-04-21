@@ -263,7 +263,7 @@ for one of the BNS injections by [@sachdevEarlywarningSystemElectromagnetic2020]
 from em_repointing.tiling import rasterize_skymap
 from pathlib import Path
 from ligo.skymap.io.fits import read_sky_map
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 from astropy.coordinates import SkyCoord
 import astropy.units as u
 import ligo.skymap.plot

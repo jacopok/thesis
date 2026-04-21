@@ -37,7 +37,7 @@ This constrain can be evaluated during nested sampling, for example: there, we h
 Let us consider the problem of sampling the standard normal distribution, with a uniform prior constraint of $x \in [-10, 10]$. The integral is $Z \approx 1$, the prior volume is $V_{\theta}=20$. So, we should set $C = \varepsilon_{0} / 20$.
 
 ```{python}
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 import numpy as np
 
 x = np.linspace(-5, 5, num=1000)

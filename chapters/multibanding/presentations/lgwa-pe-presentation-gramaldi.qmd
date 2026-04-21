@@ -33,7 +33,7 @@ from thesis_scripts.plotting import make_arcmin_grid
 from thesis_scripts import data_path
 import yaml
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 
 from cmcrameri import cm
 
@@ -174,7 +174,7 @@ $$
 
 ```{python}
 import h5py
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 import numpy as np
 from tqdm import tqdm
 from thesis_scripts.lgwa_pe.lgwa_likelihood import LunarLikelihood

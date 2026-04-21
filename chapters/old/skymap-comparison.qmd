@@ -12,7 +12,7 @@ format:
 
 ```{python}
 # Some imports and definitions which will be used throughout
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 import numpy as np
 
 cmap = plt.get_cmap('plasma')
@@ -156,7 +156,7 @@ $$
 
 ```{python}
 # Some imports and definitions which will be used throughout
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 import numpy as np
 
 cmap = plt.get_cmap('plasma')
