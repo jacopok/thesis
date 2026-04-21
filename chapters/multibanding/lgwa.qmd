@@ -117,7 +117,7 @@ At higher frequency, readout noise starts to dominate; its specific spectral sha
 
 ```{python}
 #| layout-ncol: 2
-#| fig-cap: "Displacement noise estimates for the LGWA."
+#| fig-cap: "Displacement noise estimates for the LGWA. For both concepts, thermal noise dominates at low frequency, while displacement noise dominates at high frequency."
 #| fig-subcap: 
 #|   - "Pessimistic model: a Niobium suspension and laser readout."
 #|   - "Optimistic mode: a Silicon suspension and a SQUID readout."
@@ -126,7 +126,7 @@ At higher frequency, readout noise starts to dominate; its specific spectral sha
 
 from thesis_scripts import *
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 import astropy.units as u
 import astropy.constants as ac
 
@@ -253,7 +253,7 @@ Finally, the intra-station distance among the four seismometers is planned to be
 Nevertheless, more measurements are needed to quantify the impact of the lunar seismic background. 
 Moonquakes remain a significant issue, and it is likely that some fraction of the data will need to be unusable due to their effect. The low damping of the lunar regolith makes their duration much longer than what typically happens on Earth, as illustrated in @fig-moonquake-duration.
 
-![Comparison between a moonquake detected within the Apollo 12 mission and an earthquake. From @steinIntroductionSeismologyEarthquakes2009.](figures/moonquake.jpg){#fig-moonquake-duration width=60%}
+![Comparison between a moonquake detected within the Apollo 12 mission and an earthquake, from @steinIntroductionSeismologyEarthquakes2009.](figures/moonquake.jpg){#fig-moonquake-duration width=60%}
 
 Other sources of noise yet may affect the measurement, such as human activity from other nearby projects, magnetic noise from lunar dust and so forth. 
 Mitigating these will be a significant challenge as the mission is developed.
@@ -343,10 +343,10 @@ $$
 
 ```{python}
 #| label: fig-response-functions-of-time
-#| fig-cap: "Response functions in terms of time."
+#| fig-cap: "Evolution of the response functions for the two LGWA channels over one month. The _x_ and _y_ channels correspond to two orthogonal horizonal directions across which displacement is measured."
 
 from lgwa_response.likelihood import LunarLikelihood
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 import numpy as np
 
 like = LunarLikelihood()
@@ -420,7 +420,7 @@ This is the worst-case scenario, as to achieve it we would need a source at the 
 
 ```{python}
 #| label: fig-position-interpolation-errors
-#| fig-cap: "Interpolation errors in position, by the number of interpolation points."
+#| fig-cap: "Interpolation errors in position as a function of the number of interpolation points."
 
 from lgwa_response.lunar_coordinates import make_position_interpolation_plot
 from thesis_scripts import data_path
@@ -435,13 +435,13 @@ In @fig-position-function-of-time we illustrate how the position vector encodes 
 
 ```{python}
 #| label: fig-position-function-of-time
-#| fig-cap: "Position of the detector as a function of time."
+#| fig-cap: "Position of the detector as a function of time over 4 months. We show the evolution of the displacement vector from three different reference points. From the Solar System Barycenter we can only visually resolve a yearly modulation. From the Earth's center we can clearly see the effect of the lunar orbit. From the lunar center we see the displacement due to the detector's position vector. Due to the low tilt of the lunar rotation, this position vector is approximately constant. In all cases, the three Cartesian coordinates are computed in an ICRS frame."
 
 from lgwa_response.likelihood import LunarLikelihood
 from astropy.coordinates import get_body_barycentric
 from astropy.time import Time
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 import warnings
 
 warnings.filterwarnings('ignore', module='erfa')
@@ -505,7 +505,7 @@ In figure @fig-time-to-merger-error we show the error in time we get by only loo
 #| label: fig-time-to-merger-error
 #| fig-cap: "Error in the time to merger estimation by using the lowest-order Post-Newtonian term only. The source considered here is a binary with equal components, of 1.4 solar masses each, compatible with neutron stars such as those in GW170817."
 
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 from lgwa_response.simple_waveforms import time_to_merger, time_to_merger_simple, Phif3hPN, SUN_MASS_SECONDS
 import numpy as np
 
@@ -571,7 +571,7 @@ The phase, on the other hand, primarily exhibits variation with a slower period,
 from lgwa_response.likelihood import LunarLikelihood
 from lgwa_response.simple_waveforms import from_bilby
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 
 like = LunarLikelihood(gps_time_range=(1500000000., 2000000000.))
 t0 = 1893024018.
@@ -671,14 +671,14 @@ Indeed, a more systematic analysis confirms this.
 In @fig-gwtc-snr-lgwa we compute several realizations of a population compatible with the Gravitational Wave Transient Catalog, and compute their SNRs with various detectors, compared with the observed SNRs of the actual catalog.
 The SNRs obtained with the LGWA are indeed compatible, within catalog variance, with the original ones.
 
-![Cumulative SNR for the population of compact binaries in the GWTC catalogs. From @iacovelliGravitationalwaveParameterEstimation2025.](figures/gw231123/cumulative_detections_wErrorbars_LGWA_GB.pdf){#fig-gwtc-snr-lgwa width=70%}
+![Cumulative SNR for the population of compact binaries in the GWTC catalogs. The detection rate for the LGWA at any given SNR is comparable to that obtained by the LVK. From @iacovelliGravitationalwaveParameterEstimation2025.](figures/gw231123/cumulative_detections_wErrorbars_LGWA_GB.pdf){#fig-gwtc-snr-lgwa width=70%}
 
 Despite their signal-to-noise ratios not being much higher than current observations, these low-frequency observations will provide qualitatively different information compared to high-frequency ones; we discuss this in more detail in @sec-lgwa-pe-stellar.
 
 The deci-Hertz band will also introduce the possibility to constrain the coalescence of heavier binaries, which are inaccessible to ground-based observatories. Specifically, its sensitivity is optimal for binaries in the middle of the Intermediate-Mass Black Hole range, $100$ to $10^{5}M_{\odot}$. 
 We illustrate this with a horizon plot in @fig-horizon-multiband: as a function of mass, we show the maximum redshift $z$ (and corresponding luminosity distance $d_{L}$, under a fixed cosmology compatible with Planck data) to which an optimally oriented binary with that mass would be detectable.
 
-![Horizon for equal mass black hole binaries as seen by the detectors for the next decade: Einstein Telescope, Lunar Gravitational Wave Antenna and LISA. From @ajithLunarGravitationalwaveAntenna2025.](figures/horizon_IMBH.pdf){#fig-horizon-multiband width=80%}
+![Horizon for equal mass black hole binaries as seen by the detectors for the next decade: Einstein Telescope, Lunar Gravitational Wave Antenna and LISA. The horizon is defined as the distance (or, equivalently, redshift) at which an optimally-oriented source would be detectable. From @ajithLunarGravitationalwaveAntenna2025.](figures/horizon_IMBH.pdf){#fig-horizon-multiband width=80%}
 
 The LGWA's optimal sensitivity is for binaries with total detector-frame mass $(1+z)M$ around $10^{4}M_{\odot}$ (see @sec-distance-redshift).
 At the moment, full injections and recoveries for binaries in this range has not been performed.
@@ -787,7 +787,7 @@ Based on analytical results (@eq-wen-chen-area), we expect long observations to 
 
 For GW170817 this is indeed the case, as shown in @fig-lgwa-gw170817-sky: the posterior is extremely tight, and it remains so when repeating the same experiment with a lower upper limit in frequency of $710\text{mHz}$, which corresponds to removing the last 14 days before merger. This only reduces the SNR from 21.9 to 21.3.
 
-![Sky localization for a GW170817-like injection with the LGWA. ](figures/ra_dec_corner_gw170817.png){#fig-lgwa-gw170817-sky width=60%}
+![Sky localization for a GW170817-like injection with the LGWA. Both for the full signal, and excluding the last two weeks of data, the area is tiny, on the order of a few tens of square arcminutes.](figures/ra_dec_corner_gw170817.png){#fig-lgwa-gw170817-sky width=60%}
 
 For GW250114, despite the higher SNR, the localization is much less precise.
 In @fig-lgwa-gw250114-sky we can see two nearby modes in the sky, corresponding respectively to a face-on source with $\theta_{JN} < \pi / 2$ and a face-off source with $\theta_{JN}> \pi / 2$.
@@ -836,7 +836,7 @@ For clarity, we also switch to a linear scale in frequency
 from lgwa_response.likelihood import LunarLikelihood
 from lgwa_response.simple_waveforms import from_bilby
 import numpy as np
-import matplotlib.pyplot as plt
+from thesis_scripts import plt
 
 like = LunarLikelihood(gps_time_range=(1500000000., 2000000000.))
 t0 = 1893024018.
@@ -908,6 +908,46 @@ $$
 
 Then, we can parameterize our waveforms based on $t_{22}(f_{0}; \theta)$ as opposed to the merger time.
 
+```{python}
+#| label: fig-different-reference-frequency-illustration
+#| fig-cap: "An illustration of what it means to parameterize waveforms based on an evolutionary stage other than the merger. For each value of the chirp mass in range between 10 and 40 solar masses, we show the evolutionary track of frequency as a function of time. In the top panel, all curves correspond to binaries which reach coalescence at time 0, while in the bottom panel, they reach a frequency of 30Hz at time 0. These descriptions are equivalent, but the corresponding timing parameter may have a different variance, depending on the detector's noise curve."
+
+import numpy as np
+import matplotlib 
+from thesis_scripts import plt
+
+T_20_HZ = 157.86933774
+REF_FREQ = 20.
+REF_MCHIRP = 1.2187707886145736
+
+def time_to_merger(f, mchirp = REF_MCHIRP):
+    # time in seconds, frequency in Hz, chirp mass in solar masses
+    return T_20_HZ * (f / REF_FREQ)**(-8/3) * (mchirp / REF_MCHIRP)**(-5/3)
+
+
+f = np.geomspace(5, 1000, num=1000)
+
+fig, axs = plt.subplots(2, 1, sharex=True, figsize=(8, 5))
+
+cmap = plt.get_cmap('cividis_r')
+mrange = (10, 40)
+norm = matplotlib.colors.Normalize(*mrange)
+
+for mchirp in np.linspace(*mrange, num=500):
+
+    axs[0].plot(-time_to_merger(f, mchirp), f, c=cmap(norm(mchirp)))
+    axs[1].plot(-time_to_merger(f, mchirp)+time_to_merger(30, mchirp), f, c=cmap(norm(mchirp)))
+
+for ax in axs:
+    ax.set_ylim(0, 60)
+    ax.set_xlim(-5, 2)
+    ax.set_ylabel('Frequency [Hz]')
+axs[0].set_title('Reference stage: merger')
+axs[1].set_title('Reference stage: $f_{{22}} = 30$ Hz')
+axs[1].set_xlabel('Time [s]')
+_ = plt.colorbar(matplotlib.cm.ScalarMappable(norm=norm, cmap=cmap), label='Chirp mass [$M_{\odot}$]', ax=axs)
+```
+
 ### Shifting reference frame in post-processing {#sec-time-shifting}
 
 We start from the assumption of having successfully performed a parameter estimation run, in which we measured merger time referring to some center $r_{0}$. 
@@ -923,13 +963,35 @@ The timing uncertainty is a function of four variables ($\vec{r}$, $f$),
 which we can visualize in a few different ways, 
 using the injection with GW250114 described in @sec-lgwa-pe-stellar as our reference example.
 
-![Timing uncertainty by frequency for our GW250114 injection.](figures/timing_constraint_by_frequency_GW250114.pdf){#fig-timing-lgwa-by-frequency width=80%}
+```{python}
+#| label: tbl-uncertainty-by-frequency-and-location
+#| tbl-cap: 'Timing uncertainty for some choices of reference frame and evolutionary stage, for our GW250114-like injection. By "Earth" and "Moon" we refer to their location at a given time, our reference frames are always comoving with the Solar System Barycenter.'
+
+from IPython.display import Markdown
+
+Markdown(r"""| Location | Stage | Timing uncertainty (90\% interval) |
+|---:|----:|---:|
+| global optimum  | $f_{22}=0.54$ Hz | 0.09 s |
+| Earth | $f_{22}=0.54$ Hz | 0.16 s |
+| Moon | merger | 0.23 s |
+| Earth | merger | 0.24 s |
+| Solar System Barycenter | merger | 10.56 s |
+| Solar System Barycenter | $f_{22}=0.54$ Hz | 10.64 s |
+| Earth | $f_{22}=0.03$ Hz | 217 s |
+""")
+```
+
+In @tbl-uncertainty-by-frequency-and-location we show the timing uncertainty obtained at some locations and evolutionary stages. The global optimum in uncertainty is achieved at a location close to the position of the Moon a few hours from merger, as we will show in more detail in @fig-timing-lgwa-solar-system.
+Qualitatively, we see that for reference frequencies at or above the best detector sensitivity ($\approx 0.4$ Hz), and locations close to the Earth-Moon system, the timing uncertainty remains low. 
+On the contrary, at distant locations such as the Solar System Barycenter, or at very low reference frequencies, the timing uncertainty becomes very large.
+
+![Timing uncertainty by frequency for our GW250114-like injection. For all panels, the meaning of the vertical axis is above the panel itself. In the top panel we show the characteristic noise and signal strains as a function of frequency, as a reference. In the second panel from the top, we show the uncertainty in time as measured at a given reference frequency, as a function of that reference frequency. In the third panel we perform an analogous operation, but looking at the uncertainty in frequency as measured at a given reference time. Finally, in the bottom panel we show the Pearson correlation between time (or frequency) and chirp mass. ](figures/timing_constraint_by_frequency_GW250114.pdf){#fig-timing-lgwa-by-frequency width=80%}
 
 In @fig-timing-lgwa-by-frequency we vary the frequency $f$ and, for each of its values, we compute the position $r$ such that the 90% width of the samples $t^{f, r}$ is minimized. 
 We then show these 90% widths as a function of frequency. 
 One can see a minimum around 0.54Hz, just above the point where the LGWA's sensitivity is best.
 
-![Spatial variation of the timing uncertainty for our GW250114 injection.](figures/time_std_solar_system.pdf){#fig-timing-lgwa-solar-system width=80%}
+![Spatial variation of the timing uncertainty for our GW250114-like injection. ](figures/time_std_solar_system.pdf){#fig-timing-lgwa-solar-system width=80%}
 
 In @fig-timing-lgwa-solar-system, instead, we show the spatial variation of the timing uncertainty by fixing three values of $f$, which include the frequency of the global minimum, one lower frequency, and the merger. 
 We also fix three orthogonal spatial slices, each passing through the global minimum, and compute the timing uncertainty in these slices, so as to show its 3D structure. 
@@ -1014,8 +1076,22 @@ The corresponding waveforms for the 11 and 12-month cases are shown in @fig-wave
 ![Waveforms for the 11 and 12 month normalized injections.](figures/lgwa_waveforms_month_by_month.pdf){#fig-waveforms-lgwa-injections width=80%}
 
 According to @eq-wen-chen-area the sky localization area should scale inversely with $A_{\perp}$, which we compute by projecting the detector's orbit onto the plane orthogonal to the injected source's direction, and then taking its convex hull, as shown in @fig-trajectories-lgwa-injections.
+We complement these 
 
-![Convex hulls for the 12 month normalized injections.](figures/trajectories.pdf){#fig-trajectories-lgwa-injections width=80%}
+![Convex hulls for the 12 month normalized injections.](figures/trajectories.png){#fig-trajectories-lgwa-injections width=80%}
+
+::: {#nte-snr-integrand .callout-note collapse="true"}
+
+##### The SNR integrand
+
+We complement @fig-trajectories-lgwa-injections with an indication of how SNR is accumulated over time for each of the injections. 
+Since our signal is composed of a single time-frequency track, we can write the integral which defines the total square SNR as 
+
+$$ \text{SNR}^{2} = \int \underbrace{ \frac{|h(f)|^{2}}{S_{n}(f)} \frac{\text{d}f}{\text{d}t} }_{ w(t) } \text{d}t
+$$
+
+:::
+
 
 We perform these injections in three setups:
 
@@ -1041,21 +1117,6 @@ We validate this intuition through the __simplified, uniform SNR__ scenario, in 
 $$ \text{SNR}^{2} = \int \underbrace{ \frac{|h(f)|^{2}}{S_{n}(f)} \frac{\text{d}f}{\text{d}t} }_{ w(t) } \text{d}t
 $$
 
-::: {#nte-uniform-snr-over-time .callout-note collapse="true"}
-
-##### How to obtain uniform SNR over time
-
-For the purpose of validating our intuition, we want to construct a PSD such that the accumulation of SNR over time is uniform, _i.e._ the SNR obtained in any given month is equal to that obtained in another.  
-The $22$ mode of the signal has an amplitude scaling with $f^{-7/6}$;
-projecting the signal introduces month-long modulations, which we average over by only looking at integer numbers of months. 
-The SNR integrand in time, which we want to be constant, reads as follows when setting an arbitrary power-law PSD with $S_{n}(f) \propto f^{\kappa}$:
-$$
-\frac{|h(f)|^2}{S_n(f)} \text{d}{f} \propto \frac{f^{-14/6}}{f^{\kappa}} \frac{\text{d}{f}}{\text{d}{t}} \text{d}{t}\,,
-$$
-where we can obtain the frequency derivative by differentiating $t(f) \propto f^{-8/3}$. 
-This leads us to $\kappa=4 / 3$.
-
-:::
 
 In all cases, the Fisher matrix approximation overestimates the sky sensitivity of our detector; however, it should be stressed that even when accounting for this effect, the LGWA alone can still achieve better sky localization than pairs of ground-based interferometers, despite lower SNRs.
 
@@ -1068,3 +1129,82 @@ This is because the convex hull of the observation is not significantly affected
 
 ### Effect on sampling
 
+In @sec-time-shifting we discussed how the reference frame can be 
+changed _a posteriori_ based on the results from an analysis.
+Indeed, any frame chosen is formally equivalent to any other, 
+but this equivalence does not carry over to sampling efficiency:
+on the contrary, it is significantly more efficient to sample 
+using a frame for which the timing uncertainty is low.
+
+Demonstrating this requires us to perform at least one parameter estimation run 
+with a suboptimal frame. 
+As we shall shortly show, this entails a significant computational multiplier:
+doing so for the complete injection, which requires a good amount of resources
+even with a close-to-optimal frame would be wasteful and lengthy. 
+Therefore, we consider a simplified scenario, still based on the GW250114-like injection discussed in @sec-lgwa-pe-stellar. 
+We employ a phase-marginalized likelihood (@sec-analytic-marginalization-phase) and only sample over sky position and time. 
+We adopt a uniform prior in the sky, and a uniform prior in the timing parameter, whose width is _a posteriori_ chosen to be approximately 6 times wider than the 90% credible interval, and centered at the true value, to ensure a fair comparison.
+
+We compare two reference frame centers: one at the SSB, and one at the optimal location, as computed through a timing uncertainty minimization procedure. 
+The required prior width on the timing parameter in these two cases is significantly different. 
+Being able to use a narrower prior is part of the reason why sampling is faster 
+in the optimal frame, but it is not the major contributor: 
+to demonstrate this, we include an intermediate scenario where we sample 
+based on the optimal frame, but with the same wide prior that would be
+required for the SSB frame. 
+
+Finally, since this comparison is about sampler performance, 
+we compare two different samplers: `dynesty` [@speagleDYNESTYDynamicNested2020]
+and `nessai` [@williamsNestedSamplingNormalising2021]. 
+Both are commonly used in gravitational wave science. 
+The proposals are obtained through a decomposition of the 
+live points into ellipses with the former, and through a normalizing flow with the latter. 
+
+```{python}
+#| label: tbl-sampling-time-reference-frame
+#| tbl-cap: Variation in computational cost for different choices of reference frame center and sampler.
+
+from thesis_scripts import data_path
+from IPython.display import Markdown
+from tabulate import tabulate
+
+import pandas as pd
+import numpy as np
+
+columns = ['likelihood_evaluations','sampling_minutes','timing_uncertainty','prior_width','sampler','location']
+header = ['Likelihood evaluations', 'Sampling time [min]', 'Timing uncertainty [s]', 'Prior width [s]', 'Sampler', 'Center']
+
+df = pd.read_csv(
+	data_path / 'timing_convergence_experiment.csv',
+	# usecols = columns,
+	names = header,
+	# index_col = False,
+).iloc[1:]
+
+df['Sampling time [min]'] = np.round(df['Sampling time [min]'].to_numpy(dtype=float), decimals=1)
+df['Timing uncertainty [s]'] = np.round(df['Timing uncertainty [s]'].to_numpy(dtype=float), decimals=3)
+
+df["Sampler"] = df["Sampler"].apply(lambda s: f'`{s}`')
+
+Markdown(df.to_markdown(
+	index=False, 
+))
+```
+
+We show the results in @tbl-sampling-time-reference-frame. 
+The difference in timing uncertainty between the two reference frames is about a factor 60, 
+and the corresponding ratio of sampling times is about a factor 10 with `dynesty`, 
+and a factor 5 with `nessai`.
+The intermediate scenario, using a wide prior but the optimal frame, 
+is barely slower with `nessai` while it doubles the computational cost with `DYNESTY`. 
+
+Many variables can affect sampling time. 
+To ensure that our results are robust, we also verify that 
+the same scaling is observed in the number of likelihood evaluations. 
+
+In practice, the optimal reference frame center will be _a priori_ unknown.
+The strategy we propose is to perform the first parameter estimation
+with a heuristically-determined origin, 
+compute the optimal origin, which should always be used thereafter.
+For the tests in this section, the heuristic we employed was to 
+use the position of the detector
