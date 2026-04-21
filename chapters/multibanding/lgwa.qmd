@@ -1087,8 +1087,10 @@ We complement these
 We complement @fig-trajectories-lgwa-injections with an indication of how SNR is accumulated over time for each of the injections. 
 Since our signal is composed of a single time-frequency track, we can write the integral which defines the total square SNR as 
 
-$$ \text{SNR}^{2} = \int \underbrace{ \frac{|h(f)|^{2}}{S_{n}(f)} \frac{\text{d}f}{\text{d}t} }_{ w(t) } \text{d}t
+$$ \text{SNR}^{2} = \int \underbrace{ \frac{|h(f)|^{2}}{S_{n}(f)} \frac{\text{d}f}{\text{d}t} }_{ w^2(t) } \text{d}t\,.
 $$
+
+The root-mean-square of $w(t)$ is related to the total SNR, 
 
 :::
 
