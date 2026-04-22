@@ -199,3 +199,4 @@ thesis/site_libs/bootstrap/bootstrap-icons.woff
 site_libs/bootstrap/bootstrap-icons.woff
 
 titlepage/*
+!rehear.bib
