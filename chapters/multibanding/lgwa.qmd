@@ -903,7 +903,7 @@ The situation can be significantly improved by finding a position where time is 
 We combine this with another possible optimization, which regards the choice of reference event within our waveform. 
 Typically, for the analysis of signals observed by ground-based interferometers, this event is the merger; however, this event is out of band for the LGWA, so one may wonder if there is a better choice. We can compute the SPA time at a given frequency based on @eq-spa-time-from-phase:
 $$
-t _\text{merger} - t_{22}(f;\theta) = \frac{1}{2\pi} \frac{\text{d}\phi_{22}(f;\theta)}{\text{d}f}\,.
+t _\text{merger} - t_{22}(f;\theta) = - \frac{1}{2\pi} \frac{\text{d}\phi_{22}(f;\theta)}{\text{d}f}\,.
 $$
 
 Then, we can parameterize our waveforms based on $t_{22}(f_{0}; \theta)$ as opposed to the merger time.
@@ -954,7 +954,7 @@ We start from the assumption of having successfully performed a parameter estima
 We can convert each timing posterior sample to one measuring $t_{22}(f)$ at a different position $r$ by the expression
 $$
 t_{i}^{f, r} = t_{i}^{\text{mrg}, r_0} 
-+ \frac{(r-r_0 ) \cdot \hat{n}_{i}}{c}
+- \frac{(r-r_0 ) \cdot \hat{n}_{i}}{c}
 + \frac{1}{2 \pi} \frac{ \text{d} \varphi_{22}(f; \theta_i)}{ \text{d} f}\,.
 $$
 
@@ -1073,12 +1073,11 @@ In order to validate this, we set up 12 injections with the same parameters as o
 
 The corresponding waveforms for the 11 and 12-month cases are shown in @fig-waveforms-lgwa-injections. 
 
-![Waveforms for the 11 and 12 month normalized injections.](figures/lgwa_waveforms_month_by_month.pdf){#fig-waveforms-lgwa-injections width=80%}
+![Waveforms for the 11 and 12 month normalized injections, shown in characteristic strain, together with the LGWA PSD and the .](figures/lgwa_waveforms_month_by_month.pdf){#fig-waveforms-lgwa-injections width=80%}
 
 According to @eq-wen-chen-area the sky localization area should scale inversely with $A_{\perp}$, which we compute by projecting the detector's orbit onto the plane orthogonal to the injected source's direction, and then taking its convex hull, as shown in @fig-trajectories-lgwa-injections.
-We complement these 
 
-![Convex hulls for the 12 month normalized injections.](figures/trajectories.png){#fig-trajectories-lgwa-injections width=80%}
+![Top panel: convex hulls for the 12 month normalized injections, projected onto a plane orthogonal to the gravitational wave propagation direction. The line thickness is proportional to the SNR integrand as a function of time, defined in @nte-snr-integrand. Bottom panel: SNR integrand as a function of time on a linear axis.](figures/trajectories.png){#fig-trajectories-lgwa-injections width=80%}
 
 ::: {#nte-snr-integrand .callout-note collapse="true"}
 
@@ -1090,10 +1089,10 @@ Since our signal is composed of a single time-frequency track, we can write the 
 $$ \text{SNR}^{2} = \int \underbrace{ \frac{|h(f)|^{2}}{S_{n}(f)} \frac{\text{d}f}{\text{d}t} }_{ w^2(t) } \text{d}t\,.
 $$
 
-The root-mean-square of $w(t)$ is related to the total SNR, 
+The root-mean-square of $w(t)$, taken as a function of time, is proportional to the total SNR.
+@fig-trajectories-lgwa-injections shows how $w(t)$ varies throughout the orbit for all our injections.
 
 :::
-
 
 We perform these injections in three setups:
 
@@ -1103,24 +1102,25 @@ We perform these injections in three setups:
 
 The shapes of the localization areas are shown in @fig-injections-sky-areas, while @fig-injections-vs-wen-chen summarizes the comparison between these setups and the Fisher matrix expression.
 
-![Sky localization areas for the 12 month normalized injections.](figures/sky_locs.pdf){#fig-injections-sky-areas width=90%}
-
-![Comparison between the Fisher matrix expectation for the sky localization and the injections performed in the three scenarios described in @sec-area-validation.](figures/sky_loc_vs_theory.pdf){#fig-injections-vs-wen-chen width=80%}
+![Sky localization areas for the 12 month normalized injections in the three scenarios described in @sec-area-validation. ](figures/sky_locs.pdf){#fig-injections-sky-areas width=90%}
 
 The bimodality in sky position which we observe in the full injection (@fig-lgwa-gw250114-sky) is only retained in the 12 month case with all parameters. 
 The simplified scenarios fix the inclination angle and are therefore unable by construction to reproduce it. 
 In the runs lasting 11 months or less with all parameters, the SNR is more evenly distributed across the observation, enabling more precise localization through phase alone, thus removing the degeneracy with inclination.
 
+![Comparison between the Fisher matrix expectation for the sky localization and the injections performed in the three scenarios described in @sec-area-validation.](figures/sky_loc_vs_theory.pdf){#fig-injections-vs-wen-chen width=80%}
+
 As a general pattern, we see how the qualitative Fisher matrix prediction is validated for all but the 12 month case: the sky localization area decreases with the number of months, even though the SNR is kept constant, driven mostly by the change in area; the frequency increases slightly through the injections, but not nearly enough to explain the effect.
 
 The failure of the prediction in the 12 month case, with the localization worsening again, is due to the non-uniform accumulation of SNR, with most of it coming from the last few days of observation. 
-We validate this intuition through the __simplified, uniform SNR__ scenario, in which the SNR is accumulated at a constant rate over time --- we obtain this by artificially setting a PSD in the form $S_{n}(f) \propto f^{4/3}$. 
+We validate this intuition through the __simplified, uniform SNR__ scenario, in which the SNR is accumulated at a constant rate over time --- we obtain this by artificially setting a PSD in the form $S_{n}(f) \propto f^{4/3}$, as shown in @fig-waveforms-lgwa-injections. 
+This way, the SNR integrand $w(t)$ (@nte-snr-integrand) will approximately have the same distribution every month.
+In this scenario, we see that the localization sky area keeps decreasing even for the 12 month-long injection.
 
-$$ \text{SNR}^{2} = \int \underbrace{ \frac{|h(f)|^{2}}{S_{n}(f)} \frac{\text{d}f}{\text{d}t} }_{ w(t) } \text{d}t
-$$
-
-
-In all cases, the Fisher matrix approximation overestimates the sky sensitivity of our detector; however, it should be stressed that even when accounting for this effect, the LGWA alone can still achieve better sky localization than pairs of ground-based interferometers, despite lower SNRs.
+The Fisher matrix approach also predicts a larger sky area for the 1-month injection than what we observe in the simplified scenario. 
+We attribute this to the fact that it assumes a constant antenna pattern, 
+whereas during a month of observation the Moon's rotation imprints a measurable, sky position-dependent amplitude modulation to the signal. 
+This effect is present in all cases, but the precision of the Doppler shift-driven sky localization dominates once the observation lasts more than a month.
 
 This analysis allows us to determine the crucial features of the signals which a deci-Hertz detector will precisely localize: they should be observed for a long time, at least a _few months_, and their SNR should be _well-distributed_ across the observation.
 This points to light sources, with component masses $M \lesssim 30 M_{\odot}$. 
@@ -1205,8 +1205,9 @@ To ensure that our results are robust, we also verify that
 the same scaling is observed in the number of likelihood evaluations. 
 
 In practice, the optimal reference frame center will be _a priori_ unknown.
-The strategy we propose is to perform the first parameter estimation
+The strategy we propose is to perform the first parameter estimation run
 with a heuristically-determined origin, 
 compute the optimal origin, which should always be used thereafter.
-For the tests in this section, the heuristic we employed was to 
-use the position of the detector
+The heuristic we employed was to 
+use the position of the detector when it receives the merger as a 
+reference.

@@ -1,6 +1,6 @@
 # Conclusions
 
-Major results: 
+<!-- Major results: 
 
 - working with current detectors, involvement in the LVK
     - GW250114 paper writing
@@ -18,14 +18,46 @@ Major results:
     - massive sources and horizons
 - understanding and helping the problems we will have when doing PE with LGWA
     - understanding how the detector's operational principle relates to its science case
-    - timing: dependence on what and where, and effect on sampling
+    - timing: dependence on what and where, and effect on sampling -->
 
 This thesis summarizes several novel findings in gravitational wave science,
 related to the detection and analysis of recent gravitational wave events and 
 the preparation of data analysis techniques required for future detectors.
 
-The author was part of the paper writing team for the GW250114 detection paper, 
-published in Physical Review Letters [@abacGW250114TestingHawkings2025], whose
-results are summarized in @sec-gw250114. 
-This event set the current record for clarity, which allowed for precision 
-analyses of the ringdown and inspiral. 
+In January 2025 the LIGO-Virgo-KAGRA collaboration detected GW250114 [@abacGW250114TestingHawkings2025], a merger of black holes which set the record for clarity, as measured by its signal-to-noise ratio. 
+@sec-gw250114 outlines how we used it to perform tests of 
+General Relativity, constraining the frequency of the first overtone
+and validating Hawking's area theorem.
+The analysis of such a precisely-measured signal also required a reexamination
+of the assumptions that were previously made, which led to 
+the identification and correction of a long-standing issue related to data normalization (@sec-windowing).
+
+Data analysis with the next generation of grond-based detectors, such as the Einstein Telescope, will require efficient parameter estimation techniques.
+In @sec-einstein-telescope, we show that parameter estimation on a population scale
+is possible thanks to neural posterior estimation (@sec-neural-posterior-estimation). 
+While this work only included a subset of sources, namely massive black hole binaries, 
+it paves the way for the fast analysis of all the compact binary signals
+detected. 
+Furthermore, it enables the comparison of different designs for the detector:
+we investigate the parameter constraints the Einstein Telescope
+would provide in several of its possible configurations. 
+A triangular detector is prone to yielding 8-fold multimodality in the sky for the sources in our sample, while a 2L configuration can exhibit multimodal posterior distributions for the source's distance. 
+
+The Lunar Gravitational Wave Antenna (@sec-lgwa) will operate through a seismometric principle, which is significantly different from that of ground-based interferometers.
+Thanks to the quiet environment in permanently shadowed regions at the lunar pole,
+it will be able to reach much lower frequencies.
+We explore its science case, which ranges from lunar science to massive compact binaries of intermediate-mass black holes, light compact binaries such as those containing white dwarfs or neutron stars, and stellar-mass black hole binaries.
+The LGWA will probe their early inspiral of binaries in the population currently being observed by the LIGO-Virgo-KAGRA detectors, providing early warning 
+and precise constraints on their evolution and sky position. 
+The tight constraints on the chirp mass indicate that other, more astrophysically relevant parameters such as eccentricity or environmental matter density would also be tightly constrained, though that remains a topic for future work.
+We investigate the way the LGWA localizes its sources, and find it to be 
+primarily through the measurement of Doppler phasing as the detector orbits the Sun,
+which is more effective for less massive sources. 
+
+We show that straightforwardly employing standard data analysis techniques --- developed for ground-based interferometers ---
+to these binaries can lead to significant inefficiency: 
+through a minimization procedure, requiring little computational overhead,
+we are able to find an optimized coordinate frame, which can reduce sampling
+time by an order of magnitude.
+This procedure is of general applicability, and it will allow for coherent multi-band data analysis.
+
