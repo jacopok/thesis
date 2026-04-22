@@ -1,25 +1,5 @@
 # Conclusions
 
-<!-- Major results: 
-
-- working with current detectors, involvement in the LVK
-    - GW250114 paper writing
-    - improvements to data analysis pipelines: windowing factor
-    - interfacing waveform models: TEOBResumS-DALí, and analyses done with it
-- understanding and helping the problems we will have when doing PE with ET
-    - waveform accuracy requirements (bluebook)
-    - fast PE requirements
-    - `mlgw_bns`, accurate fast surrogate
-    - fast PE for massive BBH with DINGO
-    - Fisher matrix limitations
-- defining the science case for the LGWA
-    - sky position and timing for early warning
-    - chirp mass as a proxy for low-PN order effects, eccentricity, environmental effects and so forth
-    - massive sources and horizons
-- understanding and helping the problems we will have when doing PE with LGWA
-    - understanding how the detector's operational principle relates to its science case
-    - timing: dependence on what and where, and effect on sampling -->
-
 This thesis summarizes several novel findings in gravitational wave science,
 related to the detection and analysis of recent gravitational wave events and 
 the preparation of data analysis techniques required for future detectors.
@@ -47,17 +27,16 @@ The Lunar Gravitational Wave Antenna (@sec-lgwa) will operate through a seismome
 Thanks to the quiet environment in permanently shadowed regions at the lunar pole,
 it will be able to reach much lower frequencies.
 We explore its science case, which ranges from lunar science to massive compact binaries of intermediate-mass black holes, light compact binaries such as those containing white dwarfs or neutron stars, and stellar-mass black hole binaries.
-The LGWA will probe their early inspiral of binaries in the population currently being observed by the LIGO-Virgo-KAGRA detectors, providing early warning 
+The LGWA will probe the early inspiral of binaries in the population currently being observed by the LIGO-Virgo-KAGRA detectors, providing early warning 
 and precise constraints on their evolution and sky position. 
 The tight constraints on the chirp mass indicate that other, more astrophysically relevant parameters such as eccentricity or environmental matter density would also be tightly constrained, though that remains a topic for future work.
 We investigate the way the LGWA localizes its sources, and find it to be 
 primarily through the measurement of Doppler phasing as the detector orbits the Sun,
 which is more effective for less massive sources. 
 
-We show that straightforwardly employing standard data analysis techniques --- developed for ground-based interferometers ---
+We show that straightforwardly employing standard data analysis techniques
 to these binaries can lead to significant inefficiency: 
 through a minimization procedure, requiring little computational overhead,
 we are able to find an optimized coordinate frame, which can reduce sampling
 time by an order of magnitude.
 This procedure is of general applicability, and it will allow for coherent multi-band data analysis.
-
