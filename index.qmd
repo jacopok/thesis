@@ -13,19 +13,27 @@ format:
 
 We offer the reader a tour of the gravitational wave astronomy 
 enabled by the study of compact binary coalescences.
-While this field is wide and multi-faceted, we focus on data analysis: 
+This field is wide and multi-faceted: 
+we start our discussion from data analysis, encompassing
 the statistical and computational methods 
-used to robustly infer the properties of the astrophysical objects 
-whose emission we are able to measure.
+used to infer the properties of the astrophysical objects 
+whose emission we measure.
 
+The relative simplicity of the data produced by gravitational wave
+detectors allows us to employ statistically robust Bayesian methods.
+Starting from a detailed discussion of these, 
+we explore how they can help shed light on the properties of compact objects.
+We start from the data observed by current gravitational wave detectors 
+and then move to the ones whose construction is planned. 
+Each of these scenarios brings many challenges; we focus on the 
+computational and statistical ones.
 
-
-@sec-statistical-methods introduces the general statistical tools required for this inference; 
+@sec-statistical-methods introduces the general tools required for inference; 
 @sec-gw-pe illustrates how they can be applied to the analysis of timeseries.
-In both, we take outline what approaches can improve computational efficiency,
+In both, we outline what approaches can improve computational efficiency,
 as well as how the robustness of our methods can be assessed.
 
-The next three chapters summarize the main ways the waveform measured at the detectors can vary.
+The next three chapters summarize the main ways the data measured at the detectors can vary depending on the compact binary system that emitted it.
 In @sec-gw250114 we introduce the protagonist signal for this endeavour, GW250114, which as of this writing
 holds the record as the clearest-ever gravitational wave detection:
 we use it as our reference example wherever possible in later chapters.

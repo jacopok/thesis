@@ -126,7 +126,7 @@ The angle between orbital angular momentum and observation direction, or _inclin
 
 The best-constrained spin-related quantity is generally the effective spin parameter
 $$
-\chi _\text{eff} = \left(   \frac{m_{1} \vec{\chi}_{1} + m_{2}\vec{\chi}_{2}}{m_{1}+m_{2}}  \right) \cdot \hat{L}\,.
+\chi _\text{eff} = \left(\frac{m_{1} \vec{\chi}_{1} + m_{2}\vec{\chi}_{2}}{m_{1}+m_{2}}  \right) \cdot \hat{L}\,.
 $$
 
 The extent to which precessing spin affects a binary is often characterized through the precessing spin parameter 

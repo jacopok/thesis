@@ -52,6 +52,10 @@ $$
  [-\log q(\theta|d)]\,.
 $${#eq-simple-npe-loss}
 
+This is equivalent, up to an additive constant, to the expectation value of the KL divergence between 
+the posterior $p(\theta | d)$ and the estimator, $\mathbb{E}_{d \sim \mathcal{Z}(d)} D_{\text{KL}}(p(\theta | d) \lvert  \rvert  q(\theta |d))$:
+in order to get @eq-simple-npe-loss from this expression, we need to apply Bayes' theorem (@eq-bayes-theorem).
+
 The expectation values can be numerically approximated by repeatedly sampling the parameters $\theta$ from their prior distribution $\pi(\theta)$, and then computing a set of data $d$ by fixing the parameters and simulating a noise realization through the likelihood $p(d|\theta)$.
 
 In practice, directly employing the loss in @eq-simple-npe-loss is impractical. 
