@@ -44,7 +44,7 @@ Here is a simple argument for why $t$, the largest out of $k$ uniform random var
 The statement can equivalently be framed in terms of the cumulative distribution: $p(t \leq T) = T^{k}$.
 
 We can think of our $k$ random variates as a point in the $k$-dimensional unit box $[0, 1]^{k}$, and since they are uniformly distributed there will be a one-to-one correspondence between volume within the box and probability mass.
-Then, the geometric meaning of the cumulative distribution is: what is the volume of the region corresponding to the event $t \leq T$, i.e. such that the maximum of the coordinates of our point is $T$?
+Then, the geometric meaning of the cumulative distribution is the volume of the region corresponding to the event $t \leq T$, i.e. such that the maximum of the coordinates of our point is $T$.
 The answer is the box $[0, T]^{k}$, whose volume is $T^{k}$, thus proving our claim.
 
 In general, the $n$-th smallest out of $k$ uniform random variates in $[0, 1]$ is distributed according to a beta distribution, specifically $\text{beta}(k, n-k+1) \propto x^{n-1}(1-x)^{k-n}$; here we are looking at the $k$-th smallest (i.e. the largest).
@@ -555,8 +555,7 @@ fig.set_size_inches(5, 3)
 
 For this example the scenario introduced at the start of @sec-ns-common-plots is not adequate, so we will use the problem from @sec-model-comparison.
 
-Is our model able to reproduce the data? 
-A convenient visualization to gain insight into this question is the _posterior predictive distribution_: the distribution expected of new data, conditional on our model and the data we observed.
+A convenient visualization to gain insight into the question whether our model can reproduce the data is the _posterior predictive distribution_: the distribution expected of new data, conditional on our model and the data we observed.
 
 $$
 \begin{aligned}
@@ -647,8 +646,8 @@ For an in-depth discussion of posterior predictive checks in the context of grav
 
 ### Information gain {#sec-information-gain}
 
-The typical set of the posterior is often "much smaller" than the prior: how can this be quantified?
-A useful way to do so is the relative entropy, or Kullback-Leibler divergence between posterior and prior, often also called  _information gain_ or $H$:
+The typical set of the posterior is often "much smaller" than the prior.
+A useful way to quantify this is the relative entropy, or Kullback-Leibler divergence between posterior and prior, often also called  _information gain_ or $H$:
 
 $$ H = \text{KL}(p \parallel \pi) = \int p(\theta ) \log \left( \frac{ p( \theta )}{\pi (\theta )}\right) \text{d}\theta = \int p(X) \log p(X) \text{d}X\,.
 $$

@@ -341,7 +341,7 @@ A significant issue in modern cosmology is the precise determination of the expa
 
 Measurements of distance associated with redshift in the form $(d_{L}, z)_{i}$ would be sufficient to uniquely determine it. However, the observation of gravitational waves from a black hole binary only provides estimates of $(d_{L}, (1+z)\mathcal{M})$. 
 Much of the field of gravitational wave cosmology is devoted to the disentanglement of these contributions. 
-There are several proposed methods for this [@abacScienceEinsteinTelescope2025], 
+There are several proposed methods for this [@abacScienceEinsteinTelescope2026], 
 some of which have already provided constraints on the local Hubble rate $H_0$.
 
 - Source galaxy association, i.e. _bright sirens_: if the sky position of the source 

@@ -30,7 +30,7 @@ In the following decades, both technology and our understanding of gravitational
 The plan is to deploy this antenna in a Permanently Shadowed Region at the lunar pole (see @sec-lgwa-site-selection), in order to achieve low-noise cryogenic operation with a displacement noise ASD (@eq-amplitude-spectral-density) below one $\text{fm} / \sqrt{ \text{Hz} }$.
 Combined with a sufficiently strong lunar response to gravitational waves, this would be enough to directly measure gravitational waves in the deci-Hertz band.
 
-In the following years, a collaboration has been formed to study the science of the Lunar Gravitational Wave Antenna; this has resulted in the publication of several works, among them the _whitepaper_ [@ajithLunarGravitationalwaveAntenna2024], which details several aspects of the possible science achievable in this band.
+In the following years, a collaboration has been formed to study the science of the Lunar Gravitational Wave Antenna; this has resulted in the publication of several works, among them the _whitepaper_ [@ajithLunarGravitationalwaveAntenna2025], which details several aspects of the possible science achievable in this band.
 
 This chapter will focus on the full LGWA mission and its projected sensitivity, 
 but a preliminary mission, dubbed Soundcheck, is also planned.
@@ -111,7 +111,7 @@ The main source of readout noise at low frequencies ($\lesssim 0.7 \text{Hz}$) i
 $$
 S_\text{thermal}(\omega) = \frac{4 k_{B}T \omega_{0}^{2}  / Q}{m \omega \left[ (\omega_{0}^{2}- \omega^{2})^{2}  + \omega_{0}^{4} / Q^{2} \right] }\,,
 $$
-where $\omega$ is the angular frequency, $\omega_{0}$ is its resonance value, $k_{B}$ is the Boltzmann constant, $T$ is the temperature, while $Q$ is the mechanical quality factor [@ajithLunarGravitationalwaveAntenna2024, eq. 2.1]. 
+where $\omega$ is the angular frequency, $\omega_{0}$ is its resonance value, $k_{B}$ is the Boltzmann constant, $T$ is the temperature, while $Q$ is the mechanical quality factor [@ajithLunarGravitationalwaveAntenna2025, eq. 2.1]. 
 
 At higher frequency, readout noise starts to dominate; its specific spectral shape depends on the specific readout scheme adopted to measure relative displacement between ground and test mass. @fig-lgwa-station schematically depicts a SQUID readout, which makes use of superconducting magnets. In @fig-lgwa-displacement-noise we compare this choice with another candidate: laser-interferometric readout.
 
@@ -629,7 +629,7 @@ plt.show()
 ### Lunar science
 
 The scientific potential of a very sensitive seismometer array at the lunar pole
-does not only include gravitational wave science [@ajithLunarGravitationalwaveAntenna2024].
+does not only include gravitational wave science [@ajithLunarGravitationalwaveAntenna2025].
 Indeed, all the seismic motion which is a nuisance for gravitational wave observations
 would include valuable data on seismic events on the Moon.
 Here we give a brief glimpse into what problems may be probed thanks to LGWA data.
@@ -1024,9 +1024,9 @@ $$
 \end{pmatrix}\,.
 $$
 
-Then, the question is posed as follows: what happens to the timing variance under the transformation
+Now we will determine what happens to the timing variance under the transformation
 $$
-\tilde{t} = t + \frac{\Delta \vec{r}}{c} \cdot \left( \hat{m}(1-\gamma) + \alpha \hat{u} + \beta \hat{v} \right) ?
+\tilde{t} = t + \frac{\Delta \vec{r}}{c} \cdot \left( \hat{m}(1-\gamma) + \alpha \hat{u} + \beta \hat{v} \right) \,.
 $$
 
 The new timing mean will be $\mathbb{E}\left[ \tilde{t} \right] = \Delta \vec{r} \cdot \hat{m} (1-\bar{\gamma}) / c$, where $\bar{\gamma} = \mathbb{E}[\gamma]$, while the variance will be

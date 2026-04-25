@@ -33,14 +33,14 @@ There are different sites which may, as of this writing, host the Einstein Teles
 
 The scientific potential for the Einstein Telescope is extremely wide, including 
 CBC population studies, precision cosmology, multimessenger observations, and tests of general relativity. 
-A full description is beyond the scope of this thesis, and we refer the reader to some among the many works which describe it in detail [@branchesiScienceEinsteinTelescope2023;@abacScienceEinsteinTelescope2025;@ronchiniPerspectivesMultimessengerAstronomy2022].
+A full description is beyond the scope of this thesis, and we refer the reader to some among the many works which describe it in detail [@branchesiScienceEinsteinTelescope2023;@abacScienceEinsteinTelescope2026;@ronchiniPerspectivesMultimessengerAstronomy2022].
 
 In the remainder of this chapter we shall discuss the challenges which come when trying to perform parameter estimation with such a sensitive detector, and how some recent advancements in these techniques are allowing for systematic forecasting studies, which can help in informing the urgent choices that need to be made regarding the construction of this instrument.
 
 ## Data analysis challenges {#sec-einstein-telescope-challenges}
 
 This section will give a brief summary of the primary challenges that remain unsolved in the data analysis of compact binary signals with the Einstein Telescope. 
-They are described in significantly more detail in chapters 8 and 10 of @abacScienceEinsteinTelescope2025, which also outlines some problems we will not consider here, such as the detection of CBCs and the analysis of different types of signals like continuous waves or stochastic backgrounds.
+They are described in significantly more detail in chapters 8 and 10 of @abacScienceEinsteinTelescope2026, which also outlines some problems we will not consider here, such as the detection of CBCs and the analysis of different types of signals like continuous waves or stochastic backgrounds.
 
 The main differences between the analyses performed with the Einstein Telescope, compared to current detectors, are as follows.
 
@@ -228,8 +228,11 @@ $$
 $$
 
 This distance ranges in value from $0$ to $\log_{b}2$, where $b$ is the base in which the logarithms in the KL divergence are computed. 
-What value of this distance corresponds to expected statistical fluctuations?
-We answer this question in a data-driven way: since we can easily sample from the NPE distribution, we draw 100 realizations of the full posterior and compare them with the JSD, in all $100 \times (100-1) / 2 =4950$ combinations.
+
+The JSD between two sets of sample is commonly used to assess whether they originate from the same distribution.
+In order to do so, we need to determine what values of estimated JSD are compatible with statistical fluctuations, _i.e._ their null distribution.
+We determine this in a data-driven way: since we can easily sample from the NPE distribution, we draw 100 realizations of the full posterior and compare them with the JSD, in all $100 \times (100-1) / 2 =4950$ combinations.
 This gives us a distribution of Jensen-Shannon divergences under the null hypothesis, which we can compare to the observed divergence with the nested sampling run. 
 
-We do not disprove the null hypothesis: the two distributions are statistically consistent [@santoliquidoComparingNextgenerationDetector2025].
+The test confirms that the two distributions are statistically consistent [@santoliquidoComparingNextgenerationDetector2025]; 
+as far as we are able to check, the inference we are performing is unbiased.

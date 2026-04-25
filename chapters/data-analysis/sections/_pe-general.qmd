@@ -176,8 +176,8 @@ A first visual test is to plot it and check that it approximately follows the di
 A useful variant of this is to plot $u$ on the horizontal axis and $P(u) - u$ on the vertical, which is expected to be near zero; see e.g. the work of @chatziioannouNoiseSpectralEstimation2019.
 This allows for the resolution of small fluctuations from the diagonal. 
 
-In order to help in the visual check, we need something to compare against: what is the magnitude of the expected fluctuations of $P(u)$ under the null hypothesis, i.e. if the distribution is indeed uniform?
-If we fix a value of $u$, the question can be reframed as follows: out of $N_\text{inj}$ independent and identically distributed draws from the distribution $\mathcal{U}([0, 1])$, how many are smaller than $u$?
+In order to help in the visual check, we need something to compare against: the magnitude of the expected fluctuations of $P(u)$ under the null hypothesis, i.e. if the distribution is indeed uniform.
+If we fix a value of $u$, this can be reframed as counting, out of $N_\text{inj}$ independent and identically distributed draws from the distribution $\mathcal{U}([0, 1])$, how many are smaller than $u$.
 The probability for each of them being smaller than $u$ is $u$ itself, so the probability mass function describing this scenario will be binomial, but scaled by $N_\text{inj}$:
 $$
 p  \left( P (u) = \frac{k}{N_\text{inj}} \right) = {k\choose N_\text{inj}} u^{k} (1-u)^{N _\text{inj}-k}
@@ -412,8 +412,7 @@ However, close to the edges in @fig-pp-plot-bias-distributional we can see the t
 
 ### Model comparison {#sec-model-comparison}
 
-Why should we care about the evidence $\mathcal{Z}$ when performing inference?
-It is helpful when comparing models. 
+The evidence $\mathcal{Z}$ is helpful when comparing models. 
 In a realistic scenario, our model $M$ may not adequately capture the behavior of the system at hand,
 but in @eq-bayes-theorem, all the terms are conditional on it: 
 an analysis performed under the assumption that the model is true cannot 

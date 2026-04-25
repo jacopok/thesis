@@ -387,8 +387,8 @@ This value of $\alpha$ means that the exponential cutoff is quite steep:
 for example, bringing the BNS FAR from 30 thousand per year to just one 
 per year only requires us to raise the equivalent threshold to $\rho = 9.4$ on average.
 
-For the purposes of forecasting, then, what SNR threshold should we consider 
-as the minimum for detectability?
+Based on this, we can determine the SNR threshold we should consider 
+as a minimum for detectability in forecasting.
 Despite not knowing which glitches will affect our future detectors, 
 this sharp exponential behavior gives us confidence that values in the range of roughly 8 to 12 will be sufficient. 
 

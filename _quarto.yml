@@ -18,6 +18,7 @@ format:
     documentclass: scrreprt
     colorlinks: true
     linkcolor: blue
+    cite-method: biblatex
     fig-width: 6
     fig-height: 3
     link-citations: true

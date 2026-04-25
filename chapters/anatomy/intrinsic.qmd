@@ -25,7 +25,7 @@ The waveform at low frequencies is most affected by their combination called _ch
 $$ \mathcal{M} = \nu^{3/5}M = \frac{(m_1 m_2 )^{3/5}}{(m_1 + m_2)^{1/5}}
 $$
 
-A general Post-Newtonian expression for the phase of a compact binary reads as follows [@abacScienceEinsteinTelescope2025, eq. 1.1]:
+A general Post-Newtonian expression for the phase of a compact binary reads as follows [@abacScienceEinsteinTelescope2026, eq. 1.1]:
 $$
 \Psi(f) = 2 \pi f t_{c} - \phi_{c} - \frac{\pi}{4} + \frac{3}{128 \nu x^{5}}  \left( 1+  \sum_{n=2}^{n _\text{max}} \left[ \varphi_{n} + \varphi_{n}^{(l)} \log x \right] x^{n}\right)\,.
 $${#eq-post-newtonian-phase-generic}
