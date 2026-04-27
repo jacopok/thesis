@@ -118,33 +118,33 @@ With the current technology, this is possible for a population of high-mass blac
 Though we inject sources in the chirp mass and distance ranges $\mathcal{M} \in [40, 1100] M_{\odot}$ and $d_{L} \in [5, 500] \text{Gpc}$, we are forced to discard most sources with chirp masses $\mathcal{M} \lesssim 150 M_{\odot}$ and distances $d_{L} \lesssim 6 \text{Gpc}$, due to their low sample efficiency, shown in @fig-sample-efficiency-et. 
 Specifically, we discard any source for which the sample efficiency, defined in @sec-importance-sampling, is lower than $10^{-2}$.
 
-![Sample efficiency for the sources considered by @santoliquidoComparingNextgenerationDetector2025 as a function of SNR, distance and chirp mass.](figures/einstein-telescope/SNR_vs_sample_efficiency_cropped.png){#fig-sample-efficiency-et width=70%}
+![Sample efficiency for the sources considered by @santoliquidoComparingNextgenerationDetector2025 as a function of SNR, for all detector configurations. We observe little variation across configurations. For SNRs higher than 100, we generally observe low sample efficiencies: as long as that is the case, the usage of NPE does not present a computational advantage for these sources compared to stochastic methods.](figures/einstein-telescope/SNR_vs_sample_efficiency_cropped.png){#fig-sample-efficiency-et width=70%}
 
-Sources similar to these are expected to make up the "bulk" of black holes observed by the Einstein Telescope. 
+Sources similar to these are expected to constitute the majority of black holes observed by the Einstein Telescope. 
 Black holes are expected to form at high redshift from several processes, among them the collapse of the nearly metal-free first generation of stars (Population III). @santoliquidoBinaryBlackHole2023 investigated their formation history, highlighting the uncertainties in our understanding of these early stars.
 Constraining the properties of these black holes thus has interesting astrophysical implications. 
 
 While an investigation including only a specific kind of source can only provide partial information, it can still highlight some important characteristics of each detector network's capabilities.
 
-![Summary statistics for source position constraints by various configurations. From @santoliquidoComparingNextgenerationDetector2025.](figures/einstein-telescope/Big_Panel.pdf){#fig-einstein-telescope-design-comparison-statistics width=70%}
+![Summary statistics for source position constraints by various configurations. The information gain (@sec-information-gain) encodes the global volumetric compression between prior and posterior. We see variations of one to two orders of magnitude across configurations for the sky localization area, fractional distance uncertainty and comoving volume constraints. This is driven by network geometry, as we can see from the fact that the distribution of SNRs is similar for all configurations. From @santoliquidoComparingNextgenerationDetector2025.](figures/einstein-telescope/Big_Panel.pdf){#fig-einstein-telescope-design-comparison-statistics width=70%}
 
 In @fig-einstein-telescope-design-comparison-statistics we provide some summary statistics for several configurations of Einstein Telescope, also combining it with other detectors. 
-Among these metrics we include the information gain (@sec-information-gain), which summarizes the global volumetric ratio between prior and posterior. 
 
 Let us focus specifically on three configurations:
 
 - ET-$\Delta$, with 10km arms, which we will discuss in more detail in @sec-et-delta;
 - ET-2L, with 15km arms, in two configurations: aligned and misaligned by 45 degrees, discussed in @sec-et-2l. The two detectors are assumed to be in the EMR and Sardinia respectively.
 
-For the analysis of the events in our sample, the misaligned 2L configuration is globally more informative about the signals, though the $\Delta$ configuration typically constrains their distance more precisely. 
-The misaligned 2L configuration is, however, the most precise in constraining sky position, which translates to smaller values of the comoving localization volume.
+For the analysis of the events in our sample, the misaligned 2L configuration is generally more informative about the signals, though the $\Delta$ configuration typically constrains their distance more precisely.
+The misaligned 2L configuration is more in constraining sky position, which translates to smaller values of the comoving localization volume.
 
 We started from the extrinsic parameters --- distance and sky position --- as they are the most dependent on detector configuration. As we see in @fig-einstein-telescope-design-comparison-statistics-intrinsic, the errors in most intrinsic parameters obtained with different configurations are quite stable, as they depend on the source SNR alone. 
 This can also be understood from the correlation structure of the posterior distributions: see @sec-correlation-structure.
 
 ![Summary statistics for intrinsic parameter constraints by various configurations. From @santoliquidoComparingNextgenerationDetector2025.](figures/einstein-telescope/Big_Panel_appendix.pdf){#fig-einstein-telescope-design-comparison-statistics-intrinsic width=70%}
 
-The only parameter for which we see significant differences in @fig-einstein-telescope-design-comparison-statistics-intrinsic is the inclination angle, which depends on the ratio of amplitudes observed by different detectors. 
+The only parameter for which we see significant differences in @fig-einstein-telescope-design-comparison-statistics-intrinsic is the inclination angle, which depends on the amplitudes observed by different detectors, and is therefore generally correlated with 
+luminosity distance.
 
 ### $\Delta$ shape {#sec-et-delta}
 
@@ -159,7 +159,7 @@ For the many of the expected CBC sources expected, though, this
 precise localization is sullied by an eight-fold multimodality [@santoliquidoFastAccurateParameter2025], which was also previously highlighted in the context of LISA [@marsatExploringBayesianParameter2021], which shares the triangular geometry.
 An example of this multimodality is shown in @fig-einstein-telescope-delta-sky-time.
 
-![Sky position posterior colored by time at geocenter. From @santoliquidoFastAccurateParameter2025.](figures/einstein-telescope/5_skymap_252_geocent_ET-1.png){#fig-einstein-telescope-delta-sky-time width=80%}
+![Sky position posterior, colored by arrival time at geocenter, for a massive black hole injection as observed by a triangular Einstein Telescope. The posterior is shown in an altitude-azimuth coordinate frame centered at the Einstein Telescope's location. From @santoliquidoFastAccurateParameter2025.](figures/einstein-telescope/5_skymap_252_geocent_ET-1.png){#fig-einstein-telescope-delta-sky-time width=80%}
 
 These degeneracies are driven by symmetries in the antenna patterns, and they are expected to be present as long as no effect is able to make some modes preferred over others. The following effects could do so:
 
@@ -203,7 +203,7 @@ For the high-mass black holes in our sample, the timing uncertainties are genera
 The amplitude of the signal, however, is also affected by its distance and inclination angle. 
 This can lead to correlated multimodalities in the joint posterior distribution of sky position and distance, as illustrated in @fig-einstein-telescope-2l-sky.
 
-![Sky and distance posteriors for an injection in the 2L, misaligned case, compared to a triangular Einstein Telescope. From @santoliquidoComparingNextgenerationDetector2025.](figures/einstein-telescope/skymap_dL_hist_colorbar_manualspacing.png){#fig-einstein-telescope-2l-sky width=60%}
+![Sky and distance posteriors for an injection in the 2L, misaligned case, compared to a triangular Einstein Telescope. We show results obtained with stochastic sampling ("Bilby"): they perfectly overlap with those obtained with NPE. The 2L configuration, in this case, yields a multimodal posterior distribution for both distance and sky position. From @santoliquidoComparingNextgenerationDetector2025.](figures/einstein-telescope/skymap_dL_hist_colorbar_manualspacing.png){#fig-einstein-telescope-2l-sky width=60%}
 
 The example in @fig-einstein-telescope-2l-sky also helps in building an intuition for the interpretation of multimodalities. It is tempting, when presented with an asymmetric multimodal posterior distribution, to assume that the true value will lie in the higher mode. 
 Of course, as long as our analysis is unbiased, the probability mass contained in each mode is precisely the probability that the true value will be contained in that mode. 

@@ -1073,7 +1073,7 @@ In order to validate this, we set up 12 injections with the same parameters as o
 
 The corresponding waveforms for the 11 and 12-month cases are shown in @fig-waveforms-lgwa-injections. 
 
-![Waveforms for the 11 and 12 month normalized injections, shown in characteristic strain, together with the LGWA PSD and the .](figures/lgwa_waveforms_month_by_month.pdf){#fig-waveforms-lgwa-injections width=80%}
+![Waveforms for the 11 and 12 month normalized injections, shown in characteristic strain, together with the LGWA PSD and the artificial PSD used in the "uniform SNR" scenario.](figures/lgwa_waveforms_month_by_month.pdf){#fig-waveforms-lgwa-injections width=80%}
 
 According to @eq-wen-chen-area the sky localization area should scale inversely with $A_{\perp}$, which we compute by projecting the detector's orbit onto the plane orthogonal to the injected source's direction, and then taking its convex hull, as shown in @fig-trajectories-lgwa-injections.
 
