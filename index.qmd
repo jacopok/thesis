@@ -11,10 +11,10 @@ format:
 
 # Introduction  
 
-We offer the reader a tour of the gravitational wave astronomy 
+We offer the reader a tour of the gravitational wave science 
 enabled by the study of compact binary coalescences.
 This field is wide and multi-faceted: 
-we start our discussion from data analysis, encompassing
+we center our discussion on data analysis, which encompasses
 the statistical and computational methods 
 used to infer the properties of the astrophysical objects 
 whose emission we measure.
@@ -23,18 +23,18 @@ The relative simplicity of the data produced by gravitational wave
 detectors allows us to employ statistically robust Bayesian methods.
 Starting from a detailed discussion of these, 
 we explore how they can help shed light on the properties of compact objects.
-We start from the data observed by current gravitational wave detectors 
-and then move to the ones whose construction is planned. 
-Each of these scenarios brings many challenges; we focus on the 
-computational and statistical ones.
+We start from current gravitational wave detectors 
+and then move to the ones whose construction is planned:
+each of these brings its own scientific potential, as well as new challenges.
 
 @sec-statistical-methods introduces the general tools required for inference; 
 @sec-gw-pe illustrates how they can be applied to the analysis of timeseries.
 In both, we outline what approaches can improve computational efficiency,
 as well as how the robustness of our methods can be assessed.
 
-The next three chapters summarize the main ways the data measured at the detectors can vary depending on the compact binary system that emitted it.
-In @sec-gw250114 we introduce the protagonist signal for this endeavour, GW250114, which as of this writing
+The next three chapters summarize the main ways the data measured at the detectors 
+can vary depending on the compact binary system that emitted it.
+In @sec-gw250114 we introduce the GW250114 signal, which as of this writing
 holds the record as the clearest-ever gravitational wave detection:
 we use it as our reference example wherever possible in later chapters.
 In @sec-intrinsic we outline how the signal produced by a compact binary merger is characterized, while in @sec-extrinsic
@@ -110,8 +110,9 @@ in the latter, I also contributed to the analysis of some
 concepts other than the seismic one, such as the 
 effect of dust on an unshielded laser-interferometric detector.
 I am currently leading a paper on the generic solution to the LGWA parameter estimation problem [@tissinoGeometryLunarGravitational2026], where
-we show that it must generically be performed in a coordinate frame comoving with the Solar System Barycenter, but centered elsewhere.
-I was also involved in a recent work which performed parameter estimation 
+we show that it must generically be performed in a coordinate frame comoving with the Solar System Barycenter, 
+which should be centered at a location close to the detector for better computational efficiency.
+I was also involved in a recent work on LGWA parameter estimation  
 for a massive black hole binary [@iacovelliGravitationalwaveParameterEstimation2025], 
 which lasted for a short enough time in band not to require 
 an accurate treatment of the lunar orbit around the Sun.
