@@ -557,7 +557,7 @@ On top of this trend we see modulations; their period in the time domain is a mo
 
 Along with the injected waveform, we show the posterior predictive distribution obtained after performing an injection and recovery.
 
-![Posterior Predictive Distribution and injected waveforms for a GW250114-like injection with the LGWA](figures/lgwa_ppd_fb.pdf){#fig-projected-waveforms-gw250114-ppd}
+![Posterior Predictive Distribution and injected waveforms for a GW250114-like injection with the LGWA.](figures/lgwa_ppd_fb.pdf){#fig-projected-waveforms-gw250114-ppd}
 
 The phase of the response is more difficult to visualize, as it spans thousands of cycles during an observation.
 We illustrate one aspect of its variation by computing the ratio of two waveforms computed with identical parameters --- again, the injection ones for GW250114 --- but with a difference in 1 degree in right ascension. 
@@ -793,7 +793,7 @@ For GW250114, despite the higher SNR, the localization is much less precise.
 In @fig-lgwa-gw250114-sky we can see two nearby modes in the sky, corresponding respectively to a face-on source with $\theta_{JN} < \pi / 2$ and a face-off source with $\theta_{JN}> \pi / 2$.
 The LVK posterior distribution exhibits the same qualitative behavior, which in both cases is due to the sky position being also constrained by the relative amplitude of the signal in two detectors (for the LVK) and in the two LGWA channels at various times.
 
-![Sky localization and inclination angle for a GW250114-like injection. We compare the results with those obtained with other detectors: the Einstein Telescope in its 2L configuration, and the posterior distribution provided by the LVK collaboration for the real event.](figures/ra_dec_theta_jn_lgwa_vs_et.pdf){#fig-lgwa-gw250114-sky width=80%}
+![Sky location, inclination angle and distance posteriors for a GW250114-like injection. We compare the results with those obtained with other detectors: the Einstein Telescope in its 2L configuration, and the posterior distribution provided by the LVK collaboration for the real event.](figures/ra_dec_theta_jn_lgwa_vs_et.pdf){#fig-lgwa-gw250114-sky width=80%}
 
 The Einstein Telescope in its 2L configuration would measure this position with extreme precision, due to its SNR of more than 600.
 As we discussed in @sec-gw250114-et, ET in its $\Delta$ configuration would constrain the position of this source to two modes in the sky; if operational at the same time, the LGWA would easily allow us to discriminate among them. 
@@ -955,8 +955,10 @@ We can convert each timing posterior sample to one measuring $t_{22}(f)$ at a di
 $$
 t_{i}^{f, r} = t_{i}^{\text{mrg}, r_0} 
 - \frac{(r-r_0 ) \cdot \hat{n}_{i}}{c}
-+ \frac{1}{2 \pi} \frac{ \text{d} \varphi_{22}(f; \theta_i)}{ \text{d} f}\,.
++ \frac{1}{2 \pi} \frac{ \text{d} \varphi_{22}(f; \theta_i)}{ \text{d} f}\,,
 $$
+
+where $\hat{n}$ is a unit vector pointing toward the source.
 
 This gives us a new set of samples for the time, whose variance may be higher or lower than the baseline depending on the specifics of the signal. 
 The timing uncertainty is a function of four variables ($\vec{r}$, $f$),
@@ -971,13 +973,13 @@ from IPython.display import Markdown
 
 Markdown(r"""| Location | Stage | Timing uncertainty (90\% interval) |
 |---:|----:|---:|
-| global optimum  | $f_{22}=0.54$ Hz | 0.09 s |
-| Earth | $f_{22}=0.54$ Hz | 0.16 s |
-| Moon | merger | 0.23 s |
+| global optimum  | $f_{22}=0.56$ Hz | 0.09 s |
+| Earth | $f_{22}=0.56$ Hz | 0.15 s |
+| Moon | merger | 0.24 s |
 | Earth | merger | 0.24 s |
-| Solar System Barycenter | merger | 10.56 s |
-| Solar System Barycenter | $f_{22}=0.54$ Hz | 10.64 s |
-| Earth | $f_{22}=0.03$ Hz | 217 s |
+| Solar System Barycenter | merger | 11.16 s |
+| Solar System Barycenter | $f_{22}=0.56$ Hz | 11.25 s |
+| Earth | $f_{22}=0.03$ Hz | 225 s |
 """)
 ```
 
@@ -985,11 +987,11 @@ In @tbl-uncertainty-by-frequency-and-location we show the timing uncertainty obt
 Qualitatively, we see that for reference frequencies at or above the best detector sensitivity ($\approx 0.4$ Hz), and locations close to the Earth-Moon system, the timing uncertainty remains low. 
 On the contrary, at distant locations such as the Solar System Barycenter, or at very low reference frequencies, the timing uncertainty becomes very large.
 
-![Timing uncertainty by frequency for our GW250114-like injection. For all panels, the meaning of the vertical axis is above the panel itself. In the top panel we show the characteristic noise and signal strains as a function of frequency, as a reference. In the second panel from the top, we show the uncertainty in time as measured at a given reference frequency, as a function of that reference frequency. In the third panel we perform an analogous operation, but looking at the uncertainty in frequency as measured at a given reference time. Finally, in the bottom panel we show the Pearson correlation between time (or frequency) and chirp mass. ](figures/timing_constraint_by_frequency_GW250114.pdf){#fig-timing-lgwa-by-frequency width=80%}
+![Timing uncertainty by frequency for our GW250114-like injection. For all panels, the meaning of the vertical axis is above the panel itself. In the top panel we show the characteristic noise and signal strains as a function of frequency, as a reference. In the second panel from the top, we show the uncertainty in time as measured at a given reference frequency, as a function of that reference frequency. In the third panel we perform an analogous operation, but looking at the uncertainty in frequency as measured at a given reference time. ](figures/timing_constraint_by_frequency_GW250114.pdf){#fig-timing-lgwa-by-frequency width=80%}
 
 In @fig-timing-lgwa-by-frequency we vary the frequency $f$ and, for each of its values, we compute the position $r$ such that the 90% width of the samples $t^{f, r}$ is minimized. 
 We then show these 90% widths as a function of frequency. 
-One can see a minimum around 0.54Hz, just above the point where the LGWA's sensitivity is best.
+One can see a minimum around 0.56Hz, just above the point where the LGWA's sensitivity is best.
 
 ![Spatial variation of the timing uncertainty for our GW250114-like injection. ](figures/time_std_solar_system.pdf){#fig-timing-lgwa-solar-system width=80%}
 
@@ -1056,7 +1058,7 @@ Neglecting the terms depending on $\gamma$, which is subdominant for a relativel
 
 :::
 
-![Velocity of the minimum uncertainty position compared with the detector's position and velocity.](figures/minimum_uncertainty_velocity.pdf){#fig-minimum-uncertainty-velocity width=80%}
+![Velocity of the detector as a function of frequency, compared to the relative velocity of the detector and the minimum in timing uncertainty. For a long duration, the minimum approximately moves with the detector, as evidenced by their relative velocity being smaller in modulus than the Moon's orbital velocity.](figures/minimum_uncertainty_velocity.pdf){#fig-minimum-uncertainty-velocity width=80%}
 
 Finally, in @fig-minimum-uncertainty-velocity we show the velocity of the point $\vec{r}_\text{min} (t(f))$, where we compute the time $t(f)$ associated with the frequency $f$ based on a SPA of the injected signal. 
 We can see that, even though its motion is obtained exclusively by post-processing posterior samples, it retains a certain "memory" of the detector's trajectory through the Solar System. 
@@ -1077,7 +1079,7 @@ The corresponding waveforms for the 11 and 12-month cases are shown in @fig-wave
 
 According to @eq-wen-chen-area the sky localization area should scale inversely with $A_{\perp}$, which we compute by projecting the detector's orbit onto the plane orthogonal to the injected source's direction, and then taking its convex hull, as shown in @fig-trajectories-lgwa-injections.
 
-![Top panel: convex hulls for the 12 month normalized injections, projected onto a plane orthogonal to the gravitational wave propagation direction. The line thickness is proportional to the SNR integrand as a function of time, defined in @nte-snr-integrand. Bottom panel: SNR integrand as a function of time on a linear axis.](figures/trajectories.png){#fig-trajectories-lgwa-injections width=80%}
+![Top panel: convex hulls for the 12 month normalized injections, projected onto a plane orthogonal to the gravitational wave propagation direction. The line thickness is proportional to the SNR integrand as a function of time, defined in @nte-snr-integrand. Bottom panel: SNR integrand as a function of time on a linear axis.](figures/trajectories.png){#fig-trajectories-lgwa-injections width=100%}
 
 ::: {#nte-snr-integrand .callout-note collapse="true"}
 
