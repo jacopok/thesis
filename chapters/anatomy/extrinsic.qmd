@@ -488,8 +488,10 @@ where the stationary time $t^{*}(f)$ is defined by the condition $2 \pi f = \dot
 It is often useful to compute the stationary time based on the frequency domain phase, 
 $$
 \angle \tilde{g} (f) = - \phi(f) 
-= -\Phi(t^{*}(f)) + 2 \pi f t^{*}(f) - \frac{\pi}{4}\,.
+= -\Phi(t^{*}(f)) + 2 \pi f t^{*}(f) - \frac{\pi}{4}\,,
 $$
+
+where $\angle z$ denotes the angle of a complex number $z$.
 
 By differentiating it we get a commonly used expression to recover the SPA time in terms of the frequency-domain phasing [@marsatFourierdomainModulationsDelays2018, eq. 21]:
 $$
