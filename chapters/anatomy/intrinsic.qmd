@@ -34,7 +34,7 @@ Here, the expansion parameter represents the velocity of the binary: $x = v / c 
 The chirp mass appears as a prefactor in @eq-post-newtonian-phase-generic: $\nu x^{5} = \nu (\pi M f)^{5/3} = (\pi \mathcal{M} f)^{5/3}$.
 This means it affects the phase evolution of the signal at a basic level, and its measurement will be precise if we can constrain a large number of signal cycles.
 
-On the other hand, the Post-Newtonian coefficients $\varphi_{n}$^[A terminology note: the $n$-th term in the sum is called the $(n /2)$PN contribution. For example, the $n=5$ term is called 2.5PN.] contain information about various other contributions, such as mass ratio and spin @blanchetPostNewtonianTheoryGravitational2024.
+On the other hand, the Post-Newtonian coefficients $\varphi_{n}$^[A terminology note: the $n$-th term in the sum is called the $(n /2)$PN contribution. For example, the $n=5$ term is called 2.5PN.] contain information about various other contributions, such as mass ratio and spin [@blanchetPostNewtonianTheoryGravitational2024].
 For example, the symmetric mass ratio $\nu$ enters in the expression at 1PN order, spin-orbit effects at 1.5PN, and spin-spin effects at 2PN.
 
 ### The component masses of GW250114
