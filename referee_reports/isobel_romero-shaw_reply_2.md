@@ -1,0 +1,297 @@
+I thank the referee for her kind words.
+I have revised the manuscript; the major changes are outlined in a separate document,
+while here I provide a point-by-point reply to the review.
+
+
+## Sec 1: Introduction
+
+- [ ] Please provide a link here to the mentioned static website version of the thesis – a reader of the PDF would probably like to be able to easily navigate to this.
+
+As mentioned
+
+- [ ] The link to the source code gives me a 404 error, please fix this.
+
+
+
+- [ ] Although Section 1.1 purports to explicitly outline the contributions made by the author, I do not find it clear exactly what the personal contributions to some mentioned publications were. For example:  “I was part of the team which wrote the discovery paper…” – it would be helpful to add explicit description of which analyses, plots, and/or sections of the writing of the GW250114 paper the author is responsible for.
+- [ ] “I coauthored the paper which outlined its fix” – please explain which parts of the window bug paper the author is responsible for.
+
+- [ ] One example of where this is done well is the sentence describing how the author wrote an interface for an eccentric waveform model that enabled its use in a particular analysis for a paper.
+- [ ] The paragraph about the ET collaboration whitepaper does describe that the author contributed a discussion of computational bottlenecks to that paper’s section 8. However, it also mentions a “series of papers led by Filippo Santoliquido, which whom I closely collaborated” – which parts of these papers did was the author responsible for?
+
+- [ ] The paragraph on contributions to LGWA works is mostly clear, except for the last sentence: “I was also involved in a recent work…” – please describe how the author was involved.
+- [ ] Sec 2: Statistical Methods
+
+Overall this is a very thorough and well-written summary of statistical
+methods used in gravitational wave data analysis. This section may well
+become a useful reference for myself and many other people!
+
+- [ ] Figure 2.1: There are no axis labels on this plot – it would be useful to an unfamiliar reader if these could be added.
+
+
+- [ ] 2.1.1.2: in the equation for wi it might be helpful to explain why the evidence can be neglected.
+
+- [ ] 2.1.2-3: I really enjoyed these sections! I would appreciate a little more clarity
+- [ ] around how the plots were generated though. Were posteriors obtained through
+- [ ] some injection study? Or were simple draws from different distributions used?
+- [ ] (I would assume the latter, but it is not clear.) This section also has inconsistent
+- [ ] notation for the likelihood and prior than the surrounding sections – unless there
+- [ ] is a good reason for this, please make the notation consistent.
+- [ ] The last paragraph in Sec 2.1 took me a little while to parse. I think it should be
+- [ ] made clearer that here the “baseline model” corresponds to model 1 in Eq 2.4.
+- [ ] Fig 2.12: It might be nice to include a horizontal line on this plot before -log X
+- [ ] = 4 to guide the reader’s eye in assessing whether horizontal slices of the
+- [ ] ensemble are thinner when we have more live points.
+- [ ] 2.2.3.1: The statements “this seems restrictive at first glance, but does not
+- [ ] actually constrain the class of models we can consider” and “this restricts the
+- [ ] space of useable priors” seem contradictory. Please clarify.
+- [ ] 2.2.7.1: “depending on what is the quantity we are more interested in
+- [ ] evaluating” sounds a bit clunky, perhaps rephrase as “depending on the quantity
+- [ ] we are most interested in evaluating”. The Pareto front has not been introduced
+- [ ] or defined, please include a footnote or similar for more information on this.
+- [ ] The placement of the reference in the final sentence in this section is also
+- [ ] awkward, please move it to the end of the sentence.
+- [ ] 2.3.1: I believe “distribution” should be “distributions” in the first sentence. The
+- [ ] \mathcal{L} used in the loss function in e.g., Eq 2.6, Eq 2.7 could be confused
+- [ ] with the likelihood defined in earlier sections, please use a different notation for
+- [ ] the loss function. The Dax et al. [51] reference should be \citep rather than
+- [ ] \citet.
+- [ ] 2.3.3.2: “2.5 an 0.3”  “2.5 and 0.3”. The last sentence in this section ends
+- [ ] should end with a full stop rather than with a comma.
+- [ ] 2.4.1.2: “an year”  “a year” or “one year”
+- [ ] Sec 3: Gravitational wave parameter estimation
+- [ ] Note 4: It would be helpful to include a brief description of aliasing at the end
+- [ ] of this note.
+- [ ] Fig 3.3: Contrary to naïve expectations, the amplitude of the maximum
+- [ ] likelihood and reconstructed signals in the middle panel do not drop to 0 after
+- [ ] the ringdown of GW250114. It would be helpful to an unfamiliar reader to
+- [ ] explain why this happens.
+- [ ] 3.2: “…reached a value higher than 75…” – why not quote the exact measured
+- [ ] SNR?
+- [ ] 3.2.1: “This is useful information in the context of forecasting, i.e., estimating
+- [ ] the number of detected signals by some detector that is not yet operational”.
+- [ ] This is not the only time that forecasting would be employed: it is also
+- [ ] usedwhen, e.g., designing detector upgrades that change noise sensitivity curves
+- [ ] of existing detectors; seeing how detection rates change if new detectors are
+- [ ] added to the existing network; estimating how many detectable mergers a given
+- [ ] compact binary merger formation channel might produce in existing detectors;
+- [ ] and so on. Please change the “i.e.” to an “e.g.” or expand the given statement
+- [ ] into a list of all cases where forecasting might be useful.
+- [ ] With an SNR threshold of 8, the FAR for BBHs is found to be 5500 per year in
+- [ ] O1. This is very high. The author then says that “values in the range of roughly
+- [ ] 8 to 12 will be sufficient”. It would be helpful to explain a bit more when a
+- [ ] threshold of 8 is appropriate and when it is not, perhaps also describing the
+- [ ] thresholds that were used in the first detection.
+- [ ] 3.3.1: “The formulation given here works well in the absence of orbital
+- [ ] precession” – I assume this means spin-induced precession? I think it will also
+- [ ] break down for eccentric waveforms – please add a note about this too.
+- [ ] 3.3.2: When introducing reduced order quadrature, please cite Canizares et al:
+- [ ] https://ui.adsabs.harvard.edu/abs/2015PhRvL.114g1104C/abstract
+- [ ] Sec 4: Tests of General Relativity with GW250114
+- [ ] I am once again confused as to why the author states “the signal to noise ratio
+- [ ] was higher than 75” rather than stating the measured value?
+- [ ] “what can be gleamed”  “what can be gleaned”
+- [ ] “signal’s amplitude”  “signal amplitude”
+- [ ] Fig 4.7: Some elements of this figure are not explained in the text or the
+- [ ] caption. What is the orange vertical band in the tope panel representing (the cut-
+- [ ] off time for the inspiral analysis)? What does the dotted line in the bottom panel
+- [ ] show? I am assuming the lighter grey vertical region in the bottom panel is
+- [ ] excluded by energy conservation, is that correct? How is the “full signal
+- [ ] measurement” band obtained and why is that not the main result being
+- [ ] presented here?
+- [ ] Sec 5: Intrinsic parameters and waveform modelling
+- [ ] 5.1: The Blanchet citation should be a \citep rather than a \citet.
+- [ ] 5.1.2: SPA and FD are not defined, please expand and define them at their first
+- [ ] use.
+- [ ] 5.1.3: “importanto”  “important”
+- [ ] 5.2: “Qualitatively, Xeff was slightly negative while Xp was small”. I think the
+- [ ] figure (Fig 5.3) shows that Xeff gets more negative with higher Xp. Initially I
+- [ ] thought this statement was contradictory to this trend, but I think I understand
+- [ ] the intention behind the statement: the figure is showing a restricted range of Xp
+- [ ] and Xeff, and in qualitative terms, Xeff was constrained to be slightly negative,
+- [ ] while Xp was constrained to be small. It might be worth clarifying this
+- [ ] statement and the fact that the range of the plot is restricted. It might also be
+- [ ] interesting to comment on why the trend of more negative Xeff for higher
+- [ ] values of Xp arises.
+- [ ] 5.3: As we enter the eccentricity section I am reminded to encourage the author
+- [ ] to clarify “spin-precessing” instead of “precessing” whenever spin-induced
+- [ ] precession is mentioned. This is particularly important when talking about
+- [ ] eccentric systems, which also experience orbital precession of a different kind.
+- [ ] This is a comment that should be addressed throughout the whole thesis, not
+- [ ] just this section.
+- [ ] “semilatus rectus”  “semilatus rectum”
+- [ ] “peaks and trophs”  “peaks and troughs”
+- [ ] 5.3.1: When evolving the eccentricity posterior backwards in time, were
+- [ ] variations in the spin of the binary included? Please also cite here Fumagalli et
+- [ ] al https://ui.adsabs.harvard.edu/abs/2024PhRvD.110f3012F/abstract, where the
+- [ ] issue of unmeasurable eccentricity as a systematic uncertainty on the earlier
+- [ ] properties of the black hole binary, and therefore their formation channel, is
+- [ ] explored in detail.
+- [ ] When discussing the meaning of the prior on eccentricity, please cite Clarke et
+- [ ] al. https://ui.adsabs.harvard.edu/abs/2026arXiv260518742C/abstract, which
+- [ ] explores the sometimes surprising implications of different commonly-used
+- [ ] priors in eccentricity in detail.
+- [ ] Please describe why a reference frequency of 13.33 Hz was chosen.
+- [ ] There is some inconsistency in this section between eccentricity written as “e”
+- [ ] and written as “e_13.33Hz”. For example, in the definition of the prior
+- [ ] (“uniform in e”, “log-uniform prior p(e)”…) e is used while in the final
+- [ ] paragraph e_13.33Hz is used. I think e_13.33Hz should be used in all of these
+- [ ] cases, but please make them consistent.
+- [ ] 5.4: “This deformation enhances the gravitational attraction between the two
+- [ ] objects, but it is only effective at relatively short separations: the net effect,
+- [ ] therefore, is to leave the early inspiral almost unchanged, while accelerating its
+- [ ] late stages”. Since the previous section talked about eccentricity, the question
+- [ ] naturally arises as to how tidal deformability would affect the inspiral in an
+- [ ] eccentric system, where shorter separations can be reached earlier in the
+- [ ] inspiral. Could a short comment on this be added here?
+- [ ] The tidal field in the static case is described, but nothing is mentioned about the dynamical case. It might benefit the thesis to add just a short commentary on dynamical tides.
+
+Cite https://arxiv.org/abs/2207.13106
+
+- [ ] 5.5: References should be added for Numerical Relativity surrogate and
+- [ ] phenomenological waveform models.
+- [ ] Throughout the various subsections here, it would be worth clarifying which
+- [ ] waveform models discussed are inspiral-only (e.g, TaylorF2) vs full inspiral-
+- [ ] merger-ringdown. Other differences in physics contained could also be higher-
+- [ ] order modes.
+- [ ] 5.5.1: “Post-Newtonian templates”: I think this should be “Post-Newtonian
+- [ ] waveform models”? Typically “templates” refer to specific instances of
+- [ ] generated waveforms (for example, in a matched-filter search you will find the
+- [ ] best-matching template as the waveform instance with the highest SNR).
+- [ ] 5.5.2: “Post-Netwonian”  “Post-Newtonian”
+- [ ] There seems to be an error formatting a reference: I see
+- [ ] “@gambaRevisitingGW150914Nonplanar2025” after “their waveforms need to
+- [ ] be computed in the time domain” and reference 108.
+- [ ] Fig 5.11: In the legend I see some names that clearly refer to waveform models,
+- [ ] but it is not clear what the labels with various numbers x N refer to, please
+- [ ] clarify this.
+- [ ] Sec 6: Extrinsic parameters and signal projection
+- [ ] Note 7: There is an unfinished sentence: “The formulas given here are again
+- [ ] from”. Also, “GW” has not actually been defined and “gravitational waves” is
+- [ ] used throughout the majority of the thesis, so I suggest expanding it here.
+- [ ] 6.1.1.3: I have mentioned this already, but just as a reminder, please wherever
+- [ ] “precession” or “precessing” is mentioned, clarify that this refers to spin-
+- [ ] induced precession.
+- [ ] Fig 6.1: This is slightly small for ease of interpretation, please make this figure
+- [ ] about twice as large as it is currently.
+- [ ] 6.3: The description of calibration here is quite limited. It would improve the
+- [ ] thesis to expand this description (perhaps with an illustrative plot), and also
+- [ ] make reference to the recent astrophysical calibrations enabled by GW
+- [ ] observations: https://arxiv.org/pdf/2605.11703.
+- [ ] 6.4.1: Here e is used as a unit vector, but e was also used earlier as eccentricity.
+- [ ] I appreciate that this is a problem with conventions using the same letter, but the
+- [ ] fact that a previously defined notation is now changing should be explicitly
+- [ ] noted.
+- [ ] Sec 7: Einstein Telescope
+- [ ] “current ground-based detectors”: ground-based does not need to be specified,
+- [ ] since all current detectors are ground-based.
+- [ ] “two main proposed designs for it”: the last two words can be removed from
+- [ ] this sentence for a smoother read.
+- [ ] Cosmic Explorer is mentioned once on p68, but never in the section on Einstein
+- [ ] Telescope, which is surprising since they are very comparable instruments that
+- [ ] may be concurrent. Many of the challenges faced for ET data analysis will be
+- [ ] relevant for CE data analysis, for example. Please add a sentence or two in the
+- [ ] introduction to Sec 7 on Cosmic Explorer, its similarities and differences from
+- [ ] ET, and why the focus here is on ET only.
+- [ ] 7.1: “that of only one signal being present in the data”: specifically, the
+- [ ] assumption is that there is only one signal in the data segment being analysed.
+- [ ] We hope, and know, that there are many more signals in the data overall!
+- [ ] Fig 7.2: The text on this figure is too small to read comfortably, please either
+- [ ] increase the text size or increase the figure size.
+- [ ] Fig 7.2, 7.3, 7.4: These are all produced by Filippo Santoliquido. Is it possible
+- [ ] to replace these with figures produced by the author? Other figures not
+- [ ] produced by the author are taken from publications, but it seems unusual to
+- [ ] have figures produced specifically for the thesis that are not produced by the
+- [ ] author.
+- [ ] Figs 7.6 and 7.7: Text is a bit too small to read comfortably in the figure legends
+- [ ] here, please make this text larger. The meanings of the different detector
+- [ ] combinations described in the figure legends are not defined, please defined
+- [ ] these (e.g., “2L A”, “2L MisA”, “LHI”, “CE”….)
+- [ ] 7.2: “misaligned 2L configuration is more in constraining sky position”: there is
+- [ ] a word missing in this sentence. More what?
+- [ ] 7.2.1: “For the many of the expected CBC sources”  “For many of the CBC
+- [ ] sources”
+- [ ] Fig 7.1.2: This figure is too small to read the results comfortably, please make it
+- [ ] larger.
+- [ ] Sec 8: Lunar Gravitational Wave Antenna
+- [ ] What does being included in the “Reserve Pool of Activities” mean for the
+- [ ] Soundcheck mission? Will it go ahead? It sounds exciting!
+- [ ] “LROC Norther Polar Mosaic”  “LROC Northern Polar Mosaic”
+- [ ] Fig 8.5: The space between the figure captions (a) and (b) is not adequate to
+- [ ] clearly distinguish which is which, please increase this spacing.
+- [ ] 8.1.2.1: “For the purposes of the LGWA, these may simply lead to a fraction of
+- [ ] the data, as opposed to making the entirety of the data too noisy.” This sentence
+- [ ] is unclear to me. Should it be: “For the purposes of the LGWA, these may
+- [ ] simply lead to a fraction of the data, as opposed to the entirety of the data, being
+- [ ] too noisy”?
+- [ ] “ALSEP” has not been defined, please expand the acronym.
+- [ ] “GWs” has not been defined and “gravitational waves” is used throughout the
+- [ ] majority of the thesis, so I suggest expanding it here.
+- [ ] Fig 8.7 has no vertical axis labels, please add these.
+- [ ] 8.1.3: Again “GWs” is not defined, please expand.
+- [ ] Fig 8.13: The text in this figure is too small to read comfortably, please make
+- [ ] the text larger.
+- [ ] 8.2.1: “The formation mechanism of the Moon could also be investigated, as is
+- [ ] not a settled debate”  “The formation mechanism of the Moon could also be
+- [ ] investigated, as this is not a settled debate”
+- [ ] The explanation of the isotopic crisis is limited. Why is it hard to explain under
+- [ ] the giant impact scenario?
+- [ ] 8.2.2.1: GW190521 is described as one of “the edges” of the mass range
+- [ ] observed by ground-based detectors, but this is not true since GW231123.
+- [ ] Please replace GW190521 in this discussion and in Fig 8.15 with GW231123.
+- [ ] It is described that GW231123 would be detectable by LGWA and would
+- [ ] accumulate the majority of its SNR on the last day before merger, but the latter
+- [ ] point is not explained or illustrated in Fig 8.16. Please describe or include a plot
+- [ ] of the SNR accumulation over time.
+- [ ] The final sentence in this section indicates that IMRIs would be a source for
+- [ ] LGWA and observing them would shed light on the formation of IMBHs. Please
+- [ ] add additional explanation of how observations with LGWA would shed light
+- [ ] on the formation of IMBHs.
+- [ ] 8.2.2.2: “Mergers of white dwarfs (WDs) are an interesting event”  “Mergers
+- [ ] of white dwarfs (WDs) are interesting events”
+- [ ] “accurate 3D simulations of this scenario becoming available only recently”:
+- [ ] please add a reference to these newly available simulations.
+- [ ] “The main limitation in the study of their systems”  The main limitation in
+- [ ] the study of these systems”
+- [ ] This section is lacking a few references, for example, for WD tidal disruptions
+- [ ] creating a signal in the deciHertz band, CCSn exhibiting emission in this band,
+- [ ] and detection of the stochastic background requiring seismometers at both
+- [ ] poles.
+- [ ] 8.2.3: I am not sure “notorious” is the right work to use for GW170817 and
+- [ ] GW250114. “Notorious” typically implies something or someone that is well-
+- [ ] known for negative reasons. Perhaps change this to “well-known”.
+- [ ] “GW170871”  “GW170817”
+- [ ] 8.2.3.1: Would a lack of noise realisation not increase the uncertainty on
+- [ ] measured parameters? I suggest at least one additional analysis showing the
+- [ ] difference in recovery between the zero-noise and realistically noisy case, or at
+- [ ] least a stronger argument as to why realistic noise would not impact the
+- [ ] posterior width.
+- [ ] 8.2.3.2: The LVK posterior shown in Fig 8.20 is the true posterior, obtained
+- [ ] with real noisy data. As mentioned above, since this contains real noise, I think
+- [ ] this is quite a different scenario than the zero-noise LGWA simulation.
+- [ ] Therefore the posteriors are not directly comparable. Please clarify this, or
+- [ ] repeat the simulated analysis on realistically noisy data.
+- [ ] Fig 8.20, 8.21: I believe the delta in “ET-delta” should be the triangle used in
+- [ ] earlier notation.
+- [ ] Fig 8.23 figure caption: two instances of “time 0”  “time 0 s”
+- [ ] Figs 8.24, 8.25: Text is too small to read comfortably, please increase text size
+- [ ] in these figures
+- [ ] Fig 8.25: The colours used for the lines are hard to distinguish from the heat
+- [ ] map. Please make them clearer by using different colours. Also please explain
+- [ ] what they mean in the figure caption.
+- [ ] 8.3.2: Overall this was one of my favourite sections, very clearly presented with
+- [ ] interesting results.
+- [ ] The list of injection setups is broken by two pages that each contain one figure.
+- [ ] Is it possible to bring this whole list onto the same page for ease of readability?
+- [ ] Fig 8.30: I really like this figure, it shows the difference between the different
+- [ ] scenarios explored very effectively! To save the reader having to scroll back to
+- [ ] the list that describes these scenarios, could they be recapped in the figure
+- [ ] caption?
+- [ ] 8.3.3: “doing so for the complete injection, which requires a good amount of
+- [ ] resources even with a close-to-optimal frame would be wasteful and lengthy”
+- [ ]  “doing so for the complete injection, which requires a good amount of
+- [ ] resources even with a close-to-optimal frame, would be wasteful and lengthy”
+- [ ] Normally dynesty is in low caps but once it is written as DYNESTY. Please
+- [ ] make the stylisation consistent.
+- [ ] Sec 9: Conclusions
+- [ ] “grond-based”  “ground based”

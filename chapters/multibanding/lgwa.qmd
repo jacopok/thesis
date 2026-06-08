@@ -774,12 +774,16 @@ Nevertheless, in @sec-area-validation we will present an argument as to why we
 do not expect our results in terms of source parameter constraints and sky localization
 to be significantly affected by this limitation.
 
-The zero-noise assumption is not expected to be a significant limitation. 
-Adding a noise realization would simply bias the expectation value of our parameter estimation results, but not their variance, which is the quantity of interest in forecasting.
-
 Working directly with the zero-noise likelihood ratio simplifies the problem, meaning that we never have to leave the frequency domain; this is a blessing and a curse, since it also means that we are not performing a full pipeline test, which would need to start from simulated time-domain data. 
 Furthermore, we are performing inference assuming that the signal's presence is known, and no other signals nor non-Gaussian noise sources are present in the data.
 As we transition from forecasting to developing the analysis infrastructure for the mission, these issues can be addressed, eventually leading to a realistic simulation and blind analysis of simulated time-domain seismometer data.
+
+#### Impact of non-zero Gaussian noise
+
+The zero-noise assumption is not expected to be a significant limitation. 
+Adding a noise realization would simply bias the expectation value of our parameter estimation results, but not their variance, which is the quantity of interest in forecasting.
+
+
 
 #### Sky localization
 
@@ -993,7 +997,7 @@ In @fig-timing-lgwa-by-frequency we vary the frequency $f$ and, for each of its 
 We then show these 90% widths as a function of frequency. 
 One can see a minimum around 0.56Hz, just above the point where the LGWA's sensitivity is best.
 
-![Spatial variation of the timing uncertainty for our GW250114-like injection. ](figures/time_std_solar_system.pdf){#fig-timing-lgwa-solar-system width=80%}
+![Spatial variation of the timing uncertainty for our GW250114-like injection. ](figures/time_std_solar_system.png){#fig-timing-lgwa-solar-system width=80%}
 
 In @fig-timing-lgwa-solar-system, instead, we show the spatial variation of the timing uncertainty by fixing three values of $f$, which include the frequency of the global minimum, one lower frequency, and the merger. 
 We also fix three orthogonal spatial slices, each passing through the global minimum, and compute the timing uncertainty in these slices, so as to show its 3D structure. 
