@@ -31,8 +31,8 @@ $${#eq-fourier-transform-discrete}
 While @eq-fourier-transform-discrete can be computed for any $m \in \mathbb{Z}$, it only contains independent information for $0 \leq m < N / 2$: since our time domain signal is real-valued we have $\tilde{h}(-m / T) = \tilde{h}^{*}( m / T)$, and by the periodicity of the complex exponential $\tilde{h}(m /T) = \tilde{h}( (m+N) / T)$. 
 
 Starting from $N$ real-valued samples in time we then get $N / 2$ complex-valued ones in frequency.
-The frequency samples are spaced by $1 / T$, while the highest frequency available is $1 / 2 \Delta t$, the Nyquist frequency. 
-Any signal with frequency higher than this will experience _aliasing_. 
+The frequency samples are spaced by $1 / T$, while the highest frequency available is $1 / 2 \Delta t = f_s$, the Nyquist frequency. 
+Any component in the signal with a higher frequency, $f > f_s$, will experience aliasing: it will appear in the Fourier transform of the data at an artificially lower frequency, $f - k f_s$ for some integer $k$ chosen such that $0 < f - k f_s < f_s$.  
 :::
 
 
@@ -308,6 +308,7 @@ The original detection paper for GW150914 [@ligoscientificcollaborationandvirgoc
 
 Besides the apparent technical complexity of this approach and its many parameters, its residuals are problematic. 
 Residuals computed subtracting a filtered model from filtered strain data have little meaning, since their distribution is hard to model and frequency-dependent: one should refrain from trying to draw visual conclusions based on their patterns and magnitude, which essentially removes all of the potential utility in showing them.
+Furthermore, the filtering process can introduce artefacts in the data: the fact that the signal model does not exactly approach zero after the merger is one of these.
 
 A significant advantage of showing filtered data, on the other hand, is being able to show the actual signal magnitude, on the order of $10^{-21}$, on the $y$-axis.
 The alternative approach, which has become the standard nowadays, does not share this. 
@@ -348,11 +349,11 @@ $$
 \rho _\text{tot}^{2} =  \sum_{i} \rho_{i}^{2}\,.
 $$
 
-The highest SNR for a gravitational wave signal, as of early 2026, was achieved by the event GW250114 [@abacGW250114TestingHawkings2025], which reached a value higher than 75 when combining the Livingston and Hanford LIGO detectors.
+The highest SNR for a gravitational wave signal, as of early 2026, was achieved by the event GW250114 [@abacGW250114TestingHawkings2025], which reached a value between 77 and 80 when combining the Livingston and Hanford LIGO detectors.
 
 ### SNR thresholds
 
-This section gives a brief outline of the way to estimate what value of SNR is sufficient for a signal to be detectable. This is useful information in the context of _forecasting_, i.e. estimating the number of detected signals by some detector that is not yet operational.
+This section gives a brief outline of the way to estimate what value of SNR is sufficient for a signal to be detectable. This is useful information in the context of forecasting the number of detected signals by some detector that is not yet operational.
 
 If we were searching for a signal without any possible shift in time and with the certainty 
 that the noise did not contain any glitches or non-Gaussianities, then the SNR would simply follow

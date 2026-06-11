@@ -15,7 +15,7 @@ The appeal of NPE specifically is in its promise to remove the stochastic sampli
 
 ### Normalizing flows {#sec-normalizing-flows}
 
-Modelling generic probability distribution is a task with wide applicability in gravitational wave science and beyond. 
+Modelling generic probability distributions is a task with wide applicability in gravitational wave science and beyond. 
 A normalizing flow [@papamakariosNormalizingFlowsProbabilistic2021] is a series of parameterized transformations, whose joint action is denoted as $T$, which map a base distribution onto a generic other distribution.
 The base distribution should be easy to sample from: it is often chosen to be the standard $n$-dimensional Gaussian, with zero mean and the identity matrix as covariance.
 The transformations $T$ are chosen to be invertible, and both $T$ and $T^{-1}$ to be differentiable.
@@ -31,7 +31,7 @@ This fact enables the flow-based architecture, in which several simple transform
 If we have samples from a target distribution $p(\theta)$, we seek to train a normalizing flow $q_{\theta}(\theta; \lambda)$, where $\lambda$ are the parameters defining the transform $T$. We can do so with the following loss function [@papamakariosNormalizingFlowsProbabilistic2021, equation 13]:
 $$
 \begin{aligned}
-\mathcal{L} &= D_{\text{KL}} (p(\theta) \lvert  \rvert  q_{\theta}(\theta ; \lambda)) \\
+\text{loss}(\lambda) &= D_{\text{KL}} (p(\theta) \lvert  \rvert  q_{\theta}(\theta ; \lambda)) \\
 &= \mathbb{E}_{\theta \sim p(\theta)} [- \log p_{\theta}(\theta; \lambda) ] + \text{const.}
 \end{aligned}
 $${#eq-normalizing-flow-loss}
@@ -46,7 +46,7 @@ This is often a normalizing flow: see @sec-normalizing-flows.
 
 The loss function for this, in the simplest case, is [@papamakariosFastEpsilonFree2016;@daxGroupEquivariantNeural2023]:
 $$
- \mathcal{L}_{\text{NPE}} = 
+ \text{loss}_{\text{NPE}} = 
  \mathbb{E}_{\theta \sim \pi(\theta)}
  \mathbb{E}_{d \sim p(d|\theta)}
  [-\log q(\theta|d)]\,.
@@ -60,11 +60,11 @@ The expectation values can be numerically approximated by repeatedly sampling th
 
 In practice, directly employing the loss in @eq-simple-npe-loss is impractical. 
 Some parameters, such as the sky position of the signal, significantly alter the observed waveform in each detector by shifting it in time; 
-This dependence, however, is known and can be amortized during training @daxGroupEquivariantNeural2023, leading to significantly improved performance. 
+This dependence, however, is known and can be amortized during training [@daxGroupEquivariantNeural2023], leading to significantly improved performance. 
 Additionally, the detector's power spectral density $S_{n}$ is varied during training, so that conditioning can be performed at inference time [@wildbergerAdaptingNoiseDistribution2023].
 With this approach, the actual loss function for the state-of-the art NPE model `DINGO` ("Deep Inference for Gravitational-wave Observations") [@daxRealtimeGravitationalwaveScience2021, equation 3] is
 $$
- \mathcal{L}_{\text{GNPE}} = 
+ \text{loss}_{\text{GNPE}} = 
  \mathbb{E}_{\theta \sim \pi(\theta)} 
  \mathbb{E}_{S_{n} \sim p(S_{n})}
  \mathbb{E}_{d \sim p(d|\theta)} 
@@ -162,15 +162,15 @@ $$
 q(\theta|d) = \mathcal{N}(\theta|\mu=\mu_0, \sigma=1)\,.
 $$
 
-In order to illustrate the impact of effective sample size, we choose two different values for the offset: 2.5 an 0.3.
+In order to illustrate the impact of effective sample size, we choose two different values for the offset: 2.5 and 0.3.
 In @fig-importance-sampling-example we can see the impact of effective sample size on the evidence estimate.
 
 Besides the decreasing accuracy in evidence estimation, a low efficiency (low effective sample size) also leads to inaccurate estimates on the error of the estimate itself.
-Visually, this is not surprising: with the higher value of the offset, the left side of the posterior is completely unexplored, 
+Visually, this is not surprising: with the higher value of the offset, the left side of the posterior is completely unexplored.
 
 ```{python}
 #| label: fig-importance-sampling-example
-#| fig-cap: "A demonstration of importance sampling"
+#| fig-cap: "A demonstration of importance sampling with an efficient or an inefficient proposal."
 
 from thesis_scripts import *
 

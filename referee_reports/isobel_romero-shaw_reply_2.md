@@ -5,78 +5,98 @@ while here I provide a point-by-point reply to the review.
 
 ## Sec 1: Introduction
 
-- [ ] Please provide a link here to the mentioned static website version of the thesis – a reader of the PDF would probably like to be able to easily navigate to this.
+- [x] Please provide a link here to the mentioned static website version of the thesis – a reader of the PDF would probably like to be able to easily navigate to this.
 
-As mentioned
+As discussed in an earlier reply, this will be added in the published version.
 
-- [ ] The link to the source code gives me a 404 error, please fix this.
+- [x] The link to the source code gives me a 404 error, please fix this.
 
+Discussed in an earlier reply.
 
+- [ ] Although Section 1.1 purports to explicitly outline the contributions made by the author, I do not find it clear exactly what the personal contributions to some mentioned publications were. 
 
-- [ ] Although Section 1.1 purports to explicitly outline the contributions made by the author, I do not find it clear exactly what the personal contributions to some mentioned publications were. For example:  “I was part of the team which wrote the discovery paper…” – it would be helpful to add explicit description of which analyses, plots, and/or sections of the writing of the GW250114 paper the author is responsible for.
-- [ ] “I coauthored the paper which outlined its fix” – please explain which parts of the window bug paper the author is responsible for.
+As discussed in an earlier reply, I modified the Introduction to add more detail.
 
-- [ ] One example of where this is done well is the sentence describing how the author wrote an interface for an eccentric waveform model that enabled its use in a particular analysis for a paper.
-- [ ] The paragraph about the ET collaboration whitepaper does describe that the author contributed a discussion of computational bottlenecks to that paper’s section 8. However, it also mentions a “series of papers led by Filippo Santoliquido, which whom I closely collaborated” – which parts of these papers did was the author responsible for?
-
-- [ ] The paragraph on contributions to LGWA works is mostly clear, except for the last sentence: “I was also involved in a recent work…” – please describe how the author was involved.
-- [ ] Sec 2: Statistical Methods
-
-Overall this is a very thorough and well-written summary of statistical
-methods used in gravitational wave data analysis. This section may well
-become a useful reference for myself and many other people!
-
-- [ ] Figure 2.1: There are no axis labels on this plot – it would be useful to an unfamiliar reader if these could be added.
+## Sec 2: Statistical Methods: 
 
 
-- [ ] 2.1.1.2: in the equation for wi it might be helpful to explain why the evidence can be neglected.
+- [x] Figure 2.1: There are no axis labels on this plot – it would be useful to an unfamiliar reader if these could be added.
 
-- [ ] 2.1.2-3: I really enjoyed these sections! I would appreciate a little more clarity
-- [ ] around how the plots were generated though. Were posteriors obtained through
-- [ ] some injection study? Or were simple draws from different distributions used?
-- [ ] (I would assume the latter, but it is not clear.) This section also has inconsistent
-- [ ] notation for the likelihood and prior than the surrounding sections – unless there
-- [ ] is a good reason for this, please make the notation consistent.
-- [ ] The last paragraph in Sec 2.1 took me a little while to parse. I think it should be
-- [ ] made clearer that here the “baseline model” corresponds to model 1 in Eq 2.4.
-- [ ] Fig 2.12: It might be nice to include a horizontal line on this plot before -log X
-- [ ] = 4 to guide the reader’s eye in assessing whether horizontal slices of the
-- [ ] ensemble are thinner when we have more live points.
-- [ ] 2.2.3.1: The statements “this seems restrictive at first glance, but does not
-- [ ] actually constrain the class of models we can consider” and “this restricts the
-- [ ] space of useable priors” seem contradictory. Please clarify.
-- [ ] 2.2.7.1: “depending on what is the quantity we are more interested in
-- [ ] evaluating” sounds a bit clunky, perhaps rephrase as “depending on the quantity
-- [ ] we are most interested in evaluating”. The Pareto front has not been introduced
-- [ ] or defined, please include a footnote or similar for more information on this.
-- [ ] The placement of the reference in the final sentence in this section is also
-- [ ] awkward, please move it to the end of the sentence.
-- [ ] 2.3.1: I believe “distribution” should be “distributions” in the first sentence. The
-- [ ] \mathcal{L} used in the loss function in e.g., Eq 2.6, Eq 2.7 could be confused
-- [ ] with the likelihood defined in earlier sections, please use a different notation for
-- [ ] the loss function. The Dax et al. [51] reference should be \citep rather than
-- [ ] \citet.
-- [ ] 2.3.3.2: “2.5 an 0.3”  “2.5 and 0.3”. The last sentence in this section ends
-- [ ] should end with a full stop rather than with a comma.
-- [ ] 2.4.1.2: “an year”  “a year” or “one year”
-- [ ] Sec 3: Gravitational wave parameter estimation
-- [ ] Note 4: It would be helpful to include a brief description of aliasing at the end
-- [ ] of this note.
-- [ ] Fig 3.3: Contrary to naïve expectations, the amplitude of the maximum
-- [ ] likelihood and reconstructed signals in the middle panel do not drop to 0 after
-- [ ] the ringdown of GW250114. It would be helpful to an unfamiliar reader to
-- [ ] explain why this happens.
-- [ ] 3.2: “…reached a value higher than 75…” – why not quote the exact measured
-- [ ] SNR?
-- [ ] 3.2.1: “This is useful information in the context of forecasting, i.e., estimating
-- [ ] the number of detected signals by some detector that is not yet operational”.
-- [ ] This is not the only time that forecasting would be employed: it is also
-- [ ] usedwhen, e.g., designing detector upgrades that change noise sensitivity curves
-- [ ] of existing detectors; seeing how detection rates change if new detectors are
-- [ ] added to the existing network; estimating how many detectable mergers a given
-- [ ] compact binary merger formation channel might produce in existing detectors;
-- [ ] and so on. Please change the “i.e.” to an “e.g.” or expand the given statement
-- [ ] into a list of all cases where forecasting might be useful.
+I added axis label here.
+
+- [x] 2.1.1.2: in the equation for wi it might be helpful to explain why the evidence can be neglected.
+
+I added a comment on why we can avoid including the evidence in the equation, 
+and also how the weights provide us with an estimate for it.
+
+- [x] 2.1.2-3: I really enjoyed these sections! I would appreciate a little more clarity around how the plots were generated though. Were posteriors obtained through some injection study? Or were simple draws from different distributions used? (I would assume the latter, but it is not clear.) This section also has inconsistent notation for the likelihood and prior than the surrounding sections – unless there is a good reason for this, please make the notation consistent.
+
+I added more details on how the pp plots were generated - this was helpful, since it allowed me to simplify and clarify the setup, I believe it now reads much better.
+
+Also, I made the notation on likelihoods and priors consistent in section 2.1.4, and add a clarification on the meaning of $Z(d)$, which appears in the derivation of the Bayes Factor.
+
+- [x] The last paragraph in Sec 2.1 took me a little while to parse. I think it should be made clearer that here the “baseline model” corresponds to model 1 in Eq 2.4.
+
+I clarified what "baseline" and "deviation" mean here.
+
+- [x] Fig 2.12: It might be nice to include a horizontal line on this plot before $-log X = 4$ to guide the reader’s eye in assessing whether horizontal slices of the ensemble are thinner when we have more live points.
+
+Very good idea! I added errorbars based on the one sigma interval as computed from the distribution of curves.
+Furthermore, I changed the comparison from 50 vs 100 live points to 25 vs 100: this way, there is a factor 2 between the standard deviation, which is clearer.
+I also took the occasion to make the plot slightly more colorful and appealing.
+
+- [ ] 2.2.3.1: The statements “this seems restrictive at first glance, but does not actually constrain the class of models we can consider” and “this restricts the  space of useable priors” seem contradictory. Please clarify.
+
+When writing the first sentence I was thinking "this does not restrict us to only use uniform priors", as written it was definitely wrong. 
+
+I also rephrased the last section, introducing some detail on how one might sample from a non-separable prior.
+
+- [x] 2.2.7.1: “depending on what is the quantity we are more interested in evaluating” sounds a bit clunky, perhaps rephrase as “depending on the quantity  we are most interested in evaluating”. 
+
+Agreed, I changed it.
+
+- [x] The Pareto front has not been introduced or defined, please include a footnote or similar for more information on this.
+
+I added a footnote with a brief definition of the Pareto front.
+
+- [x] The placement of the reference in the final sentence in this section is also awkward, please move it to the end of the sentence.
+
+Done.
+
+- [ ] 2.3.1: I believe “distribution” should be “distributions” in the first sentence. The $\mathcal{L}$ used in the loss function in e.g., Eq 2.6, Eq 2.7 could be confused with the likelihood defined in earlier sections, please use a different notation for the loss function. 
+
+I corrected the first typo, and switched to the full term "loss" for the equations. 
+
+- [x] The Dax et al. [51] reference should be \citep rather than \citet.
+
+Fixed.
+
+- [x] 2.3.3.2: “2.5 an 0.3”  “2.5 and 0.3”. The last sentence in this section ends should end with a full stop rather than with a comma.
+
+Fixed.
+
+- [x] 2.4.1.2: “an year”  “a year” or “one year”
+
+Fixed.
+
+###  Sec 3: Gravitational wave parameter estimation
+
+- [x] Note 4: It would be helpful to include a brief description of aliasing at the end of this note.
+
+Done.
+
+- [x] Fig 3.3: Contrary to naïve expectations, the amplitude of the maximum likelihood and reconstructed signals in the middle panel do not drop to 0 after the ringdown of GW250114. It would be helpful to an unfamiliar reader to explain why this happens.
+
+I added a note on how this is an artefact of the filtering procedure.
+
+- [x] 3.2: “…reached a value higher than 75…” – why not quote the exact measured SNR?
+
+I wanted to stick to information explicitly given in the detection paper, and "77 to 80" somehow did not sound right to me when I wrote that.
+I have switched to this, though, since it more closely matches what we reported in the paper.
+
+- [x] 3.2.1: “This is useful information in the context of forecasting, i.e., estimating the number of detected signals by some detector that is not yet operational”. This is not the only time that forecasting would be employed: it is also used when, e.g., designing detector upgrades that change noise sensitivity curves of existing detectors; seeing how detection rates change if new detectors are added to the existing network; estimating how many detectable mergers a given compact binary merger formation channel might produce in existing detectors; and so on. Please change the “i.e.” to an “e.g.” or expand the given statement into a list of all cases where forecasting might be useful.
+
+
 - [ ] With an SNR threshold of 8, the FAR for BBHs is found to be 5500 per year in
 - [ ] O1. This is very high. The author then says that “values in the range of roughly
 - [ ] 8 to 12 will be sufficient”. It would be helpful to explain a bit more when a

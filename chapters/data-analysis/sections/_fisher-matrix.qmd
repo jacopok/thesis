@@ -21,7 +21,7 @@ $$
 
 In this approximation, the Whittle likelihood is written as 
 $$ \log\mathcal{L}(d | \theta) = -\frac{1}{2} (n|n) + \delta\theta_{i} \left( n\bigg|   \frac{\partial h}{\partial \theta_{i}} \right) - \frac{1}{2} \delta \theta^i \delta \theta^j \mathcal{F}_{ij} + \mathcal{O}((\delta\theta)^{3}) \,.
-$$
+$${#eq-linearized-signal-approximation}
 This is the expression of a multivariate normal distribution, with covariance matrix $\mathcal{C}_{ij} = \mathcal{F}_{ij}^{-1}$.
 
 This expression is written as an expansion in orders of the deviation of the parameters, but the actual requirement for the Fisher approximation is a high value of the (optimal) SNR, which we shall define in @sec-snr, $\rho = \sqrt{ (h_{0}|h_{0}) }$.
@@ -129,7 +129,7 @@ $$
 Here, $\rho_{N} = \sqrt{ \sum_{i} \rho_{i}^{2} }$ is the network SNR, the sum in quadrature of the individual SNRs (see @sec-snr); the quantities $D_{\perp}$ and $A_{\perp}$ are respectively the distance between detectors or their area, projected onto a plane orthogonal to the propagation direction $n$.
 
 An expression can also be computed in the case of a long observation by a single detector, since its orbit around the Sun will effectively make it akin to a large network of detectors. 
-@wenGeometricalExpressionAngular2010 give this expression only in the limit of a short observation or one that is longer than an year; the expression for an arbitrary-length observation of a monochromatic signal with frequency $f_{0}$ reads [@tissinoGeometryLunarGravitational2026]
+@wenGeometricalExpressionAngular2010 give this expression only in the limit of a short observation or one that is longer than a year; the expression for an arbitrary-length observation of a monochromatic signal with frequency $f_{0}$ reads [@tissinoGeometryLunarGravitational2026]
 $$
 \Delta\Omega = \frac{c^{2}}{f_{0}^{2} \rho^{2}A_{\perp}}\,,
 $${#eq-wen-chen-area}

@@ -128,12 +128,22 @@ Some algorithms, such as Nested Sampling (@sec-nested-sampling) or importance-sa
 This means that each sample $\theta_{i}$ is associated with a weight $w_{i}$.
 Weighted samples can also arise in the context of _reweighting_: slightly perturbing the assumptions underlying an analysis and thus obtaining a set of weights in the form
 $$
-w_{i} = \frac{\mathcal{L}_{1}(\theta_{i}|d) \pi_{1}(\theta_{i})}{\mathcal{L}_{2}(\theta_{i}|d) \pi_{2}(\theta_{i})}\,.
+w_{i} = \frac{\mathcal{L}_{1}(d|\theta_{i}) \pi_{1}(\theta_{i})}{\mathcal{L}_{2}(d|\theta_{i}) \pi_{2}(\theta_{i})}\,.
+$${#eq-reweighting-weights}
+
+Here, it is assumed that the samples $\theta_i$ were obtained through an analysis with model 2, so they are distributed according to the posterior distribution $p_2(\theta_i)$.
+
+The weights $w_i$ could in principle also be defined as the ratio of the two normalized posteriors, multiplying them by a factor $Z_2 / Z_1$. 
+However, when reweighting we typically only have access to an estimate of the
+evidence $Z_2$ from the previous analysis, while $Z_1$ still to be determined.
+Defining the weights without this term, as in @eq-reweighting-weights, means that their average will provide this estimate (see also @sec-importance-sampling):
+
+$$ \frac{1}{N} \sum_{i=1}^{N}w_{i} \approx \frac{Z_1}{Z_2}\,.
 $$
 
-Summary statistics can be computed through __importance sampling__, as 
+Summary statistics can then be computed through __importance sampling__, as 
 $$ \langle f \rangle_{\theta \sim p(\theta | d, M)} \approx \frac{\sum _{i=1}^N w_{i} f(\theta _i)}{\sum_{i=1}^{N}w_{i}} \,.
-$$
+$${#eq-weighted-sample-average}
 Based on this, all the quantities that could be obtained as described in @sec-posterior-samples can be retrieved with weighted samples as well.
 
 We can also extract equally-weighted samples from weighted ones by __rejection sampling__ [see _e.g._ @ashtonReconstructingResamplingGuide2025 for a review]:
@@ -156,7 +166,7 @@ This test starts with a campaign of injections, for which the true value $\hat{\
 Then, we may compute the percentile of the distribution at which the true value lies:
 $$
 u = \int_{-\infty}^{\hat{\theta}_{i}} p(\theta_{i}| d) \text{d}\theta = \text{CDF}_{p(\theta_{i}| d)}(\hat{\theta}_{i})\,.
-$$
+$${#eq-pp-plot-quantile}
 Here we assume for simplicity that the parameter can range over $\mathbb{R}$, but the same calculation can be performed starting integration from the lower bound.
 This is the definition of the cumulative distribution function, computed at $\hat{\theta}_{i}$. 
 Repeating this procedure $N_\text{inj}$ times, we will get a set of values $u_{j}$, where the index $j$ denotes the number of the injection.
@@ -254,14 +264,19 @@ Note that in that case, overconstraining of the distribution being sampled will 
 ### $p$-$p$ test failure modes {#sec-pp-test-failure-modes}
 
 Let us now explore the way that $p$-$p$ plots look when the test fails. 
-We will keep the distribution according to which the true parameter $\hat{\theta}$ is distributed fixed to the standard normal, centered on zero and with unit variance, and we will explore how the $p$-$p$ plot can help us diagnose errors in the estimated posterior distribution.
+We will assume the true parameter $\hat{\theta}$ is always equal to zero, the noise is Gaussian, and our prior on the parameter $\theta$ is flat.
+This will allow us to explore how the $p$-$p$ plot can help us diagnose errors in the estimated posterior distribution.
 
-First, let us suppose we have a bias in our measurement, so that the posterior distribution is not centered at the true value, 0, but instead at a slightly higher one, say 0.2. We will consider a simple Gaussian model, so that
+For all the cases considered, we simulate injections analytically as follows:
+
+1. we draw a noise instance, which we assume to be normally distributed as $n \sim \mathcal{N}(n; \mu=0, \sigma=1)$, the observed value will be $n + \hat{\theta} = n$;
+2. we define a posterior distribution $p(\theta|d)$ --- the correct one would be $p(\theta|d) = \mathcal{N}(\theta; \mu=n, \sigma=1)$, but we will also use other (incorrect) options;
+3. we compute the quantile $u$ based on $p(\theta | d)$ and $\hat{\theta} = 0$ as in equation @eq-pp-plot-quantile.
+
+First, let us suppose we have a bias in our measurement, so that the posterior distribution is not centered at the measured value, $\hat{\theta}+n = n$, but instead at a slightly higher one: we will use a small deviation, 0.2.
+Our posterior distribution will then read
 $$
-\begin{aligned}
-p(\theta|d) &= \mathcal{N}(\theta; \mu=0.2, \sigma=1)\\
-p(\hat{\theta}|d) &= \mathcal{N}(\theta; \mu=0, \sigma=1)\,.
-\end{aligned}
+p(\theta|d) = \mathcal{N}(\theta; \mu=n+0.2, \sigma=1)\,.
 $$
 
 The result is in @fig-pp-plot-bias-positive.
@@ -276,7 +291,7 @@ from thesis_scripts import plt
 from scipy import stats
 
 rng = np.random.default_rng(seed=1)
-u = stats.norm(loc=0.2, scale=1).cdf(rng.normal(size=2000))
+u = stats.norm(loc=0.2+rng.normal(size=2000), scale=1).cdf(0)
 
 fig, ax = pp_plot.pp_plot(u, confidence_intervals=(.68, .95, .997))
 plt.show()
@@ -284,10 +299,7 @@ plt.show()
 
 @fig-pp-plot-bias-negative shows what happens if the bias is in the negative direction:
 $$
-\begin{aligned}
-p(\theta|d) &= \mathcal{N}(\theta; \mu=-0.2, \sigma=1)\\
-p(\hat{\theta}|d) &= \mathcal{N}(\theta;\mu=0, \sigma=1)\,.
-\end{aligned}
+p(\theta|d) = \mathcal{N}(\theta; \mu=-0.2+n, \sigma=1)\,.
 $$
 
 ```{python}
@@ -300,7 +312,7 @@ from thesis_scripts import plt
 from scipy import stats
 
 rng = np.random.default_rng(seed=1)
-u = stats.norm(loc=-0.2, scale=1).cdf(rng.normal(size=2000))
+u = stats.norm(loc=-0.2+rng.normal(size=2000), scale=1).cdf(0)
 
 fig, ax = pp_plot.pp_plot(u, confidence_intervals=(.68, .95, .997))
 plt.show()
@@ -311,10 +323,7 @@ Note that only one of the one-sided KS tests gives extreme results in either cas
 Now let us consider a different scenario: when the mean of the posterior distribution is correctly estimated, but its variance is not. 
 If the variance is too high, we are _underconstraining_ the parameter, assigning a higher uncertainty to our measurement than is warranted: for example, if
 $$
-\begin{aligned}
-p(\theta|d) &= \mathcal{N}(\mu=0, \sigma=1.2)\\
-p(\hat{\theta}|d) &= \mathcal{N}(\mu=0, \sigma=1)\,.
-\end{aligned}
+p(\theta|d) = \mathcal{N}(\mu=n, \sigma=1.2)\,.
 $$
 
 ```{python}
@@ -328,7 +337,7 @@ from scipy import stats
 
 rng = np.random.default_rng(seed=1)
 
-u = stats.norm(loc=0, scale=1.2).cdf(rng.normal(size=2500))
+u = stats.norm(loc=rng.normal(size=2500), scale=1.2).cdf(0)
 
 fig, ax = pp_plot.pp_plot(u, confidence_intervals=(.68, .95, .997))
 plt.show()
@@ -337,10 +346,7 @@ plt.show()
 @fig-pp-plot-bias-underconstrain shows the result. 
 In the opposite scenario, we are _overconstraining_ (@fig-pp-plot-bias-overconstrain), assigning a lower uncertainty to our measurement than is warranted: for example,
 $$
-\begin{aligned}
-p(\theta|d) &= \mathcal{N}(\mu=0, \sigma=0.8)\\
-p(\hat{\theta}|d) &= \mathcal{N}(\mu=0, \sigma=1)\,.
-\end{aligned}
+p(\theta|d) = \mathcal{N}(\mu=n, \sigma=0.8)\,.
 $$
 ```{python}
 #| label: fig-pp-plot-bias-overconstrain
@@ -353,7 +359,7 @@ from scipy import stats
 
 rng = np.random.default_rng(seed=1)
 
-u = stats.norm(loc=0, scale=0.8).cdf(rng.normal(size=2500))
+u = stats.norm(loc=rng.normal(size=2500), scale=0.8).cdf(0)
 
 fig, ax = pp_plot.pp_plot(u, confidence_intervals=(.68, .95, .997))
 plt.show()
@@ -401,7 +407,8 @@ from scipy import stats
 
 rng = np.random.default_rng(seed=1)
 
-u = dist.cdf(rng.normal(size=10000))
+dist = stats.gennorm(beta=beta, loc=rng.normal(size=10000), scale=1/np.sqrt(var))
+u = dist.cdf(0)
 
 fig, ax = pp_plot.pp_plot(u, confidence_intervals=(.68, .95, .997))
 plt.show()
@@ -424,20 +431,21 @@ _all_ miss some important aspect.
 
 We can write an anologous expression to @eq-bayes-theorem for both models $M_{1}$ and $M_{2}$:
 $$
-p(M_{i}|d) p(d) = p(d| M_{i}) p(M_{i});
+p(M_{i}|d) Z(d) = \mathcal{Z}(d| M_{i}) \pi(M_{i});
 $$
-dividing one by the other, we get the following:
+dividing one by the other, we get the following:^[While both are probability distributions over the possible data realizations, we denote with $\mathcal{Z}$ the conditional evidence under the assumption of model $M_i$, while $Z$ is the marginal probability of the data without the assumption of this model. 
+One might interpret it as the likelihood of the data under the common assumptions shared by all models $M_i$, _e.g._ regarding the noise-generating process, which all our results are implicitly conditioned over. This is anyway immaterial, since the $Z(d)$ term cancels in the equation.]
 $$ 
-\frac{p(M_{1} | d)}{p(M_{2}|d)} = \frac{p(d|M_{1})}{p(d|M_{2})} \frac{p(M_{1})}{p(M_{2})}.
+\frac{p(M_{1} | d)}{p(M_{2}|d)} = \frac{\mathcal{Z}(d|M_{1})}{\mathcal{Z}(d|M_{2})} \frac{\pi(M_{1})}{\pi(M_{2})}.
 $${#eq-model-comparison}
 
 The left-hand term in @eq-model-comparison is dubbed _posterior odds_: 
 it describes the degree to which we should prefer model $1$ over model $2$ after seeing the data $d$. On the right hand we have a product of two terms: the _Bayes Factor_ (BF)
 $$
-\text{BF}_{2}^{1} = \frac{p(d|M_{1})}{p(d|M_{2})}
+\text{BF}_{2}^{1} = \frac{\mathcal{Z}(d|M_{1})}{\mathcal{Z}(d|M_{2})}
 $${#eq-bayes-factor}
 describes the degree to which the data prefer model $1$ over model 2.
-The remaining term, $p(M_{1}) / p(M_{2})$, is called _prior odds_, and it describes the degree to which we preferred model 1 over model 2 before seeing the data $d$.
+The remaining term, $\pi(M_{1}) / \pi(M_{2})$, is called _prior odds_, and it describes the degree to which we preferred model 1 over model 2 before seeing the data $d$.
 This may be informed, for example, by previous observations, theoretical considerations, or simply be set to 1 if our belief is that both models are equally likely.
 
 ::: {#nte-odds-logits .callout-note collapse="true"}
@@ -476,8 +484,8 @@ plt.grid()
 plt.show()
 ```
 
-The logit of a probability, $\text{logit}(p) \in \mathbb{R}$, is also called __log-odds__ 
-can be argued to be more natural way to express it than $p\in (0, 1)$. 
+The logit of a probability, $\text{logit}(p) \in \mathbb{R}$, also called __log-odds__,
+can be argued to be a more natural way to express it than $p\in (0, 1)$. 
 Probabilities very close to 0 or 1 are extreme statements: in this parameterization, they are accordingly very far from the origin, and absolutes such as $p=0, 1$ are divergent towards $\pm \infty$.
 :::
 
@@ -497,7 +505,7 @@ $$
 $${#eq-savage-dickey-density-ratio}
 Here, model 1 is the special case of model 2 in which parameter $\theta$ equals $\theta_{0}$, $p_{2}$ is the marginal posterior distribution for the parameter $\theta$ under model 2, while $\pi_{2}$ is the marginal prior distribution for the parameter $\theta$ under model 2.
 
-The value of $\pi_2$ computed at any given point is sensitive to how wide the prior is, since it must be a normalized probability distribution. For example, the density of a uniform prior over an interval $A$ is precisely $1/A$.
+The value of $\pi_2$ computed at any given point is sensitive to how wide the prior is, since it must be a normalized probability distribution. For example, the density of a uniform prior over an interval of width $A$ is precisely $1/A$.
 
 This formulation illustrates the general fact that Bayes Factors are heavily dependent on the width of the prior distribution.
 This is a well-known feature of Bayesian inference, known as the Occam Factor or Penalty.
@@ -506,5 +514,5 @@ the preferred one is the one for which the likelihood has high values for a larg
 Qualitatively, this penalizes flexible models, which are able to fit many different scenarios beside the observed one,
 in favor of ones which only fit the observed scenario and few others.
 
-A negative consequence of this arises if the prior distributions cannot be selected in a principled way, though: if they are set too wide, the data may seem to favor the baseline model even in the presence of a deviation.
-Then, by the way Bayes Factors are constructed, if the BF for any single observation favors the baseline model, combining many of them from different observations only accumulates evidence against a deviation, even if a small deviation is present and could be detected by a simultaneous analysis of all events.
+A negative consequence of this arises if the prior distributions cannot be selected in a principled way, though: if they are set too wide, the data may seem to favor the baseline model (_i.e._ model 1 in equation @eq-savage-dickey-density-ratio) even in the presence of a deviation (model 2 in the same equation with $\theta \neq \theta_0$).
+By the way Bayes Factors are constructed, if the BF for any single observation favors the baseline model, combining many of them from different observations only accumulates evidence against a deviation, even if a small deviation is present and could be detected by a simultaneous analysis of all events.

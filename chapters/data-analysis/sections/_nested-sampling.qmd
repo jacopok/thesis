@@ -131,7 +131,7 @@ For a visualization of this compression see @fig-nested-sampling-volume-compress
 
 ```{python}
 #| label: fig-nested-sampling-volume-compression-iteration
-#| fig-cap: "Volume compression by iteration. The number of points is denoted here as $n_{\\mathrm{live}} = k$. Note how horizontal slices of this ensemble are thinner when we have more live points: increasing them will decrease the uncertainty at a fixed prior compression. After reaching a logarithmic volume compression of $- \\log X = 4$ the runs are truncated, and the remaining points are shown: these are distributed uniformly and not geometrically in $X$, therefore they taper off in this logarithmic plot."
+#| fig-cap: "Volume compression by iteration. The number of points is denoted here as $n_{\\mathrm{live}} = k$. Note how horizontal slices of this ensemble are thinner when we have more live points: increasing them will decrease the uncertainty at a fixed prior compression. We illustrate this by drawing a line corresponding to the one-sigma range of the distribution of prior compressions obtained after $4k$ iterations. After reaching a logarithmic volume compression of $- \\log X = 4$ the runs are truncated, and the remaining points are shown: these are distributed uniformly and not geometrically in $X$, therefore they taper off in this logarithmic plot."
 
 import numpy as np
 from thesis_scripts import plt
@@ -141,8 +141,8 @@ rng = np.random.default_rng(seed=1)
 n_iterations = 80
 logX_min = -4
 
-n_live_numbers = [100, 50]
-colors = ['grey', 'black']
+n_live_numbers = [100, 25]
+colors = ['#648FFF', '#FE6100']
 
 plt.figure(figsize=(6, 3.))
 
@@ -163,6 +163,7 @@ for n_live, color in zip(n_live_numbers, colors):
 
 	min_i = min(len(arr) for arr in results)
 
+	max_length = 0
 	for i in range(n_iterations):
 		if i == 0:
 			label = '$n_{\mathrm{live}} =$' + f' {n_live}'
@@ -172,10 +173,30 @@ for n_live, color in zip(n_live_numbers, colors):
 			results[i], 
 			np.arange(len(results[i])), 
 			c=color, 
-			alpha=.2, 
+			alpha=.1,
 			label=label)
+		if max_length < len(results[i]):
+			max_length = len(results[i])
 
-plt.legend()
+	res_array = np.zeros((max_length, n_iterations))
+	for i in range(n_iterations):
+		res_array[:len(results[i]), i] = results[i]
+
+	expected_it = int(-logX_min * n_live)
+	std = np.std(res_array[expected_it])
+	plt.errorbar(
+		[logX_min], [expected_it], xerr=std,
+		fmt='.k',
+		lw=1,
+		capsize=5,
+		c='black',
+	)
+	
+
+legend = plt.legend()
+for handle in legend.legend_handles:
+	handle.set_alpha(1.)
+
 plt.axvline(logX_min, ls='--', c='black', lw=1)
 plt.xlim(0, logX_min-6)
 plt.xlabel(r'$\log X$: prior compression')
@@ -228,8 +249,7 @@ While the current set of live points is often used as a guide, the statistical p
 
 The way most nested sampling software implements likelihood-restricted prior sampling starts from the assumption that the prior is uniform in the box $[0, 1]^{d}$.
 
-This seems restrictive at first glance, but does not actually constrain the class of models we can consider.
-For any given prior $\pi(\theta)$ we want to use, it means that we need to find a mapping $g\colon [0, 1]^{d} \to \mathbb{R}^{d}$  between the unit $d$-dimensional box and our physical prior space, such that if $u \sim \mathcal{U}([0, 1]^{d})$, then $g(u) \sim \pi$, i.e. mapping uniformly-distributed random numbers onto values distributed according to our prior.
+However, we can generalize this to non-uniform priors: for any given prior $\pi(\theta)$ we want to use, we need to find a mapping $g\colon [0, 1]^{d} \to \mathbb{R}^{d}$  between the unit $d$-dimensional box and our physical prior space, such that if $u \sim \mathcal{U}([0, 1]^{d})$, then $g(u) \sim \pi$, i.e. mapping uniformly-distributed random numbers onto values distributed according to our prior.
 
 If our prior is _separable_, i.e. $\pi (\theta) = \prod_{i=1}^{d} \pi_{i}(\theta_{i})$, then the problem is solvable analytically: the prior transform map will be  such that
 $$
@@ -243,8 +263,10 @@ and $\text{CDF}^{-1}$ is its inverse.
 The cumulative distribution can also be computed from samples, so in the case of separate priors we need not have an analytical expression for them.
 
 In the non-separable case there is no general procedure to accomplish this, which is equivalent to stating that there is no algorithm to "analytically" sample from an arbitrary distribution.
-This restricts the space of usable priors, since we need to be able to sample from them. 
-Typically, we use priors with known analytical expressions.
+
+It is still possible to work with non-separable priors:
+if samples from the prior are available, one could model it with a normalizing flow (@sec-normalizing-flows), or if its density function is known one could perform the analysis with an approximate analytic prior and then reweight the samples as described in @sec-weighted-samples.
+These approaches are, however, subject to potential pitfalls (failed convergence, low efficiency, dependence on hyperparameters).
 
 ### Model comparison with nested sampling
 
@@ -768,11 +790,11 @@ Accelerating the evaluation of the likelihood, $\langle t_\text{like} \rangle$, 
 #### Varying the number of live points {#sec-dynamic-nested-sampling}
 
 The original nested sampling algorithm evolves a fixed number of live points throughout the run. 
-It has since been proposed that it can be more efficient to vary it (@higsonDynamicNestedSampling2019, @speagleDYNESTYDynamicNested2020), depending on what is the quantity we are more interested in evaluating.
+It has since been proposed that it can be more efficient to vary it (@higsonDynamicNestedSampling2019, @speagleDYNESTYDynamicNested2020), depending on the quantity we are more interested in evaluating.
 
 A nested sampling run gives us estimates for both the evidence and the posterior. If what we are most interested in is precisely computing the evidence, we should allocate more points in the early stages of compression, even though the posterior mass is very low there: this will give us better statistics on the active volume when we reach the posterior bulk.
 
 If we are more interested in the posterior, on the other hand, we can do the initial compression with fewer points and use more once we reach the posterior bulk. 
 
-It turns out [@higsonDynamicNestedSampling2019] that, while both these objectives can be optimized independently, the standard choice of using a constant number of live points is not on the Pareto front for the uncertainties on evidence and posterior: a balanced dynamical allocation of points can improve both compared to the constant case.
+It turns out that, while both these objectives can be optimized independently, the standard choice of using a constant number of live points is not on the Pareto front^[The Pareto front (introduced by @paretoManualeDiEconomia1919 with the Italian name _serie di indifferenza_, "indifference series") is a concept from multi-objective optimization. Defining multiple cost functions across a parameter space $X$ establishes a partial order relation between points in $X$: if a point $x \in X$ has a lower cost than $y \in X$ for _all_ cost functions, then we say that it strictly dominates $y$, or $x \succ y$. This is a partial ordering, since there are pairs $(x, y)$ for which we have neither $x \succ$ y nor $y \succ x$. The _Pareto front_ is then the set of points which are not dominated by any others.] for the uncertainties on evidence and posterior: a balanced dynamical allocation of points can improve both compared to the constant case [@higsonDynamicNestedSampling2019].
 
