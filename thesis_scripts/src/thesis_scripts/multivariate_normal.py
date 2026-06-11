@@ -37,11 +37,6 @@ class MultivariateNormal():
         return self.normalization * np.exp(- argument / 2.)
 
     def marginalize(self, index):
-        # not very general! we are only able to marginalize down
-        # to one parameter right now
-
-        # the generalization is simple conceptually (take the submatrix of self.cov)
-        # but may make the code quite complicated
         
         marginal_mean = self.mean[index, np.newaxis]
         marginal_cov = self.cov[index, index, np.newaxis, np.newaxis]
@@ -150,6 +145,8 @@ class MultivariateNormal():
         colors = ax3.contourf(x, y, z, cmap=cmap, levels=20)
         ax3.axvline(chosen_x, c='white', ls='--')
         ax3.axhline(chosen_y, c='white', ls='--')
+        ax3.set_xlabel('$\\theta_1$')
+        ax3.set_ylabel('$\\theta_2$')
 
         ax2 = plt.subplot(gs[1])
         ax2.set_visible(False)
@@ -157,3 +154,8 @@ class MultivariateNormal():
         cax = divider.append_axes('left', size='20%', pad=0.05)
         cbar = fig.colorbar(colors, cax=cax)
         cbar.ax.set_ylabel('Probability density')
+        
+if __name__ == '__main__':
+    n = MultivariateNormal([0, 0], [[1, 0.8], [0.8, 1]])
+    n.plot_2d_analytical(0, 0, .9)
+    plt.show()
