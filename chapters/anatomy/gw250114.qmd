@@ -17,12 +17,12 @@ The signal is clearly visible in the data with minimal processing: @fig-gw250114
 
 ![Whitened strain for GW250114 in the Livingston and Hanford detectors. Adapted from @abacGW250114TestingHawkings2025.](figures/Figure_1_simplified.pdf){#fig-gw250114-whitened-strain-simplified width=100%}
 
-We will attempt to give an outline of the essential physics of binary mergers, starting from what can be gleamed from the "bare" data without the need to invoke complex models [@theligoscientificcollaborationBasicPhysicsBinary2017].
+We will attempt to give an outline of the essential physics of binary mergers, starting from what can be gleaned from the "bare" data without the need to invoke complex models [@theligoscientificcollaborationBasicPhysicsBinary2017].
 
 We can visually identify the sections of the waveform emitted by a black hole coalescence:
 
 - an _inspiral_, whose amplitude and frequency rise over time;
-- a _merger_, where the signal's amplitude peaks;
+- a _merger_, where the signal amplitude peaks;
 - a _ringdown_, characterized by strongly damped oscillations.
 
 Indeed, if we overlay the general relativistic prediction for a binary merger (@fig-gw250114-whitened-strain) we can see that it matches very closely.
@@ -32,7 +32,7 @@ Indeed, if we overlay the general relativistic prediction for a binary merger (@
 This chapter will discuss the "anatomy" of a gravitational wave signal, the way it is parameterized, and the way it appears in our detectors, using GW250114 as an example wherever possible, but also with an eye toward low frequencies, which we will then expand on in @sec-lgwa. 
 The current chapter will focus on ringdown, as this is what allowed for the most prominent scientific results with GW250114. 
 @sec-intrinsic will describe the intrinsic modelling of a gravitational wave signal, with parameters such the masses and spins of the two component objects, eccentricity, tidal effects.
-In @sec-extrinsic we will bring the signal from source to detector, discussing the impact of precession, detector motion and antenna patterns.
+In @sec-extrinsic we will bring the signal from source to detector, discussing the impact of spin-induced precession, detector motion and antenna patterns.
 
 ## Ringdown {#sec-ringdown}
 
@@ -172,9 +172,24 @@ Fortunately, this does not diminish the power of our analysis, as the ratio $(A_
 
 ![Posterior distribution for the fractional area change of GW250114. Adapted from @abacGW250114TestingHawkings2025.](figures/area_law_plot_combined.pdf){#fig-area-law-posterior width=80%} 
 
-@fig-area-law-posterior illustrates the posterior distribution on this quantity, which excludes a negative area variation to high credibility.
-The upper panel showcases the robustness of this result to varying the cut time for the inspiral.
-We further explore this in @fig-area-law-varying-time; the rapid decay in the ringdown signal makes the choice of cut time there significantly more impactful than that in the inspiral.
+The lower panel of @fig-area-law-posterior illustrates the posterior distribution on this quantity, which excludes a negative area variation to high credibility. The green histogram corresponds to the aforementioned analysis performed 
+while independently considering the pre- and post-merger sections of the signal. 
+The upper panel showcases the robustness of this result to varying the cut time for the inspiral;
+the main result we quote is the one obtained when truncating the inspiral waveform $40t_M$ before the merger
+and starting the ringdown analysis $10.5 t_{M_f}$ after the merger.
+
+For reference, in the lower panel we also show the constraints on the change in area obtained when coherently analyzing
+the whole signal ("Full signal measurement"). While this is significantly more precise, 
+General Relativity being correct is assumed to obtain this result, so it cannot function as a test of it.
+
+Hawking's area theorem predicts $A_{f} - A_{i} > 0$, which we show in the lower panel as a vertical dashed line.
+Furthermore, if we assume that energy is conserved, an upper bound for the change in area can be found 
+by considering two maximally-spinning black holes with mass $M_1 = M_2 = M$ and $\chi = 1$ form a minimally spinning black hole
+with mass $2M$ and spin $\chi = 0$. Then, we will have $A_f = 4 A_i$, or $(A_{f} - A_{i} ) / A_{i} = 3$. 
+We show the region excluded by this argument in light grey.
+
+We further explore the robustness of this result in @fig-area-law-varying-time; 
+the rapid decay in the ringdown signal makes the choice of cut time there significantly more impactful than that in the inspiral.
 Despite this, the statement $A_{f} - A_{i} > 0$ is robustly verified for a wide range of choices for the end time of the inspiral analysis, $t_<$, and the start time of the ringdown analysis, $t_>$.
 
 ![Robustness of the fractional area change of GW250114 to changes in cut times. Adapted from @abacGW250114TestingHawkings2025.](figures/supp_area_compare_10.5M.pdf){#fig-area-law-varying-time} 

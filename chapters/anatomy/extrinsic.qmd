@@ -35,7 +35,7 @@ _{m=-\ell}^{\ell} h_{\ell m} (t; \theta_{\text{int}})\, {}^{(-2)}Y_{\ell m} (\io
 $${#eq-spherical-harmonic-decomposition}
 
 This decomposition is performed around the _orbital_ angular momentum,
-which is not conserved in the generic, precessing case.
+which is not conserved in the generic, spin-precessing case.
 If the binary is spin-aligned, on the other hand, it is also symmetric about the orbital plane, 
 which leads to the relation $h_{\ell m}= (-1)^{\ell}h^{*}_{\ell -m}$ [@prattenComputationallyEfficientModels2021]. 
 For the expressions of the spin-weighted harmonics, see @nte-spherical-harmonics.
@@ -171,14 +171,14 @@ To this end, @daxNeuralImportanceSampling2023 introduced a resampling method,
 in which the phase is synthetically sampled by evaluating the likelihood
 on a grid in phase.
 
-#### Twisting: the construction of precessing frequency-domain waveforms {#sec-twisting}
+#### Twisting: the construction of spin-precessing frequency-domain waveforms {#sec-twisting}
 
-The construction of precessing gravitational waveforms is 
+The construction of spin-precessing gravitational waveforms is 
 generally performed by computing them in a non-inertial, precessing frame aligned with the orbital angular momentum $\vec{L}$, and then converting to the approximately inertial frame aligned with the total angular momentum $\vec{J}$ by means of a time-dependent rotation [@prattenComputationallyEfficientModels2021, eq. 3.3]:
 $$
 h_{\ell m}^{J} = \sum _{m'=-\ell}^{\ell} \mathcal{D}_{m'm}^{\ell *}(\alpha, \beta, \gamma) h_{\ell m'}^{L}\,.
 $$
-This choice is not unique, and the $\vec{J}$ vector is not exactly conserved for an inspiralling, precessing system [@boyleGeometricApproachPrecession2011]; we can use its value at a given moment (such as $t \to - \infty$) as a reference.
+This choice is not unique, and the $\vec{J}$ vector is not exactly conserved for an inspiralling, spin-precessing system [@boyleGeometricApproachPrecession2011]; we can use its value at a given moment (such as $t \to - \infty$) as a reference.
 
 This is useful because the gravitational waves in the precessing frame are quite close to those which would be emitted by a non-precessing binary. 
 
@@ -207,7 +207,7 @@ $$
 A^{\ell}_{mm'} = e^{-im \alpha} d^{\ell}_{mm'}(\beta) ^{(-2)}Y_{\ell m}\,.
 $$
 
-At a first approximation, the $L$-frame modes can be approximated with a non-precessing model, but this is not completely accurate.
+At a first approximation, the $L$-frame modes can be approximated with a non-spin-precessing model, but this is not completely accurate.
 
 The angles defining the transformation need to be computed in the frequency domain as well, at a frequency $2 \pi f / m'$. 
 Post-Newtonian expressions for them can be used, such as those given in appendix G.1 of @prattenComputationallyEfficientModels2021.

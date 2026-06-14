@@ -484,10 +484,17 @@ $$
 Crucially, this depends on the ratio $r(f)$ being relatively smooth across the frequency axis.
 This is expected to be approximately true for all the relevant points in the posterior, potentially not if we stray from its peak.
 
-The formulation given here works well in the absence of orbital precession. 
+The formulation given here works well in the absence of spin-induced orbital precession. 
 In its presence it breaks down, since the smooth structure of the waveforms is not preserved --- the residual $r(f)$, directly computed, is not smooth enough for @eq-relative-binning-approximation to be a good approximation. However, this can be counteracted by performing a mode-by-mode decomposition in the orbital frame of the binary (see @sec-twisting) and then approximating those ratios as smoothly varying [@narolaRelativeBinningComplete2023].
 
-For an example of how the waveform ratio $r(f)$ looks, see @fig-projected-lgwa-waveforms-ratio, where it is computed in a specific case for the Lunar Gravitational Wave Antenna.
+For an example of how the waveform ratio $r(f)$ might look, see @fig-projected-lgwa-waveforms-ratio, where it is computed in a specific case for the Lunar Gravitational Wave Antenna.
+
+To our knowledge, this framework has not been applied in the case of eccentric waveforms. 
+Doing so in the frequency domain would likely be more efficient 
+if a decomposition of these waveforms into harmonics is performed.
+The relative binning approach can also be applied to 
+time-domain analyses [@sharmaRapidInferenceGravitationalwave2026], which
+might be helpful in this scenario.
 
 #### Noisy summary data for injections {#sec-noisy-relative-binning}
 

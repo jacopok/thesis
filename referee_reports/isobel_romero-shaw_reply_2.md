@@ -96,102 +96,139 @@ I have switched to this, though, since it more closely matches what we reported 
 
 - [x] 3.2.1: “This is useful information in the context of forecasting, i.e., estimating the number of detected signals by some detector that is not yet operational”. This is not the only time that forecasting would be employed: it is also used when, e.g., designing detector upgrades that change noise sensitivity curves of existing detectors; seeing how detection rates change if new detectors are added to the existing network; estimating how many detectable mergers a given compact binary merger formation channel might produce in existing detectors; and so on. Please change the “i.e.” to an “e.g.” or expand the given statement into a list of all cases where forecasting might be useful.
 
+I'm not sure where the "i.e." came from, I simply meant "forecasting the number of detected signals". Sorry about that. Fixed now.
 
-- [ ] With an SNR threshold of 8, the FAR for BBHs is found to be 5500 per year in
-- [ ] O1. This is very high. The author then says that “values in the range of roughly
-- [ ] 8 to 12 will be sufficient”. It would be helpful to explain a bit more when a
-- [ ] threshold of 8 is appropriate and when it is not, perhaps also describing the
-- [ ] thresholds that were used in the first detection.
-- [ ] 3.3.1: “The formulation given here works well in the absence of orbital
-- [ ] precession” – I assume this means spin-induced precession? I think it will also
-- [ ] break down for eccentric waveforms – please add a note about this too.
-- [ ] 3.3.2: When introducing reduced order quadrature, please cite Canizares et al:
-- [ ] https://ui.adsabs.harvard.edu/abs/2015PhRvL.114g1104C/abstract
-- [ ] Sec 4: Tests of General Relativity with GW250114
-- [ ] I am once again confused as to why the author states “the signal to noise ratio
-- [ ] was higher than 75” rather than stating the measured value?
-- [ ] “what can be gleamed”  “what can be gleaned”
-- [ ] “signal’s amplitude”  “signal amplitude”
-- [ ] Fig 4.7: Some elements of this figure are not explained in the text or the
-- [ ] caption. What is the orange vertical band in the tope panel representing (the cut-
-- [ ] off time for the inspiral analysis)? What does the dotted line in the bottom panel
-- [ ] show? I am assuming the lighter grey vertical region in the bottom panel is
-- [ ] excluded by energy conservation, is that correct? How is the “full signal
-- [ ] measurement” band obtained and why is that not the main result being
-- [ ] presented here?
-- [ ] Sec 5: Intrinsic parameters and waveform modelling
-- [ ] 5.1: The Blanchet citation should be a \citep rather than a \citet.
-- [ ] 5.1.2: SPA and FD are not defined, please expand and define them at their first
-- [ ] use.
-- [ ] 5.1.3: “importanto”  “important”
-- [ ] 5.2: “Qualitatively, Xeff was slightly negative while Xp was small”. I think the
-- [ ] figure (Fig 5.3) shows that Xeff gets more negative with higher Xp. Initially I
-- [ ] thought this statement was contradictory to this trend, but I think I understand
-- [ ] the intention behind the statement: the figure is showing a restricted range of Xp
-- [ ] and Xeff, and in qualitative terms, Xeff was constrained to be slightly negative,
-- [ ] while Xp was constrained to be small. It might be worth clarifying this
-- [ ] statement and the fact that the range of the plot is restricted. It might also be
-- [ ] interesting to comment on why the trend of more negative Xeff for higher
-- [ ] values of Xp arises.
-- [ ] 5.3: As we enter the eccentricity section I am reminded to encourage the author
-- [ ] to clarify “spin-precessing” instead of “precessing” whenever spin-induced
-- [ ] precession is mentioned. This is particularly important when talking about
-- [ ] eccentric systems, which also experience orbital precession of a different kind.
-- [ ] This is a comment that should be addressed throughout the whole thesis, not
-- [ ] just this section.
-- [ ] “semilatus rectus”  “semilatus rectum”
-- [ ] “peaks and trophs”  “peaks and troughs”
-- [ ] 5.3.1: When evolving the eccentricity posterior backwards in time, were
-- [ ] variations in the spin of the binary included? Please also cite here Fumagalli et
-- [ ] al https://ui.adsabs.harvard.edu/abs/2024PhRvD.110f3012F/abstract, where the
-- [ ] issue of unmeasurable eccentricity as a systematic uncertainty on the earlier
-- [ ] properties of the black hole binary, and therefore their formation channel, is
-- [ ] explored in detail.
-- [ ] When discussing the meaning of the prior on eccentricity, please cite Clarke et
-- [ ] al. https://ui.adsabs.harvard.edu/abs/2026arXiv260518742C/abstract, which
-- [ ] explores the sometimes surprising implications of different commonly-used
-- [ ] priors in eccentricity in detail.
-- [ ] Please describe why a reference frequency of 13.33 Hz was chosen.
-- [ ] There is some inconsistency in this section between eccentricity written as “e”
-- [ ] and written as “e_13.33Hz”. For example, in the definition of the prior
-- [ ] (“uniform in e”, “log-uniform prior p(e)”…) e is used while in the final
-- [ ] paragraph e_13.33Hz is used. I think e_13.33Hz should be used in all of these
-- [ ] cases, but please make them consistent.
-- [ ] 5.4: “This deformation enhances the gravitational attraction between the two
-- [ ] objects, but it is only effective at relatively short separations: the net effect,
-- [ ] therefore, is to leave the early inspiral almost unchanged, while accelerating its
-- [ ] late stages”. Since the previous section talked about eccentricity, the question
-- [ ] naturally arises as to how tidal deformability would affect the inspiral in an
-- [ ] eccentric system, where shorter separations can be reached earlier in the
-- [ ] inspiral. Could a short comment on this be added here?
-- [ ] The tidal field in the static case is described, but nothing is mentioned about the dynamical case. It might benefit the thesis to add just a short commentary on dynamical tides.
+- [x] With an SNR threshold of 8, the FAR for BBHs is found to be 5500 per year in  O1. This is very high. The author then says that “values in the range of roughly 8 to 12 will be sufficient”. It would be helpful to explain a bit more when a threshold of 8 is appropriate and when it is not, perhaps also describing the thresholds that were used in the first detection.
 
-Cite https://arxiv.org/abs/2207.13106
+This is the first comment in this review where I would like to push back a little 
+and stand by what I wrote. 
+This paragraph is dedicated to forecasting the detection statistics of future instruments. 
+Determining when a given threshold is appropriate or not is ultimately 
+something that depends on the actual detector data, which we 
+do not have access to for a future detector.
 
-- [ ] 5.5: References should be added for Numerical Relativity surrogate and
-- [ ] phenomenological waveform models.
-- [ ] Throughout the various subsections here, it would be worth clarifying which
-- [ ] waveform models discussed are inspiral-only (e.g, TaylorF2) vs full inspiral-
-- [ ] merger-ringdown. Other differences in physics contained could also be higher-
-- [ ] order modes.
-- [ ] 5.5.1: “Post-Newtonian templates”: I think this should be “Post-Newtonian
-- [ ] waveform models”? Typically “templates” refer to specific instances of
-- [ ] generated waveforms (for example, in a matched-filter search you will find the
-- [ ] best-matching template as the waveform instance with the highest SNR).
-- [ ] 5.5.2: “Post-Netwonian”  “Post-Newtonian”
-- [ ] There seems to be an error formatting a reference: I see
-- [ ] “@gambaRevisitingGW150914Nonplanar2025” after “their waveforms need to
-- [ ] be computed in the time domain” and reference 108.
-- [ ] Fig 5.11: In the legend I see some names that clearly refer to waveform models,
-- [ ] but it is not clear what the labels with various numbers x N refer to, please
-- [ ] clarify this.
-- [ ] Sec 6: Extrinsic parameters and signal projection
-- [ ] Note 7: There is an unfinished sentence: “The formulas given here are again
-- [ ] from”. Also, “GW” has not actually been defined and “gravitational waves” is
-- [ ] used throughout the majority of the thesis, so I suggest expanding it here.
-- [ ] 6.1.1.3: I have mentioned this already, but just as a reminder, please wherever
-- [ ] “precession” or “precessing” is mentioned, clarify that this refers to spin-
-- [ ] induced precession.
+5500 per year is very high, 2 per month is sensible, 1 per 100 years is very small. 
+The argument here is that we can get these values with SNR thresholds that are within tens of percent
+of each other, meaning that something like a horizon distance or a BNS range can be
+forecasted without a large uncertainty contribution from the choice of this threshold.
+
+- [x] 3.3.1: “The formulation given here works well in the absence of orbital  precession” – I assume this means spin-induced precession? I think it will also break down for eccentric waveforms – please add a note about this too.
+
+Indeed, noted. To my knowledge this is fairly unexplored territory. 
+
+- [x] 3.3.2: When introducing reduced order quadrature, please cite Canizares et al: https://ui.adsabs.harvard.edu/abs/2015PhRvL.114g1104C/abstract
+
+Done.
+
+###  Sec 4: Tests of General Relativity with GW250114
+
+
+- [x] I am once again confused as to why the author states “the signal to noise ratio was higher than 75” rather than stating the measured value?
+
+As mentioned before, changed to the range we reported in the paper.
+
+- [x] “what can be gleamed”  “what can be gleaned”
+
+Corrected.
+
+- [x] “signal’s amplitude”  “signal amplitude”
+
+Corrected.
+
+- [x] Fig 4.7: Some elements of this figure are not explained in the text or the caption. What is the orange vertical band in the tope panel representing (the cutoff time for the inspiral analysis)? What does the dotted line in the bottom panel show? I am assuming the lighter grey vertical region in the bottom panel is excluded by energy conservation, is that correct? How is the “full signal measurement” band obtained and why is that not the main result being presented here?
+
+I added more detail on these aspects, as well as a brief argument for the energy conservation limit.
+
+###  Sec 5: Intrinsic parameters and waveform modelling
+
+- [x] 5.1: The Blanchet citation should be a \citep rather than a \citet.
+
+Corrected.
+
+- [x] 5.1.2: SPA and FD are not defined, please expand and define them at their first  use.
+
+I expanded both, didn't really need to abbreviate them here.
+
+- [x] 5.1.3: “importanto”  “important”
+
+Corrected.
+
+- [x] 5.2: “Qualitatively, Xeff was slightly negative while Xp was small”. I think the figure (Fig 5.3) shows that Xeff gets more negative with higher Xp. Initially I thought this statement was contradictory to this trend, but I think I understand the intention behind the statement: the figure is showing a restricted range of Xp and Xeff, and in qualitative terms, Xeff was constrained to be slightly negative, while Xp was constrained to be small. It might be worth clarifying this statement and the fact that the range of the plot is restricted. It might also be interesting to comment on why the trend of more negative Xeff for higher values of Xp arises.
+
+I think my usage of "while" was confusing here. I used it to mean "and", essentially just referring to the two marginals and not to the correlation, but I can see 
+how that might not come have across. 
+I switched to "and", and added a note about the restricted range.
+
+- [x] 5.3: As we enter the eccentricity section I am reminded to encourage the author to clarify “spin-precessing” instead of “precessing” whenever spin-induced precession is mentioned. This is particularly important when talking about eccentric systems, which also experience orbital precession of a different kind. This is a comment that should be addressed throughout the whole thesis, not just this section.
+
+I went through the whole thesis and clarified every instance of this imprecise language.
+Interestingly, this section contained the one instance where I was actually referring to perihelion precession for eccentric systems and not spin precession.
+
+- [x] “semilatus rectus”  “semilatus rectum”
+
+Corrected.
+
+- [x] “peaks and trophs”  “peaks and troughs”
+
+Corrected.
+
+- [x] 5.3.1: When evolving the eccentricity posterior backwards in time, were variations in the spin of the binary included? Please also cite here Fumagalli et al https://ui.adsabs.harvard.edu/abs/2024PhRvD.110f3012F/abstract, where the issue of unmeasurable eccentricity as a systematic uncertainty on the earlier properties of the black hole binary, and therefore their formation channel, is explored in detail.
+
+They were not included, and I think that's implicitly mentioned already 
+(I write that the backward evolution is performed through Peter's equations,
+and spin is not accounted for in those).
+However, I added a comment after that explicitly mentioning 
+the possibility of evolving spin-precession backward and citing Giulia's paper.
+
+- [x] When discussing the meaning of the prior on eccentricity, please cite Clarke et al. https://ui.adsabs.harvard.edu/abs/2026arXiv260518742C/abstract, which explores the sometimes surprising implications of different commonly-used priors in eccentricity in detail.
+
+Agreed - I really liked that paper, and I also discussed it with Teagan 
+when it was circulated (I'm in the acnowledgements!).
+It wasn't out when I was writing that section but I am adding it now.
+
+- [x] Please describe why a reference frequency of 13.33 Hz was chosen.
+
+This was actually already in the thesis, as footnote 6 on page 88.
+
+- [ ] There is some inconsistency in this section between eccentricity written as “e” and written as “e_13.33Hz”. For example, in the definition of the prior (“uniform in e”, “log-uniform prior p(e)”…) e is used while in the final paragraph e_13.33Hz is used. I think e_13.33Hz should be used in all of these cases, but please make them consistent.
+
+I made these consistent. 
+The one mention of $e$ which should not have the 13.33Hz label is the one discussing the value in the decihertz band.
+
+- [ ] 5.4: “This deformation enhances the gravitational attraction between the two objects, but it is only effective at relatively short separations: the net effect, therefore, is to leave the early inspiral almost unchanged, while accelerating its late stages”. Since the previous section talked about eccentricity, the question naturally arises as to how tidal deformability would affect the inspiral in an eccentric system, where shorter separations can be reached earlier in the inspiral. Could a short comment on this be added here? The tidal field in the static case is described, but nothing is mentioned about the dynamical case. It might benefit the thesis to add just a short commentary on dynamical tides.
+
+I added a brief discussion on this and a citation to https://arxiv.org/abs/2207.13106
+
+- [ ] 5.5: References should be added for Numerical Relativity surrogate and phenomenological waveform models.
+
+- [ ] Throughout the various subsections here, it would be worth clarifying which waveform models discussed are inspiral-only (e.g, TaylorF2) vs full inspiral- merger-ringdown. Other differences in physics contained could also be higher- order modes.
+
+- [ ] 5.5.1: “Post-Newtonian templates”: I think this should be “Post-Newtonian waveform models”? Typically “templates” refer to specific instances of generated waveforms (for example, in a matched-filter search you will find the best-matching template as the waveform instance with the highest SNR).
+
+Good point, I fixed this.
+
+- [x] 5.5.2: “Post-Netwonian”  “Post-Newtonian”
+
+Fixed.
+
+- [x] There seems to be an error formatting a reference: I see “@gambaRevisitingGW150914Nonplanar2025” after “their waveforms need to be computed in the time domain” and reference 108.
+
+Fixed.
+
+- [x] Fig 5.11: In the legend I see some names that clearly refer to waveform models, but it is not clear what the labels with various numbers x N refer to, please clarify this.
+
+These are linear fits to the waveform evaluation time.
+I clarified it in the caption.
+
+###  Sec 6: Extrinsic parameters and signal projection 
+
+- [ ] Note 7: There is an unfinished sentence: “The formulas given here are again from”. Also, “GW” has not actually been defined and “gravitational waves” is used throughout the majority of the thesis, so I suggest expanding it here.
+
+
+
+- [ ] 6.1.1.3: I have mentioned this already, but just as a reminder, please wherever “precession” or “precessing” is mentioned, clarify that this refers to spin- induced precession.
+
+
 - [ ] Fig 6.1: This is slightly small for ease of interpretation, please make this figure
 - [ ] about twice as large as it is currently.
 - [ ] 6.3: The description of calibration here is quite limited. It would improve the
