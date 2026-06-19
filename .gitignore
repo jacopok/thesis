@@ -200,3 +200,5 @@ site_libs/bootstrap/bootstrap-icons.woff
 
 titlepage/*
 !rehear.bib
+**/*.quarto_ipynb
+**/figure-pdf/*
