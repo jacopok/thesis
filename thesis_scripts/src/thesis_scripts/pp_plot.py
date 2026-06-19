@@ -175,8 +175,8 @@ def pp_plot(u, confidence_intervals = (.68, .95, .997), ks_test_labels='floating
             
                 
             ax[2].text(
-                x[idx], D*1.1,
-                label, 
+                x=x[idx], y=D*1.1,
+                s=label, 
                 horizontalalignment=horizontalalignment,
                 verticalalignment=verticalalignment,
             )
@@ -187,14 +187,15 @@ def pp_plot(u, confidence_intervals = (.68, .95, .997), ks_test_labels='floating
             else:
                 y = 0.25
             
-            ax[2].text(
+            text = ax[2].text(
                 0.5, y,
-                label, 
+                s=label, 
                 transform=ax[2].transAxes,
-                path_effects=white_stroke,
                 horizontalalignment='center',
                 verticalalignment='center',
             )
+            
+            text.set_path_effects(white_stroke)
         
 
     for a in ax:
@@ -208,3 +209,12 @@ def pp_plot(u, confidence_intervals = (.68, .95, .997), ks_test_labels='floating
     ax[2].yaxis.tick_right()
 
     return fig, ax
+
+if __name__ == '__main__':
+    from thesis_scripts import plt
+
+    rng = np.random.default_rng(seed=1)
+    u = rng.uniform(size=1000)
+
+    fig, ax = pp_plot(u, confidence_intervals=(.68, .95, .997))
+    plt.show()

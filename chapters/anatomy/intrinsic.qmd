@@ -152,12 +152,16 @@ Modelling spin precession is generally accomplished through a change in referenc
 The prior to adopt for spin variables is a matter of convention. 
 Within `BILBY` [@romero-shawBayesianInferenceCompact2020], it is defined so that the dimensionless spin magnitudes $a_{i}$ are uniformly distributed in the range $[0, 0.99]$, while the spins are uniformly distributed on the sphere, meaning that $\phi_{12}$, $\phi_{JL}$, $\cos \theta_{1}$, $\cos \theta_{2}$ are uniformly distributed.
 
-If one wishes to restrict sampling to the aligned-spin case only, care must be taken to use compatible priors: given a prior $\pi(a)$ on the spin magnitude and a prior $\pi(\cos\theta)$ on the cosine of the tilt, the equivalent prior on the aligned spin component is 
+If one wishes to restrict sampling to the aligned-spin case only, care must be taken to use compatible priors: given a prior $\pi(|\chi|)$ on the spin magnitude and a prior $\pi(\cos\theta)$ on the cosine of the tilt, the equivalent prior on the aligned spin component $\chi_z$ is 
 $$
-\pi(\chi) = \int_{0}^{1} \text{d}a \int_{-1}^{1} \text{d}\cos\theta
-        \left[  \pi(a) \pi(\cos\theta) \delta(\chi - a \cos\theta) \right]\,.
+\pi(\chi_z) = \int_{0}^{1} \text{d}a \int_{-1}^{1} \text{d}\cos\theta
+        \left[  \pi(|\chi|) \pi(\cos\theta) \delta(\chi_z - |\chi| \cos\theta) \right]\,.
 $$
 
+If the prior on the spin magnitude $\pi(|\chi|)$ is taken to be uniform in the range $[0, \chi_{\text{max}}]$, then the result of this integral is [@langeRapidAccurateParameter2018, eq. A7]:
+
+$$p(\chi_{z}) = - \ln ( |\chi_{z} / \chi^{\text{max}}|) / 2 \chi^{\text{max}}\,.
+$${#eq-aligned-spin-prior-uniform-in-magnitude}
 
 ## Eccentricity
 

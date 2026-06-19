@@ -86,7 +86,7 @@ and I coauthored the paper which outlined its fix [@talbotInferenceFiniteTime202
 I also contributed to the collaboration in other ways, 
 such as acting as an internal paper and waveform model reviewee.
 By writing an interface for the eccentric waveform model `TEOBResumS-Dalí`,
-I contributed to a reanalysis of the first gravitational wave event performed including both eccentricity and orbital precession [@gambaRevisitingGW150914Nonplanar2025].
+I contributed to a reanalysis of the first gravitational wave event performed including both eccentricity and spin-induced orbital precession [@gambaRevisitingGW150914Nonplanar2025].
 
 The Einstein Telescope collaboration (@sec-einstein-telescope) published a white paper [@abacScienceEinsteinTelescope2026]
 outlining the detector's capabilities. I contributed to its section 8,

@@ -226,7 +226,7 @@ It can be shown that this sum converges to the correct value in the $n_\text{ite
 These weights can also be used to estimate the posterior as follows: take the points $\theta_{i}$ and assign to each of them a weight 
 $$
 p_{i} = \frac{w_{i} L_{i}}{Z}\,.
-$$
+$${#eq-weights-nested-sampling}
 
 These weighted samples (see @sec-weighted-samples) represent the posterior.
 It is readily seen that these weights add to 1, and heuristically they are computed as one might expect, by multiplying the prior mass and likelihood value for each of the regions we have subdivided the prior volume into.
@@ -249,7 +249,7 @@ While the current set of live points is often used as a guide, the statistical p
 
 The way most nested sampling software implements likelihood-restricted prior sampling starts from the assumption that the prior is uniform in the box $[0, 1]^{d}$.
 
-However, we can generalize this to non-uniform priors: for any given prior $\pi(\theta)$ we want to use, we need to find a mapping $g\colon [0, 1]^{d} \to \mathbb{R}^{d}$  between the unit $d$-dimensional box and our physical prior space, such that if $u \sim \mathcal{U}([0, 1]^{d})$, then $g(u) \sim \pi$, i.e. mapping uniformly-distributed random numbers onto values distributed according to our prior.
+We can, however, use arbitrary non-uniform priors: for any given prior $\pi(\theta)$ we want to use, we need to find a mapping $g\colon [0, 1]^{d} \to \mathbb{R}^{d}$  between the unit $d$-dimensional box and our physical prior space, such that if $u \sim \mathcal{U}([0, 1]^{d})$, then $g(u) \sim \pi$, i.e. mapping uniformly-distributed random numbers onto values distributed according to our prior.
 
 If our prior is _separable_, i.e. $\pi (\theta) = \prod_{i=1}^{d} \pi_{i}(\theta_{i})$, then the problem is solvable analytically: the prior transform map will be  such that
 $$
@@ -262,11 +262,11 @@ $$
 and $\text{CDF}^{-1}$ is its inverse. 
 The cumulative distribution can also be computed from samples, so in the case of separate priors we need not have an analytical expression for them.
 
-In the non-separable case there is no general procedure to accomplish this, which is equivalent to stating that there is no algorithm to "analytically" sample from an arbitrary distribution.
+In the non-separable case, while it may be mathematically possible to define the transform $g$ corresponding to the distribution $\pi$, there is no general procedure to obtain it; equivalently, there is no algorithm to "analytically" sample from an arbitrary distribution $\pi$.
 
 It is still possible to work with non-separable priors:
-if samples from the prior are available, one could model it with a normalizing flow (@sec-normalizing-flows), or if its density function is known one could perform the analysis with an approximate analytic prior and then reweight the samples as described in @sec-weighted-samples.
-These approaches are, however, subject to potential pitfalls (failed convergence, low efficiency, dependence on hyperparameters).
+for example, one could model it with a normalizing flow (@sec-normalizing-flows), or if its density function is known one could perform the analysis with an approximate analytic prior and then reweight the samples as described in @sec-weighted-samples.
+These approaches are, however, subject to potential pitfalls (failed convergence, low sample efficiency, dependence on hyperparameters), and their performance needs to be studied on a case-by-case basis.
 
 ### Model comparison with nested sampling
 

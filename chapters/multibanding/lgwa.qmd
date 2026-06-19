@@ -52,7 +52,7 @@ With the former option, a lander could directly target the deployment region; wi
 @gobeSeismicInvestigationLunar2025 identified a potential landing site in the lunar north polar region, at latitude 88.389
 and longitude 280.76 degrees, which could be used to then deploy seismometers in a nearby PSR, around the latitude 88.50 and longitude 290.63 degrees.
 This PSR lies roughly between the Hermite A and Hinshelwood craters.
-We show these locations in figure @fig-lgwa-landing-site; useful free and interactive mapping tools to explore them include [LROC Norther Polar Mosaic](https://lroc.im-ldi.com/images/gigapan) and  [Quickmap](https://bit.ly/4bFltcB).
+We show these locations in figure @fig-lgwa-landing-site; useful free and interactive mapping tools to explore them include [LROC Northern Polar Mosaic](https://lroc.im-ldi.com/images/gigapan) and  [Quickmap](https://bit.ly/4bFltcB).
 
 ![LGWA proposed landing site on the North Pole (right blue dot) and PSR (left blue dot), in 3D perspective. The color on the lunar surface indicates maximum summer temperatures, ranging from 50K (deep blue), through 100K (white) to red (150K or more). The Earth's and Sun's apparent orbits are shown for reference. The large crater whose rim is visible to the right is Hermite A. This figure was generated with `QuickMap` [@LunarLROCQuickMap].](figures/quickmap-lroc-2.png){#fig-lgwa-landing-site}
 
@@ -642,8 +642,22 @@ Furthermore, the LGWA would be able to precisely measure the excitation of lunar
 This would provide insights into the lunar interior structure, enabling the exploration of lunar origin models.
 
 The formation mechanism of the Moon could also be investigated, as is not a settled debate: the giant impact scenario, in which a large planetary object dubbed _Theia_ impacted a young Earth forming a disk of debris which coalesced into our satellite, is the dominant theory, but it does have issues. 
-The _isotopic crisis_ is the problem posed by the observation that the Earth and Moon's mantles have nearly identical ratios of isotopes such as $^{17}\text{O} / ^{16}\text{O}$, $^{50}\text{Ti} / ^{47}\text{Ti}$ and $^{182}\text{W} / ^{184}\text{W}$. This is unlike any other body in the Solar System, for which these ratios are significantly different, and is hard to explain under the giant impact scenario. 
-Mapping the composition of the lunar interior, which can be accomplished through seismic observations, will aid in the resolution of this problem.
+The _isotopic crisis_ is the problem posed by the observation that the Earth and Moon's mantles have nearly identical ratios of isotopes such as $^{17}\text{O} / ^{16}\text{O}$, $^{50}\text{Ti} / ^{47}\text{Ti}$ and $^{182}\text{W} / ^{184}\text{W}$. 
+Simulations show that, under the giant impactor scenario, a majority of the Moon's mass would be inherited from the impactor, while only a relatively small fraction of the Earth's mass would be.
+Therefore, we expect different isotopic ratios: the Earth and the impactor, having
+formed independently, are likely to have different isotopic compositions [@meloshNewApproachesMoons2014].
+Indeed, the composition of other objects in the Solar System such as Mars
+is quite different from the Earth's.
+
+There are a number of theories proposed to solve this issue, including 
+some mechanism for material equilibration between a proto-Earth and
+the orbiting disk that would become the Moon, and a different description
+of the impact, both in terms of improving numerical simulations and
+reevaluating their assumptions [@meloshNewApproachesMoons2014].
+
+Mapping the composition of the lunar interior, 
+which can be accomplished through seismic observations, 
+will aid in the resolution of this problem.
 
 ### Gravitational wave sources
 
@@ -736,7 +750,33 @@ We perform these injections with the following software:
 - prior distributions and interfacing across modules are handled through [`bilby`](https://github.com/bilby-dev/bilby) [@ashtonBilbyUserfriendlyBayesian2019];
 - for sampling we use [`nessai`](https://github.com/mj-will/nessai) [@williamsNestedSamplingNormalising2021].
 
-For more details on the specific priors we employ and other details, see @tissinoGeometryLunarGravitational2026.
+```{python}
+#| label: tbl-priors-full-analysis
+#| tbl-cap: Priors and injected values for our GW250114-like injection. The notation $[a, b] + c$ represents the interval $[a+c, b+c]$. The timing parameter $\Delta t$ represents a deviation from the injected value, a GPS time for the merger of 1420878140.0 seconds, as measured at the location of the LGWA at this time. Phase is not included in this list as we do not explicitly sample over it, but by using a phase-marginalized likelihood we implicitly employ a uniform prior in $[0, 2 \pi]$. 
+
+from thesis_scripts import data_path
+from IPython.display import Markdown
+
+string = """| Parameter        |   Injected value | Unit      | Prior function              | Prior range                                  |
+|:------------|---------------------------:|:----------|:----------------------------|:---------------------------------------------|
+| $\mathcal{M}$|       31.2718    | $M_\odot$ | Uniform                     | $[-2, 2]\\times 10^{-3} M_\odot + \mathcal{M}_0$ |
+| $q$|        0.98  |           | Uniform                     | [0.125, 1]                                   |
+| $d_L$|      414     | Mpc       | Uniform in the source frame (@eq-uniform-source-frame-volume) | [100, 1000]                                  |
+| $\\theta_{JN}$|        0.7  | rad       | Sine                        | [0, $\pi$]                                   |
+| $\psi$|        1.3   | rad       | Uniform                     | [0, $\pi$]                                   |
+| $\mathrm{RA}$|        2.3   | rad       | Uniform                     | [0, 2$\pi$]                                  |
+| $\mathrm{DEC}$|        0.2  | rad       | Cosine                      | [$-\pi / 2$, $\pi / 2$]                      |
+| $\Delta t$ |        0         | s         | Uniform                     | [-2, 2]                                      |
+| $\chi_1$|       -0.05 |           | Aligned spin (@eq-aligned-spin-prior-uniform-in-magnitude)                | [-0.9, 0.9]                                  |
+| $\chi_2$|        0.01 |           | Aligned spin (@eq-aligned-spin-prior-uniform-in-magnitude)                | [-0.9, 0.9]                                  |
+| $m_1$|       36.3    | $M_\odot$ | Constraint                  | [5, 100]                                     |
+| $m_2$|       35.5    | $M_\odot$ | Constraint                  | [5, 100]                                     |
+"""
+
+Markdown(string)
+```
+
+For more details, see @tissinoGeometryLunarGravitational2026 and its attached data release [@tissinoGeometryLunarGravitational2026a].
 
 #### Limitations {#sec-lgwa-pe-limitations}
 
@@ -778,23 +818,6 @@ Working directly with the zero-noise likelihood ratio simplifies the problem, me
 Furthermore, we are performing inference assuming that the signal's presence is known, and no other signals nor non-Gaussian noise sources are present in the data.
 As we transition from forecasting to developing the analysis infrastructure for the mission, these issues can be addressed, eventually leading to a realistic simulation and blind analysis of simulated time-domain seismometer data.
 
-#### Impact of non-zero Gaussian noise
-
-Throughout this thesis we perform zero-noise injections, meaning that 
-we assume the realization of the Gaussian noise process is the maximum-likelihood one, $n=0$; 
-however, we still compute scalar products (@eq-noise-weighted-inner-product) accounting for 
-the distribution it is drawn from, which we describe through the spectral density $S_n(f)$.
-
-If the Fisher approximation holds, _i.e._ the posterior distribution is Gaussian in the parameters,
-then the effect of the noise realization is to bias the mean of the distribution away
-from its true value, but it will leave the covariance unchanged, as we can see from @eq-linearized-signal-approximation.
-
-Under realistic conditions, this will not be the case, and we expect to see noise-driven fluctuations 
-in the covariance as well. However, we do expect the zero-noise posterior distribution $p(\theta | d=h_0)$ 
-to be representative of the distributions $p(\theta | d = h_0 + n)$. 
-In order to validate this, we perform a campaign of 250 injections, 
-in the same scenario except for a different noise realization, and compare them to the zero-noise case.
-
 
 #### Sky localization
 
@@ -833,6 +856,122 @@ as we discussed in @sec-timing-general, ground based observations often use a ge
 While the chirp mass itself does not have a particular astrophysical significance, these analyses provide an indication of the LGWA's sensitivity to tiny fluctuations at low PN order, which affect the long-duration frequency evolution of the signal.
 We expect this to mean it will be very effective at constraining other effects, such as contributions from dark matter in the environment, or eccentricity, both of which modify the phase of the binary at low frequencies.
 
+### Impact of non-zero Gaussian noise
+
+Throughout this thesis we perform zero-noise injections, meaning that 
+we assume the realization of the Gaussian noise process is the maximum-likelihood one, $n=0$; 
+however, we still compute scalar products (@eq-noise-weighted-inner-product) accounting for 
+the distribution it is drawn from, which we describe through the spectral density $S_n(f)$.
+
+If the Fisher approximation holds, _i.e._ the posterior distribution is Gaussian in the parameters,
+then the effect of the noise realization is to bias the mean of the distribution away
+from its true value, but it will leave the covariance unchanged, as we can see from @eq-linearized-signal-approximation.
+
+Under realistic conditions, this will not be the case, and we expect to see noise-driven fluctuations 
+in the covariance as well. However, we do expect the zero-noise posterior distribution $p(\theta | d=h_0)$ 
+to be _representative_ of the distributions $p(\theta | d = h_0 + n)$ in some sense.
+In this section we investigate the impact of non-zero Gaussian noise realizations on our GW250114 injection.
+
+In order to to so, we need to explore the space of distributions $p(\theta | d = h_0 + n)$ with varying noise $n \sim \mathcal{L}(n)$,
+which requires a representative number of noise realizations, at least in the hundreds. 
+
+Repeating the same injection we performed hundreds of times is not possible for us due to computational constraints.
+In order to circumvent this issue, we take two complementary approaches. 
+The first (@sec-restricted-noisy-pe) is direct: we perform a campaign of 250 injections, 
+all identical except for a different noise realization, and compare them to the corresponding zero-noise injection.
+To reduce the computational expense of the task, however, we perform these
+in a simplified scenario: we condition on the injected values for intrinsic parameters,
+use a phase-marginalized likelihood, and only sample over a reduced parameter space, including 
+time, sky position, distance, polarization and inclination angle.
+
+The second approach (@sec-full-noisy-reweighting) is more computationally efficient, 
+and it allows us to use the full parameter space, but it comes at the expense of a potential bias. 
+We start from samples obtained in the zero-noise case, 
+define the likelihood with a noise realization, and reweight them 
+as described in @sec-weighted-samples, with weights
+
+$$ w_i = \frac{\mathcal{L}(d = h_0 + n | \theta_i)}{\mathcal{L}(d = h_0 | \theta_i)}\,.
+$${#eq-noisy-reweight-correction}
+
+The concern, as usual with reweighting, is that this procedure might fail to 
+accurately model regions in the parameter space which are not adequately covered by the
+noiseless posterior distribution.
+
+In all cases, we are able to avoid simulationg full-length data 
+by exploiting the properties of relative binning summary data, 
+as described in @sec-noisy-relative-binning.
+
+The results obtained with the two approaches are discussed in 
+@sec-restricted-noisy-pe and @sec-full-noisy-reweighting respectively.^[For clarity, we also note here that the results here are not expected 
+to produce a diagonal $p$-$p$ plot (@sec-pp-plot): for that to be true, we 
+would need to vary the injected value as well as the noise realization.
+For example, the mass ratio we are injecting is close to 1; with the 
+typical uncertainties of this measurement, the injected 
+value will always correspond to a high quantile of the distribution.
+This is expected and does not indicate a bias in our setup.]
+
+These injections are closer to a realistic scenario than the zero-noise case, but still not fully realistic: they are performed assuming that the noise is Gaussian, and colored according to a known power spectral density; neither of these will be true in practice.
+
+#### Restricted noisy parameter estimation {#sec-restricted-noisy-pe}
+
+We perform a series of 250 injections with the same prior assumptions and injected values reported in @tbl-priors-full-analysis, but fixing chirp mass, mass ratio, and spins to their injected valus. 
+For each injection, we keep an identical analyis setup, and only vary the noise realization.
+Furthermore, we perform one extra reference analysis the same setup but with a noise realization $n=0$.
+
+![Boxplot comparing several summary statistics between the noisy and zero-noise case, for our campaign of injections. $I_{90} (p)$ denotes the 90 percent symmetric interval for paramer $p$. $\Delta \Omega$ denotes the 90% HPD area in the sky. For all summary statistics, we report the ratio of their values in the noisy injections versus the zero-noise case. We show this as follows: an orange line denotes the distribution median, a box around it shows the 25-75th percentile range, whiskers show the 5th and 95th percentiles, and outliers beyond this range are individually shown as circles.](figures/summary_boxplot_injections.pdf){#fig-boxplot-noisy-injections}
+
+In figure @fig-boxplot-noisy-injections we show the distribution of summary statistics obtained in the noisy 
+case, compared to the zero-noise one. 
+As a general pattern, we can see that for most parameters the distribution of the noisy statistics is quite close to the zero-noise case. 
+The width of the distribution varies significantly across parameters. For example, the polarization angle is nearly unconstrained in all cases, resulting in nearly identical intervals.
+
+Other parameters exhibit more variation, but the value 1 (_i.e._ the summary statistic being equal to the zero-noise case) is generally quite close to the median of the distribution.
+The main outlier is the luminosity distance, for which the interval width in the noisy case is systematically larger than the zero-noise case: the difference is small (less than 10% additional width) but consistent across realizations.
+The reason for this effect is nonlinearity in the mapping between parameter and log-likelihood values; specifically, in this case, the degeneracy between distance and inclination.
+
+![Kernel density estimates of the marginal posterior distributions on luminosity distance in the zero-noise (thick, dashed) and noisy (thin, continuous) case. We highlight the boundaries of the symmetric 90% interval for each of these as vertical blue lines.](figures/distance_kdes.pdf){#fig-distance-kdes-noisy}
+
+As shown in @fig-distance-kdes-noisy, the right boundaries of the distance 90% credible intervals in the noisy case are well-represented by the zero-noise case, while a sistematic difference arises in the left boundaries, which corresponds to a peak at low values of distance appearing in many of these distributions.
+This peak corresponds to a significant amount of posterior mass in the $\theta_{\text{JN}} \approx 0$ region, which is excluded in the zero-noise case.
+
+Finally, we investigate whether the values for the maximum likelihood, maximum posterior, evidence and posterior volume in the noisy case are consistent with theoretical expectations.
+It can be shown [@guttmanLicenceBinAccurate2026, appendix C] that the log-likelihood is expected to be distributed according to $\log \mathcal{L} \sim \mathcal{N}(\mu = \rho_{\text{opt}}^2 / 2, \sigma = \rho_{\text{opt}}^2)$, where $\rho_{\text{opt}}$ is the optimal SNR (@eq-optimal-snr).
+Then, when comparing with the noise-free case, we expect to see that _e.g._ the ratio of log-likelihood peaks will be distributed according to $\log \mathcal{L} / \log \mathcal{L}_{n=0} \sim \mathcal{N}(\mu = 1, \sigma = 2/\rho_{\text{opt}})$.
+
+![Boxplot comparing sampling summary statistics obtained with our injection campaigns. For all summary statistics, we report the ratio of their values in the noisy injections versus the zero-noise case. The quantiles shown are defined as in @fig-boxplot-noisy-injections.](figures/summary_boxplot_like.pdf){#fig-boxplot-noisy-likes}
+
+As shown in @fig-boxplot-noisy-likes, this expectation also holds when considering the maximum value of the log-posterior, as well as the log-evidence (for signal against noise, _i.e._ the integral of the residual likelihood).
+It appears that the tails of the distribution of these statistics in our noisy injections are slightly less populated 
+than what one might expect based on a normal distribution. 
+
+#### Full noisy posterior reweighting {#sec-full-noisy-reweighting}
+
+In order to estimate the effect of noise with the full parameter space, we 
+reweight the samples obtained in zero noise with 1000 realizatons of the noisy likelihood.
+We can quantify the extent to the reweighted samples accurately describe the distribution
+they ought to be drawn from with the effective sample size (@eq-effective-sample-size). 
+We start from $2.6 \times 10^4$ posterior samples, and as @fig-sampling-efficiencis-noisy shows, are sometimes left with less than a hundred effective samples after the reweighting procedure.
+
+However, as that figure also show, there is an alternative: we can perform the reweighting starting from the full set of $1.7 \times 10^5$ nested samples.
+These are already weighted, with weights given by @eq-weights-nested-sampling, which we can update by multiplying them by the factor in @eq-noisy-reweight-correction.
+
+![Sampling efficiencies for the reweighting approach, when starting from either equally-weighted posterior samples or nested samples.](figures/sample_efficiencies.pdf){#fig-sampling-efficiencis-noisy}
+
+In @fig-sampling-efficiencis-noisy we compare 
+the sample efficiencies obtained when starting from the nested
+samples to the ones we get with the posterior samples. 
+The increase in median sample efficiency is by a factor 3 compared to 
+what we get by weighting posterior samples, and the tail toward
+lower sample efficiencies is significantly less pronounced. 
+Heuristically, the nested samples do not only cover the typical posterior 
+volume in the baseline, zero-noise scenario, 
+but also provide coverage of regions which are unlikely with it, 
+but which may be more likely with a given noise realization.
+
+![Boxplot comparing several summary statistics obtained with the reweighting approach for 1000 different noise realizations. For all summary statistics, we report the ratio of their values in the noisy injections versus the zero-noise case. The quantiles shown are defined as in @fig-boxplot-noisy-injections.](figures/summary_boxplot_reweight.pdf){#fig-boxplot-noisy-reweight}
+
+In @fig-boxplot-noisy-reweight we show the r
+
 
 ## Reference frames for long observations {#sec-lgwa-reference-frames}
 
@@ -842,7 +981,7 @@ LGWA observations of stellar mass binaries are generally at least a month long, 
 This would seem to indicate that we should analyze our signals from the Solar System Barycenter frame; however, that is not actually necessary. 
 We need a frame that is _comoving_ with the SSB, but not necessarily _centered_ there, and this is an important distinction for the LGWA.
 Let us consider again the example from @fig-projected-lgwa-waveforms-ratio, only now we shall compare the phases in two different reference frames: one centered at the SSB, and one comoving with the SSB, but centered close to the Moon's location when it receive the merger.
-For clarity, we also switch to a linear scale in frequency
+For clarity, we also switch to a linear scale in frequency.
 
 ```{python}
 #| label: fig-projected-lgwa-waveforms-ratio-ssb
@@ -1008,7 +1147,7 @@ In @fig-timing-lgwa-by-frequency we vary the frequency $f$ and, for each of its 
 We then show these 90% widths as a function of frequency. 
 One can see a minimum around 0.56Hz, just above the point where the LGWA's sensitivity is best.
 
-![Spatial variation of the timing uncertainty for our GW250114-like injection. ](figures/time_std_solar_system.png){#fig-timing-lgwa-solar-system width=80%}
+![Spatial variation of the timing uncertainty for our GW250114-like injection. ](figures/time_std_solar_system.pdf){#fig-timing-lgwa-solar-system width=80%}
 
 In @fig-timing-lgwa-solar-system, instead, we show the spatial variation of the timing uncertainty by fixing three values of $f$, which include the frequency of the global minimum, one lower frequency, and the merger. 
 We also fix three orthogonal spatial slices, each passing through the global minimum, and compute the timing uncertainty in these slices, so as to show its 3D structure. 

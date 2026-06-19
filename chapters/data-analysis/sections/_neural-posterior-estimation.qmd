@@ -117,7 +117,7 @@ Let us define the number of __effective samples__ [@augustinekongNoteImportanceS
 
 $$
 n_\text{eff} = \frac{\left( \sum_{i}w_{i} \right)^{2}}{\sum_{i}w_{i}^{2}}\,,
-$$
+$${#eq-effective-sample-size}
 
 and the __sample efficiency__  $\epsilon =n_\text{eff} / n$.
 

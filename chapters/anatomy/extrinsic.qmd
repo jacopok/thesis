@@ -57,7 +57,6 @@ The spin-weighted spherical harmonics are functions of the orientation
 of the source, parametrized as $\iota$ (inclination angle, between the 
 observation direction and the source angular momentum) and $\phi_0$ (initial phase 
 of the source's rotation).
-The formulas given here are again from 
 
 Explicitly, they are [@ajithDataFormatsNumerical2011]:
 
@@ -76,7 +75,7 @@ $${#eq-wigner-d-functions}
 
 where $k_1 = \max(0, m-s)$ and $k_2 = \min (\ell + m, \ell - s)$.
 
-Note that in the GW case the label for the harmonics $Y$ is $-2$, but the parameter $s$ in the $d$-function is 
+Note that in the gravitational wave case the label for the harmonics $Y$ is $-2$, but the parameter $s$ in the $d$-function is 
 equal to $+2$. 
 
 :::
@@ -372,7 +371,7 @@ $${#eq-uniform-source-frame-volume}
 
 ```{python}
 #| label: fig-luminosity-distance-priors
-#| fig-cap: "Cosmological priors for luminosity distance."
+#| fig-cap: "Cosmological priors for luminosity distance. The labels in the legend denote the quantity each prior is uniform over. All priors have been normalized so that they integrate to 1 over the range shown."
 
 import numpy as np
 from thesis_scripts import plt
@@ -388,15 +387,17 @@ dV_dz = cosmo.differential_comoving_volume(z) * 4 * np.pi * u.steradian
 dL = cosmo.luminosity_distance(z).to(u.Gpc)
 dd_dz = dL / (1+z) +  ac.c * (1+z) / cosmo.H(z)
 
-normalize = lambda x :  x.to(u.Gpc**2) / np.max(x.to(u.Gpc**2))
+# normalize = lambda x :  x.to(u.Gpc**2) / np.max(x.to(u.Gpc**2))
+normalize = lambda x :  (x.to(u.Gpc**2) / np.trapz(x, x=dL).to(u.Gpc**3)).to(u.Gpc**(-1))
 
-plt.plot(dL, normalize(dL**2), label='Luminosity volume')
 plt.plot(dL, normalize(1/(1+z)*dV_dz / dd_dz), label='Source frame volume')
-plt.plot(dL, normalize(dV_dz / dd_dz), label='Comoving frame volume')
+plt.plot(dL, normalize(dL**2), label='Luminosity volume', ls='--')
+plt.plot(dL, normalize(dV_dz / dd_dz), label='Comoving frame volume', ls='--')
+plt.xlim(dL[0].value, dL[-1].value)
+plt.ylim(0, 0.5)
 plt.legend()
-plt.yticks([])
 plt.xlabel('Distance [Gpc]')
-plt.ylabel('Probability density, arbitrary scale')
+plt.ylabel('Probability density [Gpc$^{-1}$]')
 plt.show()
 ```
 
@@ -404,7 +405,7 @@ In @fig-luminosity-distance-priors we visually compare some options for cosmolog
 
 - the Euclidean "luminosity volume" prior $\pi(d_L) \propto d_L^2$;
 - the "comoving frame volume" prior, uniform in $\text{d}V_c / \text{d}d_L$;
-- the "source frame volume" prior, given in @eq-uniform-source-frame-volume.
+- the "source frame volume" prior, given in @eq-uniform-source-frame-volume; this is the distribution which we would expect binary mergers to follow in the Universe if the merger rate were constant as a function of time.
 
 ### Timing {#sec-timing-general}
 
@@ -550,6 +551,8 @@ Over the first observing runs for the LVK collaboration,
 the typical order of magnitude for the $1\sigma$ width of the posterior predictive distribution 
 on the calibration envelope was $\delta A \sim \text{few} \times 10^{-2}$ and $\delta \phi \sim \text{few deg}$.
 
+
+
 ## Antenna patterns {#sec-antenna-patterns}
 
 Antenna patterns allow us to compute the scalar strain measured by a detector, $h(t)$, 
@@ -584,10 +587,10 @@ $$
 Let us start with a derivation of the antenna pattern for an interferometric detector in the static limit, also called long-wavelength approximation, in which the gravitational perturbation $h_{ij}$ is taken to be constant [@essickFrequencydependentResponsesThird2017]. This is approximately valid when the wavelength of the gravitational wave is much longer than the round-trip travel time along the detector arm, $2L / c$ where $L$ is the arm length. 
 Equivalently, it is approximately valid when the frequency $f_{0}$ of the gravitational wave is much smaller than the _free spectral range_ $f _\text{fsr} = c / 2L$.
 
-In this limit, the change in arm length can be taken to be $\delta L = L (h_{ij} / 2) e_{i} e_{j}$, where $e$ is the unit vector along the arm direction. 
+In this limit, the change in arm length can be taken to be $\delta L = L (h_{ij} / 2) l_{i} l_{j}$, where $n$ is the unit vector along the arm direction. 
 Measuring the relative displacement in arm length then means computing 
 $$
-\frac{\delta L }{L} = \frac{\delta L_{x}- \delta L_{y}}{L} = \underbrace{ \frac{1}{2} (e_{i}^{x} e_{j}^{x} - e_{i}^{y} e_{j}^{y}) }_{ D_{ij} } h_{ij}\,.
+\frac{\delta L }{L} = \frac{\delta L_{x}- \delta L_{y}}{L} = \underbrace{ \frac{1}{2} (l_{i}^{x} l_{j}^{x} - l_{i}^{y} l_{j}^{y}) }_{ D_{ij} } h_{ij}\,.
 $$
 
 For high-frequency observations performed with next generation detectors, the long wavelength approximation starts to break down. @fig-long-wavelength-essick illustrates this: already at a few kHz, ignoring this effect would correspond to a bias of tens of degrees in phase for the Einstein Telescope.
@@ -595,7 +598,7 @@ For high-frequency observations performed with next generation detectors, the lo
 
 ```{python}
 #| label: fig-long-wavelength-essick
-#| fig-cap: "Frequency-dependent antenna response as a function of the angle between source and detector arm. Adapted from figure 1 in @essickFrequencydependentResponsesThird2017, implementing their equation 4. The amplitude of the response is symmetric under sign flips for the observation direction, hence the curves from negative values are not visible in the upper panel."
+#| fig-cap: "Frequency-dependent antenna response as a function of the angle between source and detector arm. Adapted from figure 1 in @essickFrequencydependentResponsesThird2017, implementing their equation 4. The amplitude of the response is symmetric under sign flips for the observation direction, hence the curves from negative values are not visible in the upper panel. The color scale shows the cosine of the angle between the gravitational wave's propagation direction and the detector arm."
 
 from thesis_scripts import *
 import astropy.units as u
@@ -684,7 +687,7 @@ secax.set_xlabel('Frequency for a 10-km ET [Hz]')
 for ax in axs:
     ax.grid(which='both')
 
-_ = plt.colorbar(mappable=ScalarMappable(norm=norm, cmap=cmap), ax=axs, label='$n \cdot e_i$')
+_ = plt.colorbar(mappable=ScalarMappable(norm=norm, cmap=cmap), ax=axs, label='$n \cdot l_i$')
 ```
 
 

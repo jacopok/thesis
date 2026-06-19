@@ -13,7 +13,7 @@ Working with such a precisely-measured signal also required a reexamination
 of the analysis assumptions that were previously made, which led to 
 the identification and correction of a long-standing issue related to data normalization (@sec-windowing).
 
-Data analysis with the next generation of grond-based detectors, such as the Einstein Telescope, will require efficient parameter estimation techniques.
+Data analysis with the next generation of grond based detectors, such as the Einstein Telescope, will require efficient parameter estimation techniques.
 In @sec-einstein-telescope, we show that parameter estimation on a population scale
 is possible thanks to neural posterior estimation (@sec-neural-posterior-estimation). 
 While this work only included a subset of the sources we expect to be present in Einstein Telescope data, 
