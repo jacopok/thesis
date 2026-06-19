@@ -234,9 +234,9 @@ Done for both. I removed that sentence - I don't quite remember what I was tryin
 
 Done.
 
-- [ ] Fig 6.1: This is slightly small for ease of interpretation, please make this figure about twice as large as it is currently.
+- [x] Fig 6.1: This is slightly small for ease of interpretation, please make this figure about twice as large as it is currently.
 
-To check in the PDF.
+Done.
 
 - [ ] 6.3: The description of calibration here is quite limited. It would improve the thesis to expand this description (perhaps with an illustrative plot), and also make reference to the recent astrophysical calibrations enabled by GW observations: https://arxiv.org/pdf/2605.11703.
 
@@ -259,7 +259,9 @@ Furthermore, in this section I made some improvements to the figure showing the 
 
 - [ ] 7.1: “that of only one signal being present in the data”: specifically, the assumption is that there is only one signal in the data segment being analysed. We hope, and know, that there are many more signals in the data overall!
 
-- [ ] Fig 7.2: The text on this figure is too small to read comfortably, please either increase the text size or increase the figure size. Fig 7.2, 7.3, 7.4: These are all produced by Filippo Santoliquido. Is it possible to replace these with figures produced by the author? Other figures not produced by the author are taken from publications, but it seems unusual to have figures produced specifically for the thesis that are not produced by the author.
+- [ ] Fig 7.2: The text on this figure is too small to read comfortably, please either increase the text size or increase the figure size. 
+
+- [ ] Fig 7.2, 7.3, 7.4: These are all produced by Filippo Santoliquido. Is it possible to replace these with figures produced by the author? Other figures not produced by the author are taken from publications, but it seems unusual to have figures produced specifically for the thesis that are not produced by the author.
 
 - [ ] Figs 7.6 and 7.7: Text is a bit too small to read comfortably in the figure legends here, please make this text larger. The meanings of the different detector combinations described in the figure legends are not defined, please defined these (e.g., “2L A”, “2L MisA”, “LHI”, “CE”….)
 
