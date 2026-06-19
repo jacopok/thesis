@@ -778,6 +778,34 @@ Markdown(string)
 
 For more details, see @tissinoGeometryLunarGravitational2026 and its attached data release [@tissinoGeometryLunarGravitational2026a].
 
+```{python}
+#| label: tbl-priors-full-analysis-gw170817
+#| tbl-cap: Priors and injected values for our GW170817-like injection. The notation is the same as in @tbl-priors-full-analysis.
+
+from thesis_scripts import data_path
+from IPython.display import Markdown
+
+string = """
+| Parameter                                      |   Injected value | Unit      | Prior function              | Prior range                                                  |
+|:-----------------------------------------------|-----------------:|:----------|:----------------------------|:-------------------------------------------------------------|
+| $\mathcal{M}$                                  |        1.19757   | $M_\odot$ | Uniform                     | $[-2, 2]\times 10^{-6} M_\odot + \mathcal{M}_{\mathrm{inj}}$ |
+| $\chi_1$                                       |        0.0245664 |           | Uniform                     | [-0.8, 0.8]                                                  |
+| $\chi_2$                                       |       -0.0100164 |           | Uniform                     | [-0.8, 0.8]                                                  |
+| $\mathrm{DEC}$                                 |       -0.571666  | rad       | Cosine                      | $[-0.01, 0.01] + \mathrm{dec}_{\mathrm{inj}}$                |
+| $\lambda_1$                                    |      413.54      |           | Uniform                     | [0, 5000]                                                    |
+| $\lambda_2$                                    |      369.35      |           | Uniform                     | [0, 5000]                                                    |
+| $d_L$                                          |       37.2307    | Mpc       | Uniform in the source frame | [5, 100]                                                     |
+| $q$                                            |        0.762902  |           | Uniform                     | [0.5, 1]                                                     |
+| $\phi$                                         |        3.19071   |           | Uniform                     | [0, 2$\pi$]                                                  |
+| $\psi$                                         |        0.43413   | rad       | Uniform                     | [0, $\pi$]                                                   |
+| $\mathrm{RA}$                                  |        6.13476   | rad       | Uniform                     | $[-0.01, 0.01] + \mathrm{ra}_{\mathrm{inj}}$                 |
+| $\theta_{JN}$                                  |        2.43295   | rad       | Sine                        | [0, $\pi$]                                                   |
+| $\Delta t_{\mathrm{merger}}^{\mathrm{center}}$ |        0         | s         | Uniform                     | [-3, 3]                                                      |
+"""
+
+Markdown(string)
+```
+
 #### Limitations {#sec-lgwa-pe-limitations}
 
 The procedure we employ regarding the response is equivalent to performing inference assuming that 
@@ -947,12 +975,13 @@ than what one might expect based on a normal distribution.
 #### Full noisy posterior reweighting {#sec-full-noisy-reweighting}
 
 In order to estimate the effect of noise with the full parameter space, we 
-reweight the samples obtained in zero noise with 1000 realizatons of the noisy likelihood.
+reweight the samples obtained in zero noise for GW250114 (for injected values and priors see @tbl-priors-full-analysis) with 1000 realizatons of the noisy likelihood.
+
 We can quantify the extent to the reweighted samples accurately describe the distribution
 they ought to be drawn from with the effective sample size (@eq-effective-sample-size). 
-We start from $2.6 \times 10^4$ posterior samples, and as @fig-sampling-efficiencis-noisy shows, are sometimes left with less than a hundred effective samples after the reweighting procedure.
+We start from $2.6 \times 10^4$ posterior samples, and as @fig-sampling-efficiencis-noisy shows, we are sometimes left with less than a hundred effective samples after the reweighting procedure: too few to make robust claims.
 
-However, as that figure also show, there is an alternative: we can perform the reweighting starting from the full set of $1.7 \times 10^5$ nested samples.
+However, as that figure also shows, there is an alternative: we can perform the reweighting starting from the full set of $1.7 \times 10^5$ nested samples.
 These are already weighted, with weights given by @eq-weights-nested-sampling, which we can update by multiplying them by the factor in @eq-noisy-reweight-correction.
 
 ![Sampling efficiencies for the reweighting approach, when starting from either equally-weighted posterior samples or nested samples.](figures/sample_efficiencies.pdf){#fig-sampling-efficiencis-noisy}
@@ -970,8 +999,17 @@ but which may be more likely with a given noise realization.
 
 ![Boxplot comparing several summary statistics obtained with the reweighting approach for 1000 different noise realizations. For all summary statistics, we report the ratio of their values in the noisy injections versus the zero-noise case. The quantiles shown are defined as in @fig-boxplot-noisy-injections.](figures/summary_boxplot_reweight.pdf){#fig-boxplot-noisy-reweight}
 
-In @fig-boxplot-noisy-reweight we show the r
+In @fig-boxplot-noisy-reweight we show the fluctuations of some summary statistics describing the posterior distributions, analogously to @fig-boxplot-noisy-injections. 
+The results are generally similar: the widths and sky areas in the zero-noise case are near the bulk of their distribution in the noisy case. 
+The distance distributions are systematically wider in the noisy case than the zero-noise one, as observed in @fig-boxplot-noisy-injections.
 
+For the sky area and coordinates, we observe a trend reversal: while in @fig-boxplot-noisy-injections we typically observed narrower distributions in the noisy case than the zero-noise one, in @fig-boxplot-noisy-reweight we find them to be systematically broader. 
+The cause of this is unclear: for the sky areas,
+it may be related to imprecision of the kernel density
+estimate we use when working with weighted samples.
+However, the trend is also observed in right ascension
+and declination alone: no density estimate is required
+to compute their quantiles, so it cannot be the sole cause.
 
 ## Reference frames for long observations {#sec-lgwa-reference-frames}
 
@@ -1229,11 +1267,13 @@ In order to validate this, we set up 12 injections with the same parameters as o
 
 The corresponding waveforms for the 11 and 12-month cases are shown in @fig-waveforms-lgwa-injections. 
 
-![Waveforms for the 11 and 12 month normalized injections, shown in characteristic strain, together with the LGWA PSD and the artificial PSD used in the "uniform SNR" scenario.](figures/lgwa_waveforms_month_by_month.pdf){#fig-waveforms-lgwa-injections width=80%}
+![Waveforms for the 11 and 12 month normalized injections, shown in characteristic strain, together with the LGWA PSD and the artificial PSD used in the "uniform SNR" scenario.](figures/lgwa_waveforms_month_by_month.pdf){#fig-waveforms-lgwa-injections width=70%}
 
 According to @eq-wen-chen-area the sky localization area should scale inversely with $A_{\perp}$, which we compute by projecting the detector's orbit onto the plane orthogonal to the injected source's direction, and then taking its convex hull, as shown in @fig-trajectories-lgwa-injections.
 
-![Top panel: convex hulls for the 12 month normalized injections, projected onto a plane orthogonal to the gravitational wave propagation direction. The line thickness is proportional to the SNR integrand as a function of time, defined in @nte-snr-integrand. Bottom panel: SNR integrand as a function of time on a linear axis.](figures/trajectories.png){#fig-trajectories-lgwa-injections width=100%}
+![Top panel: convex hulls for the 12 month normalized injections, projected onto a plane orthogonal to the gravitational wave propagation direction. The line thickness is proportional to the SNR integrand as a function of time, defined in @nte-snr-integrand. Bottom panel: SNR integrand as a function of time on a linear axis.](figures/trajectories.png){#fig-trajectories-lgwa-injections width=90%}
+
+![Scaling of the geometric and statistical areas.](figures/areas_appendix.pdf){#fig-geometric-statistical-areas width=70%}
 
 ::: {#nte-snr-integrand .callout-note collapse="true"}
 

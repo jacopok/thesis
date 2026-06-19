@@ -116,7 +116,7 @@ since it describes the geometric relation of the source and the observer: it is 
 
 Also see @romero-shawBayesianInferenceCompact2020 for the definitions of these parameters within `BILBY`.
 
-![Diagram of the angles involved in the description of generic spins, from @dupletsaValidatingPriorinformedFishermatrix2025. ](figures/spin-angles.pdf){#fig-spin-diagram}
+![Diagram of the angles involved in the description of generic spins, from @dupletsaValidatingPriorinformedFishermatrix2025. ](figures/spin-angles.pdf){#fig-spin-diagram width=80%}
 
 Due to spin-induced precession, the orbital angular momentum $\vec{L}$ and the spins $\vec{S}$ are time-dependent. The total angular momentum $\vec{J}$ is not exactly conserved for an inspiralling, spin-precessing binary [@boyleGeometricApproachPrecession2011], but we can consider a reference frame aligned to its value early in the evolution of the binary, $\vec{J} = \lim_{ t \to -\infty }\vec{J}(t)$, so its angle with the observation direction $\theta_{\text{JN}}$ is a well-defined parameter [@prattenComputationallyEfficientModels2021].
 The magnitudes of the spins $a_{i}$ are exactly conserved. 

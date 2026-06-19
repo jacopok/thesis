@@ -35,6 +35,12 @@ The scientific potential for the Einstein Telescope is extremely wide, including
 CBC population studies, precision cosmology, multimessenger observations, and tests of general relativity. 
 A full description is beyond the scope of this thesis, and we refer the reader to some among the many works which describe it in detail [@branchesiScienceEinsteinTelescope2023;@abacScienceEinsteinTelescope2026;@ronchiniPerspectivesMultimessengerAstronomy2022].
 
+In a similar time frame, a detector dubbed Cosmic Explorer is planned in the United States [@reitzeCosmicExplorerUS2019]. 
+While it shares many similarities with the Einstein Telescope, 
+there are some major design differences between the two.
+Cosmic Explorer's planned arm length is 40km, significantly longer than any of the designs for the Einstein Telescope.
+
+
 In the remainder of this chapter we shall discuss the challenges which come when trying to perform parameter estimation with such a sensitive detector, and how some recent advancements in these techniques are allowing for systematic forecasting studies, which can help in informing the urgent choices that need to be made regarding the construction of this instrument.
 
 ## Data analysis challenges {#sec-einstein-telescope-challenges}

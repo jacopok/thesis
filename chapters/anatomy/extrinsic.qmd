@@ -281,7 +281,7 @@ $$
 where the sky position is parameterized by an azimuth $\phi \in [0, 2 \pi)$ and a colatitude $\theta \in (0, \pi)$, which is equal to $\pi / 2$ on the equator. 
 @fig-ra-dec-diagram illustrates the meaning of right ascension $\text{ra} = \phi$ and declination $\text{dec} = \pi / 2 - \theta$, a standard parameterization for positions in the sky. Declination is analogous to latitude, and it is equal to $0$ on the equator.
 
-![Diagram of the right ascension and declination coordinates, from @dupletsaValidatingPriorinformedFishermatrix2025.](figures/ra-dec.pdf){#fig-ra-dec-diagram}
+![Diagram of the right ascension and declination coordinates, from @dupletsaValidatingPriorinformedFishermatrix2025.](figures/ra-dec.pdf){#fig-ra-dec-diagram width=80%}
 
 When constraining the sky position of a given gravitational wave source, 
 we typically do not actually care about the error in the coordinates themselves but about 
