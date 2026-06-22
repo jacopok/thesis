@@ -277,7 +277,7 @@ def figure_2_lvk_calib_paper():
     feb_peak = np.median(get_fpeak(result_feb_wide['mass_1'], result_feb_wide['mass_2'], result_feb_wide['spin_1z'], result_feb_wide['spin_2z']))
 
     # Make plot
-    fig, [[ax1, ax2], [ax3, ax4]] = plt.subplots(2, 2, figsize=(30, 15), dpi=500, sharey=True, sharex=True)
+    fig, [[ax1, ax2], [ax3, ax4]] = plt.subplots(2, 2, figsize=(10, 6), dpi=200, sharey=True, sharex=True)
 
     # Plot GW250114 posteriors
     post_plot_jan_wide = plot_cal(result_jan_wide, ax1, ax3, color=paper_colors['C00Wide'], label='Calibrated', plot_type='fill')
@@ -312,57 +312,57 @@ def figure_2_lvk_calib_paper():
         phase_lower = env[4] 
 
         # Plot as a percentage
-        temp, = ax1.plot(freqs, 100*(amplitude_upper), ls = '-', color=colors[i], lw=4, label=labels[i]) 
+        temp, = ax1.plot(freqs, 100*(amplitude_upper), ls = '-', color=colors[i], lw=2, label=labels[i]) 
         prior_plots_jan.append(temp)
 
-        ax1.plot(freqs, 100*(amplitude_lower), ls = '-', color=colors[i], lw=4)
+        ax1.plot(freqs, 100*(amplitude_lower), ls = '-', color=colors[i], lw=2)
 
         # Plot in degrees
-        ax3.plot(freqs, (phase_upper)*180/np.pi, ls = '-', color=colors[i], lw=4)
-        ax3.plot(freqs, (phase_lower)*180/np.pi, ls = '-', color=colors[i], lw=4)
+        ax3.plot(freqs, (phase_upper)*180/np.pi, ls = '-', color=colors[i], lw=2)
+        ax3.plot(freqs, (phase_lower)*180/np.pi, ls = '-', color=colors[i], lw=2)
 
         # GW250207 only has the wide prior, which is used for both analyses
         if i==0:
             # Since the priors are the same, we will plot with a dashed line, so we can see both
             
             # First set up for the legend
-            temp, = ax2.plot(freqs, 100*(amplitude_upper), ls = '-', color=paper_colors['H1'], lw=4, label=labels[i])
+            temp, = ax2.plot(freqs, 100*(amplitude_upper), ls = '-', color=paper_colors['H1'], lw=2, label=labels[i])
             prior_plots_feb.append(temp)
 
             # Plot solid line underneath
             # Plot as a percentage
-            temp, = ax2.plot(freqs, 100*(amplitude_upper), ls = '-', color=colors[i], lw=4, label=labels[i])
+            temp, = ax2.plot(freqs, 100*(amplitude_upper), ls = '-', color=colors[i], lw=2, label=labels[i])
             prior_plots_feb.append(temp)
-            ax2.plot(freqs, 100*(amplitude_lower), ls = '-', color=colors[i], lw=4)
+            ax2.plot(freqs, 100*(amplitude_lower), ls = '-', color=colors[i], lw=2)
 
             # Plot in degrees
-            ax4.plot(freqs, (phase_upper)*180/np.pi, ls = '-', color=colors[i], lw=4)
-            ax4.plot(freqs, (phase_lower)*180/np.pi, ls = '-', color=colors[i], lw=4)
+            ax4.plot(freqs, (phase_upper)*180/np.pi, ls = '-', color=colors[i], lw=2)
+            ax4.plot(freqs, (phase_lower)*180/np.pi, ls = '-', color=colors[i], lw=2)
 
             # Plot dashed line on top
             linestyle=(0,(5,5))
             # Plot as a percentage
-            ax2.plot(freqs, 100*(amplitude_upper), ls = linestyle, color=paper_colors['H1'], lw=4, label=labels[i])
-            ax2.plot(freqs, 100*(amplitude_lower), ls = linestyle, color=paper_colors['H1'], lw=4)
+            ax2.plot(freqs, 100*(amplitude_upper), ls = linestyle, color=paper_colors['H1'], lw=2, label=labels[i])
+            ax2.plot(freqs, 100*(amplitude_lower), ls = linestyle, color=paper_colors['H1'], lw=2)
 
             # Plot in degrees
-            ax4.plot(freqs, (phase_upper)*180/np.pi, ls = linestyle, color=paper_colors['H1'], lw=4)
-            ax4.plot(freqs, (phase_lower)*180/np.pi, ls = linestyle, color=paper_colors['H1'], lw=4)
+            ax4.plot(freqs, (phase_upper)*180/np.pi, ls = linestyle, color=paper_colors['H1'], lw=2)
+            ax4.plot(freqs, (phase_lower)*180/np.pi, ls = linestyle, color=paper_colors['H1'], lw=2)
 
     # Label axes
-    font_size = 42
+    font_size = 42 / 2
     ax1.tick_params(labelsize=0.85 * font_size)
     ax2.tick_params(labelsize=0.85 * font_size)
     ax3.tick_params(labelsize=0.85 * font_size)
     ax4.tick_params(labelsize=0.85 * font_size)
-    ax1.tick_params(which='major',length=8)
-    ax1.tick_params(which='minor',length=6)
-    ax2.tick_params(which='major',length=8)
-    ax2.tick_params(which='minor',length=6)
-    ax3.tick_params(which='major',length=8)
-    ax3.tick_params(which='minor',length=6)
-    ax4.tick_params(which='major',length=8)
-    ax4.tick_params(which='minor',length=6)
+    ax1.tick_params(which='major',length=8/2)
+    ax1.tick_params(which='minor',length=8/2)
+    ax2.tick_params(which='major',length=8/2)
+    ax2.tick_params(which='minor',length=8/2)
+    ax3.tick_params(which='major',length=8/2)
+    ax3.tick_params(which='minor',length=8/2)
+    ax4.tick_params(which='major',length=8/2)
+    ax4.tick_params(which='minor',length=8/2)
     ax1.grid(visible=False)
     ax2.grid(visible=False)
     ax3.grid(visible=False)
@@ -376,8 +376,8 @@ def figure_2_lvk_calib_paper():
     labels_jan = ["Hanford and Livingston",]
     leg_feb = [(post_plot_feb_wide,prior_plots_feb[1]),(post_plot_feb_H1,prior_plots_feb[0])]
     labels_feb = ["Hanford, Livingston, Virgo","Hanford Only"]
-    ax1.legend(leg_jan,labels_jan,loc='upper left', prop={'size': 0.75 * font_size}, framealpha=0.7) 
-    ax2.legend(leg_feb,labels_feb,loc='upper left', prop={'size': 0.75 * font_size}, framealpha=0.7) 
+    ax1.legend(leg_jan,labels_jan,loc='lower right', prop={'size': 0.75 * font_size}, framealpha=0.7) 
+    ax2.legend(leg_feb,labels_feb,loc='lower right', prop={'size': 0.75 * font_size}, framealpha=0.7) 
 
     # Set different limits for the two plots as the signals from different frequency ranges
     ax1.set_xscale('log')

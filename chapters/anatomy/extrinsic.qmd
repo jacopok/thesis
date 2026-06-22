@@ -537,15 +537,27 @@ When analyzing data from a detector,
 we need to estimate strain based on some other physical quantity,
 such as the number of photons arriving at a photodiode
 or the displacement measured by a seismometer.
-This will come with some uncertainty 
-in the amplitude and phase of the measured strain.
 
-This is commonly modelled as a frequency-dependent deviation around the observed waveform, in the form^[The phase term can be substituted by an expression in the form $(2 +i \delta \phi(f)) / (2 - i \delta \phi(f))$, which is equivalent to third order in $\delta \phi$ and does not involve exponentials [@farrMODELLINGCALIBRATIONERRORS2014].]
+For ground-based interferometers, various data streams (_e.g._ the 
+residual test mass displacement and the analog control displacement) 
+are used to obtain a point estimate for the time-domain strain $h(t)$.
+Building and continuously validating this process is known as detector __calibration__,
+and the residual uncertainty in the amplitude and phase of the measured strain
+is called __calibration uncertainty__.
+
+Calibration uncertainty is commonly modelled as a frequency-dependent deviation 
+around the observed waveform, 
+in the form^[The phase term can be substituted by an expression in the form 
+$(2 +i \delta \phi(f)) / (2 - i \delta \phi(f))$, 
+which is equivalent to third order in $\delta \phi$ and does 
+not involve exponentials [@farrMODELLINGCALIBRATIONERRORS2014].]
 $$
 h_\text{obs}(f) = h_\text{true}(f) (1+\delta A(f)) \exp(i \delta \phi(f)) \,.
 $$
 
-It is common practice to model the functions $\delta A(f)$ and $\delta \phi(f)$ through a Gaussian Process [@cahillaneCalibrationUncertaintyAdvanced2017], whose parameters are inferred together with those of the gravitational wave source.
+It is common practice to model the functions $\delta A(f)$ and $\delta \phi(f)$ through a Gaussian Process [@cahillaneCalibrationUncertaintyAdvanced2017], 
+whose parameters are inferred together with those of the gravitational wave source;
+this 
 
 Over the first observing runs for the LVK collaboration, 
 the typical order of magnitude for the $1\sigma$ width of the posterior predictive distribution 
@@ -558,20 +570,34 @@ Based on publicly available data [@ligoscientificcollaborationGW250114DiscoveryP
 in the left panel of figure @fig-parameter-bias-calibration we show the difference in all parameter posteriors between these two analyses, both of which 
 used the `NRSur7dq4` waveform model [@varmaSurrogateModelsPrecessing2019].
 
-![Cumulative distributions for all sampled waveform parameters, comparing an analysis marginalized over calibration uncertainties and one which neglected them. The bias due to not including calibration is small.](figures/posterior_nocal_compared.pdf){#fig-parameter-bias-calibration}
+![Cumulative distributions for all sampled waveform parameters, comparing an analysis marginalized over calibration uncertainties and one which neglected them (_i.e._ setting all the calibration corrections to zero). The bias due to not including calibration is small for GW250114, and significantly higher for GW2502027.](figures/posterior_nocal_compared.pdf){#fig-parameter-bias-calibration}
 
 The right panel concerns another event: GW250207, which was detected a few weeks after GW250114; with an SNR of approximately 69, it placed as the second-clearest signal to date[@ligoscientificvirgoandkagracollaborationsGW240925GW250207Astrophysical2026].
 While the LIGO Livingston, LIGO Hanford and Virgo interferometers were all taking data, Hanford was not yet in observing mode.
 Hence, its data was not well-calibrated. 
 Typically, information about detector calibration comes 
 from _in-situ_ measurements;  
-for the first time, however, this signal was loud enough 
-to significantly inform the calibration of the Hanford detector,
-under the assumption that the 
+for the first time, however, this astrophysical signal was loud enough 
+to significantly inform the calibration of the Hanford detector.
 
-![Calibration envelopes for GW250114 and GW250207 at the LIGO Hanford detector. Adapted from figure 2 of @ligoscientificvirgoandkagracollaborationsGW240925GW250207Astrophysical2026, using publically available data from the releases [@collaborationDataReleaseGW2409252026;@ligoscientificcollaborationGW250114DiscoveryPaper2025].](figures/H1_calibration_comp.pdf){#fig-calibration envelopes}
+![Calibration envelopes for GW250114 and GW250207 at the LIGO Hanford detector. All posterior envelopes are showing the a 68% symmetric interval. The 60% width of the prior envelopes adopted is also shown with horizontal lines. Adapted from figure 2 of @ligoscientificvirgoandkagracollaborationsGW240925GW250207Astrophysical2026, using publically available data from the releases [@collaborationDataReleaseGW2409252026;@ligoscientificcollaborationGW250114DiscoveryPaper2025].](figures/H1_calibration_comp.pdf){#fig-calibration-envelopes}
 
+This can be seen in the right panel of @fig-calibration-envelopes, 
+where we compare the posterior predictive distribution on 
+the calibration envelope for the Hanford detector in two cases: 
+either an analysis of data from all three interferometers, or only from the
+Hanford detector itself. 
+Using data from LIGO Livingston and Virgo allows for a tighter constraint on
+the calibration of LIGO Hanford.
 
+In the left panel we provide a comparison with the
+posterior calibration envelope for the GW250114 event. 
+Besides being significantly narrower, it is near zero at all frequencies,
+indicating that the detector was properly calibrated at 
+that time.
+Indeed, the degree of bias observed when neglecting calibration 
+uncertainty (@fig-parameter-bias-calibration) is minimal for GW250114, while 
+it is significant for GW250207.
 
 ## Antenna patterns {#sec-antenna-patterns}
 

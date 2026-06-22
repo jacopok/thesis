@@ -80,22 +80,30 @@ The LIGO-Virgo-KAGRA collaboration recently concluded its fourth observing run,
 whose data is currently being analyzed.
 I was part of the team which wrote the discovery paper for the 
 exceptional gravitational wave event GW250114 (@sec-gw250114) [@abacGW250114TestingHawkings2025]. 
+I authored all figures in the main text except for figure 2, 
+and co-authored figures 2 and 3 in the Supplement.
+I was also responsible for the data release [@ligoscientificcollaborationGW250114DiscoveryPaper2025], 
+as well as coordinating with the 
+outreach team for the creation of various items, such as the infographic and image shown 
+[here](https://ligo.org/detections/gw250114-10-years-of-gravitational-wave-astronomy/).
 The analysis of this event helped in identifying an issue (@sec-windowing)
 in the way parameter estimation was performed in the collaboration,
-and I coauthored the paper which outlined its fix [@talbotInferenceFiniteTime2025].
+and I contributed to the presentation and correctness of the paper 
+which outlined its fix [@talbotInferenceFiniteTime2025].
 I also contributed to the collaboration in other ways, 
 such as acting as an internal paper and waveform model reviewee.
 By writing an interface for the eccentric waveform model `TEOBResumS-Dalí`,
-I contributed to a reanalysis of the first gravitational wave event performed including both eccentricity and spin-induced orbital precession [@gambaRevisitingGW150914Nonplanar2025].
+I contributed to a reanalysis of the first gravitational wave event performed 
+including both eccentricity and spin-induced orbital precession [@gambaRevisitingGW150914Nonplanar2025].
 
 The Einstein Telescope collaboration (@sec-einstein-telescope) published a white paper [@abacScienceEinsteinTelescope2026]
 outlining the detector's capabilities. I contributed to its section 8,
 with a discussion of the computational bottlenecks related to waveform evaluation.
 These are reported in this thesis' @sec-einstein-telescope-challenges, 
 which also includes the results of a series of papers
-led by Filippo Santoliquido [@santoliquidoClassifyingBinaryBlack2024;@santoliquidoFastAccurateParameter2025;@santoliquidoComparingNextgenerationDetector2025], 
-with whom I closely collaborated, related to 
+led by Filippo Santoliquido [@santoliquidoClassifyingBinaryBlack2024;@santoliquidoFastAccurateParameter2025;@santoliquidoComparingNextgenerationDetector2025], related to 
 population-scale data analysis with the Einstein Telescope.
+We collaborated closely, and I 
 
 The Lunar Gravitational Wave Antenna (LGWA) collaboration also published a white paper
 [@ajithLunarGravitationalwaveAntenna2025]. 
