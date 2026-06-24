@@ -415,7 +415,7 @@ We apply the interpolation approach here as well, pre-computing the position on 
  
 The results in figure @fig-position-interpolation-errors show that in order to
 achieve an error of $10^{-4}$ radians we need as many as 160 thousand interpolation points for the 10-year span we are considering. 
-The maximum phase error is computed by comparing the position error to the angular wavelength corresponding to the smallest angular wavelength in the LGWA band (i.e. the highest frequency): $c/(2 \pi \times 3 \mathrm{Hz}) \approx 1.6 \times 10^7 \mathrm{m}$.
+We compute the maximum phase error by comparing the position error to the angular wavelength corresponding to the smallest angular wavelength in the LGWA band (i.e. the highest frequency): $c/(2 \pi \times 3 \mathrm{Hz}) \approx 1.6 \times 10^7 \mathrm{m}$.
 This is the worst-case scenario, as to achieve it we would need a source at the upper edge of the detector's band to also be perfectly aligned with the position error vector $\vec{r} _\text{interp} - \vec{r}_\text{true}$.
 
 ```{python}
@@ -848,7 +848,7 @@ string = """| Parameter        |   Injected value | Unit      | Prior function  
 Markdown(string)
 ```
 
-For more details, see @tissinoGeometryLunarGravitational2026 and its attached data release [@tissinoGeometryLunarGravitational2026a].
+For more details, see @tissinoGeometryLunarGravitational2026 and the attached data release [@tissinoGeometryLunarGravitational2026a].
 
 In @tbl-priors-full-analysis-gw170817 we outline the injected parameters 
 for our GW170817-like binary neutron star injection. 
@@ -935,6 +935,8 @@ Working directly with the zero-noise likelihood ratio simplifies the problem, me
 Furthermore, we are performing inference assuming that the signal's presence is known, and no other signals nor non-Gaussian noise sources are present in the data.
 As we transition from forecasting to developing the analysis infrastructure for the mission, these issues can be addressed, eventually leading to a realistic simulation and blind analysis of simulated time-domain seismometer data.
 
+Finally, the impact of working in the zero-noise case as opposed to generating a noise realization 
+is comparatively minor. We explore this in more detail in @sec-zero-noise-impact.
 
 #### Sky localization
 
@@ -973,7 +975,7 @@ as we discussed in @sec-timing-general, ground based observations often use a ge
 While the chirp mass itself does not have a particular astrophysical significance, these analyses provide an indication of the LGWA's sensitivity to tiny fluctuations at low PN order, which affect the long-duration frequency evolution of the signal.
 We expect this to mean it will be very effective at constraining other effects, such as contributions from dark matter in the environment, or eccentricity, both of which modify the phase of the binary at low frequencies.
 
-### Impact of non-zero Gaussian noise
+### Impact of non-zero Gaussian noise {#sec-zero-noise-impact}
 
 Throughout this thesis we perform zero-noise injections, meaning that 
 we assume the realization of the Gaussian noise process is the maximum-likelihood one, $n=0$; 

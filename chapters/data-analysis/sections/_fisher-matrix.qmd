@@ -133,8 +133,24 @@ An expression can also be computed in the case of a long observation by a single
 $$
 \Delta\Omega = \frac{c^{2}}{f_{0}^{2} \rho^{2} A_{s}}\,,
 $${#eq-wen-chen-area}
-where $A_{s}$ is the area spanned by the detector's motion 
-within a plane perpendicular to the source direction.
+where $A_{s}$ is the area of the projected detector's motion 
+onto a plane perpendicular to the source direction.
+
+Specifically, it is defined as 
+
+$$ A_s = 2 \pi \sqrt{\text{var}(r_\theta) \text{var}(r_\phi) - \text{cov}^2(r_\theta, r_\phi)}\,,
+$$
+
+where the coordinates $r_\theta$ and $r_\phi$ parameterize the projected motion of
+the detector in the aforementioned plane.
+When computing these variances and covariances, the trajectory should be weighted 
+according to the accumulation of SNR, with an expression in the form 
+
+$$ w(t) = \left|\frac{\mathrm{d} f}{\mathrm{d}t}\right| \frac{\left|h(f)\right|^2 }{S_n(f)} \,.
+$$
+
+This is a consequence of equation 45 in the paper by @wenGeometricalExpressionAngular2010, under
+the assumption of a monochromatic signal.
 
 #### Correlation structure {#sec-correlation-structure}
 
