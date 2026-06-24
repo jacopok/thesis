@@ -556,33 +556,42 @@ h_\text{obs}(f) = h_\text{true}(f) (1+\delta A(f)) \exp(i \delta \phi(f)) \,.
 $$
 
 It is common practice to model the functions $\delta A(f)$ and $\delta \phi(f)$ through a Gaussian Process [@cahillaneCalibrationUncertaintyAdvanced2017], 
-whose parameters are inferred together with those of the gravitational wave source;
-this 
+whose parameters are inferred together with those of the gravitational wave source.
 
 Over the first observing runs for the LVK collaboration, 
 the typical order of magnitude for the $1\sigma$ width of the posterior predictive distribution 
-on the calibration envelope was $\delta A \sim \text{few} \times 10^{-2}$ and $\delta \phi \sim \text{few deg}$.
+on the calibration envelope was $\delta A \sim \text{few} \times 10^{-2}$ and $\delta \phi \sim \text{few deg}$. 
 
-For the GW250114 event, the strain was well-calibrated at both Hanford and Livingston, requiring minimal 
-corrections. This was verified by performing an analyisis without taking into account 
-the effect of calibration; the difference was below the level due to waveform approximant systematics [@abacGW250114TestingHawkings2025].
+For the GW250114 event, the strain was well-calibrated at both Hanford and Livingston, 
+requiring minimal corrections. 
+This was practically useful, as it enabled a reliable simplified ringdown analysis 
+without accounting for the impact of calibration.
+We verified this by comparing an analysis accounting for calibration uncertainty
+with one that assumed the calibration was perfect; the systematic difference between 
+these was below the level 
+due to other systematics such as a different waveform approximant [@abacGW250114TestingHawkings2025].
+
 Based on publicly available data [@ligoscientificcollaborationGW250114DiscoveryPaper2025], 
 in the left panel of figure @fig-parameter-bias-calibration we show the difference in all parameter posteriors between these two analyses, both of which 
 used the `NRSur7dq4` waveform model [@varmaSurrogateModelsPrecessing2019].
 
-![Cumulative distributions for all sampled waveform parameters, comparing an analysis marginalized over calibration uncertainties and one which neglected them (_i.e._ setting all the calibration corrections to zero). The bias due to not including calibration is small for GW250114, and significantly higher for GW2502027.](figures/posterior_nocal_compared.pdf){#fig-parameter-bias-calibration}
+![Cumulative distributions for all sampled waveform parameters, comparing an analysis marginalized over calibration uncertainties and one which neglected them (_i.e._ setting all the calibration corrections to zero). The bias due to not including calibration is small for GW250114, and significantly higher for GW2502027. This figure uses publically available data from the respective data releases [@collaborationDataReleaseGW2409252026;@ligoscientificcollaborationGW250114DiscoveryPaper2025].](figures/posterior_nocal_compared.pdf){#fig-parameter-bias-calibration}
 
-The right panel concerns another event: GW250207, which was detected a few weeks after GW250114; with an SNR of approximately 69, it placed as the second-clearest signal to date[@ligoscientificvirgoandkagracollaborationsGW240925GW250207Astrophysical2026].
-While the LIGO Livingston, LIGO Hanford and Virgo interferometers were all taking data, Hanford was not yet in observing mode.
-Hence, its data was not well-calibrated. 
+The right panel concerns another event: GW250207, which was detected a few weeks after GW250114; with an SNR of approximately 69, it placed as the second-clearest signal to date[@ligoscientificvirgoandkagracollaborationsGW240925GW250207Astrophysical2026],
+its properties (component masses, spins) were quite similar to those of GW250114.
+While the LIGO Livingston, LIGO Hanford and Virgo interferometers were all taking data, Hanford was not yet in observing mode: hence, its data was not well-calibrated. 
+This is illustrated in @fig-parameter-bias-calibration by the significant difference 
+between the posterior distributions obtained when not marginalizing 
+over calibration uncertainty.
+
 Typically, information about detector calibration comes 
 from _in-situ_ measurements;  
-for the first time, however, this astrophysical signal was loud enough 
+for the first time, however, the astrophysical signal GW250207 was loud enough 
 to significantly inform the calibration of the Hanford detector.
 
-![Calibration envelopes for GW250114 and GW250207 at the LIGO Hanford detector. All posterior envelopes are showing the a 68% symmetric interval. The 60% width of the prior envelopes adopted is also shown with horizontal lines. Adapted from figure 2 of @ligoscientificvirgoandkagracollaborationsGW240925GW250207Astrophysical2026, using publically available data from the releases [@collaborationDataReleaseGW2409252026;@ligoscientificcollaborationGW250114DiscoveryPaper2025].](figures/H1_calibration_comp.pdf){#fig-calibration-envelopes}
+![Calibration envelopes for GW250114 and GW250207 at the LIGO Hanford detector. All posterior envelopes are showing the a 68% symmetric interval. The 68% width of the prior envelopes adopted is also shown with horizontal lines. Adapted from figure 2 of @ligoscientificvirgoandkagracollaborationsGW240925GW250207Astrophysical2026, using publically available data from the releases [@collaborationDataReleaseGW2409252026;@ligoscientificcollaborationGW250114DiscoveryPaper2025].](figures/H1_calibration_comp.pdf){#fig-calibration-envelopes}
 
-This can be seen in the right panel of @fig-calibration-envelopes, 
+We show this in the right panel of @fig-calibration-envelopes, 
 where we compare the posterior predictive distribution on 
 the calibration envelope for the Hanford detector in two cases: 
 either an analysis of data from all three interferometers, or only from the
@@ -595,7 +604,7 @@ posterior calibration envelope for the GW250114 event.
 Besides being significantly narrower, it is near zero at all frequencies,
 indicating that the detector was properly calibrated at 
 that time.
-Indeed, the degree of bias observed when neglecting calibration 
+This is compatible with the small degree of bias observed when neglecting calibration 
 uncertainty (@fig-parameter-bias-calibration) is minimal for GW250114, while 
 it is significant for GW250207.
 

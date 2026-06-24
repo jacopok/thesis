@@ -116,7 +116,7 @@ where $\omega$ is the angular frequency, $\omega_{0}$ is its resonance value, $k
 At higher frequency, readout noise starts to dominate; its specific spectral shape depends on the specific readout scheme adopted to measure relative displacement between ground and test mass. @fig-lgwa-station schematically depicts a SQUID readout, which makes use of superconducting magnets. In @fig-lgwa-displacement-noise we compare this choice with another candidate: laser-interferometric readout.
 
 ```{python}
-#| layout-ncol: 2
+#| layout: [[47,-6, 47], [47,-6, 47]]
 #| fig-cap: "Displacement noise estimates for the LGWA. For both concepts, thermal noise dominates at low frequency, while displacement noise dominates at high frequency."
 #| fig-subcap: 
 #|   - "Pessimistic model: a Niobium suspension and laser readout."
@@ -230,7 +230,7 @@ Displacement sensitivity curves similar to those in @fig-lgwa-displacement-noise
 
 While a PSR is undoubtedly a quiet place, it is warranted to ask whether the seismic environment of the Moon can interfere with gravitational wave measurements, or prevent them entirely.
 Unfortunately, the current data on this is quite limited. 
-@coughlinConstrainingGravitationalWave2014 analyzed one year of data from the ALSEP mission, which consisted of four seismometers deployed on the near side of the Moon by the Apollo 12, 13, 14 and 16 missions.
+@coughlinConstrainingGravitationalWave2014 analyzed one year of data from the Apollo Lunar Surface Experiments Package (ALSEP) mission, which consisted of four seismometers deployed on the near side of the Moon by the Apollo 12, 13, 14 and 16 missions.
 
 ![Upper bound on the lunar seismic spectrum, from [@coughlinConstrainingGravitationalWave2014]. The dashed lines indicate the minimum and maximum for a model of seismic noise on the Earth.](figures/Moon-noise-spectrum.png){#fig-lunar-seismic-spectrum width=60%}
 
@@ -244,16 +244,16 @@ From theoretical considerations, we expect the actual seismic background to be s
 furthermore, a spectrum computed this way is not necessarily representative of the "typical" spectrum
 one would observe at any given time on the Moon: it is a root-mean-square of values observed over a year,
 which means it includes the contribution of loud events which are well-localized in time.
-For the purposes of the LGWA, these may simply lead to a fraction of the data, as opposed to making
+For the purposes of the LGWA, these may simply lead to a fraction of the data being unusable, as opposed to making
 the entirety of the data too noisy. 
 
 The LGWA will also operate in a PSR without dawns or dusks, removing their thermal stresses as a noise source.
-Finally, the intra-station distance among the four seismometers is planned to be close enough that the seismic signal from GWs is strongly correlated among them, but far enough that events such as meteorite impacts arrive at each station with measurably different amplitude and phase, and can therefore be subtracted.
+Finally, the intra-station distance among the four seismometers is planned to be close enough that the seismic signal from gravitational waves is strongly correlated among them, but far enough that events such as meteorite impacts arrive at each station with measurably different amplitude and phase, and can therefore be subtracted.
 
 Nevertheless, more measurements are needed to quantify the impact of the lunar seismic background. 
 Moonquakes remain a significant issue, and it is likely that some fraction of the data will need to be unusable due to their effect. The low damping of the lunar regolith makes their duration much longer than what typically happens on Earth, as illustrated in @fig-moonquake-duration.
 
-![Comparison between a moonquake detected within the Apollo 12 mission and an earthquake, from @steinIntroductionSeismologyEarthquakes2009.](figures/moonquake.jpg){#fig-moonquake-duration width=60%}
+![Comparison between a moonquake detected within the Apollo 12 mission and an earthquake, from @steinIntroductionSeismologyEarthquakes2009. In both cases, the vertical axis shows seismic displacement due to the quake, with arbitrary normalization.](figures/moonquake.jpg){#fig-moonquake-duration width=60%}
 
 Other sources of noise yet may affect the measurement, such as human activity from other nearby projects, magnetic noise from lunar dust and so forth. 
 Mitigating these will be a significant challenge as the mission is developed.
@@ -265,7 +265,7 @@ While plenty of gravitational wave sources are expected at these frequencies, wh
 Computing the lunar response at frequencies two to three orders of magnitude higher than the fundamental is challenging with the normal mode formalism, as one needs to include a very large number of modes, 
 and local topography is expected to play a significant role.
 
-The standard treatement for the problem of an elastically coupled medium to gravitational waves was introduced by @dysonSeismicResponseEarth1969 and applied to the computation of the excitation of the normal modes of a planetary body by GWs by @ben-menahemExcitationEarthsEigenvibrations1983. 
+The standard treatement for the problem of an elastically coupled medium to gravitational waves was introduced by @dysonSeismicResponseEarth1969 and applied to the computation of the excitation of the normal modes of a planetary body by gravitational waves by @ben-menahemExcitationEarthsEigenvibrations1983. 
 Recent years have seen significant theoretical and computational advancements in this regard.
 @belgacemCouplingElasticMedia2024 formulated the coupling problem with a fully relativistic  Effective Field Theory approach, which generalizes well to high frequencies beyond the reach of the normal-mode approach. 
 @biResponseMoonGravitational2024 investigated the impact of a layered geological structure using a half-space model, showing that it can significantly amplify the lunar response compared to a uniform Moon.
@@ -557,7 +557,7 @@ On top of this trend we see modulations; their period in the time domain is a mo
 
 Along with the injected waveform, we show the posterior predictive distribution obtained after performing an injection and recovery.
 
-![Posterior Predictive Distribution and injected waveforms for a GW250114-like injection with the LGWA.](figures/lgwa_ppd_fb.pdf){#fig-projected-waveforms-gw250114-ppd}
+![Upper panel: Posterior Predictive Distribution and injected waveforms for our GW250114-like injection with the LGWA. The two colors represent the two horizontal measurement channels of the LGWA. We show the sensitivity curve of the LGWA in grey. Both are displayed as characteristic strains (@sec-characteristic-strain). Lower panel: the accumulation of SNR as a function of frequency, which can be referenced to time through the upper markers on the $x$ axis. From @tissinoGeometryLunarGravitational2026.](figures/lgwa_ppd_fb.pdf){#fig-projected-waveforms-gw250114-ppd}
 
 The phase of the response is more difficult to visualize, as it spans thousands of cycles during an observation.
 We illustrate one aspect of its variation by computing the ratio of two waveforms computed with identical parameters --- again, the injection ones for GW250114 --- but with a difference in 1 degree in right ascension. 
@@ -641,11 +641,11 @@ Whether this is a genuine effect or an artefact of selection bias is an open que
 Furthermore, the LGWA would be able to precisely measure the excitation of lunar normal modes by Moonquakes.^[As discussed earlier, their excitation by gravitational waves would require an improbably strong signal.] 
 This would provide insights into the lunar interior structure, enabling the exploration of lunar origin models.
 
-The formation mechanism of the Moon could also be investigated, as is not a settled debate: the giant impact scenario, in which a large planetary object dubbed _Theia_ impacted a young Earth forming a disk of debris which coalesced into our satellite, is the dominant theory, but it does have issues. 
+The formation mechanism of the Moon could also be investigated, as this is not a settled debate: the giant impact scenario, in which a large planetary object dubbed _Theia_ impacted a young Earth forming a disk of debris which coalesced into our satellite, is the dominant theory, but it does have issues. 
 The _isotopic crisis_ is the problem posed by the observation that the Earth and Moon's mantles have nearly identical ratios of isotopes such as $^{17}\text{O} / ^{16}\text{O}$, $^{50}\text{Ti} / ^{47}\text{Ti}$ and $^{182}\text{W} / ^{184}\text{W}$. 
 Simulations show that, under the giant impactor scenario, a majority of the Moon's mass would be inherited from the impactor, while only a relatively small fraction of the Earth's mass would be.
 Therefore, we expect different isotopic ratios: the Earth and the impactor, having
-formed independently, are likely to have different isotopic compositions [@meloshNewApproachesMoons2014].
+formed independently, are likely to have different isotopic compositions.
 Indeed, the composition of other objects in the Solar System such as Mars
 is quite different from the Earth's.
 
@@ -666,13 +666,73 @@ will aid in the resolution of this problem.
 The range of gravitational wave sources observable in the most sensitive band for the LGWA, $[0.05, 2]\text{Hz}$, is quite wide.
 Compact binaries are a natural candidate: they are significant emitters of gravitational waves, and their study is a blossoming field due to the wealth of data from ground-based observations.
 
-![Time to merger as a function of mass, highlighting at which point various sources would cross the decihertz band. The sources are assumed to have equal mass and no spin --- including these effects changes the results, but not the overall qualitative picture.](figures/time_to_merger.pdf){#fig-time-to-merger-lgwa width=80%}
+
+```{python}
+
+#| fig-cap: "Time to merger as a function of mass, highlighting at which point various sources would cross the decihertz band. For the purposes of the time to merger computation, the sources are assumed to have equal mass and no spin --- including these effects changes the results, but not the overall qualitative picture. Furthermore, we only consider the dominant, $\\ell|m| = 22$ mode of emission. We include the total mass of the three events considered in this chapter: GW170817, GW250114, and GW231123, with uncertainties as reported in the respective detection papers [@abbottGW170817ObservationGravitational2017;@abacGW250114TestingHawkings2025;@abacGW231123BinaryBlack2025]."
+#| label: fig-time-to-merger-lgwa
+
+from thesis_scripts.plot_signals import time_to_merger, chirp_mass
+import numpy as np
+from thesis_scripts import plt
+from matplotlib import ticker, cm, colors
+
+
+plt.rcParams.update({
+    "text.usetex": True,
+    "font.family": "Serif"
+})
+
+mass_grid = np.geomspace(1, 1e7, num=200)
+freq_grid = np.geomspace(1e-5, 1e2, num=200)
+
+F, M = np.meshgrid(freq_grid, mass_grid)
+
+M_CHIRP = chirp_mass(M/2, M/2)
+
+T = time_to_merger(F, M_CHIRP)
+
+times = {
+        1: 'second',
+        60: 'minute',
+        3600: 'hour',
+        3600*24: 'day',
+        3600*24*30: 'month',
+        3600*24*365.24: 'year',
+        3600*24*365.24*10: '10 years',
+}
+
+plt.contourf(F, M, T, levels=list(times.keys()), cmap=cm.PuBu_r, norm=colors.LogNorm())
+
+# plt.axvline(x=0.05, c='black')
+# plt.axvline(x=2, c='black')
+plt.fill_betweenx([mass_grid[0], mass_grid[-1]], 0.05, 2, alpha=.2, color='red')
+
+m_170817 = (2.72, 2.77)
+m_250114 = (65.8-1.2, 65.8+1.1)
+m_231123 = (190, 265)
+
+plt.axhspan(*m_170817, color='black', alpha=.5)
+plt.text(2e-5, m_170817[1]*1.3, 'GW170817')
+plt.axhspan(*m_250114, color='black', alpha=.5)
+plt.text(2e-5, m_250114[1]*1.3, 'GW250114')
+plt.axhspan(*m_231123, color='black', alpha=.2)
+plt.text(2e-5, m_231123[1]*1.3, 'GW231123')
+
+plt.text(1e-1, 4e6, 'decihertz')
+
+plt.xscale('log')
+plt.yscale('log')
+plt.xlabel('Frequency [Hz]')
+plt.ylabel('Total binary mass [$M_\odot$]')
+_ = plt.colorbar(format=ticker.FixedFormatter(list(times.values())), label='Time to merger')
+
+```
 
 @fig-time-to-merger-lgwa illustrates their time to merger as a function of mass.
 It is truncated at 10 years, an approximate upper bound for the LGWA mission's duration. 
-We depict GW170817, the lightest binary whose merger has been detected to date, and GW190521, among the heaviest.
-These are at the edges of what are known as _stellar-mass binaries_, with component masses roughly between $1$ and $100 M_{\odot}$, whose population has been explored by ground-based observations.
-As illustrated in @fig-time-to-merger-lgwa, depending on their mass, they may cross the deci-Hertz band hours to years before their merger. 
+We events shown include: GW170817 and GW231123, respectively the lightest and heaviest out of the current population of _stellar-mass binaries_ we detected.
+Depending on their mass, these may cross the deci-Hertz band hours to years before their merger. 
 
 ![The population of compact binaries in the GWTC-3 catalog, highlighting GW231123, compared to the noise curves of LGWA and ground-based detectors. From @iacovelliGravitationalwaveParameterEstimation2025.](figures/gw231123/GW231123-ASD.pdf){#fig-231123-asd-lgwa width=80%}
 
@@ -699,8 +759,20 @@ At the moment, full injections and recoveries for binaries in this range has not
 At these masses, the signals' mergers will be in band, therefore (like with current observatories) several higher order modes will be necessary for a complete description of the signal. 
 Stellar mass binaries are comparatively simpler, as their low-frequency emission is dominated by the $\ell |m| = 22$ mode, hence we chose them as the first target for our studies.
 
-So far we discussed comparable-mass binaries, but Intermediate Mass Ratio Inspirals, binaries with mass ratios in the range $q=10^{-2}$ to $10^{-4}$, would also be a fascinating way to shed light into the formation of intermediate-mass black holes.
+So far we discussed comparable-mass binaries, but Intermediate Mass Ratio Inspirals, 
+binaries with mass ratios in the range $q=10^{-2}$ to $10^{-4}$, 
+would also be a fascinating way to shed light into the formation of intermediate-mass black holes: 
+the presence and orbits of lighter black holes in the vicinity 
+of an intermediate-mass black hole provide a precise probe of its environment, 
+and in turn knowing about that can inform our understanding of its formation pathways.
 
+Specifically, the LGWA's operating frequency band allows for 
+a long observation of these sources' inspiral, which would allow for a precision 
+measurement of any environmental effects, such as dynamical friction from 
+a dark matter halo or migration torques from an accretion disk
+[@cardosoConstraintsAstrophysicalEnvironment2020;@speriQuantifyingScientificPotential2026].
+Aso, these early-time orbits would likely be non-circular, and measuring their 
+eccentricity could provide evidence for or against different formation channels.
 
 #### Non-CBC sources
 
@@ -708,17 +780,17 @@ Probing any previously unexplored region brings the possibility to find some com
 These may have been previously theorized, their electromagnetic signatures may be known, but they may also be completely serendipitous new discoveries.  
 While keeping in mind the last of these options is a possibility, it is useful think of the candidate sources of gravitational waves in this band based on our current knowledge, as was done in the LGWA whitepaper [@ajithLunarGravitationalwaveAntenna2025] as well as in earlier work such as the review by @branchesiLunarGravitationalWaveDetection2023.
 
-Mergers of white dwarfs (WDs) are an interesting event, as they may be the origin of certain supernovae. They generally happen when the binary is emitting GWs in the deciHertz band.
+Mergers of white dwarfs (WDs) are interesting events, as they may be the origin of certain supernovae. They generally happen when the binary is emitting gravitational waves in the deciHertz band.
 Their collision is not preceded by a measurable "chirp", as the binary is still quite wide then, due to the large radius of white dwarfs: three to four orders of magnitude larger than black holes with the same mass.
-The nuclear detonation or deflagration which is expected as the two WDs impact each other is hard to model, with accurate 3D simulations of this scenario becoming available only recently.
+The nuclear detonation or deflagration which is expected as the two WDs impact each other is hard to model, with accurate 3D simulations of this scenario becoming available only recently [@zhangNumericalSimulationLunar2025;@zhangThickLunarCrust2026].
 Collisions of WDs with other compact objects, such as neutron stars, are also of interest: they would emit at higher frequencies, which places them closer to the best sensitivity of LGWA around 0.3Hz, whereas double white dwarf systems generally collide before this point.
-The main limitation in the study of their systems is their low rate: they are comparatively rare in the local Universe, and the gravitational wave amplitudes they emit are not very high, meaning that they would need to be quite close --- on the scale of a Megaparsec or less --- to be detectable.
+The main limitation in the study of these systems is their low rate: they are comparatively rare in the local Universe, and the gravitational wave amplitudes they emit are not very high, meaning that they would need to be quite close --- on the scale of a Megaparsec or less --- to be detectable [@benettiObservingDoubleWhite2025].
 
-Tidal disruption events also can involve white dwarfs, for example a WD being disrupted after orbiting an intermediate mass black hole would produce a short-lived signal peaking in the deci-Hertz band.
+Tidal disruption events can also involve white dwarfs, for example a WD being disrupted after orbiting an intermediate mass black hole would produce a short-lived signal peaking in the deci-Hertz band [@pfisterObservableGravitationalWaves2022;@toscaniGravitationalWavesTidal2022].
 
-Core-collapse supernovae may also exhibit significant emission in the deci-Hertz band, but current simulations typically last for a few seconds, and are therefore unable to resolve this part of the spectrum. 
+Core-collapse supernovae may also exhibit significant emission in the deci-Hertz band, but current simulations typically last for a few seconds, and are therefore unable to resolve this part of the spectrum [@vartanyanGravitationalwaveSignatureCorecollapse2023]. 
 
-Finally, the LGWA could contribute to the detection of a stochastic cosmological background of gravitational waves, but it would give significant results only by correlating the measurements of stations with a large separation, which would require an extension to the mission with seismometers placed at both lunar poles.
+Finally, the LGWA could contribute to the detection of a stochastic cosmological background of gravitational waves, but it would give significant results only by correlating the measurements of stations with a large separation, which would require an extension to the mission with seismometers placed at both lunar poles [@ajithLunarGravitationalwaveAntenna2025; section 3.2.3].
 
 ### Parameter estimation for stellar-mass binaries {#sec-lgwa-pe-stellar}
 
@@ -733,9 +805,9 @@ $$
 S_{n}^{\text{LGWA}}(f) = \frac{S_{n}^{\text{displacement}}(f)}{L(f)}\,.
 $$
 
-We inject parameters compatible with two of the most notorious signals detected by the LVK collaboration:
+We inject parameters compatible with two of the most well-known signals detected by the LVK collaboration:
 
-- GW170871, the best-constrained neutron star binary detected with gravitational waves, and the only multi-messenger GW detection to date [@abbottGW170817ObservationGravitational2017;@theligoscientificcollaborationPropertiesBinaryNeutron2019];
+- GW170817, the best-constrained neutron star binary detected with gravitational waves, and the only multi-messenger GW detection to date [@abbottGW170817ObservationGravitational2017;@theligoscientificcollaborationPropertiesBinaryNeutron2019];
 - GW250114, the best-constrained black hole binary to date, whose detection by the LVK collaboration we discussed in detail in @sec-gw250114 [@abacGW250114TestingHawkings2025]. We also provide comparisons with the injections with the Einstein Telescope discussed in @sec-gw250114-et.
 
 We consider a 10-year observation of GW170817, which corresponds to the frequency band $[208.1, 3000]\text{mHz}$, and a 1-year observation of GW250114, in the band $[27.1, 3000]\text{mHz}$. 
@@ -761,14 +833,14 @@ string = """| Parameter        |   Injected value | Unit      | Prior function  
 |:------------|---------------------------:|:----------|:----------------------------|:---------------------------------------------|
 | $\mathcal{M}$|       31.2718    | $M_\odot$ | Uniform                     | $[-2, 2]\\times 10^{-3} M_\odot + \mathcal{M}_0$ |
 | $q$|        0.98  |           | Uniform                     | [0.125, 1]                                   |
+| $\chi_1$|       -0.05 |           | Aligned spin (@eq-aligned-spin-prior-uniform-in-magnitude)                | [-0.9, 0.9]                                  |
+| $\chi_2$|        0.01 |           | Aligned spin (@eq-aligned-spin-prior-uniform-in-magnitude)                | [-0.9, 0.9]                                  |
 | $d_L$|      414     | Mpc       | Uniform in the source frame (@eq-uniform-source-frame-volume) | [100, 1000]                                  |
 | $\\theta_{JN}$|        0.7  | rad       | Sine                        | [0, $\pi$]                                   |
 | $\psi$|        1.3   | rad       | Uniform                     | [0, $\pi$]                                   |
 | $\mathrm{RA}$|        2.3   | rad       | Uniform                     | [0, 2$\pi$]                                  |
 | $\mathrm{DEC}$|        0.2  | rad       | Cosine                      | [$-\pi / 2$, $\pi / 2$]                      |
 | $\Delta t$ |        0         | s         | Uniform                     | [-2, 2]                                      |
-| $\chi_1$|       -0.05 |           | Aligned spin (@eq-aligned-spin-prior-uniform-in-magnitude)                | [-0.9, 0.9]                                  |
-| $\chi_2$|        0.01 |           | Aligned spin (@eq-aligned-spin-prior-uniform-in-magnitude)                | [-0.9, 0.9]                                  |
 | $m_1$|       36.3    | $M_\odot$ | Constraint                  | [5, 100]                                     |
 | $m_2$|       35.5    | $M_\odot$ | Constraint                  | [5, 100]                                     |
 """
@@ -778,9 +850,22 @@ Markdown(string)
 
 For more details, see @tissinoGeometryLunarGravitational2026 and its attached data release [@tissinoGeometryLunarGravitational2026a].
 
+In @tbl-priors-full-analysis-gw170817 we outline the injected parameters 
+for our GW170817-like binary neutron star injection. 
+In this case, the posterior distribution occupies a significantly
+smaller volume; for computational efficiency, therefore, we perform 
+these injections with restricted priors in several parameters, including 
+the sky location. 
+This is risky, since it may lead us to miss a mode in the posterior distribution
+on the sky location;
+while we expect no such additional modes to exist due to the structure of the Doppler modulation
+in the observed waveform, this remains a potential systematic
+bias in our analysis. 
+Future work will be required to relax this assumption.
+
 ```{python}
 #| label: tbl-priors-full-analysis-gw170817
-#| tbl-cap: Priors and injected values for our GW170817-like injection. The notation is the same as in @tbl-priors-full-analysis.
+#| tbl-cap: Priors and injected values for our GW170817-like injection. The notation is the same as in @tbl-priors-full-analysis, though for this injection we explicitly sample over phase.
 
 from thesis_scripts import data_path
 from IPython.display import Markdown
@@ -788,18 +873,18 @@ from IPython.display import Markdown
 string = """
 | Parameter                                      |   Injected value | Unit      | Prior function              | Prior range                                                  |
 |:-----------------------------------------------|-----------------:|:----------|:----------------------------|:-------------------------------------------------------------|
-| $\mathcal{M}$                                  |        1.19757   | $M_\odot$ | Uniform                     | $[-2, 2]\times 10^{-6} M_\odot + \mathcal{M}_{\mathrm{inj}}$ |
-| $\chi_1$                                       |        0.0245664 |           | Uniform                     | [-0.8, 0.8]                                                  |
-| $\chi_2$                                       |       -0.0100164 |           | Uniform                     | [-0.8, 0.8]                                                  |
-| $\mathrm{DEC}$                                 |       -0.571666  | rad       | Cosine                      | $[-0.01, 0.01] + \mathrm{dec}_{\mathrm{inj}}$                |
-| $\lambda_1$                                    |      413.54      |           | Uniform                     | [0, 5000]                                                    |
-| $\lambda_2$                                    |      369.35      |           | Uniform                     | [0, 5000]                                                    |
-| $d_L$                                          |       37.2307    | Mpc       | Uniform in the source frame | [5, 100]                                                     |
-| $q$                                            |        0.762902  |           | Uniform                     | [0.5, 1]                                                     |
-| $\phi$                                         |        3.19071   |           | Uniform                     | [0, 2$\pi$]                                                  |
-| $\psi$                                         |        0.43413   | rad       | Uniform                     | [0, $\pi$]                                                   |
-| $\mathrm{RA}$                                  |        6.13476   | rad       | Uniform                     | $[-0.01, 0.01] + \mathrm{ra}_{\mathrm{inj}}$                 |
-| $\theta_{JN}$                                  |        2.43295   | rad       | Sine                        | [0, $\pi$]                                                   |
+| $\mathcal{M}$                                  |        1.19757   | $M_\odot$ | Uniform                     | $[-2, 2]\\times 10^{-6} M_\odot + \mathcal{M}_{\mathrm{inj}}$ |
+| $q$                                            |        0.76  |           | Uniform                     | [0.5, 1]                                                     |
+| $\chi_1$                                       |        0.02 |           | Aligned spin (@eq-aligned-spin-prior-uniform-in-magnitude)                     | [-0.8, 0.8]                                                  |
+| $\chi_2$                                       |       -0.01 |           | Aligned spin (@eq-aligned-spin-prior-uniform-in-magnitude)                     | [-0.8, 0.8]                                                  |
+| $\Lambda_1$                                    |      414      |           | Uniform                     | [0, 5000]                                                    |
+| $\Lambda_2$                                    |      369      |           | Uniform                     | [0, 5000]                                                    |
+| $d_L$                                          |       37    | Mpc       | Uniform in the source frame (@eq-uniform-source-frame-volume) | [5, 100]                                                     |
+| $\\theta_{JN}$                                  |        2.4   | rad       | Sine                        | [0, $\pi$]                                                   |
+| $\psi$                                         |        0.4   | rad       | Uniform                     | [0, $\pi$]                                                   |
+| $\mathrm{RA}$                                  |        6.1   | rad       | Uniform                     | $[-0.01, 0.01]\mathrm{rad} + \mathrm{ra}_{\mathrm{inj}}$                 |
+| $\mathrm{DEC}$                                 |       -0.6  | rad       | Cosine                      | $[-0.01, 0.01]\mathrm{rad} + \mathrm{dec}_{\mathrm{inj}}$                |
+| $\phi$                                         |        3.2   |           | Uniform                     | [0, 2$\pi$]                                                  |
 | $\Delta t_{\mathrm{merger}}^{\mathrm{center}}$ |        0         | s         | Uniform                     | [-3, 3]                                                      |
 """
 
@@ -808,7 +893,11 @@ Markdown(string)
 
 #### Limitations {#sec-lgwa-pe-limitations}
 
-The procedure we employ regarding the response is equivalent to performing inference assuming that 
+While they represent a significant improvement over Fisher-matrix estimates,
+our injections are not yet representative of a realistic data analysis pipeline
+for LGWA data, for several reasons.
+
+The procedure we employ regarding response modelling is equivalent to performing inference assuming that 
 
 1. the lunar response is given by our model $L(f)$;
 2. the lunar response is perfectly known during inference.
@@ -824,8 +913,8 @@ simultaneously with the signal parameters, analogously to what is currently
 done for the calibration of ground-based detectors (@sec-calibration).
 
 Unfortunately, we have no reason to believe that a direct application 
-of the smooth Gaussian process envelopes used for the inference of interferometric data would 
-be appropriate in this context. 
+of the smooth Gaussian process envelopes used for the inference of interferometric data 
+(@sec-calibration) would be appropriate in this context. 
 On the contrary, a general feature observed in models and simulations 
 of the lunar response is small-scale frequency dependence --- 
 the response is expected to be a "spiky" function of frequency,
@@ -859,12 +948,12 @@ For GW250114, despite the higher SNR, the localization is much less precise.
 In @fig-lgwa-gw250114-sky we can see two nearby modes in the sky, corresponding respectively to a face-on source with $\theta_{JN} < \pi / 2$ and a face-off source with $\theta_{JN}> \pi / 2$.
 The LVK posterior distribution exhibits the same qualitative behavior, which in both cases is due to the sky position being also constrained by the relative amplitude of the signal in two detectors (for the LVK) and in the two LGWA channels at various times.
 
-![Sky location, inclination angle and distance posteriors for a GW250114-like injection. We compare the results with those obtained with other detectors: the Einstein Telescope in its 2L configuration, and the posterior distribution provided by the LVK collaboration for the real event.](figures/ra_dec_theta_jn_lgwa_vs_et.pdf){#fig-lgwa-gw250114-sky width=80%}
+![Sky location, inclination angle and distance posteriors for a GW250114-like injection. We compare the results with those obtained with other detectors: the Einstein Telescope in its 2L configuration, and the posterior distribution provided by the LVK collaboration for the real event. From @tissinoGeometryLunarGravitational2026.](figures/ra_dec_theta_jn_lgwa_vs_et.pdf){#fig-lgwa-gw250114-sky width=80%}
 
 The Einstein Telescope in its 2L configuration would measure this position with extreme precision, due to its SNR of more than 600.
 As we discussed in @sec-gw250114-et, ET in its $\Delta$ configuration would constrain the position of this source to two modes in the sky; if operational at the same time, the LGWA would easily allow us to discriminate among them. 
 
-#### Intrinsic parameter constraints
+#### Intrinsic parameter constraints {#sec-lgwa-intrinsic-parameter-constraints}
 
 An observation of the gravitational waves emitted by a binary system constrains both of the masses, but as discussed in @sec-masses the chirp mass is the lowest-order contribution, while the mass ratio has a higher PN order. 
 For stellar mass binaries, the LGWA provides extremely precise constraints on the chirp mass, while
@@ -876,7 +965,7 @@ In contrast, the effective spin and mass ratio measurements from the LGWA have c
 The Einstein Telescope, in contrast, exhibits extremely precise posterior distributions for both.
 The performance of the 2L and $\Delta$ configurations is almost identical for these parameters.
 
-![Posterior distribution for the chirp mass, mass ratio and effective spin parameters of our GW250114-like injection.](figures/mchirp_q_lgwa_vs_et.pdf){#fig-lgwa-gw250114-mqchi width=80%}
+![Posterior distribution for the chirp mass, mass ratio and effective spin parameters of our GW250114-like injection. From @tissinoGeometryLunarGravitational2026.](figures/mchirp_q_lgwa_vs_et.pdf){#fig-lgwa-gw250114-mqchi width=80%}
 
 An important technical aspect to note is the fact that the relative precision on the detector-frame chirp mass of this observation, better than one part in $10^{5}$, requires us to precisely account for the Doppler shift between reference frames in a multi-detector context: 
 as we discussed in @sec-timing-general, ground based observations often use a geocentric frame, which can be approximated as _moving with constant velocity_, but not as _stationary_ compared to the SSB: at this precision level on the chirp mass, the distinction is appreciable. 
@@ -897,10 +986,16 @@ from its true value, but it will leave the covariance unchanged, as we can see f
 
 Under realistic conditions, this will not be the case, and we expect to see noise-driven fluctuations 
 in the covariance as well. However, we do expect the zero-noise posterior distribution $p(\theta | d=h_0)$ 
-to be _representative_ of the distributions $p(\theta | d = h_0 + n)$ in some sense.
-In this section we investigate the impact of non-zero Gaussian noise realizations on our GW250114 injection.
+to be _representative_ of the distributions $p(\theta | d = h_0 + n)$.
+In this section we investigate the impact of non-zero Gaussian noise realizations on our GW250114 injection
+with the Lunar Gravitational Wave Antenna.
 
-In order to to so, we need to explore the space of distributions $p(\theta | d = h_0 + n)$ with varying noise $n \sim \mathcal{L}(n)$,
+Similar investigations have already been performed in other contexts, such as for example 
+the ringdown of  GW150914 [@cotestaAnalysisRingdownOvertones2022] or 
+the estimation of the neutron star equation of state [@wadeSystematicStatisticalErrors2014].
+Our results are qualitatively compatible with theirs.
+
+We need to explore the space of distributions $p(\theta | d = h_0 + n)$ with varying noise $n \sim \mathcal{L}(n)$,
 which requires a representative number of noise realizations, at least in the hundreds. 
 
 Repeating the same injection we performed hundreds of times is not possible for us due to computational constraints.
@@ -909,11 +1004,12 @@ The first (@sec-restricted-noisy-pe) is direct: we perform a campaign of 250 inj
 all identical except for a different noise realization, and compare them to the corresponding zero-noise injection.
 To reduce the computational expense of the task, however, we perform these
 in a simplified scenario: we condition on the injected values for intrinsic parameters,
-use a phase-marginalized likelihood, and only sample over a reduced parameter space, including 
-time, sky position, distance, polarization and inclination angle.
+use a phase-marginalized likelihood, and only sample over a reduced parameter space: 
+time, sky position, distance, polarization and inclination angle, 
+with priors as described in @tbl-priors-full-analysis.
 
 The second approach (@sec-full-noisy-reweighting) is more computationally efficient, 
-and it allows us to use the full parameter space, but it comes at the expense of a potential bias. 
+and it allows us to explore the full parameter space, but it comes at the expense of a potential bias. 
 We start from samples obtained in the zero-noise case, 
 define the likelihood with a noise realization, and reweight them 
 as described in @sec-weighted-samples, with weights
@@ -924,6 +1020,8 @@ $${#eq-noisy-reweight-correction}
 The concern, as usual with reweighting, is that this procedure might fail to 
 accurately model regions in the parameter space which are not adequately covered by the
 noiseless posterior distribution.
+However, by reweighting the nested samples directly, 
+we are able to obtain a satisfactory amount of effective samples.
 
 In all cases, we are able to avoid simulationg full-length data 
 by exploiting the properties of relative binning summary data, 
@@ -938,7 +1036,9 @@ typical uncertainties of this measurement, the injected
 value will always correspond to a high quantile of the distribution.
 This is expected and does not indicate a bias in our setup.]
 
-These injections are closer to a realistic scenario than the zero-noise case, but still not fully realistic: they are performed assuming that the noise is Gaussian, and colored according to a known power spectral density; neither of these will be true in practice.
+These injections are closer to a realistic scenario than the zero-noise case,
+but still not fully realistic: they are performed assuming that the noise is Gaussian, 
+and colored according to a known power spectral density; neither of these will be true in practice.
 
 #### Restricted noisy parameter estimation {#sec-restricted-noisy-pe}
 
@@ -1102,7 +1202,7 @@ Then, we can parameterize our waveforms based on $t_{22}(f_{0}; \theta)$ as oppo
 
 ```{python}
 #| label: fig-different-reference-frequency-illustration
-#| fig-cap: "An illustration of what it means to parameterize waveforms based on an evolutionary stage other than the merger. For each value of the chirp mass in range between 10 and 40 solar masses, we show the evolutionary track of frequency as a function of time. In the top panel, all curves correspond to binaries which reach coalescence at time 0, while in the bottom panel, they reach a frequency of 30Hz at time 0. These descriptions are equivalent, but the corresponding timing parameter may have a different variance, depending on the detector's noise curve."
+#| fig-cap: "An illustration of what it means to parameterize waveforms based on an evolutionary stage other than the merger. For each value of the chirp mass in range between 10 and 40 solar masses, we show the evolutionary track of frequency as a function of time. In the top panel, all curves correspond to binaries which reach coalescence at time 0 seconds, while in the bottom panel, they reach a frequency of 30Hz at time 0 seconds. These descriptions are equivalent, but the corresponding timing parameter may have a different variance, depending on the detector's noise curve."
 
 import numpy as np
 import matplotlib 
@@ -1179,16 +1279,16 @@ In @tbl-uncertainty-by-frequency-and-location we show the timing uncertainty obt
 Qualitatively, we see that for reference frequencies at or above the best detector sensitivity ($\approx 0.4$ Hz), and locations close to the Earth-Moon system, the timing uncertainty remains low. 
 On the contrary, at distant locations such as the Solar System Barycenter, or at very low reference frequencies, the timing uncertainty becomes very large.
 
-![Timing uncertainty by frequency for our GW250114-like injection. For all panels, the meaning of the vertical axis is above the panel itself. In the top panel we show the characteristic noise and signal strains as a function of frequency, as a reference. In the second panel from the top, we show the uncertainty in time as measured at a given reference frequency, as a function of that reference frequency. In the third panel we perform an analogous operation, but looking at the uncertainty in frequency as measured at a given reference time. ](figures/timing_constraint_by_frequency_GW250114.pdf){#fig-timing-lgwa-by-frequency width=80%}
+![Timing uncertainty by frequency for our GW250114-like injection. For all panels, the meaning of the vertical axis is above the panel itself. In the top panel we show the characteristic noise and signal strains as a function of frequency, as a reference. In the second panel from the top, we show the uncertainty in time as measured at a given reference frequency, as a function of that reference frequency. In the third panel we perform an analogous operation, but looking at the uncertainty in frequency as measured at a given reference time. From @tissinoGeometryLunarGravitational2026.](figures/timing_constraint_by_frequency_GW250114.pdf){#fig-timing-lgwa-by-frequency width=100%}
 
 In @fig-timing-lgwa-by-frequency we vary the frequency $f$ and, for each of its values, we compute the position $r$ such that the 90% width of the samples $t^{f, r}$ is minimized. 
 We then show these 90% widths as a function of frequency. 
 One can see a minimum around 0.56Hz, just above the point where the LGWA's sensitivity is best.
 
-![Spatial variation of the timing uncertainty for our GW250114-like injection. ](figures/time_std_solar_system.pdf){#fig-timing-lgwa-solar-system width=80%}
+![Spatial variation of the timing uncertainty for our GW250114-like injection. The geometry of the spatial slices we employ is described in the text. The projected trajectory and position of the Earth and Moon are represented with green and grey lines and cicles. The projected optimal localization position for the row's frequency is shown as a red line. The projection of the  Adapted from @tissinoGeometryLunarGravitational2026.](figures/time_std_solar_system.pdf){#fig-timing-lgwa-solar-system width=100%}
 
 In @fig-timing-lgwa-solar-system, instead, we show the spatial variation of the timing uncertainty by fixing three values of $f$, which include the frequency of the global minimum, one lower frequency, and the merger. 
-We also fix three orthogonal spatial slices, each passing through the global minimum, and compute the timing uncertainty in these slices, so as to show its 3D structure. 
+We also fix three orthogonal spatial slices, each passing through the global minimum, and compute the timing uncertainty in these slices, in order to show its 3D structure. 
 We align the $z$ axis in this frame with the injected source direction. 
 The frequency-dependent minimum in @fig-timing-lgwa-by-frequency 
 is a curve in this visualization: $\vec{r}_\text{min}(f)$. 
@@ -1336,9 +1436,7 @@ using a frame for which the timing uncertainty is low.
 
 Demonstrating this requires us to perform at least one parameter estimation run 
 with a suboptimal frame. 
-As we shall shortly show, this entails a significant computational multiplier:
-doing so for the complete injection, which requires a good amount of resources
-even with a close-to-optimal frame would be wasteful and lengthy. 
+As we shall shortly show, this entails a significant computational multiplier: doing so for the complete injection, which requires a good amount of resources even with a close-to-optimal frame, would be wasteful and lengthy. 
 Therefore, we consider a simplified scenario, still based on the GW250114-like injection discussed in @sec-lgwa-pe-stellar. 
 We employ a phase-marginalized likelihood (@sec-analytic-marginalization-phase) and only sample over sky position and time. 
 We adopt a uniform prior in the sky, and a uniform prior in the timing parameter, whose width is _a posteriori_ chosen to be approximately 6 times wider than the 90% credible interval, and centered at the true value, to ensure a fair comparison.
@@ -1394,7 +1492,7 @@ The difference in timing uncertainty between the two reference frames is about a
 and the corresponding ratio of sampling times is about a factor 10 with `dynesty`, 
 and a factor 5 with `nessai`.
 The intermediate scenario, using a wide prior but the optimal frame, 
-is barely slower with `nessai` while it doubles the computational cost with `DYNESTY`. 
+is barely slower with `nessai` while it doubles the computational cost with `dynesty`. 
 
 Many variables can affect sampling time. 
 To ensure that our results are robust, we also verify that 

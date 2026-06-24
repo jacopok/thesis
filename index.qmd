@@ -56,7 +56,8 @@ Also, several figures are rendered from `python` code,
 which can be seen directly within the website, but is omitted from the PDF.
 This literate programming-like approach [@knuthLiterateProgramming1984] 
 allows for reproducibility and transparency.
-Its source code is publically available [here](https://github.com/jacopok/thesis).
+Its source code is publically available [here](https://github.com/jacopok/thesis)
+(to be made public upon graduation).
 
 ## Personal contributions
 
@@ -134,3 +135,12 @@ from summary data from the LHAASO collaboration [@banerjeeCamelidaeBOATObservati
 Finally, this thesis includes (@sec-mlgw-bns) the results from a paper I led [@tissinoCombiningEffectiveonebodyAccuracy2023] related 
 to surrogate modelling for the gravitational waveforms emitted by neutron
 star binaries. 
+
+## Acknowledgements
+
+Many people 
+
+- Supervisor: Jan Harms
+- Referees: Giovanni Benato, Isobel Romero-Shaw, Enrico Barausse, Jonathan Gair
+- Friends and colleagues who helped me with the thesis: Gregorio Carullo, Filippo Santoliquido, Rossella Gamba, Sara Gliorio.
+- Who helped me with other work

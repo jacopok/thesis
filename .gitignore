@@ -202,3 +202,5 @@ titlepage/*
 !rehear.bib
 **/*.quarto_ipynb
 **/figure-pdf/*
+titlepage_saved/*
+Fast-analysis-of-long-gravitational-wave-signals.tex

@@ -228,7 +228,7 @@ The recovery was performed only varying the luminosity distance of the signals.
 #| fig-subcap: 
 #|   - "_p_-_p_ plot for the distance-only injections with and without the correction."
 #|   - "K-S test _p_-value as a function of the number of injected signals. The _p_-value is shown on a logit scale (@nte-odds-logits)."
-#| layout-ncol: 2
+#| layout: [[47,-6, 47], [47,-6, 47]]
 
 from thesis_scripts import plt
 from thesis_scripts import data_path
@@ -353,7 +353,9 @@ The highest SNR for a gravitational wave signal, as of early 2026, was achieved 
 
 ### SNR thresholds
 
-This section gives a brief outline of the way to estimate what value of SNR is sufficient for a signal to be detectable. This is useful information in the context of forecasting the number of detected signals by some detector that is not yet operational.
+This section gives a brief outline of the way to estimate what value of SNR 
+is sufficient for a signal to be "detectable". This is useful information in the 
+context of forecasting the number of detected signals by some detector that is not yet operational.
 
 If we were searching for a signal without any possible shift in time and with the certainty 
 that the noise did not contain any glitches or non-Gaussianities, then the SNR would simply follow
@@ -391,7 +393,19 @@ per year only requires us to raise the equivalent threshold to $\rho = 9.4$ on a
 Based on this, we can determine the SNR threshold we should consider 
 as a minimum for detectability in forecasting.
 Despite not knowing which glitches will affect our future detectors, 
-this sharp exponential behavior gives us confidence that values in the range of roughly 8 to 12 will be sufficient. 
+this sharp exponential behavior gives us confidence that values in the range of roughly 8 to 12 will be sufficient 
+to guarantee that the number of false positive detections is low enough.
+
+What constitutes a "low enough" rate of false positives is 
+subjective, and the choice of a threshold will depend on the rate 
+of true detections for a given type of source, as well as other considerations.
+For example, in the fourth observing run of the LIGO-Virgo-KAGRA collaboration (O4),
+alerts were labelled "significant" with a false alarm rate of less than one per month
+when relative to compact binaries, but they required a FAR of less than one per year 
+if they were relative to bursts
+[@chaudharyLowlatencyGravitationalWave2024].
+
+
 
 ### Noise plotting and characteristic strain {#sec-characteristic-strain}
 
@@ -500,8 +514,7 @@ might be helpful in this scenario.
 
 Relative binning allows for the cheap generation of simulated summary data 
 under the Gaussian noise assumption [@zackayRelativeBinningFast2018], 
-in the context of an injection for which the true waveform parameters are known
-and we can therefore set $h_0 = h_{\text{true}}$.
+in the context of an injection for which the true waveform parameters are known, allowing us to set $h_0 = h_{\text{true}}$.
 
 In that case, the data $d$ can be decomposed as $h_0 + n$, and the summary data $A_0$ and $A_1$ 
 can be written as 
@@ -531,8 +544,8 @@ B_{2}(b) = \int_{f\in b} \frac{|h_{0}(f)|^{2}}{S_{n}(f) / T} (f-f_{m}(b))^2\,.
 $$
 
 Since the noise is assumed to be uncorrelated in Fourier space, 
-the same extends to the distributions of $\delta A_0(b)$ and $\delta A_1(b)$
-across different bins.
+the distributions of $\delta A_0(b)$ and $\delta A_1(b)$
+across different frequency bins are also independent.
 
 ### Reduced order quadrature {#sec-reduced-order-quadrature}
 

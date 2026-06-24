@@ -29,7 +29,7 @@ dependencies = [
     "pyqt6>=6.10.2",
     "pytest>=8.3.5",
     "qnm>=0.4.4",
-    "quarto-cli<1.6",
+    "quarto-cli>=1.9",
     "scipy>=1.13.1",
     "seaborn>=0.13.2",
     "snakeviz>=2.2.2",

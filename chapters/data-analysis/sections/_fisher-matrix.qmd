@@ -131,9 +131,10 @@ Here, $\rho_{N} = \sqrt{ \sum_{i} \rho_{i}^{2} }$ is the network SNR, the sum in
 An expression can also be computed in the case of a long observation by a single detector, since its orbit around the Sun will effectively make it akin to a large network of detectors. 
 @wenGeometricalExpressionAngular2010 give this expression only in the limit of a short observation or one that is longer than a year; the expression for an arbitrary-length observation of a monochromatic signal with frequency $f_{0}$ reads [@tissinoGeometryLunarGravitational2026]
 $$
-\Delta\Omega = \frac{c^{2}}{f_{0}^{2} \rho^{2}A_{\perp}}\,,
+\Delta\Omega = \frac{c^{2}}{f_{0}^{2} \rho^{2} A_{s}}\,,
 $${#eq-wen-chen-area}
-where $A_{\perp}$ is the area spanned by the detector's motion within a plane perpendicular to the source direction.
+where $A_{s}$ is the area spanned by the detector's motion 
+within a plane perpendicular to the source direction.
 
 #### Correlation structure {#sec-correlation-structure}
 

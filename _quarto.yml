@@ -14,7 +14,14 @@ format:
     reference-location: margin
     code-fold: true
     code-summary: "Source code"
+    citeproc: true
   titlepage-pdf:
+    titlepage: academic
+    titlepage-logo: "logo-gssi.jpg"    
+    titlepage-footer: "[Gran Sasso Science Institute](https://gssi.it)"
+    titlepage-theme:
+      affiliation-style: "numbered-list"
+      affiliation-sep: "newline"
     documentclass: scrreprt
     colorlinks: true
     linkcolor: blue
@@ -24,13 +31,8 @@ format:
     link-citations: true
     reference-section-title: "References"
     pdf-engine: xelatex
-    titlepage: academic
-    titlepage-logo: "logo-gssi.jpg"    
-    titlepage-footer: "[Gran Sasso Science Institute](https://gssi.it)"
-    titlepage-theme:
-      affiliation-style: "numbered-list"
-      affiliation-sep: "newline"
     echo: false
+    keep-tex: true
     include-in-header:
       text: |
         %\usepackage{unicode-math,polyglossia}
@@ -38,6 +40,8 @@ format:
         \usepackage[scaled=.95]{cabin} 
         \usepackage[varqu,varl]{inconsolata} 
         %\usepackage{mathpazo}
+        \usepackage{biblatex}
+        \addbibresource{rehear.bib}
 
 
 execute:

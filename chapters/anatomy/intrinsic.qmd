@@ -13,6 +13,17 @@ format:
 
 This section will continue in the dissection of the gravitational signal emitted by the coalescence of two compact objects by considering its intrinsic parameters, those relating to the source itself and not to its relation to the observer.
 
+This gravitational signal is often qualitatively decomposed
+into three sections: inspiral, merger and post-merger.
+
+When the remnant is a black hole the post-merger is an exponentially damped ringdown, as described in @sec-ringdown; 
+if this is not the case, the emission spectrum can become significantly less predictable and long-lived. 
+Though efforts have been made toward modelling it---see e.g. [@breschiKiloHertzGravitationalWaves2019;@breschiKilohertzGravitationalWaves2022;@breschiKilohertzGravitationalWaves2024] for neutron star binaries---we will not discuss this in detail here.
+
+The rest of this section mainly concerns the dependence of models for the inspiral on their parameters. 
+Some of the ones we will consider are really only suitable for the early stages of inspiral, while others are accurate enough to describe the merger, and they can be smoothly connected to a model for the post-merger. 
+When applied to black hole binaries, the result is an Inspiral-Merger-Ringdown (IMR) waveform model.
+
 ## Component masses {#sec-masses}
 
 The two objects giving rise to the coalescence are labelled "primary" and "secondary" based on their masses, respectively $m_{1}$ and $m_{2}$ with $m_{1}>m_{2}$. 
@@ -320,12 +331,16 @@ For an in-depth discussion of this effect, as well as an exploration of how one 
 
 ## Tidal parameters {#sec-tidal-parameters}
 
-Objects such as neutron stars can be deformed by the tidal gravitational field caused by the presence of a nearby object, such as the binary companion. 
+Objects such as neutron stars can be deformed by the tidal gravitational field 
+caused by the presence of a nearby object, such as the binary companion. 
 This deformation enhances the gravitational attraction between the two objects,
 but it is only effective at relatively short separations: the net effect, therefore,
 is to leave the early inspiral almost unchanged, while accelerating its late stages.
 
-In the static case, this tidal field can be expressed as $\mathcal{E}_{ij}=C_{0i0j}$, where $C$ is the Weyl curvature tensor [@misnerGravitation1973, eq. 13.50], the trace-free component of the Riemann curvature tensor. At leading order, this tidal field will induce a quadrupole moment $Q_{ij}$, given by 
+In the static case, this tidal field can be expressed as $\mathcal{E}_{ij}=C_{0i0j}$, 
+where $C$ is the Weyl curvature tensor [@misnerGravitation1973, eq. 13.50], 
+the trace-free component of the Riemann curvature tensor. At leading order, 
+this tidal field will induce a quadrupole moment $Q_{ij}$, given by 
 
 $$
 Q_{ij} = - \Lambda M^{5} \mathcal{E}_{ij}
@@ -337,9 +352,11 @@ $$
 \Lambda = \frac{2}{3} \kappa_{2} \left( \frac{Rc^{2}}{GM} \right)^{5}
 $${#eq-tidal-polarizability}
 
-where $R$ is the radius of the object, while $\kappa_{2}$ is its $\ell=2$ dimensionless tidal Love number, which for neutron stars is generally on the order of 0.1.
+where $R$ is the radius of the object, while $\kappa_{2}$ is its $\ell=2$ dimensionless 
+tidal Love number, which for neutron stars is generally on the order of 0.1.
 
-The main tidal contribution to the waveform is through the effective tidal parameter, which enters the expansion at 5PN order [@wadeSystematicStatisticalErrors2014]:
+The main tidal contribution to the waveform is through the effective tidal parameter, 
+which enters the expansion at 5PN order [@wadeSystematicStatisticalErrors2014]:
 $$
 \tilde{\Lambda} = \frac{8}{13} \left[ 
 (1+7\nu -31\nu^{2}) (\Lambda_{1}+\Lambda_{2})
@@ -350,7 +367,8 @@ while secondary contributions arise depending on the tidal deviation parameter
 $$
 \begin{aligned}
 \delta \tilde{\Lambda} = \frac{1}{2} \bigg[ 
-&\sqrt{ 1-4\nu } \left( 1 - \frac{13272}{1319}\nu + \frac{8944}{1319}\nu^{2} \right) (\Lambda_{1}+\Lambda_{2})
+&\sqrt{ 1-4\nu } \left( 1 - \frac{13272}{1319}\nu + 
+\frac{8944}{1319}\nu^{2} \right) (\Lambda_{1}+\Lambda_{2})
 \\
 &+ \left( 
 1- \frac{15910}{1319}\nu + \frac{3380}{1319}\nu^{2}  
@@ -359,14 +377,55 @@ $$
 \bigg]\,.
 \end{aligned}
 $$
-While their expressions are intimidating, note that several terms vanish in the equal-mass case, where $\nu = 1 / 4$; if that is true then $\tilde{\Lambda} =f(\nu) (\Lambda_{1}+\Lambda_{2})$ and $\delta \tilde{\Lambda} = g(\nu)(\Lambda_{1}-\Lambda_{2})$ for some functions $f$ and $g$. 
-Furthermore, if the masses are equal and so are the tidal parameters ($\Lambda_{1}=\Lambda_{2}=\Lambda$), then we have $\Lambda = \tilde{\Lambda}$ and $\delta \tilde{\Lambda} =0$.
+While their expressions are intimidating, note that several terms vanish in the equal-mass case, 
+where $\nu = 1 / 4$; if that is true then $\tilde{\Lambda} =f(\nu) (\Lambda_{1}+\Lambda_{2})$ 
+and $\delta \tilde{\Lambda} = g(\nu)(\Lambda_{1}-\Lambda_{2})$ for some functions $f$ and $g$. 
+Furthermore, if the masses are equal and so are the tidal parameters ($\Lambda_{1}=\Lambda_{2}=\Lambda$), 
+then we have $\Lambda = \tilde{\Lambda}$ and $\delta \tilde{\Lambda} =0$.
 
-The analysis so far has focused on the static case; this is equivalent to assuming that the excitation of the normal modes of a neutron star follows the forcing term (_i.e._ the other star's tidal field). 
-Relaxing this assumption leads us to consider the effect of _dynamical_ (also known as _resonant_) tides.
-These can impact the phasing at low frequencies in the case of eccentric binaries
+The analysis so far has focused on the adiabatic, quadrupolar case:
+assuming that only the dominant oscillation mode of a neutron star
+is excited, and that its time evolution
+follows the forcing term (_i.e._ the other star's tidal field). 
+
+In reality, the tidal deformation of a neutron star is more accurately described 
+through a decomposition including the time-dependent excitation of different modes.
+There are several modes of oscillation one might consider, which have been deeply
+discussed in the field of astroseismology, 
+[@cunhaAsteroseismologyInterferometry2007;@steinhoffSpinEffectsNeutron2021;@zhaoUniversalRelationsNeutron2022], 
+and a full discussion of them is beyond the scope of this work. 
+The amplitude $Q_n$ of each of these modes, which we index with an integer $n$, will oscillate 
+following a driven harmonic oscillator [@laiResonantOscillationsTidal1994] in the form
+
+$$\ddot{Q}_n + \frac{\dot{Q}_n}{t_{\text{diss}}} + \omega_n^2 Q^2 = f_n (Q_n, t, \text{orbit})\,,
+$$
+
+for some values of the dissipative timescale $t_{\text{diss}}$ and angular frequency 
+$\omega_n$. 
+The forcing term $f_n$ will generally depend on the relative position of the companion star.
+In the quasi-circular case this can be approximated as a sinusoid 
+whose period scales inversely with the angular frequency of the binary
+$\omega_{\text{orb}}$, but for eccentric binaries high-frequency modes may be excited 
+even though the orbit-averaged angular frequency is comparatively low.
+
+The adiabatic assumption is equivalent to the requirement that 
+$1/t_{\text{diss}} \ll \bar{\omega}_{\text{orb}}$, 
+as well as $\omega_n \ll \bar{\omega}_{\text{orb}}$. 
+The first constraint is generally expected to be well-satisfied, 
+both when discussing losses dueto gravitational wave emission 
+[@takatsyObservabilityDynamicalTides2024] as well as 
+due to friction [@ripleyConstraintDissipativeTidal2024].
+
+Relaxing the $\omega_n \ll \bar{\omega}_{\text{orb}}$ assumption means considering 
+the effect of _dynamical_ (also known as _resonant_) tides.
+These can impact the phasing at low frequencies, especially in the case of eccentric binaries
 [@gambaResonantTidesBinary2023].
-This, as well as the impact of higher multipoles of the stars' deformation, is in any case generally considered to be a correction to the dominant behaviour, _i.e._ the quasi-static excitation of the quadrupolar normal mode of the star.
+Considering oscillations with angular structure at higher orders than the quadrupole is also possible
+[@jimenez-fortezaImpactHighorderTidal2018] 
+In any case, none of these higher-order corrections are required to explain current 
+observations of neutron star mergers: the clearest to date, GW170817,
+only provided comparatively weak constraints on the leading-order tidal parameters $\Lambda$
+[@theligoscientificcollaborationPropertiesBinaryNeutron2019].
 
 Love numbers are generally expected to vanish for black holes, 
 and to be nonzero for other compact objects such as neutron stars.
@@ -387,10 +446,14 @@ and in order to analyze signals from binaries with strong gravity
 we must understand its predictions precisely, 
 and be able to compute them quickly. 
 
-There are several approaches to waveform modelling, 
+There are several approaches to modelling the waveform emitted by a compact binary inspiral, 
 with varying degrees of computational complexity, 
 completeness in the inclusion of physical effects,
-and accuracy.
+and accuracy. For example, while all the approaches discussed here 
+can in principle include any amount of modes 
+in the spherical harmonic decomposition of binary emission (see @sec-phase-inclination-angle),
+some specific models only include the dominant one.
+
 Often, these approaches are calibrated or validated against full Numerical Relativity simulations. 
 These have been possible for around 20 years as of this writing [@pretoriusEvolutionBinaryBlack2005;@gourgoulhon3+1FormalismBases2007], and despite being a gold standard suffer from their own set of uncertainties. 
 
@@ -402,15 +465,25 @@ $$
 
 so this scalar must be computed at the edges of the simulation, integrated twice in the time variable, and then decomposed into spherical harmonics [@lofflerEinsteinToolkitCommunity2012]. 
 
-We will focus on the Post-Newtonian (@sec-post-newtonian) and EOB (@sec-eob) approaches to waveform generation; we also note the existence of Numerical Relativity surrogates and phenomenological models for comparable mass binaries, and the gravitational self-force formalism for extreme mass ratios.
+We will focus on the Post-Newtonian (@sec-post-newtonian) and Effective One Body (@sec-eob) approaches to waveform generation; we also note the existence of Numerical Relativity surrogates (_e.g._ `NRSur7dq4`, presented by @varmaSurrogateModelsPrecessing2019) and phenomenological models (_e.g._ `IMRPHenomXHM`, presented by @garcia-quirosIMRPhenomXHMMultimodeFrequencydomain2020) for comparable mass binaries, and the gravitational self-force formalism for extreme mass ratios (_e.g._ the second-order self-force calculations presented by  @poundSecondOrderSelfForceCalculation2020 and implemented in the Fast EMRI Waveforms software package [@katzFastEMRIWaveformsNewTools2021]).
 
 ### Post-Newtonian {#sec-post-newtonian}
 
-Post-Newtonian waveforms are obtained by analytically expanding Einstein's equations in powers of $v/c$. Thanks to the SPA approximation, this can lead to an analytical expression for the amplitude and phase as a function of frequency. 
+Post-Newtonian waveforms are obtained by analytically 
+expanding Einstein's equations in powers of $v/c$. 
+Thanks to the stationary phase approximation, this can lead 
+to an analytical expression for the amplitude and phase as a function of frequency. 
 
-@buonannoComparisonPostNewtonianTemplates2009 give a comparison of some commonly used Post-Newtonian waveform approximant, including the frequency-domain one `TaylorF2`, whose frequency-domain waveforms read [@messinaQuasi55PNTaylorF2Approximant2019]:
+These models are generally only accurate for a description of the early inspiral.
+
+@buonannoComparisonPostNewtonianTemplates2009 give a comparison 
+of some commonly used Post-Newtonian waveform approximants, including the frequency-domain one `TaylorF2`, 
+whose frequency-domain waveforms read [@messinaQuasi55PNTaylorF2Approximant2019]:
 $$
-\tilde{h}(f) = \sqrt{ \frac{5}{24} }\frac{c}{\pi^{2/3} d_{L}} \left( \frac{G\mathcal{M}}{c^{3}} \right)^{5/6}  f^{-7/6} \left( 1 + \sum_{n=2}^{n_\text{max}} A_{n} \left( \pi M f \right) ^{n} \right)  e^{i \Psi(f)}\,,
+\tilde{h}(f) = \sqrt{ \frac{5}{24} }\frac{c}{\pi^{2/3} d_{L}} 
+\left( \frac{G\mathcal{M}}{c^{3}} \right)^{5/6}  f^{-7/6} 
+\left( 1 + \sum_{n=2}^{n_\text{max}} A_{n} \left( \pi M f \right) ^{n} 
+\right)  e^{i \Psi(f)}\,,
 $$
 where the phase $\Psi$ is in the form reported in @eq-post-newtonian-phase-generic.
 
@@ -418,8 +491,12 @@ Post-Newtonian approximants including eccentricity also exist, though their vali
 
 ### Effective One Body {#sec-eob}
 
-Effective One-Body waveforms are obtained by mapping the relativistic two-body problem to the motion of a test particle in a deformed metric. 
-The following description will mainly describe the components of the `TEOBResumS` family of models, though similar considerations also apply to other models, such as those in the `SEOB` family.
+Effective One Body waveforms are obtained by mapping the relativistic 
+two body problem to the motion of a test particle in a deformed metric. 
+The following description will mainly describe 
+the components of the `TEOBResumS` family of models, 
+though similar considerations also apply to other models, 
+such as those in the `SEOB` family.
 
 The problem is described in a Hamiltonian setting,
 in terms of the dimensionless variables $(r, p_{r}, \varphi, p_{\varphi})$, 
