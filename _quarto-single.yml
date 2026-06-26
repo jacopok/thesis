@@ -1,5 +1,20 @@
 project:
   type: manuscript
 
-book:
-  author: "Jacopo Tissino"
+
+format:
+  pdf:
+    documentclass: article
+    colorlinks: true
+    notebook-links: false
+    linkcolor: blue
+    fig-width: 6
+    fig-height: 3
+    link-citations: true
+    # reference-section-title: "References"
+    pdf-engine: xelatex
+    echo: false
+    include-in-header:
+      text: |
+        \usepackage[scaled=.95]{cabin} 
+        \usepackage[varqu,varl]{inconsolata} 
