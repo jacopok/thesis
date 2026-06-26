@@ -11,7 +11,9 @@ format:
 
 # Intrinsic parameters and waveform modeling {#sec-intrinsic}
 
-This section will continue in the dissection of the gravitational signal emitted by the coalescence of two compact objects by considering its intrinsic parameters, those relating to the source itself and not to its relation to the observer.
+This chapter continues in the dissection of the gravitational signal 
+emitted by the coalescence of two compact objects by considering 
+its intrinsic parameters, those relating to the source itself and not to its relation to the observer.
 
 This gravitational signal is often qualitatively decomposed
 into three sections: inspiral, merger and post-merger.
@@ -20,9 +22,12 @@ When the remnant is a black hole the post-merger is an exponentially damped ring
 if this is not the case, the emission spectrum can become significantly less predictable and long-lived. 
 Though efforts have been made toward modelling it---see e.g. [@breschiKiloHertzGravitationalWaves2019;@breschiKilohertzGravitationalWaves2022;@breschiKilohertzGravitationalWaves2024] for neutron star binaries---we will not discuss this in detail here.
 
-The rest of this section mainly concerns the dependence of models for the inspiral on their parameters. 
+The rest of this chapter mainly concerns the dependence of models for the inspiral on their parameters. 
 Some of the ones we will consider are really only suitable for the early stages of inspiral, while others are accurate enough to describe the merger, and they can be smoothly connected to a model for the post-merger. 
 When applied to black hole binaries, the result is an Inspiral-Merger-Ringdown (IMR) waveform model.
+
+This chapter also contains a discussion of the results presented in @tissinoCombiningEffectiveonebodyAccuracy2023,
+regarding the construction and application of a fast frequency-domain surrogate for neutron star binaries.
 
 ## Component masses {#sec-masses}
 
@@ -410,7 +415,8 @@ even though the orbit-averaged angular frequency is comparatively low.
 
 The adiabatic assumption is equivalent to the requirement that 
 $1/t_{\text{diss}} \ll \bar{\omega}_{\text{orb}}$, 
-as well as $\omega_n \ll \bar{\omega}_{\text{orb}}$. 
+as well as $\omega_n \gg \bar{\omega}_{\text{orb}}$
+[@flanaganConstrainingNeutronStar2008]. 
 The first constraint is generally expected to be well-satisfied, 
 both when discussing losses dueto gravitational wave emission 
 [@takatsyObservabilityDynamicalTides2024] as well as 

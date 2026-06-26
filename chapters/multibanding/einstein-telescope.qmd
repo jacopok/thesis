@@ -11,6 +11,19 @@ format:
 
 # Einstein Telescope {#sec-einstein-telescope}
 
+In this chapter, we outline the concept for the Einstein Telescope detector,
+summarizing some main aspects related to the "Blue Book" we recently
+published [@abacScienceEinsteinTelescope2026], especially related
+to the challenges of accurate parameter estimation.
+
+Then, we discuss in detail an injection performed for a high-SNR GW250114-like signal 
+(@sec-gw250114-et), presented in @tissinoGeometryLunarGravitational2026.
+Finally, we present the results of population-scale analyses
+comparing the $\Delta$ and 2L configurations, presented in @santoliquidoFastAccurateParameter2025
+and @santoliquidoComparingNextgenerationDetector2026.
+
+## Detector concept
+
 The Einstein Telescope [@punturoEinsteinTelescopeThirdgeneration2010] is a planned next-generation (XG) gravitational wave detector in Europe.
 It will consist of interferometers, like current detectors, but with several improvements enabling a ten-fold improvement in sensitivity [@hildSensitivityStudiesThirdgeneration2011]:
 
@@ -161,10 +174,10 @@ that is allows (our simulation of) the ET to _triangulate_ the signal,
 despite its extremely short baseline of $33 \upmu \text{s} \times c$. 
 In order to show this, in @fig-arrival-times-gw250114-et we show 
 the posterior distribution on the arrival time of the merger at the three beamsplitters. 
+The three arrival times are well-measured on the scale of tens of microseconds, 
+thus the time delays between detectors can inform the sky localization.
 
 ![Posterior distribution on the arrival times at the three ET beamsplitters in our GW250114 injection. From @tissinoGeometryLunarGravitational2026.](figures/arrival_times_Delta.pdf){#fig-arrival-times-gw250114-et width=80%}
-
-
 
 ## Neural posterior estimation for high-mass black holes
 
@@ -256,6 +269,9 @@ In @fig-einstein-telescope-sky-multimodality we summarize the number of modes in
 A noticeable fraction of sources exhibits eight-fold multimodality with the $\Delta$ configuration. 
 Not all of them do, since in some cases the posterior may be broad enough not to qualify as "multimodal" with the clustering algorithm we are using even if it is symmetric; alternatively, for sources close to the local horizon the modes with positive and negative $\beta$ may not be distinguishable, leading to a 4-fold multimodality.
 
+The effect we discussed in @sec-gw250114-et, on the other hand, with the travel time between beamsplitters
+enabling the exclusion of certain modes, is not observed at the lower SNRs considered here.
+
 ### 2L shape {#sec-et-2l}
 
 While the 2L configuration does not exhibit the eight-fold multimodalities we see with the $\Delta$, it is not free from them, as is apparent from @fig-einstein-telescope-sky-multimodality.
@@ -282,7 +298,7 @@ Multimodalities in distance are observed for a significant fraction of the sourc
 
 In order to verify that our results are robust, we perform some statistical consistency tests. 
 
-![Results of a pp-plot test for all configurations considered by @santoliquidoComparingNextgenerationDetector2025.](figures/einstein-telescope/all_pp-plots.pdf){#fig-einstein-telescope-pp-plots width=90%}
+![Results of a pp-plot test for all configurations considered by @santoliquidoComparingNextgenerationDetector2025. For all parameters and all configurations, we confirm the statistical self-consistency of our approach.](figures/einstein-telescope/all_pp-plots.pdf){#fig-einstein-telescope-pp-plots width=90%}
 
 The first among them is a $p$-$p$ test (@sec-pp-plot), shown in @fig-einstein-telescope-pp-plots.
 Furthermore, we perform full parameter estimation with nested sampling (@sec-nested-sampling) for a selection of sources, and directly compare the posterior distribution to that obtained with neural posterior estimation.

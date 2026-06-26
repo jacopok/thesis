@@ -7,8 +7,7 @@ They had been on my to-do list for a while and I'm happy your review gave me
 motivation to add them.
 
 You should also have received an updated CV, which includes a mention of the main 
-talks I gave (another referee raised the point that they were missing).
-
+conference talks I gave (another referee raised the point that they were missing).
 
 ## Sec 1: Introduction
 
@@ -24,7 +23,8 @@ as many mistakes as possible are corrected. When doing so, I will be sure to als
 include a link to the website, as you suggest; I already set up everything so that 
 upon a push to the repository the website can be automatically deployed.
 
-Discussed in an earlier reply.
+In any case, I added a note to the current version of the thesis saying that the 
+404 error is expected.
 
 - [ ] Although Section 1.1 purports to explicitly outline the contributions made by the author, I do not find it clear exactly what the personal contributions to some mentioned publications were. [...]
 
@@ -555,9 +555,9 @@ The discussion still holds up qualitatively, but the figures and text have been 
 
 
 
-- [ ] Fig 8.30: I really like this figure, it shows the difference between the different scenarios explored very effectively! To save the reader having to scroll back to the list that describes these scenarios, could they be recapped in the figure caption?
+- [x] Fig 8.30: I really like this figure, it shows the difference between the different scenarios explored very effectively! To save the reader having to scroll back to the list that describes these scenarios, could they be recapped in the figure caption?
 
-
+Added.
 
 - [x] 8.3.3: “doing so for the complete injection, which requires a good amount of resources even with a close-to-optimal frame would be wasteful and lengthy”  “doing so for the complete injection, which requires a good amount of resources even with a close-to-optimal frame, would be wasteful and lengthy” 
 

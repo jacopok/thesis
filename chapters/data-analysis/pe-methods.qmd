@@ -17,6 +17,15 @@ from thesis_scripts import *
 
 # Statistical methods {#sec-statistical-methods}
 
+This chapter starts with a review of the theory behind
+Bayesian parameter estimation, including a detailed description 
+of a commonly used diagnostic tool: the $p$-$p$ plot (@sec-pp-plot)
+
+Then, we provide a description of the main
+statistical methods used to perform state-of-the-art parameter 
+estimation for gravitational waves, including Nested Sampling 
+(@sec-nested-sampling) and Neural Posterior Estimation (@sec-neural-posterior-estimation).
+
 {{< include sections/_pe-general.qmd >}}
 
 {{< include sections/_nested-sampling.qmd >}}

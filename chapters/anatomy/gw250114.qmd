@@ -11,6 +11,17 @@ format:
 
 # Tests of General Relativity with GW250114 {#sec-gw250114}
 
+In this chapter, we present the results of the discovery paper for the event GW250114,
+the clearest to date, which enabled us to perform a high-significance test of Hawking's area law,
+as well as black hole ringdown spectroscopy [@abacGW250114TestingHawkings2025].
+
+The current chapter and the two following it will discuss the "anatomy" of a gravitational wave signal, the way it is parameterized, and the way it appears in our detectors, using GW250114 as an example wherever possible, but also with an eye toward low frequencies, which we will then expand on in @sec-lgwa. 
+The current chapter will focus on ringdown, as this is what allowed for the most prominent scientific results with GW250114. 
+@sec-intrinsic will describe the intrinsic modelling of a gravitational wave signal, with parameters such the masses and spins of the two component objects, eccentricity, tidal effects.
+In @sec-extrinsic we will bring the signal from source to detector, discussing the impact of spin-induced precession, detector motion and antenna patterns.
+
+## The signal
+
 On January 14th, 2025, the LIGO-Virgo-KAGRA collaboration detected the clearest binary black hole merger to date: its signal to noise ratio was between 77 and 80.
 
 The signal is clearly visible in the data with minimal processing: @fig-gw250114-whitened-strain-simplified shows whitened strain data (see @sec-strain-whitening) from the Hanford and Livingston detectors.
@@ -28,11 +39,6 @@ We can visually identify the sections of the waveform emitted by a black hole co
 Indeed, if we overlay the general relativistic prediction for a binary merger (@fig-gw250114-whitened-strain) we can see that it matches very closely.
 
 ![Upper panel: whitened strain for GW250114 in the Livingston and Hanford detectors, along with modelled and unmodelled waveform reconstructions. Lower panel: a time-frequency spectrogram of the whitened data. Adapted from @abacGW250114TestingHawkings2025.](figures/Figure_1.pdf){#fig-gw250114-whitened-strain width=100%}
-
-This chapter will discuss the "anatomy" of a gravitational wave signal, the way it is parameterized, and the way it appears in our detectors, using GW250114 as an example wherever possible, but also with an eye toward low frequencies, which we will then expand on in @sec-lgwa. 
-The current chapter will focus on ringdown, as this is what allowed for the most prominent scientific results with GW250114. 
-@sec-intrinsic will describe the intrinsic modelling of a gravitational wave signal, with parameters such the masses and spins of the two component objects, eccentricity, tidal effects.
-In @sec-extrinsic we will bring the signal from source to detector, discussing the impact of spin-induced precession, detector motion and antenna patterns.
 
 ## Ringdown {#sec-ringdown}
 

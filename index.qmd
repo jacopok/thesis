@@ -104,7 +104,11 @@ These are reported in this thesis' @sec-einstein-telescope-challenges,
 which also includes the results of a series of papers
 led by Filippo Santoliquido [@santoliquidoClassifyingBinaryBlack2024;@santoliquidoFastAccurateParameter2025;@santoliquidoComparingNextgenerationDetector2025], related to 
 population-scale data analysis with the Einstein Telescope.
-We collaborated closely, and I 
+We collaborated closely, and besides editing all the text, I work on the theroretical aspects for many of them, 
+like the theoretical Bayesian framework for the classification of 
+binaries [@santoliquidoClassifyingBinaryBlack2024] 
+or the understanding of the arrival time bimodality
+with ET-$\Delta$ [@santoliquidoFastAccurateParameter2025].
 
 The Lunar Gravitational Wave Antenna (LGWA) collaboration also published a white paper
 [@ajithLunarGravitationalwaveAntenna2025]. 
@@ -122,8 +126,9 @@ I led a paper on the generic solution to the LGWA parameter estimation problem [
 where we show that it must generically be performed in a coordinate frame comoving with the Solar System Barycenter, 
 which should be centered at a location close to the detector for better computational efficiency.
 I was also involved in a recent work on LGWA parameter estimation  
-for a massive black hole binary [@iacovelliGravitationalwaveParameterEstimation2025], 
-which lasted for a short enough time in band not to require 
+for a massive black hole binary [@iacovelliGravitationalwaveParameterEstimation2026], 
+by performing cross-checks to ensure that the analysis was consistent: indeed, the signal 
+lasted for a short enough time in band not to require 
 an accurate treatment of the lunar orbit around the Sun. 
 
 I contributed to the development and maintenance of the software package `GWFish` [@dupletsaGwfishSimulationSoftware2023], 
@@ -138,9 +143,11 @@ star binaries.
 
 ## Acknowledgements
 
-Many people 
+While writing this thesis I benefited from the help of many mentors, colleagues 
+and friends. 
 
-- Supervisor: Jan Harms
-- Referees: Giovanni Benato, Isobel Romero-Shaw, Enrico Barausse, Jonathan Gair
-- Friends and colleagues who helped me with the thesis: Gregorio Carullo, Filippo Santoliquido, Rossella Gamba, Sara Gliorio.
-- Who helped me with other work
+I would like to thank my supervisor, Jan Harms, as well as the referees who read through
+this thesis to ensure it was in the best shape possible: Enrico Barausse, Giovanni Benato, Isobel Romero-Shaw.
+
+Several friends and colleagues also helped me with the thesis: I would like to thank Pierpaolo Bilotto, Gregorio Carullo, Rossella Gamba, Sara Gliorio, Vishnu Sanjay, Filippo Santoliquido, Michael Williams.
+

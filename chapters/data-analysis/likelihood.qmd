@@ -10,7 +10,18 @@ format:
 ---
 # Gravitational wave parameter estimation {#sec-gw-pe}
 
-This chapter will outline the basic tools used for the estimation of gravitational wave signal parameters. 
+This chapter will outline the basic tools used for 
+the estimation of gravitational wave signal parameters,
+including the Whittle likelihood (@sec-whittle-likelihood),
+the full time-domain likelihood (@sec-time-domain-pe),
+strain visualization tools (@sec-strain-whitening) and 
+likelihood acceleration techniques (@sec-likelihood-acceleration).
+
+Furthermore, in @sec-windowing we summarize the main result of a recent work
+on the (lack of) necessity to correct the likelihood 
+for the loss of signal power incurred by windowing the data.
+
+## Fourier transform basics
 
 The starting point for our analysis is typically an estimate for the gravitational wave strain observed by one or more detectors, which is expressed as a discretized time series $d(i \Delta t)$, with integer $i$. 
 Each of the entries in this time series is noisy, and they cannot be considered in isolation: due to the wide-band nature of the noise, any given pair of points $d(i \Delta t)$ and $d(j\Delta t)$ will in general be _correlated_.

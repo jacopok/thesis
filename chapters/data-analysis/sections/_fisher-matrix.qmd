@@ -139,7 +139,7 @@ onto a plane perpendicular to the source direction.
 Specifically, it is defined as 
 
 $$ A_s = 2 \pi \sqrt{\text{var}(r_\theta) \text{var}(r_\phi) - \text{cov}^2(r_\theta, r_\phi)}\,,
-$$
+$${#eq-statistical-area}
 
 where the coordinates $r_\theta$ and $r_\phi$ parameterize the projected motion of
 the detector in the aforementioned plane.
