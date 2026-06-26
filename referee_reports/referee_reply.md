@@ -47,8 +47,8 @@ written and genuinely useful as a reference, are somewhat long; a more concise t
 the standard material, with more emphasis on the candidate's own results, would have
 improved the balance of the thesis. 
 
-I added notes about results being my own work in several places in the thesis.
-Also, at the request of another referee, I added more detail to that introductory section.
+I added notes about results being my own work in several places in the thesis,
+as well as more detail to the introductory section.
 
 As far as the introductory chapters are concerned, I agree that they are 
 quite long. This was a deliberate choice, made for two reasons: 
