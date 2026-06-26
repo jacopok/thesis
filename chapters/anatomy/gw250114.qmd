@@ -112,7 +112,7 @@ The exceptional SNR of GW250114 allowed for the confident detection of the $\ell
 Its amplitude was constrained to be non-vanishing: @fig-gw250114-mode-amplitudes illustrates posterior distributions on the 220 and 221 amplitudes. 
 There is a temporal window, between 6 and 8 $t_{M_{f}}$ after the peak, during which the overtone amplitude is constrained to be larger than 0 at more than $3 \sigma$.
 
-![Posterior distributions for the amplitudes of the fundamental and first overtone of GW250114. Adapted from @abacGW250114TestingHawkings2025.](figures/spectroscopy_10.5M.pdf){#fig-gw250114-mode-amplitudes}
+![Posterior distributions for the amplitudes of the fundamental and first overtone of GW250114. More details in the text. Adapted from @abacGW250114TestingHawkings2025.](figures/spectroscopy_10.5M.pdf){#fig-gw250114-mode-amplitudes}
 
 The grey bands in the figure indicate the theoretical expectation for the exponential decay of the two modes. 
 They are obtained by considering the posterior samples at the reference time for that analysis ($6 t_{M_{f}}$ for the 221, $10.5t_{M_{f}}$ for the 220), and evolving them backward and forward in time according to their respective amplitude and decay time.
@@ -140,7 +140,7 @@ The grey diagonal band shows the range of possible combinations of values under 
 The two estimated frequencies change as a function of detector-frame remnant mass $(1+z)M_{f}$ and spin $\chi_{f}$; these are free parameters, informed only by the ringdown, hence their wide posterior distributions. 
 If we were to use the whole signal, as opposed to only its ringdown, to inform our estimates of these paramters, we would get precise values near the black cross.
 
-![Spectroscopic test of the 221 QNM's frequency with GW250114. Adapted from @abacGW250114TestingHawkings2025.](figures/221_kerr_test.pdf){#fig-spectroscopy width=80%}
+![Spectroscopic test of the 221 QNM's frequency with GW250114. The left panel shows the posterior distribution on the 220 and 221 detector-frame frequencies, with a grey band indicating which combinations of these are allowed within General Relativity; the predicted ratio depends on the mass and spin of the remnant, hence we also mark the maximum-likelihood values for these based on the full-signal analysis. In the left panel, we show the prior and posterior distributions on the parameter $\delta f_{221}$. PYRING and RINGDOWN refer to two independent analysis pipelines we adopted. Adapted from @abacGW250114TestingHawkings2025.](figures/221_kerr_test.pdf){#fig-spectroscopy width=80%}
 
 ## Area law
 
@@ -176,7 +176,7 @@ $$
 The inspiral and ringdown analyses do not directly give us access to the mass $M$ of the black holes: instead, the signal directly depends on detector frame masses, in the form $(1+z)M$ --- see @sec-distance-redshift --- and therefore we can only probe "redshifted areas" in the form $(1+z)^{2}A$.
 Fortunately, this does not diminish the power of our analysis, as the ratio $(A_{f} - A_{i} ) / A_{i}$ is independent of the signal's redshift.
 
-![Posterior distribution for the fractional area change of GW250114. Adapted from @abacGW250114TestingHawkings2025.](figures/area_law_plot_combined.pdf){#fig-area-law-posterior width=80%} 
+![Posterior distribution for the fractional area change of GW250114. We describe the meaning of the panels in the text. Adapted from @abacGW250114TestingHawkings2025.](figures/area_law_plot_combined.pdf){#fig-area-law-posterior width=80%} 
 
 The lower panel of @fig-area-law-posterior illustrates the posterior distribution on this quantity, which excludes a negative area variation to high credibility. The green histogram corresponds to the aforementioned analysis performed 
 while independently considering the pre- and post-merger sections of the signal. 
@@ -198,5 +198,5 @@ We further explore the robustness of this result in @fig-area-law-varying-time;
 the rapid decay in the ringdown signal makes the choice of cut time there significantly more impactful than that in the inspiral.
 Despite this, the statement $A_{f} - A_{i} > 0$ is robustly verified for a wide range of choices for the end time of the inspiral analysis, $t_<$, and the start time of the ringdown analysis, $t_>$.
 
-![Robustness of the fractional area change of GW250114 to changes in cut times. Adapted from @abacGW250114TestingHawkings2025.](figures/supp_area_compare_10.5M.pdf){#fig-area-law-varying-time} 
+![Robustness of the fractional area change of GW250114 to changes in cut times. For various choices of cut time, we show the corresponding 90% interval and median for the posterior distribution on the initial and final black hole area respectively. For the final area, we show results obtained both with an analysis including both 220 and 221 overtones, as well as with an analysis including only the 220 one. Adapted from @abacGW250114TestingHawkings2025.](figures/supp_area_compare_10.5M.pdf){#fig-area-law-varying-time} 
 

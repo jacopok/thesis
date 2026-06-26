@@ -778,7 +778,7 @@ a long observation of these sources' inspiral, which would allow for a precision
 measurement of any environmental effects, such as dynamical friction from 
 a dark matter halo or migration torques from an accretion disk
 [@cardosoConstraintsAstrophysicalEnvironment2020;@speriQuantifyingScientificPotential2026].
-Aso, these early-time orbits would likely be non-circular, and measuring their 
+Also, these early-time orbits would likely be non-circular, and measuring their 
 eccentricity could provide evidence for or against different formation channels.
 
 #### Non-CBC sources
@@ -1120,7 +1120,16 @@ However, the trend is also observed in right ascension
 and declination alone: no density estimate is required
 to compute their quantiles, so it cannot be the sole cause.
 
-
+Overall, when looking at the results obtained with our two approaches,
+we can say that the inclusion of Gaussian noise can 
+modify posterior distributions in nontrivial ways, 
+both by making them narrower and broader;
+which of these is more often the case depends on the specific
+scenario.
+Nevertheless, at least for this injection,
+the impact of the inclusion of noise in the injection is generally
+quite minor, inducing a scatter 90% quantile width on the order
+of a few tens of percent points at most.
 
 ## Reference frames for long observations {#sec-lgwa-reference-frames}
 
@@ -1394,7 +1403,6 @@ the statistical area is generally more involved.
 In this section, we validate the expectation that the sky localization scales inversely with 
 the statistical area $A_s$, as well as exploring when the geometric area 
 can be used to approximate $A_s$.
-
 In order to do so, we set up 12 injections with the same parameters 
 as our baseline GW250114 analysis, except for the following:
 
@@ -1475,7 +1483,7 @@ In order to show a single curve in the plot, we are computing this with the LGWA
 in the __simplified, uniform SNR__ case this would give a lower result, and hence 
 the estimated sky area would be higher. 
 Specifically, in the 12-month case the estimated $f_0$ with this procedure is 391 mHz,
-while using the modified $f^{4/3}$ PSD we get an order of magnitude lower result, 33 mHz.
+while using the modified $f^{4/3}$ PSD we get a lower result by an order of magnitude, 33 mHz.
 Accounting for this, the scaling of the $A_g$ Fisher prediction agrees with the 
 __simplified, uniform SNR__ results.
 

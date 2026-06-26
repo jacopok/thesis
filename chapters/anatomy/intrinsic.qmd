@@ -426,7 +426,7 @@ both when discussing losses dueto gravitational wave emission
 [@takatsyObservabilityDynamicalTides2024] as well as 
 due to friction [@ripleyConstraintDissipativeTidal2024].
 
-Relaxing the $\omega_n \ll \bar{\omega}_{\text{orb}}$ assumption means considering 
+Relaxing the $\omega_n \gg \bar{\omega}_{\text{orb}}$ assumption means considering 
 the effect of _dynamical_ (also known as _resonant_) tides.
 These can impact the phasing at low frequencies, especially in the case of eccentric binaries
 [@gambaResonantTidesBinary2023].
@@ -605,8 +605,8 @@ The EOB approach is also amenable to being extended with beyond-GR parameters, s
 The evaluation of gravitational waveform models is commonly a bottleneck for the likelihood, therefore significant efforts have been devoted to the development of _surrogate models_, which reproduce the results from a computationally expensive model.
 
 As an example, we show results from `mlgw_bns` [@tissinoCombiningEffectiveonebodyAccuracy2023],
-a surrogate of the frequency-domain model `TEOBResumSPA` [@gambaFastFaithfulFrequencydomain2020] for aligned-spin neutron star binaries
-with tidal effects --- a 5-dimensional parameter space, with parameters $(q, \chi_1, \chi_2, \Lambda_1, \Lambda_2)$, since all others can be modeled analytically.
+a surrogate of the frequency-domain inspiral-only model `TEOBResumSPA` [@gambaFastFaithfulFrequencydomain2020] for aligned-spin neutron star binaries
+with tidal effects --- a 5-dimensional parameter space, with parameters $(q, \chi_1, \chi_2, \Lambda_1, \Lambda_2)$, since all other parameters can be modeled analytically.
 
 As a surrogate, it is trained on the base model, which can be evaluated at arbitrary points in the parameter space. 
 The surrogate's accuracy depends on the number of training data points, and it is measured in terms of the mismatch

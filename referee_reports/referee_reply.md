@@ -1,6 +1,6 @@
 ---
 # compile with:
-# pandoc -f markdown-implicit_figures --citeproc referee-reply.md -o referee-reply.pdf
+# pandoc -f markdown-implicit_figures --citeproc referee_reply.md -o referee_reply.pdf
 
 title: "Referee reply"
 author: Jacopo Tissino
@@ -208,7 +208,7 @@ Very good idea! I added errorbars based on the one sigma interval as computed fr
 Furthermore, I changed the comparison from 50 vs 100 live points to 25 vs 100: this way, there is a factor 2 between the standard deviation, which is clearer.
 I also took the occasion to make the plot slightly more colorful and appealing.
 
-- [c] 2.2.3.1: The statements “this seems restrictive at first glance, but does not actually constrain the class of models we can consider” and “this restricts the  space of useable priors” seem contradictory. Please clarify.
+- 2.2.3.1: The statements “this seems restrictive at first glance, but does not actually constrain the class of models we can consider” and “this restricts the  space of useable priors” seem contradictory. Please clarify.
 
 Indeed, the discussion was incomplete and unclear. 
 "The class of models we can consider" in theory is larger than "the space of useable priors" we can sample from in practice with existing computational methods. 
