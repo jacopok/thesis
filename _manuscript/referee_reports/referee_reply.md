@@ -1,3 +1,74 @@
+I made several improvements to the thesis following the helpful reports by the referees.
+
+The major changes are as follows, while I listed the minor ones in the detailed responses to each referee.
+
+- I updated the figures in chapters 7 and 8 to those we ultimately used in the [Geometry of Lunar Gravitational Wave Detection paper](https://arxiv.org/abs/2606.04918); while finishing the preparation we found a small issue in the calculations, which did not affect the conclusions. Also, in that paper we presented results for an injection with the Einstein Telescope, more details on which are now in the Einstein Telescope chapter. 
+-  I added more details to the Introduction, as well as to the start of all chapters, regarding my personal contributions.
+- I added a new discussion on the impact of non-zero Gaussian noise on LGWA analyses. This is in two new sections: in chapter 3,  a description of how a such an injection can cheaply be generated, as outlined in the original relative binning paper (Zackay et al. 2018). The other is in chapter 8, where I describe the results of a campaign of noisy injections and compare them to the noise-free case.
+- I added a more detailed discussion of the impact of calibration and astrophysical calibration, showing the envelopes for GW250114 and GW250207. 
+- I added priors tables in chapters 7 and 8, and made sure to mention which parameters were sampled in each analysis.
+- I added an "acknowledgements" section.
+
+# Reply to Prof. Barausse
+
+Dear Prof. Barausse,
+
+I thank you for your kind words and useful comments.
+Here, I will provide a brief response to the points he raises.
+
+1. First, the
+boundary between established background and the candidate's own contributions is not
+always evident. This is set out clearly once, in the introductory section on personal
+contributions, but the reader would benefit from having it briefly restated at the start of each
+chapter or section. Related to this, the introductory chapters, while pedagogically very well
+written and genuinely useful as a reference, are somewhat long; a more concise treatment of
+the standard material, with more emphasis on the candidate's own results, would have
+improved the balance of the thesis. 
+
+I added notes about results being my own work in several places in the thesis.
+Also, at the request of another referee, I added more detail to that introductory section.
+
+As far as the introductory chapters are concerned, I agree that they are 
+quite long. This was a deliberate choice, made for two reasons: 
+as you note, it allowed me to create a reference which will hopefully
+be useful to others.
+Furthermore, many of thse chapters include novel results from recent papers
+which I was involved in:
+
+- in chapter 3, the results from the "[window strikes back](https://doi.org/10.1088/1361-6382/ae1ac7)" paper --- I coauthored the figures shown in the thesis from that work;
+- in chapter 4, the results from the [GW250114 detection paper](https://doi.org/10.1103/kw5g-d732), which I was part of the writing team for --- specifically, all the figures shown in that chapter were either authored or coauthored by me;
+- in chapter 5, the results from the [GW150914 reanalysis](https://doi.org/10.1088/1361-6382/adfe50) paper and the [machine learning BNS surrogate](https://journals.aps.org/prd/abstract/10.1103/PhysRevD.107.084037) paper.
+
+I felt that weaving these results into the discussion of 
+standard results 
+
+2. Second, in some of the parameter-estimation
+exercises it is not always clear which parameters are held fixed and which are marginalized,
+and the choice of priors, although discussed in several places, is not consistently stated;
+making the inference setup explicit in each case would further strengthen the results and
+their reproducibility, especially because – as the thesis itself rightly emphasizes for
+eccentricity, for instance – conclusions can strongly depend on the priors. 
+
+I added three tables, clearly outlining the prior choices and injected parameters
+for the main injections performed with the Einstein Telescope and Lunar Gravitational Wave Antenna.
+These should also clarify which parameters were varied and which were not.
+
+Furthermore, the paper on these results is now out as a preprint, 
+and with it I published a [Zenodo data release](https://zenodo.org/records/20510354).
+This will ensure full reproducibility.
+
+3. Third, the thesis
+contains a large number of figures, several of which would have warranted somewhat more
+interpretation in the text.
+
+I added more discussion to the captions of several figures, as well as 
+to the surrounding text, especially in chapters 7 and 8.
+In the process of addressing the other referee's concerns
+I did add more figures, but I ensured these were all well described
+in their captions as well in the text.
+
+# Reply to Dr. Romero-Shaw
+
 Dear Dr. Romero-Shaw,
 
 I would like to thank you for your thorough and thoughtful review of my thesis.
@@ -144,7 +215,7 @@ Fixed.
 
 Fixed.
 
-###  Sec 3: Gravitational wave parameter estimation
+##  Sec 3: Gravitational wave parameter estimation
 
 - Note 4: It would be helpful to include a brief description of aliasing at the end of this note.
 
@@ -187,7 +258,7 @@ Indeed, noted. To my knowledge this is fairly unexplored territory.
 
 Done.
 
-###  Sec 4: Tests of General Relativity with GW250114
+##  Sec 4: Tests of General Relativity with GW250114
 
 
 - I am once again confused as to why the author states “the signal to noise ratio was higher than 75” rather than stating the measured value?
@@ -206,7 +277,7 @@ Corrected.
 
 I added more detail on these aspects, as well as a brief argument for the energy conservation limit.
 
-###  Sec 5: Intrinsic parameters and waveform modelling
+##  Sec 5: Intrinsic parameters and waveform modelling
 
 - 5.1: The Blanchet citation should be a \citep rather than a \citet.
 
@@ -295,7 +366,7 @@ Fixed.
 These are linear fits to the waveform evaluation time.
 I clarified it in the caption.
 
-###  Sec 6: Extrinsic parameters and signal projection 
+##  Sec 6: Extrinsic parameters and signal projection 
 
 - Note 7: There is an unfinished sentence: “The formulas given here are again from”. Also, “GW” has not actually been defined and “gravitational waves” is used throughout the majority of the thesis, so I suggest expanding it here.
 
@@ -551,9 +622,9 @@ submitted about this we found a (small) issue in the calculations.
 The discussion still holds up qualitatively, but the figures and text have been updated
 (and, I hope, clarified).
 
-- [ ] The list of injection setups is broken by two pages that each contain one figure. Is it possible to bring this whole list onto the same page for ease of readability?
+- The list of injection setups is broken by two pages that each contain one figure. Is it possible to bring this whole list onto the same page for ease of readability?
 
-
+By adding more material before this section, it happens to now be on one page.
 
 - Fig 8.30: I really like this figure, it shows the difference between the different scenarios explored very effectively! To save the reader having to scroll back to the list that describes these scenarios, could they be recapped in the figure caption?
 
@@ -572,3 +643,4 @@ Fixed.
 - “grond-based”  “ground based”
 
 Changed.
+

@@ -27,7 +27,10 @@ Some of the ones we will consider are really only suitable for the early stages 
 When applied to black hole binaries, the result is an Inspiral-Merger-Ringdown (IMR) waveform model.
 
 This chapter also contains a discussion of the results presented in @tissinoCombiningEffectiveonebodyAccuracy2023,
-regarding the construction and application of a fast frequency-domain surrogate for neutron star binaries.
+regarding the construction and application of a fast frequency-domain surrogate for neutron star binaries,
+as well as the ones in @gambaRevisitingGW150914Nonplanar2025, regarding
+a re-analysis of the GW150914 event with a waveform model accounting for both 
+eccentricity and spin-precession.
 
 ## Component masses {#sec-masses}
 

@@ -149,5 +149,10 @@ and friends.
 I would like to thank my supervisor, Jan Harms, as well as the referees who read through
 this thesis to ensure it was in the best shape possible: Enrico Barausse, Giovanni Benato, Isobel Romero-Shaw.
 
-Several friends and colleagues also helped me with the thesis: I would like to thank Pierpaolo Bilotto, Gregorio Carullo, Rossella Gamba, Sara Gliorio, Vishnu Sanjay, Filippo Santoliquido, Michael Williams.
+Several friends and colleagues also helped me with the thesis: I would specifically like to thank Pierpaolo Bilotto, Gregorio Carullo, Rossella Gamba, Sara Gliorio, Vishnu Sanjay, Filippo Santoliquido, Michael Williams.
 
+Many more people supported me through these years, with a list that would be too long to 
+make comprehensive. I would like to thank friends and family 
+from the many communities I've had the honor of joining, in L'Aquila, Pordenone, Udine, Jena; 
+as well as the many colleagues I have worked with, 
+scattered throughout Europe and other continents.

@@ -1275,13 +1275,13 @@ from IPython.display import Markdown
 
 Markdown(r"""| Location | Stage | Timing uncertainty (90\% interval) |
 |---:|----:|---:|
-| global optimum  | $f_{22}=0.56$ Hz | 0.09 s |
+| global optimum  | $f_{22}=0.56$ Hz | 0.1 s |
 | Earth | $f_{22}=0.56$ Hz | 0.15 s |
 | Moon | merger | 0.24 s |
-| Earth | merger | 0.24 s |
-| Solar System Barycenter | merger | 11.16 s |
-| Solar System Barycenter | $f_{22}=0.56$ Hz | 11.25 s |
-| Earth | $f_{22}=0.03$ Hz | 225 s |
+| Earth | merger | 0.25 s |
+| Solar System Barycenter | merger | 11.66 s |
+| Solar System Barycenter | $f_{22}=0.56$ Hz | 11.72 s |
+| Earth | $f_{22}=0.03$ Hz | 238 s |
 """)
 ```
 
@@ -1360,7 +1360,7 @@ Neglecting the terms depending on $\gamma$, which is subdominant for a relativel
 
 :::
 
-![Velocity of the detector as a function of frequency, compared to the relative velocity of the detector and the minimum in timing uncertainty. For a long duration, the minimum approximately moves with the detector, as evidenced by their relative velocity being smaller in modulus than the Moon's orbital velocity.](figures/minimum_uncertainty_velocity.pdf){#fig-minimum-uncertainty-velocity width=80%}
+![Velocity of the detector as a function of frequency, compared to the relative velocity of the detector and the minimum in timing uncertainty. For a long duration, the minimum approximately moves with the detector, as evidenced by their relative velocity being smaller in modulus than the Moon's orbital velocity.](figures/minimum_uncertainty_velocity.pdf){#fig-minimum-uncertainty-velocity width=100%}
 
 Finally, in @fig-minimum-uncertainty-velocity we show the velocity of the point $\vec{r}_\text{min} (t(f))$, where we compute the time $t(f)$ associated with the frequency $f$ based on a SPA of the injected signal. 
 We can see that, even though its motion is obtained exclusively by post-processing posterior samples, it retains a certain "memory" of the detector's trajectory through the Solar System. 
