@@ -10,9 +10,10 @@ format:
 ---
 # Lunar Gravitational Wave Antenna {#sec-lgwa}
 
-This chapter introduces the detector concept for the Lunar Gravitational Wave Antenna,
-following the whitepaper we recently published as a collaboration [@ajithLunarGravitationalwaveAntenna2025], 
-and outlines some novel contributions, namely the first discussions on the issues related to full 
+In this chapter we introduce the Lunar Gravitational Wave Antenna,
+following the whitepaper we recently published as a collaboration [@ajithLunarGravitationalwaveAntenna2025].
+Then, we outline some novel contributions, 
+namely the first discussion of the issues related to full 
 Bayesian parameter estimation for compact binaries with this detector, 
 which we presented in @tissinoGeometryLunarGravitational2026 and @iacovelliGravitationalwaveParameterEstimation2026.
 

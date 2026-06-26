@@ -11,9 +11,10 @@ format:
 
 # Intrinsic parameters and waveform modeling {#sec-intrinsic}
 
-This chapter continues in the dissection of the gravitational signal 
+In this chapter we continue in the dissection of the gravitational signal 
 emitted by the coalescence of two compact objects by considering 
-its intrinsic parameters, those relating to the source itself and not to its relation to the observer.
+its intrinsic parameters, 
+those relating to the source itself and not to its relation to the observer.
 
 This gravitational signal is often qualitatively decomposed
 into three sections: inspiral, merger and post-merger.
@@ -26,7 +27,7 @@ The rest of this chapter mainly concerns the dependence of models for the inspir
 Some of the ones we will consider are really only suitable for the early stages of inspiral, while others are accurate enough to describe the merger, and they can be smoothly connected to a model for the post-merger. 
 When applied to black hole binaries, the result is an Inspiral-Merger-Ringdown (IMR) waveform model.
 
-This chapter also contains a discussion of the results presented in @tissinoCombiningEffectiveonebodyAccuracy2023,
+This chapter also contains a discussion of the results we presented in @tissinoCombiningEffectiveonebodyAccuracy2023,
 regarding the construction and application of a fast frequency-domain surrogate for neutron star binaries,
 as well as the ones in @gambaRevisitingGW150914Nonplanar2025, regarding
 a re-analysis of the GW150914 event with a waveform model accounting for both 

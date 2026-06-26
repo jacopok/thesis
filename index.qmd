@@ -125,9 +125,9 @@ effect of dust on an unshielded laser-interferometric detector.
 I led a paper on the generic solution to the LGWA parameter estimation problem [@tissinoGeometryLunarGravitational2026], 
 where we show that it must generically be performed in a coordinate frame comoving with the Solar System Barycenter, 
 which should be centered at a location close to the detector for better computational efficiency.
-I was also involved in a recent work on LGWA parameter estimation  
-for a massive black hole binary [@iacovelliGravitationalwaveParameterEstimation2026], 
-by performing cross-checks to ensure that the analysis was consistent: indeed, the signal 
+I was also involved in a recent work on LGWA parameter estimation for 
+a massive black hole binary [@iacovelliGravitationalwaveParameterEstimation2026]:
+I performed cross-checks to ensure that the analysis was consistent; indeed, the signal 
 lasted for a short enough time in band not to require 
 an accurate treatment of the lunar orbit around the Sun. 
 

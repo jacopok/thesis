@@ -10,7 +10,7 @@ format:
 ---
 # Gravitational wave parameter estimation {#sec-gw-pe}
 
-This chapter will outline the basic tools used for 
+In this chapter, we outline the basic tools used for 
 the estimation of gravitational wave signal parameters,
 including the Whittle likelihood (@sec-whittle-likelihood),
 the full time-domain likelihood (@sec-time-domain-pe),

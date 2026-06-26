@@ -17,8 +17,9 @@ from thesis_scripts import *
 
 # Statistical methods {#sec-statistical-methods}
 
-This chapter starts with a review of the theory behind
-Bayesian parameter estimation, including a detailed description 
+In this chapter, we review of the theory behind
+Bayesian parameter estimation, including 
+posterior estimation, model comparison, as well as a detailed description 
 of a commonly used diagnostic tool: the $p$-$p$ plot (@sec-pp-plot)
 
 Then, we provide a description of the main

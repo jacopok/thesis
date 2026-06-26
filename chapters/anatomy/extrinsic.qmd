@@ -11,8 +11,8 @@ format:
 
 # Extrinsic parameters and signal projection {#sec-extrinsic}
 
-This chapter outlines the necessary ingredients for a full description of 
-a gravitational wave detector to the signal from a source, 
+In this chapter, we outline the necessary ingredients for a full description of 
+the response of a gravitational wave detector to a compact binary coalescence signal, 
 including the parameters describing the geometry of their relative position
 (@sec-extrinsic-parameters), the way the signal can be quickly computed in the 
 frequency domain (@sec-stationary-phase-approximation), the antenna patterns
@@ -20,8 +20,6 @@ of ground- and Moon-based detectors (@sec-antenna-patterns), and the
 calibration of ground-based detectors (@sec-calibration).
 
 ## Extrinsic parameters {#sec-extrinsic-parameters}
-
-This chapter will discuss the extrinsic parameterization of the signal from a compact binary coalescence (CBC). 
 
 ### Phase and inclination angle {#sec-phase-inclination-angle}
 

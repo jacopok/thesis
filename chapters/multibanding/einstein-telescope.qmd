@@ -17,9 +17,10 @@ published [@abacScienceEinsteinTelescope2026], especially related
 to the challenges of accurate parameter estimation.
 
 Then, we discuss in detail an injection performed for a high-SNR GW250114-like signal 
-(@sec-gw250114-et), presented in @tissinoGeometryLunarGravitational2026.
+(@sec-gw250114-et), which we presented in @tissinoGeometryLunarGravitational2026.
 Finally, we present the results of population-scale analyses
-comparing the $\Delta$ and 2L configurations, presented in @santoliquidoFastAccurateParameter2025
+comparing the $\Delta$ and 2L configurations, 
+that we presented in @santoliquidoFastAccurateParameter2025
 and @santoliquidoComparingNextgenerationDetector2026.
 
 ## Detector concept
