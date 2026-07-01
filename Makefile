@@ -15,3 +15,6 @@ refresh:
 	uv run quarto render --profile thesis --cache-refresh
 	mv _book thesis
 	tar -cvf thesis.tar thesis/*
+showp:
+	uv run quarto preview presentation.qmd --profile presentation
+	rm *.quarto_ipynb_*

@@ -1,0 +1,66 @@
+---
+title: "Fast analysis"
+subtitle: "of long gravitational wave signals"
+author: "Jacopo Tissino"
+date: "2026-07-15"
+
+format:
+  revealjs: 
+    slide-number: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    theme: dark
+
+---
+
+# LGWA
+
+## Mission concept and stations
+
+---
+
+![](chapters/multibanding/figures/quickmap-lroc-2.png)
+
+## The lunar response
+
+- show a plot from Bi Xiaoming's paper
+
+## LGWA data analysis
+
+Starting from the full data analysis problem, describe the simplifications we make.
+
+- About response
+- About the data stream, TD vs FD, brief diversion on FD likelihoods, data gaps
+- 
+
+# GW250114
+
+---
+
+![](chapters/anatomy/figures/Figure_1_simplified.webp){width="100%"}
+
+---
+
+![](chapters/anatomy/figures/overlapped_strains.webp){width="100%"}
+
+---
+
+![](chapters/anatomy/figures/221_kerr_test.webp){width="100%"}
+
+---
+
+![](chapters/anatomy/figures/area_law_plot_combined.webp){width="100%"}
+
+---
+
+## GW250114 as seen by LGWA
+
+---
+
+![](chapters/multibanding/figures/lgwa_ppd_fb.webp){width="80%"}
+
+## Uncertainty minimum motion
+
+{{< video https://www.youtube.com/watch?v=51Ny4vtj-As width="100%" height="100%" >}}
+
