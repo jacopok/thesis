@@ -311,6 +311,10 @@ _ = plt.errorbar(x_i, y_i, sigma_y, **kwargs)
 _ = plt.xlabel('$x$')
 _ = plt.ylabel('$y$')
 
+if not (data_path / 'cache').exists():
+	import os
+	os.mkdir((data_path / 'cache').as_posix())
+
 np.save(data_path / 'cache' / 'parabolic_data_x.npy', x_i)
 np.save(data_path / 'cache' / 'parabolic_data_y.npy', y_i)
 ```
