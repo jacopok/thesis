@@ -1,4 +1,7 @@
-Thesis being written using quarto, documentation [here](https://quarto.org/docs/guide/).
+My PhD thesis 
+
+
+This thesis is written using quarto, documentation [here](https://quarto.org/docs/guide/).
 
 The dependencies are managed with `uv` ([installation](https://docs.astral.sh/uv/getting-started/installation/#standalone-installer)).
 If `uv` is installed, the commands defined in the `Makefile` can be used:
@@ -6,6 +9,7 @@ If `uv` is installed, the commands defined in the `Makefile` can be used:
 - `make show` will render the HTML version of the thesis in a browser window, updated in real time as the underlying files change;
 - `make html` will render the HTML version of the thesis as a static website;
 - `make pdf` will render the PDF version of the thesis.
+- `make showp` will render the revealjs version of the defense presentation.
 
 ### Usage tricks
 

@@ -18,3 +18,5 @@ refresh:
 showp:
 	uv run quarto preview presentation.qmd --profile presentation
 	rm *.quarto_ipynb_*
+revealjs:
+	uv run quarto render presentation.qmd --profile presentation
