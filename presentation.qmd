@@ -14,7 +14,175 @@ format:
 
 ---
 
-# LGWA
+# GW250114: the clearest signal yet
+
+## 10 years ago: GW150914
+
+![](figures/gw150914.png){width="65%"}
+
+::::: footer
+
+[@ligoscientificcollaborationandvirgocollaborationObservationGravitationalWaves2016]
+:::::
+
+## A decade of improvement
+
+![](figures/LIGO_Signal_Plot_2015_to_2025_noise_reduction.jpg){width="100%"}
+
+::::: footer
+
+LIGO, J. Tissino, R. Hurt (Caltech-IPAC).
+:::::
+
+
+
+
+## What the detectors saw
+
+![](chapters/anatomy/figures/Figure_1_simplified.webp){width="100%"}
+
+## How we modelled it
+
+![](chapters/anatomy/figures/Figure_1.png){width="100%"}
+
+::::: footer
+
+[@abacGW250114TestingHawkings2025]
+:::::
+
+## How we analyzed it 
+
+Bayesian inference, accounting for our uncertainty on:
+
+- source masses $m_i$ and spins $\vec{\chi}_i$;
+- source location $(\alpha, \delta)$ and distance $d_L$;
+- source inclination $\theta_{\text{JN}}$ and polarization $\psi$;
+- coalescence phase $\phi_c$ and merger time $t_c$;
+- eccentricity $e$ and mean anomaly $\zeta$;
+- detector calibration.
+
+## How we interpreted it
+
+:::: {layout="[ 50, 50 ]"}
+
+::: {#first-column}
+
+Two black holes colliding, with masses
+$m_1 = 33.6_{-0.8}^{+1.2} M_{\odot}$ and
+$m_2 = 32.2_{-1.3}^{+0.8} M_{\odot}$.
+
+Small spins $|\chi_{1, 2}| \leq 0.26$, 
+negligible eccentricity $e \leq 0.03$. 
+
+:::
+
+
+::: {#second-column .fragment}
+
+![](chapters/anatomy/figures/S250114_m1_m2_grey.PNG)
+
+:::
+
+
+::::
+
+::::: footer
+
+[@abacGW250114TestingHawkings2025]
+:::::
+
+
+## The observed ringdown
+
+![](chapters/anatomy/figures/overlapped_strains.webp){width="100%"}
+
+
+## Modelling the ringdown
+
+A superposition of damped sinusoids: _quasinormal modes_.
+
+. . .
+
+$$
+\begin{aligned}
+h_{+}(t)-ih_{\times}(t) &\approx \sum_{\ell=2}^{\infty} \sum_{m=-\ell}^{\ell} \sum_{n=0}^{\infty} h_{\ell m n} \, ^{(-2)}Y_{\ell mn}  \\
+h_{\ell m n} &= A_{\ell mn} \exp(i(\omega_{\ell mn}(t-t_\text{ref})+\phi^{x}_{\ell mn})) \\
+\omega_{\ell mn} &= 2 \pi f_{\ell mn} + i / \tau _{\ell mn}
+\end{aligned}
+$$
+
+. . .
+
+For earlier signals, $\ell mn = 220$ was sufficient.
+
+## Testing the Kerr hypothesis
+
+For GW250114, the overtone $\ell mn = 221$ was required to explain the data.
+
+. . .
+
+Under the Kerr assumption, perturbation theory predicts the spectrum $f_{\ell mn} (M_f, \chi_f)$.
+
+. . .
+
+We parameterize deviations as
+
+$$
+f_{221} = e^{\delta f_{221}} f_{221}^{\text{Kerr}}
+$$
+
+## Testing the Kerr hypothesis
+
+![](chapters/anatomy/figures/221_kerr_test.webp){width="100%"}
+
+::::: footer
+
+[@abacGW250114TestingHawkings2025]
+:::::
+
+## Testing Hawking's area theorem
+
+The area of a black hole is:
+
+$$
+\mathcal{A}(M, \chi) = 8 \pi \left(  \frac{GM}{c^{2}} \right)^{2} \left( 1+\sqrt{ 1-\chi^{2} } \right)
+$$
+
+. . .
+
+Hawking's area theorem implies:
+
+$$ \mathcal{A_i} = \mathcal{A}_1 + \mathcal{A}_2 < \mathcal{A_f}
+$$
+
+## Testing Hawking's area theorem
+
+:::: {layout="[ 50, 50 ]"}
+
+::: {#first-column}
+
+- Data before $t_<$ leads to $(1+z)^2 \mathcal{A_i}$.
+- Data after $t_>$ leads to $(1+z)^2 \mathcal{A_f}$.
+
+A violation of the theorem would be
+
+$$ \frac{\mathcal{A_f} - \mathcal{A_i}}{\mathcal{A_i}} < 0
+$$
+
+:::
+
+::: {#second-column .fragment}
+
+![](chapters/anatomy/figures/area_law_plot_combined.webp){width="100%"}
+
+:::
+
+::::
+
+
+# Lunar Gravitational Wave Antenna
+
+---
 
 ## The lunar north pole
 
@@ -29,11 +197,6 @@ format:
 Measuring seismic motion at 4 locations inside a lunar crater,
 with cryogenics and seismic noise cancellation.
 
-::::: {style="font-size: 70%;"}
-
-[@vanheijningenPayloadLunarGravitationalwave2023]
-:::::
-
 :::
 
 
@@ -43,66 +206,111 @@ with cryogenics and seismic noise cancellation.
 :::
 ::::
 
+::::: footer
 
-## The lunar response
+[@vanheijningenPayloadLunarGravitationalwave2023]
+:::::
 
-- show a plot from Bi Xiaoming's paper
 
-## LGWA data analysis
-
-Starting from the full data analysis problem, describe the simplifications we make.
-
-- About response
-- About the data stream, TD vs FD, brief diversion on FD likelihoods, data gaps
-- 
-
-# GW250114
-
----
-
-![](chapters/anatomy/figures/Figure_1_simplified.webp){width="100%"}
-
----
-
-![](chapters/anatomy/figures/overlapped_strains.webp){width="100%"}
-
----
-
-![](chapters/anatomy/figures/221_kerr_test.webp){width="100%"}
-
----
-
-![](chapters/anatomy/figures/area_law_plot_combined.webp){width="80%"}
-
----
-
-## GW250114 as seen by LGWA
-
----
-
-![](chapters/multibanding/figures/lgwa_ppd_fb.webp){width="80%"}
-
-## What to use as a timing reference
+## Watt's linkage
 
 :::: {layout="[ 40, 60 ]"}
 
 ::: {#first-column}
 
-The merger time is out of band!
+Pendulum + inverted pendulum.
 
-Instead, we can use $t_{22}(f)$; the optimum is for $f\approx 0.56$ Hz.
+We measure **horizontal displacement** between the ground and this **inertial mass**,
+along two axes.
 
 :::
 
-
 ::: {#second-column}
 
-![](chapters/multibanding/figures/illustration_timing_parameterization.png){width=80%}
-![](chapters/multibanding/figures/timing_constraint_by_frequency_GW250114.png){width=80%}
+![](chapters/multibanding/figures/watts-linkage.png){width=70%}
 
 :::
 ::::
 
+::::: footer
+
+[@bertoliniMechanicalDesignSingleaxis2006]
+:::::
+
+## The Moon as a sensor
+
+The displacement measured at the detector is 
+
+$$ s(t _{\text{det}}; f) = h_{ij}(t; f) D_{ij}(t _{\text{det}}) L(f)
+$$
+
+. . .
+
+with
+
+$$ D = \text{vertical} \otimes \text{horizontal}
+$$
+
+. . .
+
+$$ L(f) = \frac{\text{seismic displacement}}{\text{GW strain}}
+$$
+
+## The multi-band horizon
+
+![](chapters/multibanding/figures/horizon_IMBH_with_GW250114.png){width="80%"}
+
+## GW250114 with the LGWA
+
+![](chapters/multibanding/figures/lgwa_ppd_fb.webp){width="80%"}
+
+## When did the signal arrive?
+
+. . .
+
+Detector motion causes a nonlinear relation between source-frame and detector-frame time,
+
+$$ t _{\text{det}} = t + t_0 - \frac{\hat{n} \cdot \vec{r}(t _{\text{det}})}{c}\,,
+$$
+
+where $\vec{r}$ connects the origin and the detector's position, and $\hat{n}$ points to the GW source.
+
+. . .
+
+$$ t _{\text{ref}} = \text{time when a reference event reaches the origin}
+$$
+
+## What reference event?
+
+![](chapters/multibanding/figures/illustration_timing_parameterization.png){width="100%"}
+
+## What origin? 
+
+Standard approaches:
+
+- ground-based detectors: the center of the Earth
+- space-based detectors: the Solar System Barycenter (SSB)
+
+New approach: 
+
+- SSB + a constant shift of origin
+
+## Why does it matter?
+
+
+::::: {style="font-size: 80%;"}
+
+|   Likelihood evaluations [$\times 10^5$] |   Sampling time [min] |   Timing uncertainty [s] |   Prior width [s]  | Origin   |
+|-------------------------:|----------------------:|-------------------------:|------------------:|:---------|
+|                        9 |                   3   |                    0.075 |               0.5 | shifted  |
+|                       10 |                   3.6 |                    0.075 |              27   | shifted  |
+|                       65 |                  16.7 |                    4.733 |              27   | SSB      |
+
+:::::
+
+The 
+
+<!-- ![](chapters/multibanding/figures/timing_constraint_by_frequency_GW250114.png){width=80%} -->
 
 ## Uncertainty minimum motion
 
@@ -110,20 +318,8 @@ Instead, we can use $t_{22}(f)$; the optimum is for $f\approx 0.56$ Hz.
 
 ## Effect on sampling time
 
-::::: {style="font-size: 80%;"}
 
-|   Likelihood evaluations |   Sampling time [min] |   Timing uncertainty [s] |   Prior width [s] | Sampler   | Center   |
-|-------------------------:|----------------------:|-------------------------:|------------------:|:----------|:---------|
-|                    91515 |                   3   |                    0.075 |               0.5 | `nessai`  | optimal  |
-|                   107878 |                   3.6 |                    0.075 |              27   | `nessai`  | optimal  |
-|                   659816 |                  16.7 |                    4.733 |              27   | `nessai`  | SSB      |
-|                   806067 |                  16.8 |                    0.074 |               0.5 | `dynesty` | optimal  |
-|                  1530906 |                  33   |                    0.076 |              27   | `dynesty` | optimal  |
-|                  9144813 |                 198.6 |                    4.766 |              27   | `dynesty` | SSB      |
-
-:::::
-
-# Einstein Telescope comparison
+# Einstein Telescope
 
 ---
 
@@ -137,7 +333,7 @@ Intrinsic parameters:
 - complementary with ET;
 - more precise than LVK on effective spin.
 
-::::: {style="font-size: 70%;"}
+::::: footer
 
 [@tissinoGeometryLunarGravitational2026]
 :::::
@@ -165,7 +361,7 @@ Extrinsic parameters:
 - ET-2L: tight, near Gaussian.
 - ET-$\Delta$: tight, bimodal.
 
-::::: {style="font-size: 70%;"}
+::::: footer
 
 [@tissinoGeometryLunarGravitational2026]
 :::::
@@ -191,7 +387,7 @@ Sky localization modes for high mass
 
 and distant ($D_L \gtrsim 6 \text{Gpc}$) BBH.
 
-::::: {style="font-size: 70%;"}
+::::: footer
 
 [@santoliquidoComparingNextgenerationDetector2026]
 :::::

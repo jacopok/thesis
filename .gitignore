@@ -158,7 +158,6 @@ skymap-comparison_files/figure-pdf/*
 
 *.mp4
 *.fit
-data
 
 *.fits
 *.npy
@@ -172,8 +171,6 @@ data
 **/.jupyter_cache/*
 **/*.ipynb
 
-data/gw170817_run/*
-!data/gw170817_run/chains/equal_weighted_post.txt
 
 **/libs/*
 *.js
@@ -207,3 +204,5 @@ Fast-analysis-of-long-gravitational-wave-signals.tex
 
 _manuscript/site_libs/*
 _manuscript/chapters/*
+
+!data/covariance_170817.txt

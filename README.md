@@ -168,3 +168,17 @@ Markdown(f'The value of $x$ is {x.to_string(precision=2, format="latex_inline")}
 ### Making a single-file PDF
 
 `uv run quarto render path/to/file.qmd`
+
+## Presentation tricks
+
+## Revealjs tips and tricks
+
+- press `g` to jump to a slide number
+- press `o` to go into "overview mode"
+- press `s` to get the speaker view
+- navigate without pauses with `Alt+arrow`
+- press `r` for scroll view
+- `Ctrl+click` to zoom
+- `c` to get the canvas:
+    - `x` to cycle colors
+    - `backspace` to erase the drawing

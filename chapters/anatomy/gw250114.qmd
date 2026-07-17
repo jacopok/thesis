@@ -78,7 +78,7 @@ This decay is comparatively slow for a mode: most other QNMs are suppressed even
 
 In terms of these modes, the gravitational wave polarizations from a Kerr black hole's ringdown can be expressed as [@bertiBlackHoleSpectroscopy2025, equation 6.12]:^[This expression only considers prograde modes, which co-rotate with the remnant black hole's spin; retrograde ones are hardly excited for quasi-circular binaries.]
 $$
-h_{+}(t)-ih_{\times}(t) \approx \sum_{\ell'}^{\infty} \sum_{m=-\ell}^{\ell} \sum_{n=0}^{\infty} A_{\ell mn} \exp(i(\omega^{x}_{\ell mn}(t-t_\text{ref})+\phi^{x}_{\ell mn})) _{(-2)}Y_{\ell mn}
+h_{+}(t)-ih_{\times}(t) \approx \sum_{\ell=2}^{\infty} \sum_{m=-\ell}^{\ell} \sum_{n=0}^{\infty} A_{\ell mn} \exp(i(\omega^{x}_{\ell mn}(t-t_\text{ref})+\phi^{x}_{\ell mn})) _{(-2)}Y_{\ell mn}
 $$
 Predicting the amplitudes of these modes is in general hard, doing so in the generic-orbit case is in fact an open problem [@carulloBlackHoleSpectroscopy2025].
 
