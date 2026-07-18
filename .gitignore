@@ -1,7 +1,7 @@
 /.quarto/
 /_book/
 demo.qmd
-*.pdf
+# *.pdf
 *.h5
 *.txt
 *.tar.gz
@@ -136,7 +136,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-docs/*.pdf
+# docs/*.pdf
 *.zip
 *.bib
 !docs/GSSI_report.bib
@@ -152,7 +152,7 @@ skymap-comparison/*.xml
 skymap-comparison_files/figure-pdf/*
 .jupyter_cache/*
 
-*.pdf
+# *.pdf
 *.html
 *.json
 
@@ -183,10 +183,10 @@ QTDublinIrish.otf
 
 **/cell-*
 chapters/multibanding/presentations/*
-!chapters/multibanding/figures/*pdf
-!chapters/data-analysis/figures/*pdf
+# !chapters/multibanding/figures/*.pdf
+# !chapters/data-analysis/figures/*.pdf
 chapters/data-analysis/figures/Figure_*.pdf
-!chapters/analysis/figures/*pdf
+# !chapters/analysis/figures/*pdf
 **/figure-html/*
 
 *.webp
@@ -209,3 +209,15 @@ _manuscript/chapters/*
 site_libs/*
 !chapters/data-analysis/figures/pp-test.webp
 !chapters/data-analysis/figures/pvalue_logit.webp
+curriculum.pdf
+jacopotissino.pdf
+noise-impact.pdf
+publications.pdf
+referee_reports/*
+_extensions/nmfs-opensci/titlepage/fonts/qualitype/doc/qualitype-doc.pdf
+tides.pdf
+referee_reply.pdf
+
+chapters/multibanding/calibration.pdf
+chapters/data-analysis/nested-sampling-seminar.pdf
+chapters/data-analysis/nested-importance-sampling-note.pdf
