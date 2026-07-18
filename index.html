@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jacopo Tissino">
+<meta name="author" content="Advisor: Jan Harms">
+<meta name="dcterms.date" content="2026-06-26">
+
+<title>Fast analysis of long gravitational wave signals</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./chapters/data-analysis/pe-methods.html" rel="next">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-c71eceede3f2eb087ba4b04b2c08e04b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-08acc1423be4a5388acf6193547677cb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-c71eceede3f2eb087ba4b04b2c08e04b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Fast analysis of long gravitational wave signals</a> 
+        <div class="sidebar-tools-main tools-wide">
+    <a href="https://github.com/jacopok/thesis" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="./Fast-analysis-of-long-gravitational-wave-signals.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Parameter estimation and model selection</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapters/data-analysis/pe-methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Statistical methods</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapters/data-analysis/likelihood.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Gravitational wave parameter estimation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Anatomy of a gravitational wave signal</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapters/anatomy/gw250114.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Tests of General Relativity with GW250114</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapters/anatomy/intrinsic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Intrinsic parameters and waveform modeling</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapters/anatomy/extrinsic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Extrinsic parameters and signal projection</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Future gravitational wave detectors</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapters/multibanding/einstein-telescope.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Einstein Telescope</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapters/multibanding/lgwa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lunar Gravitational Wave Antenna</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./conclusions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Conclusions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapters/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a>
+  <ul class="collapse">
+  <li><a href="#personal-contributions" id="toc-personal-contributions" class="nav-link" data-scroll-target="#personal-contributions"><span class="header-section-number">1.1</span> Personal contributions</a></li>
+  <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements"><span class="header-section-number">1.2</span> Acknowledgements</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/jacopok/thesis/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/jacopok/thesis/blob/main/index.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/jacopok/thesis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Fast analysis of long gravitational wave signals</h1>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Authors</div>
+  <div class="quarto-title-meta-heading">Affiliations</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Jacopo Tissino </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Gran Sasso Science Institute
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Advisor: Jan Harms </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Laboratori Nazionali del Gran Sasso
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 26, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+<div>
+  <div class="abstract">
+    <div class="block-title">Abstract</div>
+    Ten years since the first direct detection of gravitational waves, the field is in bloom. Signals are being detected with higher clarity than ever — the pinnacle of this so far is the coalescence of black holes dubbed GW250114, which enabled stringent tests of fundamental physics. Our theoretical understanding and computational methods are advancing in step, allowing us to efficiently account for more and more effects. The next generation of detectors will allow for extraordinary physical insights, but some aspects of the current data analysis paradigm will need to change. Ground-based detectors will detect so many signals it will be impractical to expend the resources we currently do for each. Deci-Hertz detectors like the Lunar Gravitational Wave Antenna will observe the same stellar-mass binaries for a long time: this makes the choice of reference frame for the analysis non-trivial, while providing significant scientific value by constraining source parameters and providing early warning.
+  </div>
+</div>
+
+
+</header>
+
+
+
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1><p><img src="logo-gssi.jpg" title="Fast analysis of long gravitational wave signals" class="quarto-cover-image nolightbox img-fluid" alt="GSSI logo. "></p>
+<p>We offer the reader a tour of the gravitational wave science enabled by the study of compact binary coalescences. This field is wide and multi-faceted: we center our discussion on data analysis, which encompasses the statistical and computational methods used to infer the properties of the astrophysical objects whose emission we measure.</p>
+<p>The relative simplicity of the data produced by gravitational wave detectors allows us to employ statistically robust Bayesian methods. Starting from a detailed discussion of these, we explore how they can help shed light on the properties of compact objects. We start from current gravitational wave detectors and then move to the ones whose construction is planned: each of these brings its own scientific potential, as well as new challenges.</p>
+<p><a href="chapters/data-analysis/pe-methods.html" class="quarto-xref"><span>Chapter 2</span></a> introduces the general tools required for inference; <a href="chapters/data-analysis/likelihood.html" class="quarto-xref"><span>Chapter 3</span></a> illustrates how they can be applied to the analysis of timeseries. In both, we outline what approaches can improve computational efficiency, as well as how the robustness of our methods can be assessed.</p>
+<p>The next three chapters summarize the main ways the data measured at the detectors can vary depending on the compact binary system that emitted it. In <a href="chapters/anatomy/gw250114.html" class="quarto-xref"><span>Chapter 4</span></a> we introduce the GW250114 signal, which as of this writing holds the record as the clearest-ever gravitational wave detection: we use it as our reference example wherever possible in later chapters. In <a href="chapters/anatomy/intrinsic.html" class="quarto-xref"><span>Chapter 5</span></a> we outline how the signal produced by a compact binary merger is characterized, while in <a href="chapters/anatomy/extrinsic.html" class="quarto-xref"><span>Chapter 6</span></a> we take it from the source to the detector, by discussing the geometric relation between us and the emitter.</p>
+<p>Finally, in <a href="chapters/multibanding/einstein-telescope.html" class="quarto-xref"><span>Chapter 7</span></a> and <a href="chapters/multibanding/lgwa.html" class="quarto-xref"><span>Chapter 8</span></a> we look toward the next decades with two concepts for future detectors. Their precise data in new frequency bands bring exciting scientific prospects, but they also come with high requirements for our data analysis infrastructure: the current approaches to the problem are not trivially extended, and advancements will be needed to ensure that we can draw robust scientific conclusions for a moderate cost in time and energy.</p>
+<p>This thesis is simultaneously compiled with <a href="https://quarto.org/">quarto</a> into both HTML — as a static website — and PDF. The HTML version is interactive, with hyperlinks, the possibility to see internal and external references by mouse over, and a dynamic table of contents. Also, several figures are rendered from <code>python</code> code, which can be seen directly within the website, but is omitted from the PDF. This literate programming-like approach <span class="citation" data-cites="knuthLiterateProgramming1984">(<a href="chapters/references.html#ref-knuthLiterateProgramming1984" role="doc-biblioref">Knuth 1984</a>)</span> allows for reproducibility and transparency. Its source code is publically available <a href="https://github.com/jacopok/thesis">here</a> (to be made public upon graduation).</p>
+<section id="personal-contributions" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="personal-contributions"><span class="header-section-number">1.1</span> Personal contributions</h2>
+<p>This thesis was deliberately written weaving established results and novel, personal contributions in order to improve its logical flow and, hopefully, its readability. This operation may obfuscate the distinction: this section adresses the problem by explicitly outlining it. For clarity, this is written in the first person; while in the rest of the thesis, the pronoun “we” is used. I opted for it because all the results presented were obtained with at least some degree of collaboration, even for the papers I led.</p>
+<p>I am part of several collaborations: LIGO-Virgo-KAGRA, Einstein Telescope and Lunar Gravitational Wave Antenna. All three of these have recently published major works, which are formally authored by the whole collaboration.</p>
+<p>The LIGO-Virgo-KAGRA collaboration recently concluded its fourth observing run, whose data is currently being analyzed. I was part of the team which wrote the discovery paper for the exceptional gravitational wave event GW250114 (<a href="chapters/anatomy/gw250114.html" class="quarto-xref"><span>Chapter 4</span></a>) <span class="citation" data-cites="abacGW250114TestingHawkings2025">(<a href="chapters/references.html#ref-abacGW250114TestingHawkings2025" role="doc-biblioref">Abac et al. 2025</a>)</span>. I authored all figures in the main text except for figure 2, and co-authored figures 2 and 3 in the Supplement. I was also responsible for the data release <span class="citation" data-cites="ligoscientificcollaborationGW250114DiscoveryPaper2025">(<a href="chapters/references.html#ref-ligoscientificcollaborationGW250114DiscoveryPaper2025" role="doc-biblioref">LIGO Scientific Collaboration 2025</a>)</span>, as well as coordinating with the outreach team for the creation of various items, such as the infographic and image shown <a href="https://ligo.org/detections/gw250114-10-years-of-gravitational-wave-astronomy/">here</a>. The analysis of this event helped in identifying an issue (<a href="chapters/data-analysis/likelihood.html#sec-windowing" class="quarto-xref"><span>Section 3.2.1</span></a>) in the way parameter estimation was performed in the collaboration, and I contributed to the presentation and correctness of the paper which outlined its fix <span class="citation" data-cites="talbotInferenceFiniteTime2025">(<a href="chapters/references.html#ref-talbotInferenceFiniteTime2025" role="doc-biblioref">Talbot et al. 2025</a>)</span>. I also contributed to the collaboration in other ways, such as acting as an internal paper and waveform model reviewee. By writing an interface for the eccentric waveform model <code>TEOBResumS-Dalí</code>, I contributed to a reanalysis of the first gravitational wave event performed including both eccentricity and spin-induced orbital precession <span class="citation" data-cites="gambaRevisitingGW150914Nonplanar2025">(<a href="chapters/references.html#ref-gambaRevisitingGW150914Nonplanar2025" role="doc-biblioref">Gamba et al. 2025</a>)</span>.</p>
+<p>The Einstein Telescope collaboration (<a href="chapters/multibanding/einstein-telescope.html" class="quarto-xref"><span>Chapter 7</span></a>) published a white paper <span class="citation" data-cites="abacScienceEinsteinTelescope2026">(<a href="chapters/references.html#ref-abacScienceEinsteinTelescope2026" role="doc-biblioref"><span class="nocase">Abac et al.</span> 2026</a>)</span> outlining the detector’s capabilities. I contributed to its section 8, with a discussion of the computational bottlenecks related to waveform evaluation. These are reported in this thesis’ <a href="chapters/multibanding/einstein-telescope.html#sec-einstein-telescope-challenges" class="quarto-xref"><span>Section 7.2</span></a>, which also includes the results of a series of papers led by Filippo Santoliquido <span class="citation" data-cites="santoliquidoClassifyingBinaryBlack2024 santoliquidoFastAccurateParameter2025 santoliquidoComparingNextgenerationDetector2025">(<a href="chapters/references.html#ref-santoliquidoClassifyingBinaryBlack2024" role="doc-biblioref">Santoliquido et al. 2024</a>; <a href="chapters/references.html#ref-santoliquidoFastAccurateParameter2025" role="doc-biblioref">2025a</a>,<a href="chapters/references.html#ref-santoliquidoComparingNextgenerationDetector2025" role="doc-biblioref">b</a>)</span>, related to population-scale data analysis with the Einstein Telescope. We collaborated closely, and besides editing all the text, I work on the theroretical aspects for many of them, like the theoretical Bayesian framework for the classification of binaries <span class="citation" data-cites="santoliquidoClassifyingBinaryBlack2024">(<a href="chapters/references.html#ref-santoliquidoClassifyingBinaryBlack2024" role="doc-biblioref">Santoliquido et al. 2024</a>)</span> or the understanding of the arrival time bimodality with ET-<span class="math inline">\(\Delta\)</span> <span class="citation" data-cites="santoliquidoFastAccurateParameter2025">(<a href="chapters/references.html#ref-santoliquidoFastAccurateParameter2025" role="doc-biblioref">Santoliquido et al. 2025a</a>)</span>.</p>
+<p>The Lunar Gravitational Wave Antenna (LGWA) collaboration also published a white paper <span class="citation" data-cites="ajithLunarGravitationalwaveAntenna2025">(<a href="chapters/references.html#ref-ajithLunarGravitationalwaveAntenna2025" role="doc-biblioref">Ajith et al. 2025</a>)</span>. I contributed to sections of it relating to sky localization capabilities and the detection of binaries containing white dwarfs. The problem of performing parameter estimation with the LGWA has been a long-standing one. I included some preliminary results on it both in the white paper <span class="citation" data-cites="ajithLunarGravitationalwaveAntenna2025">(<a href="chapters/references.html#ref-ajithLunarGravitationalwaveAntenna2025" role="doc-biblioref">Ajith et al. 2025</a>)</span> and in a work we published comparing different concepts for lunar gravitational wave detection <span class="citation" data-cites="cozzumboOpportunitiesLimitsLunar2024">(<a href="chapters/references.html#ref-cozzumboOpportunitiesLimitsLunar2024" role="doc-biblioref">Cozzumbo et al. 2024</a>)</span>; in the latter, I also contributed to the analysis of some concepts other than the seismic one, such as the effect of dust on an unshielded laser-interferometric detector. I led a paper on the generic solution to the LGWA parameter estimation problem <span class="citation" data-cites="tissinoGeometryLunarGravitational2026">(<a href="chapters/references.html#ref-tissinoGeometryLunarGravitational2026" role="doc-biblioref">Tissino et al. 2026</a>)</span>, where we show that it must generically be performed in a coordinate frame comoving with the Solar System Barycenter, which should be centered at a location close to the detector for better computational efficiency. I was also involved in a recent work on LGWA parameter estimation for a massive black hole binary <span class="citation" data-cites="iacovelliGravitationalwaveParameterEstimation2026">(<a href="chapters/references.html#ref-iacovelliGravitationalwaveParameterEstimation2026" role="doc-biblioref">Iacovelli et al. 2026</a>)</span>: I performed cross-checks to ensure that the analysis was consistent; indeed, the signal lasted for a short enough time in band not to require an accurate treatment of the lunar orbit around the Sun.</p>
+<p>I contributed to the development and maintenance of the software package <code>GWFish</code> <span class="citation" data-cites="dupletsaGwfishSimulationSoftware2023">(<a href="chapters/references.html#ref-dupletsaGwfishSimulationSoftware2023" role="doc-biblioref">Dupletsa et al. 2023</a>)</span>, and in the validation of the parameter estimation forecasts it produced against GWTC-3 analyses <span class="citation" data-cites="dupletsaValidatingPriorinformedFishermatrix2025">(<a href="chapters/references.html#ref-dupletsaValidatingPriorinformedFishermatrix2025" role="doc-biblioref">Dupletsa et al. 2025</a>)</span>. I helped in constructing a procedure to extract information from summary data from the LHAASO collaboration <span class="citation" data-cites="banerjeeCamelidaeBOATObservation2024">(<a href="chapters/references.html#ref-banerjeeCamelidaeBOATObservation2024" role="doc-biblioref">Banerjee et al. 2024</a>)</span>.</p>
+<p>Finally, this thesis includes (<a href="chapters/anatomy/intrinsic.html#sec-mlgw-bns" class="quarto-xref"><span>Section 5.5.3</span></a>) the results from a paper I led <span class="citation" data-cites="tissinoCombiningEffectiveonebodyAccuracy2023">(<a href="chapters/references.html#ref-tissinoCombiningEffectiveonebodyAccuracy2023" role="doc-biblioref">Tissino et al. 2023</a>)</span> related to surrogate modelling for the gravitational waveforms emitted by neutron star binaries.</p>
+</section>
+<section id="acknowledgements" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="acknowledgements"><span class="header-section-number">1.2</span> Acknowledgements</h2>
+<p>While writing this thesis I benefited from the help of many mentors, colleagues and friends.</p>
+<p>I would like to thank my supervisor, Jan Harms, as well as the referees who read through this thesis to ensure it was in the best shape possible: Enrico Barausse, Giovanni Benato, Isobel Romero-Shaw.</p>
+<p>Several friends and colleagues also helped me with the thesis: I would specifically like to thank Pierpaolo Bilotto, Gregorio Carullo, Rossella Gamba, Sara Gliorio, Vishnu Sanjay, Filippo Santoliquido, Michael Williams.</p>
+<p>Many more people supported me through these years, with a list that would be too long to make comprehensive. I would like to thank friends and family from the many communities I’ve had the honor of joining, in L’Aquila, Pordenone, Udine, Jena; as well as the many colleagues I have worked with, scattered throughout Europe and other continents.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-abacScienceEinsteinTelescope2026" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1088/1475-7516/2026/03/081"><span class="nocase">Abac A, Abramo R, Albanesi S, Albertini A, Agapito A, et al.</span> 2026. <em>J. Cosmol. Astropart. Phys.</em> 2026(03):081</a>
+</div>
+<div id="ref-abacGW250114TestingHawkings2025" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/kw5g-d732">Abac AG, Abouelfettouh I, Acernese F, Ackley K, Adamcewicz C, et al. 2025. <em>Phys. Rev. Lett.</em> 135(11):111403</a>
+</div>
+<div id="ref-ajithLunarGravitationalwaveAntenna2025" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1088/1475-7516/2025/01/108">Ajith P, Seoane PA, Sedda MA, Arcodia R, Badaracco F, et al. 2025. <em>J. Cosmol. Astropart. Phys.</em> 2025(01):108</a>
+</div>
+<div id="ref-banerjeeCamelidaeBOATObservation2024" class="csl-entry" role="listitem">
+<a href="https://arxiv.org/abs/2405.15855v1">Banerjee B, Macera S, De Santis AL, Mei A, Tissino J, et al. 2024. <em>arXiv.org</em></a>
+</div>
+<div id="ref-cozzumboOpportunitiesLimitsLunar2024" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1098/rsta.2023.0066">Cozzumbo A, Mestichelli B, Mirabile M, Paiella L, Tissino J, Harms J. 2024. <em>Philos. Trans. R. Soc. Math. Phys. Eng. Sci.</em> 382(2271):20230066</a>
+</div>
+<div id="ref-dupletsaGwfishSimulationSoftware2023" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1016/j.ascom.2022.100671">Dupletsa, Harms J, Banerjee B, Branchesi M, Goncharov B, et al. 2023. <em>Astron. Comput.</em> 42:100671</a>
+</div>
+<div id="ref-dupletsaValidatingPriorinformedFishermatrix2025" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.111.024036">Dupletsa U, Harms J, Ng KKY, Tissino J, Santoliquido F, Cozzumbo A. 2025. <em>Phys. Rev. D</em>. 111(2):024036</a>
+</div>
+<div id="ref-gambaRevisitingGW150914Nonplanar2025" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1088/1361-6382/adfe50">Gamba R, Lange J, Chiaramello D, Tissino J, Tibrewal S. 2025. <em>Class. Quantum Gravity</em>. 42(17):175014</a>
+</div>
+<div id="ref-iacovelliGravitationalwaveParameterEstimation2026" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/d2rh-btf9">Iacovelli F, Tissino J, Harms J, Berti E. 2026. <em>Phys. Rev. D</em>. 113:123062</a>
+</div>
+<div id="ref-knuthLiterateProgramming1984" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1093/comjnl/27.2.97">Knuth DE. 1984. <em>Comput. J.</em> 27(2):97–111</a>
+</div>
+<div id="ref-ligoscientificcollaborationGW250114DiscoveryPaper2025" class="csl-entry" role="listitem">
+LIGO Scientific Collaboration VC and KC. 2025. <a href="https://doi.org/10.5281/zenodo.16877102"><span>GW250114</span> discovery paper figure scripts</a>
+</div>
+<div id="ref-santoliquidoClassifyingBinaryBlack2024" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1051/0004-6361/202450381">Santoliquido F, Dupletsa U, Tissino J, Branchesi M, Iacovelli F, et al. 2024. <em>Astron. Astrophys.</em> 690:A362</a>
+</div>
+<div id="ref-santoliquidoFastAccurateParameter2025" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/wf1k-p5cl">Santoliquido F, Tissino J, Dupletsa U, Branchesi M, Harms J, et al. 2025a. <em>Phys. Rev. D</em>. 112(10):103015</a>
+</div>
+<div id="ref-santoliquidoComparingNextgenerationDetector2025" class="csl-entry" role="listitem">
+Santoliquido F, Tissino J, Dupletsa U, Branchesi M, Harms J. 2025b. <em>Comparing next-generation detector configurations for high-redshift gravitational wave sources with neural posterior estimation</em>. <a href="http://arxiv.org/abs/2512.20699">http://arxiv.org/abs/2512.20699</a>
+</div>
+<div id="ref-talbotInferenceFiniteTime2025" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1088/1361-6382/ae1ac7">Talbot C, Biscoveanu S, Zimmerman A, Baka T, Farr WM, et al. 2025. <em>Class. Quantum Gravity</em>. 42(23):235023</a>
+</div>
+<div id="ref-tissinoCombiningEffectiveonebodyAccuracy2023" class="csl-entry" role="listitem">
+<a href="https://journals.aps.org/prd/abstract/10.1103/PhysRevD.107.084037">Tissino J, Carullo G, Breschi M, Gamba R, Schmidt S, Bernuzzi S. 2023. <em>Phys. Rev. D</em>. 107(8):084037</a>
+</div>
+<div id="ref-tissinoGeometryLunarGravitational2026" class="csl-entry" role="listitem">
+Tissino J, Santoliquido F, Iacovelli F, Dupletsa U, Canton TD, et al. 2026. <em>The geometry of lunar gravitational wave detection</em>. <a href="http://arxiv.org/abs/2606.04918">http://arxiv.org/abs/2606.04918</a>
+</div>
+</div>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./chapters/data-analysis/pe-methods.html" class="pagination-link" aria-label="Statistical methods">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Statistical methods</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/jacopok/thesis/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/jacopok/thesis/blob/main/index.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/jacopok/thesis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

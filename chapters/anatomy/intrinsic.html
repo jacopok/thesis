@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>5&nbsp; Intrinsic parameters and waveform modeling – Fast analysis of long gravitational wave signals</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../chapters/anatomy/extrinsic.html" rel="next">
+<link href="../../chapters/anatomy/gw250114.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-c71eceede3f2eb087ba4b04b2c08e04b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-08acc1423be4a5388acf6193547677cb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-c71eceede3f2eb087ba4b04b2c08e04b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating slimcontent quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/anatomy/gw250114.html">Anatomy of a gravitational wave signal</a></li><li class="breadcrumb-item"><a href="../../chapters/anatomy/intrinsic.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Intrinsic parameters and waveform modeling</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Fast analysis of long gravitational wave signals</a> 
+        <div class="sidebar-tools-main tools-wide">
+    <a href="https://github.com/jacopok/thesis" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="../../Fast-analysis-of-long-gravitational-wave-signals.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Parameter estimation and model selection</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/data-analysis/pe-methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Statistical methods</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/data-analysis/likelihood.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Gravitational wave parameter estimation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Anatomy of a gravitational wave signal</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/anatomy/gw250114.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Tests of General Relativity with GW250114</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/anatomy/intrinsic.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Intrinsic parameters and waveform modeling</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/anatomy/extrinsic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Extrinsic parameters and signal projection</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Future gravitational wave detectors</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/multibanding/einstein-telescope.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Einstein Telescope</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/multibanding/lgwa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lunar Gravitational Wave Antenna</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../conclusions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Conclusions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-masses" id="toc-sec-masses" class="nav-link active" data-scroll-target="#sec-masses"><span class="header-section-number">5.1</span> Component masses</a>
+  <ul class="collapse">
+  <li><a href="#the-component-masses-of-gw250114" id="toc-the-component-masses-of-gw250114" class="nav-link" data-scroll-target="#the-component-masses-of-gw250114"><span class="header-section-number">5.1.1</span> The component masses of GW250114</a></li>
+  <li><a href="#at-lower-frequencies" id="toc-at-lower-frequencies" class="nav-link" data-scroll-target="#at-lower-frequencies"><span class="header-section-number">5.1.2</span> At lower frequencies</a></li>
+  <li><a href="#prior-distribution" id="toc-prior-distribution" class="nav-link" data-scroll-target="#prior-distribution"><span class="header-section-number">5.1.3</span> Prior distribution</a></li>
+  </ul></li>
+  <li><a href="#sec-spin" id="toc-sec-spin" class="nav-link" data-scroll-target="#sec-spin"><span class="header-section-number">5.2</span> Spin and orbital angular momentum</a>
+  <ul class="collapse">
+  <li><a href="#sec-spin-priors" id="toc-sec-spin-priors" class="nav-link" data-scroll-target="#sec-spin-priors"><span class="header-section-number">5.2.1</span> Prior distribution</a></li>
+  </ul></li>
+  <li><a href="#eccentricity" id="toc-eccentricity" class="nav-link" data-scroll-target="#eccentricity"><span class="header-section-number">5.3</span> Eccentricity</a>
+  <ul class="collapse">
+  <li><a href="#at-lower-frequencies-1" id="toc-at-lower-frequencies-1" class="nav-link" data-scroll-target="#at-lower-frequencies-1"><span class="header-section-number">5.3.1</span> At lower frequencies</a></li>
+  </ul></li>
+  <li><a href="#sec-tidal-parameters" id="toc-sec-tidal-parameters" class="nav-link" data-scroll-target="#sec-tidal-parameters"><span class="header-section-number">5.4</span> Tidal parameters</a></li>
+  <li><a href="#waveform-modelling" id="toc-waveform-modelling" class="nav-link" data-scroll-target="#waveform-modelling"><span class="header-section-number">5.5</span> Waveform modelling</a>
+  <ul class="collapse">
+  <li><a href="#sec-post-newtonian" id="toc-sec-post-newtonian" class="nav-link" data-scroll-target="#sec-post-newtonian"><span class="header-section-number">5.5.1</span> Post-Newtonian</a></li>
+  <li><a href="#sec-eob" id="toc-sec-eob" class="nav-link" data-scroll-target="#sec-eob"><span class="header-section-number">5.5.2</span> Effective One Body</a></li>
+  <li><a href="#sec-mlgw-bns" id="toc-sec-mlgw-bns" class="nav-link" data-scroll-target="#sec-mlgw-bns"><span class="header-section-number">5.5.3</span> Surrogate models: the <code>mlgw_bns</code> example</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/jacopok/thesis/edit/main/chapters/anatomy/intrinsic.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/jacopok/thesis/blob/main/chapters/anatomy/intrinsic.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/jacopok/thesis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/anatomy/gw250114.html">Anatomy of a gravitational wave signal</a></li><li class="breadcrumb-item"><a href="../../chapters/anatomy/intrinsic.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Intrinsic parameters and waveform modeling</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-intrinsic" class="quarto-section-identifier"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Intrinsic parameters and waveform modeling</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In this chapter we continue in the dissection of the gravitational signal emitted by the coalescence of two compact objects by considering its intrinsic parameters, those relating to the source itself and not to its relation to the observer.</p>
+<p>This gravitational signal is often qualitatively decomposed into three sections: inspiral, merger and post-merger.</p>
+<p>When the remnant is a black hole the post-merger is an exponentially damped ringdown, as described in <a href="gw250114.html#sec-ringdown" class="quarto-xref"><span>Section 4.2</span></a>; if this is not the case, the emission spectrum can become significantly less predictable and long-lived. Though efforts have been made toward modelling it—see e.g. <span class="citation" data-cites="breschiKiloHertzGravitationalWaves2019 breschiKilohertzGravitationalWaves2022 breschiKilohertzGravitationalWaves2024">(<a href="../references.html#ref-breschiKiloHertzGravitationalWaves2019" role="doc-biblioref">Breschi et al. 2019</a>, <a href="../references.html#ref-breschiKilohertzGravitationalWaves2022" role="doc-biblioref">2022</a>, <a href="../references.html#ref-breschiKilohertzGravitationalWaves2024" role="doc-biblioref">2024</a>)</span> for neutron star binaries—we will not discuss this in detail here.</p>
+<p>The rest of this chapter mainly concerns the dependence of models for the inspiral on their parameters. Some of the ones we will consider are really only suitable for the early stages of inspiral, while others are accurate enough to describe the merger, and they can be smoothly connected to a model for the post-merger. When applied to black hole binaries, the result is an Inspiral-Merger-Ringdown (IMR) waveform model.</p>
+<p>This chapter also contains a discussion of the results we presented in <span class="citation" data-cites="tissinoCombiningEffectiveonebodyAccuracy2023">Tissino et al. (<a href="../references.html#ref-tissinoCombiningEffectiveonebodyAccuracy2023" role="doc-biblioref">2023</a>)</span>, regarding the construction and application of a fast frequency-domain surrogate for neutron star binaries, as well as the ones in <span class="citation" data-cites="gambaRevisitingGW150914Nonplanar2025">Gamba et al. (<a href="../references.html#ref-gambaRevisitingGW150914Nonplanar2025" role="doc-biblioref">2025</a>)</span>, regarding a re-analysis of the GW150914 event with a waveform model accounting for both eccentricity and spin-precession.</p>
+<section id="sec-masses" class="level2 page-columns page-full" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="sec-masses"><span class="header-section-number">5.1</span> Component masses</h2>
+<p>The two objects giving rise to the coalescence are labelled “primary” and “secondary” based on their masses, respectively <span class="math inline">\(m_{1}\)</span> and <span class="math inline">\(m_{2}\)</span> with <span class="math inline">\(m_{1}&gt;m_{2}\)</span>. These masses are typically measured in units of the solar mass <span class="math inline">\(M_{\odot} \approx 1.99\times 10^{30} \text{kg}\)</span>.</p>
+<p>Some common combinations of these include the total mass <span class="math inline">\(M = m_{1}+m_{2}\)</span>, the mass ratio <span class="math inline">\(q=m_{2} / m_{1} \leq 1\)</span>,<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> the reduced mass <span class="math inline">\(\mu = m_{1} m_{2} / M\)</span> and the symmetric mass ratio <span class="math inline">\(\nu = \mu / M = m_{1} m_{2} / M^{2}\)</span>.</p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Conventions for this parameter differ, with some authors using <span class="math inline">\(q=m_{1} / m_{2}&gt;1\)</span>, but within <code>BILBY</code>, the standard piece of software for gravitational wave inference, it is defined to be less than 1 <span class="citation" data-cites="romero-shawBayesianInferenceCompact2020">(<a href="../references.html#ref-romero-shawBayesianInferenceCompact2020" role="doc-biblioref">Romero-Shaw et al. 2020</a>)</span>.</p></div></div><p>The waveform at low frequencies is most affected by their combination called <em>chirp mass</em> <span class="math inline">\(\mathcal{M}\)</span>, which is defined as follows:</p>
+<p><span class="math display">\[ \mathcal{M} = \nu^{3/5}M = \frac{(m_1 m_2 )^{3/5}}{(m_1 + m_2)^{1/5}}
+\]</span></p>
+<p>A general Post-Newtonian expression for the phase of a compact binary reads as follows <span class="citation" data-cites="abacScienceEinsteinTelescope2026">(<a href="../references.html#ref-abacScienceEinsteinTelescope2026" role="doc-biblioref"><span class="nocase">Abac et al.</span> 2026</a>, eq. 1.1)</span>: <span id="eq-post-newtonian-phase-generic"><span class="math display">\[
+\Psi(f) = 2 \pi f t_{c} - \phi_{c} - \frac{\pi}{4} + \frac{3}{128 \nu x^{5}}  \left( 1+  \sum_{n=2}^{n _\text{max}} \left[ \varphi_{n} + \varphi_{n}^{(l)} \log x \right] x^{n}\right)\,.
+\tag{5.1}\]</span></span></p>
+<p>Here, the expansion parameter represents the velocity of the binary: <span class="math inline">\(x = v / c = (\pi M f)^{1 / 3}\)</span>. The chirp mass appears as a prefactor in <a href="#eq-post-newtonian-phase-generic" class="quarto-xref">Equation&nbsp;<span>5.1</span></a>: <span class="math inline">\(\nu x^{5} = \nu (\pi M f)^{5/3} = (\pi \mathcal{M} f)^{5/3}\)</span>. This means it affects the phase evolution of the signal at a basic level, and its measurement will be precise if we can constrain a large number of signal cycles.</p>
+<p>On the other hand, the Post-Newtonian coefficients <span class="math inline">\(\varphi_{n}\)</span><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> contain information about various other contributions, such as mass ratio and spin <span class="citation" data-cites="blanchetPostNewtonianTheoryGravitational2024">(<a href="../references.html#ref-blanchetPostNewtonianTheoryGravitational2024" role="doc-biblioref">Blanchet 2024</a>)</span>. For example, the symmetric mass ratio <span class="math inline">\(\nu\)</span> enters in the expression at 1PN order, spin-orbit effects at 1.5PN, and spin-spin effects at 2PN.</p>
+<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;A terminology note: the <span class="math inline">\(n\)</span>-th term in the sum is called the <span class="math inline">\((n /2)\)</span>PN contribution. For example, the <span class="math inline">\(n=5\)</span> term is called 2.5PN.</p></div></div><section id="the-component-masses-of-gw250114" class="level3" data-number="5.1.1">
+<h3 data-number="5.1.1" class="anchored" data-anchor-id="the-component-masses-of-gw250114"><span class="header-section-number">5.1.1</span> The component masses of GW250114</h3>
+<p>This signal was quite similar to the first-ever detection, GW150914. The inferred masses of the component black holes were in fact compatible, and the distances were similar as well. However, due to the improvements in the detectors’ sensitivity over the decade between them, the precision in measurement is now significantly better. <a href="#fig-gw250114-component-masses" class="quarto-xref">Figure&nbsp;<span>5.1</span></a> shows the posterior distribution on the component masses for these two events.</p>
+<div id="fig-gw250114-component-masses" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gw250114-component-masses-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/S250114_m1_m2_grey.PNG" class="img-fluid figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gw250114-component-masses-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.1: Posterior distribution on the component masses of GW250114. Adapted from <span class="citation" data-cites="abacGW250114TestingHawkings2025">Abac et al. (<a href="../references.html#ref-abacGW250114TestingHawkings2025" role="doc-biblioref">2025</a>)</span>.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="at-lower-frequencies" class="level3" data-number="5.1.2">
+<h3 data-number="5.1.2" class="anchored" data-anchor-id="at-lower-frequencies"><span class="header-section-number">5.1.2</span> At lower frequencies</h3>
+<p>At very low frequencies we might expect to only be able to constrain the chirp mass, with a large uncertainty on the mass ratio and all other parameters appearing later in the Post-Newtonian expansion such as spin. While this is qualitatively true, an interesting observation <span class="citation" data-cites="toubianaParameterEstimationStellarmass2020">(<a href="../references.html#ref-toubianaParameterEstimationStellarmass2020" role="doc-biblioref">Toubiana et al. 2020</a>)</span> is that low frequency posterior distributions can still exhibit strong correlations between chirp mass and mass ratio.</p>
+<p>If chirp mass were the only parameter allowed to vary, the frequency derivative of the signal <span class="math inline">\(\dot{f}\)</span>, or equivalently in the stationary phase approximation (SPA, see <a href="extrinsic.html#sec-stationary-phase-approximation" class="quarto-xref"><span>Section 6.2</span></a>) the second derivative of the frequency-domain phase <span class="math inline">\(\Psi''\)</span> in <a href="#eq-post-newtonian-phase-generic" class="quarto-xref">Equation&nbsp;<span>5.1</span></a>, would be sufficient to constrain it. However, in general, fixing this frequency derivative will determine a surface — for example, a 1D curve in the <span class="math inline">\((\mathcal{M}, \nu)\)</span> space, or a 2D surface in the <span class="math inline">\((\mathcal{M}, \nu, \chi _\text{eff})\)</span> space.</p>
+<p><span class="citation" data-cites="toubianaParameterEstimationStellarmass2020">Toubiana et al. (<a href="../references.html#ref-toubianaParameterEstimationStellarmass2020" role="doc-biblioref">2020</a>)</span> show this curve in the <span class="math inline">\(\mathcal{M}, \nu\)</span> plane, in the case of a stellar-mass black hole binary observed by LISA. Qualitatively, it is very “shallow”: a variation of <span class="math inline">\(\nu\)</span> from 0.2 to 0.25 (a 25% increase) only corresponds to a variation in <span class="math inline">\(\mathcal{M}\)</span> by <span class="math inline">\(10^{-3}M_{\odot}\)</span> (a 0.003% increase). Nevertheless, the scale of the variation in chirp mass is comparable to typical uncertainties in this parameter obtained with long observations, and an anticorrelation between <span class="math inline">\(\mathcal{M}\)</span> and <span class="math inline">\(\nu\)</span> is systematically observed.</p>
+</section>
+<section id="prior-distribution" class="level3" data-number="5.1.3">
+<h3 data-number="5.1.3" class="anchored" data-anchor-id="prior-distribution"><span class="header-section-number">5.1.3</span> Prior distribution</h3>
+<p>Typically, sampling is performed in terms of the variables <span class="math inline">\(\mathcal{M}\)</span> and <span class="math inline">\(q\)</span>, but the prior distribution is required to be uniform in the <span class="math inline">\((m_{1}, m_{2})\)</span> plane. The equivalent distribution can then be obtained by computing the Jacobian of the transformation <span class="citation" data-cites="dupletsaValidatingPriorinformedFishermatrix2025">(<a href="../references.html#ref-dupletsaValidatingPriorinformedFishermatrix2025" role="doc-biblioref">Dupletsa et al. 2025</a>)</span>: <span class="math display">\[
+\pi(\mathcal{M}, q) = \mathcal{M} \frac{(1+q)^{2/5}}{q^{6/5}}\,.
+\]</span></p>
+<p>When sampling, it is also important to identify which object is the primary and which is the secondary <span class="citation" data-cites="gerosaWhichWhichIdentification2025">(<a href="../references.html#ref-gerosaWhichWhichIdentification2025" role="doc-biblioref">Gerosa et al. 2025</a>)</span>. The distinction would be well-specified if we had access to the exact masses of the objects, <span class="math inline">\(m_1\)</span> and <span class="math inline">\(m_2\)</span>, but due to measurement error we do not: any given posterior sample will describe two objects with masses <span class="math inline">\(m_a\)</span> and <span class="math inline">\(m_b\)</span> and corresponding spins <span class="math inline">\(\vec{\chi}_a\)</span> and <span class="math inline">\(\vec{\chi}_b\)</span>.</p>
+<p>The current standard approach is to establish the correspondence <span class="math inline">\(a \iff 1\)</span> and <span class="math inline">\(b \iff 2\)</span> based on the criterion that <span class="math inline">\(m_a &gt; m_b\)</span>, on a sample-by-sample basis. If the masses are well-distinguished (<em>i.e.</em> the mass ratio is considerable) this can be reliable, but for comparable masses and low SNRs it is prone to bias inference. A generic, nonparametric and non-data-driven labelling procedure is not currently available. A practical stopgap approach is to discuss results based on relabeling invariant parameters.</p>
+</section>
+</section>
+<section id="sec-spin" class="level2 page-columns page-full" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="sec-spin"><span class="header-section-number">5.2</span> Spin and orbital angular momentum</h2>
+<p>In a generic binary with orbital angular momentum <span class="math inline">\(\vec{L}\)</span>, the component objects will have two spin vectors <span class="math inline">\(\vec{S}_{1,2}\)</span>. These three vectors will generally not be aligned, neither to each other nor with the observation direction <span class="math inline">\(\vec{N}\)</span>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;In this section we shall use this letter for the observation direction to conform with the convention, though elsewhere we use <span class="math inline">\(m\)</span>.</p></div></div><p>In principle we could use Cartesian coordinates to describe these spins; however in gravitational wave analysis it is more convenient use the following decomposition:</p>
+<ol start="3" type="1">
+<li><span class="math inline">\(a_{1} = \lvert \vec{S}_{1} \rvert / m_{1}^{2}\)</span>, the dimensionless <em>magnitude</em> of the primary object’s spin;</li>
+<li><span class="math inline">\(a_{2} = \lvert \vec{S}_{2} \rvert / m_{2}^{2}\)</span>, the dimensionless <em>magnitude</em> of the secondary object’s spin;</li>
+<li><span class="math inline">\(\theta_{1} = \arccos (\vec{S}_{1} \cdot \vec{L})\)</span>, the tilt angle between the orbital angular momentum and the primary object’s spin;</li>
+<li><span class="math inline">\(\theta_{2} = \arccos (\vec{S}_{2} \cdot \vec{L})\)</span>, the tilt angle between the orbital angular momentum and the secondary object’s spin;</li>
+<li><span class="math inline">\(\phi_{12} = \arccos(\vec{S}_{1}^{\parallel}\cdot \vec{S}_{2}^{\parallel})\)</span>, the azimuthal angle between the projections of the component spins in the orbital plane, <span class="math inline">\(\vec{S}_{i}^{\parallel} = \vec{S}_{i} - \vec{S}_{i} \cdot \hat{L}\)</span>;</li>
+<li><span class="math inline">\(\phi_{\text{JL}}\)</span>, the azimuthal angle of <span class="math inline">\(\vec{L}\)</span>, which parameterizes rotations around the <span class="math inline">\(\vec{J}\)</span> axis.</li>
+</ol>
+<p>These six parameters describe the two spin vectors in terms of their relation to the orbital angular momentum. The orientation of the total angular momentum is an extrinsic parameter, since it describes the geometric relation of the source and the observer: it is described by</p>
+<ol type="1">
+<li><span class="math inline">\(\theta_{\text{JN}} = \arccos(\vec{J}\cdot \vec{N})\)</span>, the angle between the total angular momentum <span class="math inline">\(\vec{J}=\vec{L}+\vec{S}_{1}+\vec{S}_{2}\)</span> and the observation direction <span class="math inline">\(\vec{N}\)</span>.</li>
+<li><span class="math inline">\(\phi_0\)</span>, the orbital phase, the azimuthal angle of the observation direction <span class="math inline">\(\vec{N}\)</span> around the orbital angular momentum.</li>
+</ol>
+<p>Also see <span class="citation" data-cites="romero-shawBayesianInferenceCompact2020">Romero-Shaw et al. (<a href="../references.html#ref-romero-shawBayesianInferenceCompact2020" role="doc-biblioref">2020</a>)</span> for the definitions of these parameters within <code>BILBY</code>.</p>
+<div id="fig-spin-diagram" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-spin-diagram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/spin-angles.webp" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-spin-diagram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.2: Diagram of the angles involved in the description of generic spins, from <span class="citation" data-cites="dupletsaValidatingPriorinformedFishermatrix2025">Dupletsa et al. (<a href="../references.html#ref-dupletsaValidatingPriorinformedFishermatrix2025" role="doc-biblioref">2025</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>Due to spin-induced precession, the orbital angular momentum <span class="math inline">\(\vec{L}\)</span> and the spins <span class="math inline">\(\vec{S}\)</span> are time-dependent. The total angular momentum <span class="math inline">\(\vec{J}\)</span> is not exactly conserved for an inspiralling, spin-precessing binary <span class="citation" data-cites="boyleGeometricApproachPrecession2011">(<a href="../references.html#ref-boyleGeometricApproachPrecession2011" role="doc-biblioref">Boyle, Owen &amp; Pfeiffer 2011</a>)</span>, but we can consider a reference frame aligned to its value early in the evolution of the binary, <span class="math inline">\(\vec{J} = \lim_{ t \to -\infty }\vec{J}(t)\)</span>, so its angle with the observation direction <span class="math inline">\(\theta_{\text{JN}}\)</span> is a well-defined parameter <span class="citation" data-cites="prattenComputationallyEfficientModels2021">(<a href="../references.html#ref-prattenComputationallyEfficientModels2021" role="doc-biblioref">Pratten et al. 2021</a>)</span>. The magnitudes of the spins <span class="math inline">\(a_{i}\)</span> are exactly conserved. The four remaining parameters — two tilts and two azimuthal angles — measurably evolve through spin-precession, and thus need to be specified at a given reference frequency.</p>
+<p>The angle between orbital angular momentum and observation direction, or <em>inclination angle</em>, is denoted as <span class="math inline">\(\iota = \arccos(\vec{L}\cdot \vec{N})\)</span>. In the aligned-spin case it is constant and equal to <span class="math inline">\(\theta_{\text{JN}}\)</span>, but in general it is a time-dependent quantity.</p>
+<p>The best-constrained spin-related quantity is generally the effective spin parameter <span class="math display">\[
+\chi _\text{eff} = \left(\frac{m_{1} \vec{\chi}_{1} + m_{2}\vec{\chi}_{2}}{m_{1}+m_{2}}  \right) \cdot \hat{L}\,.
+\]</span></p>
+<p>The extent to which precessing spin affects a binary is often characterized through the precessing spin parameter <span class="math display">\[
+\chi_{p} = \max \left( \chi_{1}^{\perp}, q(3q+4) / (4q+3) \chi_{2}^{\perp} \right) \,,
+\]</span> where <span class="math inline">\(\chi_{i}^{\perp} = |a_{1} \sin(\theta_{i})|\)</span> denotes the magnitude of the in-plane component of the spins.</p>
+<div id="fig-chip-chieff-gw250114" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-chip-chieff-gw250114-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/four_waveforms_S250114_chi_eff_chi_p.webp" class="img-fluid figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-chip-chieff-gw250114-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.3: Effective and precessing spin parameters for GW250114, from <span class="citation" data-cites="abacGW250114TestingHawkings2025">Abac et al. (<a href="../references.html#ref-abacGW250114TestingHawkings2025" role="doc-biblioref">2025</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>In <a href="#fig-chip-chieff-gw250114" class="quarto-xref">Figure&nbsp;<span>5.3</span></a> we show the posterior distribution on these parameters for GW250115, obtained with several different waveform approximants. Qualitatively, <span class="math inline">\(\chi_{\text{eff}}\)</span> was slighty negative and <span class="math inline">\(\chi_p\)</span> was small. The apparent decrease in posterior mass for <span class="math inline">\(\chi_p \to 0\)</span> is an artefact of the prior used on the component spins (<a href="#sec-spin-priors" class="quarto-xref"><span>Section 5.2.1</span></a>), whose distribution in terms of <span class="math inline">\(\chi_p\)</span> is shown in grey: the data prefer small values of <span class="math inline">\(\chi_p\)</span>. Note how the scale of the plot for both components could in principle be extended to a magnitude of 1.</p>
+<p>Modelling spin precession is generally accomplished through a change in reference frame: a waveform is obtained in a co-precessing frame, whose <span class="math inline">\(z\)</span> axis is the orbital angular momentum, and then transformed to an inertial frame by means of a time-dependent transformation, which can efficiently be computed with a Post-Newtonian approximation. We give more details on the procedure in <a href="extrinsic.html#sec-twisting" class="quarto-xref"><span>Section 6.1.1.3</span></a>.</p>
+<section id="sec-spin-priors" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="sec-spin-priors"><span class="header-section-number">5.2.1</span> Prior distribution</h3>
+<p>The prior to adopt for spin variables is a matter of convention. Within <code>BILBY</code> <span class="citation" data-cites="romero-shawBayesianInferenceCompact2020">(<a href="../references.html#ref-romero-shawBayesianInferenceCompact2020" role="doc-biblioref">Romero-Shaw et al. 2020</a>)</span>, it is defined so that the dimensionless spin magnitudes <span class="math inline">\(a_{i}\)</span> are uniformly distributed in the range <span class="math inline">\([0, 0.99]\)</span>, while the spins are uniformly distributed on the sphere, meaning that <span class="math inline">\(\phi_{12}\)</span>, <span class="math inline">\(\phi_{JL}\)</span>, <span class="math inline">\(\cos \theta_{1}\)</span>, <span class="math inline">\(\cos \theta_{2}\)</span> are uniformly distributed.</p>
+<p>If one wishes to restrict sampling to the aligned-spin case only, care must be taken to use compatible priors: given a prior <span class="math inline">\(\pi(|\chi|)\)</span> on the spin magnitude and a prior <span class="math inline">\(\pi(\cos\theta)\)</span> on the cosine of the tilt, the equivalent prior on the aligned spin component <span class="math inline">\(\chi_z\)</span> is <span class="math display">\[
+\pi(\chi_z) = \int_{0}^{1} \text{d}a \int_{-1}^{1} \text{d}\cos\theta
+        \left[  \pi(|\chi|) \pi(\cos\theta) \delta(\chi_z - |\chi| \cos\theta) \right]\,.
+\]</span></p>
+<p>If the prior on the spin magnitude <span class="math inline">\(\pi(|\chi|)\)</span> is taken to be uniform in the range <span class="math inline">\([0, \chi_{\text{max}}]\)</span>, then the result of this integral is <span class="citation" data-cites="langeRapidAccurateParameter2018">(<a href="../references.html#ref-langeRapidAccurateParameter2018" role="doc-biblioref">Lange, O’Shaughnessy &amp; Rizzo 2018</a>, eq. A7)</span>:</p>
+<p><span id="eq-aligned-spin-prior-uniform-in-magnitude"><span class="math display">\[p(\chi_{z}) = - \ln ( |\chi_{z} / \chi^{\text{max}}|) / 2 \chi^{\text{max}}\,.
+\tag{5.2}\]</span></span></p>
+</section>
+</section>
+<section id="eccentricity" class="level2 page-columns page-full" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="eccentricity"><span class="header-section-number">5.3</span> Eccentricity</h2>
+<p>In Newtonian gravity, the two-body problem is analytically solvable. The corresponding trajectories are all planar, and they can be expressed in polar coordinates as <span class="citation" data-cites="karttunenCelestialMechanics2017">(<a href="../references.html#ref-karttunenCelestialMechanics2017" role="doc-biblioref">Karttunen et al. 2017</a>)</span>: <span class="math display">\[
+r = \frac{p}{1 + e\cos f}\,,
+\]</span> where <span class="math inline">\(f\)</span> is a polar angle in the orbital plane, measured from the center of mass of the system, while <span class="math inline">\(r = |r_{1}-r_{2}|\)</span> is the distance between the two objects. The motion of either body can easily be recovered from this equation: their position vectors measured from the center of mass will always have opposite signs, and magnitudes <span class="math inline">\(r_{1} = q r / (1+q)\)</span> and <span class="math inline">\(r_{2} = r / (1+q)\)</span>, where <span class="math inline">\(q\)</span> is the mass ratio. The constants of motion <span class="math inline">\(p\)</span> and <span class="math inline">\(e\)</span> are called <em>semilatus rectum</em> and <em>eccentricity</em>. The former has the dimensions of a length and it characterizes the orbit’s scale; the latter is a pure number, which determines the type of conic section the orbit describes:</p>
+<ul>
+<li><span class="math inline">\(e=0\)</span> is a circular orbit;</li>
+<li><span class="math inline">\(0 &lt; e&lt; 1\)</span> is an elliptical orbit;</li>
+<li><span class="math inline">\(e=1\)</span> is a parabolic trajectory;</li>
+<li><span class="math inline">\(e&gt;1\)</span> is a hyperbolic trajectory.</li>
+</ul>
+<p>Systems with <span class="math inline">\(e&lt;1\)</span> are <em>bound</em>, they repeat their motion and have negative total energy. Let us define some parameters for the elliptical case: the points <span class="math inline">\((x, y)\)</span> of an ellipse with semimajor axis <span class="math inline">\(a\)</span> and semiminor axis <span class="math inline">\(b\)</span> obey <span class="math display">\[\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1\]</span></p>
+<p>In terms of these variables, the <em>eccentricity</em> <span class="math inline">\(e\)</span> is given by <span class="math inline">\(e^2 = 1- ( b / a)^2\)</span>, the <em>focal distance</em> <span class="math inline">\(c\)</span> by <span class="math inline">\(c = \sqrt{ a^{2} - b^{2} }\)</span>, and the <em>semilatus rectum</em> <span class="math inline">\(p\)</span> by <span class="math inline">\(p=a \sqrt{ 1-e^{2} }\)</span>.</p>
+<p>We have previously used the <em>true anomaly</em> <span class="math inline">\(f\)</span> as a polar angle: it is the angle from the periastron to the orbiting body, measured using the <em>focus of the ellipse</em> as the center. There are some other choices: the <em>eccentric anomaly</em> <span class="math inline">\(E\)</span> is the angle from the periastron to the <em>projection</em> of the orbiting body onto the smallest circle containing the ellipse, measured using the <em>center of the ellipse</em> as the center. The <em>mean anomaly</em> <span class="math inline">\(M\)</span> is an angle increasing proportionally to time from a periastron pass to the next.</p>
+<div id="nte-eccentric-parameter-conversion" class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note&nbsp;5.1: Converting between eccentric parameters
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Mean anomaly and eccentric anomaly are related through Kepler’s equation, which is transcendental and therefore must be solved numerically if we want to compute <span class="math inline">\(E\)</span> as a function of <span class="math inline">\(M\)</span>: <span class="math display">\[M = E - e \sin E\]</span></p>
+<p>True anomaly and eccentric anomaly are related through the equation: <span class="math display">\[(1 - e) \tan^2(f/2) = (1+e) \tan^2(E/2)\]</span></p>
+<p>but solving it is numerically unstable (the tangent diverges), so there is a better way <span class="citation" data-cites="brouckeNoteRelationsTrue1973">(<a href="../references.html#ref-brouckeNoteRelationsTrue1973" role="doc-biblioref">Broucke &amp; Cefola 1973</a>)</span>: define <span class="math inline">\(\beta = e / (1 + \sqrt(1-e^2))\)</span>, then <span class="math display">\[f = E + 2 \text{atan2}(\beta \sin E, 1 - \beta \cos E)\]</span></p>
+<p>where <span class="math inline">\(\text{atan2}(y, x) = \arctan( y / x)\)</span> is the two-argument tangent function, which is also stable for <span class="math inline">\(x=0\)</span>.</p>
+<p>Finally, one may close the circle of conversions with the following relation: <span class="math display">\[M = \text{atan2}(-\sqrt{ 1-e^{2} \sin f }, -e - \cos f) + \pi -e \frac{\sqrt{ 1 - e^{2} } \sin f}{1+e \cos f}\]</span></p>
+<p>In <a href="#fig-anomalies-visualization" class="quarto-xref">Figure&nbsp;<span>5.4</span></a> we illustrate how these anomalies can vary as a function of time. Also see <a href="https://www.youtube.com/watch?v=Mr9t7SLo0I0">this animated visualization</a>.</p>
+<div id="fig-anomalies-visualization" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-anomalies-visualization-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/anomalies.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-anomalies-visualization-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.4: The three anomalies for a generic orbit
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>They provide a useful starting point toward an understanding general-relativistic eccentric binaries, but their characteristics do not fully generalize: when gravity is strong eccentricity is not a constant of motion, nor is it covariantly defined; orbits are also not exactly elliptical, due to both perihelion precession and gravitational wave emission <span class="citation" data-cites="favataGravitationalwaveMemoryEccentric2011">(<a href="../references.html#ref-favataGravitationalwaveMemoryEccentric2011" role="doc-biblioref">Favata 2011</a>)</span>.</p>
+<p>Furthermore, the strict classification of Newtonian binaries breaks down in General Relativity: eccentricity decreases in a process known as <em>circularization</em>, and an unbound system can become bound if the gravitational wave emission during a hyperbolic encounter is enough to make its total energy negative.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;In GR this Newtonian condition should be phrased as: “make the total energy of the system <span class="math inline">\(E\)</span> smaller than the sum of the rest masses of the components, <span class="math inline">\(M\)</span>.”</p></div></div><p>It is possible to define a notion of eccentricity based on the evolution of the emission frequency of the binary. This frequency is monotonic when the orbit is quasi-circular, while for eccentric orbits it exhibits peaks and troughs on the orbital timescale <span class="citation" data-cites="shaikhDefiningEccentricityGravitational2023">(<a href="../references.html#ref-shaikhDefiningEccentricityGravitational2023" role="doc-biblioref">Shaikh et al. 2023</a>)</span>.</p>
+<p>Within the <code>TEOBResumS-DAlí</code> waveform model <span class="citation" data-cites="boninoInferringEccentricityEvolution2022 albanesiEffectiveonebodyModelingGeneric2025">(<a href="../references.html#ref-albanesiEffectiveonebodyModelingGeneric2025" role="doc-biblioref">Albanesi et al. 2025</a>, <a href="../references.html#ref-boninoInferringEccentricityEvolution2022" role="doc-biblioref">Bonino et al. 2022</a>)</span>, eccentricity and relativistic anomaly are used as an initial condition for the EOB variables, which are then evolved with fully relativistic prescriptions (see also <a href="#sec-eob" class="quarto-xref"><span>Section 5.5.2</span></a>).</p>
+<p><span class="citation" data-cites="gambaRevisitingGW150914Nonplanar2025">Gamba et al. (<a href="../references.html#ref-gambaRevisitingGW150914Nonplanar2025" role="doc-biblioref">2025</a>)</span> performed a first-of-its-kind reanalysis of the event GW150914 with a model including both eccentricity and precessing spins. Beyond the regular 15 parameters describing a spin-precessing black hole binary,<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> this analysis required two more: eccentricity and (true) anomaly. The constraints on these two parameters are shown in <a href="#fig-ecc-zeta-gw150914" class="quarto-xref">Figure&nbsp;<span>5.5</span></a>.</p>
+<div class="no-row-height column-margin column-container"><div id="fn5"><p><sup>5</sup>&nbsp;For convenience we give the list here: 2 masses, 6 independent spin components, 7 extrinsic parameters (inclination <span class="math inline">\(\theta_{JN}\)</span>, phase <span class="math inline">\(\phi_{0}\)</span>, 2 sky coordinates, luminosity distance <span class="math inline">\(d_{L}\)</span>, polarization <span class="math inline">\(\psi\)</span>, time of coalescence <span class="math inline">\(t_{0}\)</span>.)</p></div></div><div id="fig-ecc-zeta-gw150914" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ecc-zeta-gw150914-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/ecc_zeta.webp" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ecc-zeta-gw150914-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.5: Eccentricity and true anomaly posterior for GW150914, from <span class="citation" data-cites="gambaRevisitingGW150914Nonplanar2025">Gamba et al. (<a href="../references.html#ref-gambaRevisitingGW150914Nonplanar2025" role="doc-biblioref">2025</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<section id="at-lower-frequencies-1" class="level3 page-columns page-full" data-number="5.3.1">
+<h3 data-number="5.3.1" class="anchored" data-anchor-id="at-lower-frequencies-1"><span class="header-section-number">5.3.1</span> At lower frequencies</h3>
+<p>Most of the gravitational waves detected so far, in the audio band, have had no measurable eccentricity. GW250114 was one such example: parameter estimation performed with an eccentric waveform <span class="citation" data-cites="boninoInferringEccentricityEvolution2022">(<a href="../references.html#ref-boninoInferringEccentricityEvolution2022" role="doc-biblioref">Bonino et al. 2022</a>)</span> model prefers eccentricity values very close to zero, as measured at a reference frequency of 13.33Hz.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn6"><p><sup>6</sup>&nbsp;This specific value was chosen to correspond to the start of the generated waveform in the time domain. The frequency band used for the analysis started from 20Hz, but the waveform needed to be started earlier in order to account for the contributions at 20Hz of the <span class="math inline">\(\ell=3\)</span> modes, which appear at a frequency <span class="math inline">\(3/2\)</span> times higher.</p></div></div><p><a href="#fig-gw250114-eccentricity-posterior" class="quarto-xref">Figure&nbsp;<span>5.6</span></a> shows the posterior: the eccentricity is bounded to be lower than roughly 0.02.</p>
+<div id="cell-fig-gw250114-eccentricity-posterior" class="cell" data-execution_count="2">
+<details class="code-fold">
+<summary>Source code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> peters_evolution</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> gaussian_kde</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>samples <span class="op">=</span> peters_evolution.get_gw250114_samples()</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>ecc <span class="op">=</span> samples[<span class="st">'eccentricity'</span>]</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>plt.hist(ecc, density<span class="op">=</span><span class="va">True</span>, histtype<span class="op">=</span><span class="st">'step'</span>, bins<span class="op">=</span><span class="dv">20</span>, color<span class="op">=</span><span class="st">'black'</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>plt.hist(ecc, density<span class="op">=</span><span class="va">True</span>, bins<span class="op">=</span><span class="dv">20</span>, color<span class="op">=</span><span class="st">'lightgrey'</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>plt.axvline(np.quantile(ecc, <span class="fl">0.9</span>), ymin<span class="op">=</span><span class="dv">0</span>, ymax<span class="op">=</span><span class="fl">0.5</span>, color<span class="op">=</span><span class="st">'black'</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Eccentricity $e$ measured at 13.33Hz'</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Posterior distribution $p(e)$'</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>plt.xlim(<span class="dv">0</span>, <span class="fl">0.05</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-gw250114-eccentricity-posterior" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gw250114-eccentricity-posterior-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="intrinsic_files/figure-html/fig-gw250114-eccentricity-posterior-output-1.png" width="593" height="427" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gw250114-eccentricity-posterior-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.6: Eccentricity posterior distribution for GW250114. A vertical line shows the location of the 90% upper limit on eccentricity.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Despite this being the best constraint on the eccentricity of a black hole binary merger to date, based on this observation alone we cannot exclude the possibility that this binary had significant eccentricity at lower frequencies. <a href="#fig-gw250114-eccentricity-evolution" class="quarto-xref">Figure&nbsp;<span>5.7</span></a> shows the posterior distribution for GW250114 evolved backward in time. This is done with a simple Post-Newtonian approach, namely Peters’ equations <span class="citation" data-cites="petersGravitationalRadiationPoint1963 maggioreGravitationalWavesVolume2007">(<a href="../references.html#ref-maggioreGravitationalWavesVolume2007" role="doc-biblioref">Maggiore 2007</a>, <a href="../references.html#ref-petersGravitationalRadiationPoint1963" role="doc-biblioref">Peters &amp; Mathews 1963</a>)</span>, as it only serves to illustrate the point. It would be possible to also account for the impact of spin-precession, as described by <span class="citation" data-cites="fumagalliResidualEccentricitySystematic2024">Fumagalli et al. (<a href="../references.html#ref-fumagalliResidualEccentricitySystematic2024" role="doc-biblioref">2024</a>)</span>.</p>
+<div id="cell-fig-gw250114-eccentricity-evolution" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Source code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> peters_evolution, data_path</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> plt</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span>, <span class="dv">2</span>, sharey<span class="op">=</span><span class="va">True</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="fl">2.5</span>),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    gridspec_kw<span class="op">=</span>{<span class="st">'wspace'</span>:<span class="fl">0.1</span>}</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>fname_cache <span class="op">=</span> data_path <span class="op">/</span> <span class="st">'cache'</span> <span class="op">/</span> <span class="st">'gw250114_eccentricity_extrapolation.npy'</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>freqs, lo, med, hi <span class="op">=</span> peters_evolution.get_gw250114_eccentricity_extrapolation(fname_cache)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].fill_between(freqs, lo, hi, color<span class="op">=</span><span class="st">'blue'</span>, alpha<span class="op">=</span><span class="fl">.3</span>, label<span class="op">=</span><span class="st">'90</span><span class="er">\</span><span class="sc">% c</span><span class="st">redible interval'</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].plot(freqs, med, c<span class="op">=</span><span class="st">'blue'</span>, label<span class="op">=</span><span class="st">'Median'</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_title(<span class="st">'Uniform prior on $e_</span><span class="sc">{{</span><span class="st">13.33</span><span class="er">\</span><span class="st">mathrm</span><span class="sc">{{</span><span class="st">Hz</span><span class="sc">}}}}</span><span class="st">$'</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>fname_cache <span class="op">=</span> data_path <span class="op">/</span> <span class="st">'cache'</span> <span class="op">/</span> <span class="st">'gw250114_eccentricity_extrapolation_loguniform.npy'</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>freqs, lo, med, hi <span class="op">=</span> peters_evolution.get_gw250114_eccentricity_extrapolation_loguniform(fname_cache)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].fill_between(freqs, lo, hi, color<span class="op">=</span><span class="st">'blue'</span>, alpha<span class="op">=</span><span class="fl">.3</span>, label<span class="op">=</span><span class="st">'90</span><span class="er">\</span><span class="sc">% c</span><span class="st">redible interval'</span>)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].plot(freqs, med, c<span class="op">=</span><span class="st">'blue'</span>, label<span class="op">=</span><span class="st">'Median'</span>)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> axs:</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    ax.set_xscale(<span class="st">'log'</span>)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    ax.set_xlim(<span class="fl">2e-2</span>, <span class="fl">13.33</span>)</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">'Frequency [Hz]'</span>)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_ylabel(<span class="st">'Eccentricity'</span>)</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].legend()</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_title(<span class="vs">r'Log-uniform prior on </span><span class="dv">$</span><span class="vs">e_{{13</span><span class="dv">.</span><span class="vs">33</span><span class="dv">\m</span><span class="vs">athrm{{Hz}}}}</span><span class="dv">$</span><span class="vs">'</span>)</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-gw250114-eccentricity-evolution" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gw250114-eccentricity-evolution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="intrinsic_files/figure-html/fig-gw250114-eccentricity-evolution-output-1.png" width="509" height="263" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gw250114-eccentricity-evolution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.7: Backward-extrapolated eccentricity evolution for GW250114.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>While the limits and analysis quoted in the discovery paper <span class="citation" data-cites="abacGW250114TestingHawkings2025">(<a href="../references.html#ref-abacGW250114TestingHawkings2025" role="doc-biblioref">Abac et al. 2025</a>)</span> used a uniform prior in <span class="math inline">\(e_{13.33\text{Hz}}\)</span>, a conservative choice, we also show results obtained with a log-uniform prior <span class="math inline">\(p(e_{13.33\text{Hz}}) \propto 1/e_{13.33\text{Hz}}\)</span>. The qualitative scenario is similar in both cases: eccentricities on the order of <span class="math inline">\(e \sim 0.5\)</span> are plausible in the deci-hertz band. However, the prior significantly affects whether these lie on the edge of the distribution or along its bulk.</p>
+<p>This is not surprising: the data is not very informative on the <span class="math inline">\(e_{13.33\text{Hz}} \sim 0\)</span> tail of the distribution, so we get back out of the analysis the assumptions we started with. This result can lead us to reflect on the meaning of the prior on eccentricity: a flat distribution in <span class="math inline">\(e_{13.33\text{Hz}}\)</span> is not a neutral statement, but instead one which heavily favors eccentric binaries at lower frequencies. For an in-depth discussion of this effect, as well as an exploration of how one might use astrophysically-motivated priors instead, see <span class="citation" data-cites="clarkeUniversalFrameworkIdentify2026">Clarke et al. (<a href="../references.html#ref-clarkeUniversalFrameworkIdentify2026" role="doc-biblioref">2026</a>)</span>.</p>
+</section>
+</section>
+<section id="sec-tidal-parameters" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="sec-tidal-parameters"><span class="header-section-number">5.4</span> Tidal parameters</h2>
+<p>Objects such as neutron stars can be deformed by the tidal gravitational field caused by the presence of a nearby object, such as the binary companion. This deformation enhances the gravitational attraction between the two objects, but it is only effective at relatively short separations: the net effect, therefore, is to leave the early inspiral almost unchanged, while accelerating its late stages.</p>
+<p>In the static case, this tidal field can be expressed as <span class="math inline">\(\mathcal{E}_{ij}=C_{0i0j}\)</span>, where <span class="math inline">\(C\)</span> is the Weyl curvature tensor <span class="citation" data-cites="misnerGravitation1973">(<a href="../references.html#ref-misnerGravitation1973" role="doc-biblioref">Misner, Thorne &amp; Wheeler 1973</a>, eq. 13.50)</span>, the trace-free component of the Riemann curvature tensor. At leading order, this tidal field will induce a quadrupole moment <span class="math inline">\(Q_{ij}\)</span>, given by</p>
+<p><span class="math display">\[
+Q_{ij} = - \Lambda M^{5} \mathcal{E}_{ij}
+\]</span></p>
+<p>where <span class="math inline">\(\Lambda\)</span> is the <em>tidal deformability</em> or <em>polarizability</em> parameter, written as</p>
+<p><span id="eq-tidal-polarizability"><span class="math display">\[
+\Lambda = \frac{2}{3} \kappa_{2} \left( \frac{Rc^{2}}{GM} \right)^{5}
+\tag{5.3}\]</span></span></p>
+<p>where <span class="math inline">\(R\)</span> is the radius of the object, while <span class="math inline">\(\kappa_{2}\)</span> is its <span class="math inline">\(\ell=2\)</span> dimensionless tidal Love number, which for neutron stars is generally on the order of 0.1.</p>
+<p>The main tidal contribution to the waveform is through the effective tidal parameter, which enters the expansion at 5PN order <span class="citation" data-cites="wadeSystematicStatisticalErrors2014">(<a href="../references.html#ref-wadeSystematicStatisticalErrors2014" role="doc-biblioref">Wade et al. 2014</a>)</span>: <span class="math display">\[
+\tilde{\Lambda} = \frac{8}{13} \left[
+(1+7\nu -31\nu^{2}) (\Lambda_{1}+\Lambda_{2})
++\sqrt{ 1-4\nu } (1+9\nu-11\nu^{2})(\Lambda_{1}-\Lambda_{2})
+\right]
+\]</span> while secondary contributions arise depending on the tidal deviation parameter <span class="math display">\[
+\begin{aligned}
+\delta \tilde{\Lambda} = \frac{1}{2} \bigg[
+&amp;\sqrt{ 1-4\nu } \left( 1 - \frac{13272}{1319}\nu +
+\frac{8944}{1319}\nu^{2} \right) (\Lambda_{1}+\Lambda_{2})
+\\
+&amp;+ \left(
+1- \frac{15910}{1319}\nu + \frac{3380}{1319}\nu^{2}  
+\right)
+(\Lambda_{1}-\Lambda_{2})
+\bigg]\,.
+\end{aligned}
+\]</span> While their expressions are intimidating, note that several terms vanish in the equal-mass case, where <span class="math inline">\(\nu = 1 / 4\)</span>; if that is true then <span class="math inline">\(\tilde{\Lambda} =f(\nu) (\Lambda_{1}+\Lambda_{2})\)</span> and <span class="math inline">\(\delta \tilde{\Lambda} = g(\nu)(\Lambda_{1}-\Lambda_{2})\)</span> for some functions <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span>. Furthermore, if the masses are equal and so are the tidal parameters (<span class="math inline">\(\Lambda_{1}=\Lambda_{2}=\Lambda\)</span>), then we have <span class="math inline">\(\Lambda = \tilde{\Lambda}\)</span> and <span class="math inline">\(\delta \tilde{\Lambda} =0\)</span>.</p>
+<p>The analysis so far has focused on the adiabatic, quadrupolar case: assuming that only the dominant oscillation mode of a neutron star is excited, and that its time evolution follows the forcing term (<em>i.e.</em> the other star’s tidal field).</p>
+<p>In reality, the tidal deformation of a neutron star is more accurately described through a decomposition including the time-dependent excitation of different modes. There are several modes of oscillation one might consider, which have been deeply discussed in the field of astroseismology, <span class="citation" data-cites="cunhaAsteroseismologyInterferometry2007 steinhoffSpinEffectsNeutron2021 zhaoUniversalRelationsNeutron2022">(<a href="../references.html#ref-cunhaAsteroseismologyInterferometry2007" role="doc-biblioref">Cunha et al. 2007</a>, <a href="../references.html#ref-steinhoffSpinEffectsNeutron2021" role="doc-biblioref">Steinhoff et al. 2021</a>, <a href="../references.html#ref-zhaoUniversalRelationsNeutron2022" role="doc-biblioref">Zhao &amp; Lattimer 2022</a>)</span>, and a full discussion of them is beyond the scope of this work. The amplitude <span class="math inline">\(Q_n\)</span> of each of these modes, which we index with an integer <span class="math inline">\(n\)</span>, will oscillate following a driven harmonic oscillator <span class="citation" data-cites="laiResonantOscillationsTidal1994">(<a href="../references.html#ref-laiResonantOscillationsTidal1994" role="doc-biblioref">Lai 1994</a>)</span> in the form</p>
+<p><span class="math display">\[\ddot{Q}_n + \frac{\dot{Q}_n}{t_{\text{diss}}} + \omega_n^2 Q^2 = f_n (Q_n, t, \text{orbit})\,,
+\]</span></p>
+<p>for some values of the dissipative timescale <span class="math inline">\(t_{\text{diss}}\)</span> and angular frequency <span class="math inline">\(\omega_n\)</span>. The forcing term <span class="math inline">\(f_n\)</span> will generally depend on the relative position of the companion star. In the quasi-circular case this can be approximated as a sinusoid whose period scales inversely with the angular frequency of the binary <span class="math inline">\(\omega_{\text{orb}}\)</span>, but for eccentric binaries high-frequency modes may be excited even though the orbit-averaged angular frequency is comparatively low.</p>
+<p>The adiabatic assumption is equivalent to the requirement that <span class="math inline">\(1/t_{\text{diss}} \ll \bar{\omega}_{\text{orb}}\)</span>, as well as <span class="math inline">\(\omega_n \gg \bar{\omega}_{\text{orb}}\)</span> <span class="citation" data-cites="flanaganConstrainingNeutronStar2008">(<a href="../references.html#ref-flanaganConstrainingNeutronStar2008" role="doc-biblioref">Flanagan &amp; Hinderer 2008</a>)</span>. The first constraint is generally expected to be well-satisfied, both when discussing losses dueto gravitational wave emission <span class="citation" data-cites="takatsyObservabilityDynamicalTides2024">(<a href="../references.html#ref-takatsyObservabilityDynamicalTides2024" role="doc-biblioref">Takátsy, Kocsis &amp; Kovács 2024</a>)</span> as well as due to friction <span class="citation" data-cites="ripleyConstraintDissipativeTidal2024">(<a href="../references.html#ref-ripleyConstraintDissipativeTidal2024" role="doc-biblioref">Ripley et al. 2024</a>)</span>.</p>
+<p>Relaxing the <span class="math inline">\(\omega_n \gg \bar{\omega}_{\text{orb}}\)</span> assumption means considering the effect of <em>dynamical</em> (also known as <em>resonant</em>) tides. These can impact the phasing at low frequencies, especially in the case of eccentric binaries <span class="citation" data-cites="gambaResonantTidesBinary2023">(<a href="../references.html#ref-gambaResonantTidesBinary2023" role="doc-biblioref">Gamba &amp; Bernuzzi 2023</a>)</span>. Considering oscillations with angular structure at higher orders than the quadrupole is also possible <span class="citation" data-cites="jimenez-fortezaImpactHighorderTidal2018">(<a href="../references.html#ref-jimenez-fortezaImpactHighorderTidal2018" role="doc-biblioref">Jimenez-Forteza et al. 2018</a>)</span> In any case, none of these higher-order corrections are required to explain current observations of neutron star mergers: the clearest to date, GW170817, only provided comparatively weak constraints on the leading-order tidal parameters <span class="math inline">\(\Lambda\)</span> <span class="citation" data-cites="theligoscientificcollaborationPropertiesBinaryNeutron2019">(<a href="../references.html#ref-theligoscientificcollaborationPropertiesBinaryNeutron2019" role="doc-biblioref"><span class="nocase">Collaboration et al.</span> 2019</a>)</span>.</p>
+<p>Love numbers are generally expected to vanish for black holes, and to be nonzero for other compact objects such as neutron stars. GW250114 provided an opportunity to test this prediction: if it had a measurable deviation from <span class="math inline">\(\tilde{\Lambda}=0\)</span>, it would have indicated a potential violation of General Relativity or some other missing aspect in our description of this binary, such as the components not being black holes but other compact objects. <span class="citation" data-cites="andres-carcasonaNoLoveBlack2025">Andrés-Carcasona &amp; Santoro (<a href="../references.html#ref-andres-carcasonaNoLoveBlack2025" role="doc-biblioref">2025</a>)</span> have shown this not to be the case within current experimental uncertainties, constraining <span class="math inline">\(\tilde{\Lambda}\)</span> to be less than 155 (with uniform priors) or 35 (with log-uniform priors) for this event.</p>
+</section>
+<section id="waveform-modelling" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="waveform-modelling"><span class="header-section-number">5.5</span> Waveform modelling</h2>
+<p>General relativity is a complex non-linear theory, and in order to analyze signals from binaries with strong gravity we must understand its predictions precisely, and be able to compute them quickly.</p>
+<p>There are several approaches to modelling the waveform emitted by a compact binary inspiral, with varying degrees of computational complexity, completeness in the inclusion of physical effects, and accuracy. For example, while all the approaches discussed here can in principle include any amount of modes in the spherical harmonic decomposition of binary emission (see <a href="extrinsic.html#sec-phase-inclination-angle" class="quarto-xref"><span>Section 6.1.1</span></a>), some specific models only include the dominant one.</p>
+<p>Often, these approaches are calibrated or validated against full Numerical Relativity simulations. These have been possible for around 20 years as of this writing <span class="citation" data-cites="pretoriusEvolutionBinaryBlack2005 gourgoulhon3+1FormalismBases2007">(<a href="../references.html#ref-gourgoulhon3+1FormalismBases2007" role="doc-biblioref">Gourgoulhon 2007</a>, <a href="../references.html#ref-pretoriusEvolutionBinaryBlack2005" role="doc-biblioref">Pretorius 2005</a>)</span>, and despite being a gold standard suffer from their own set of uncertainties.</p>
+<p>Gravitational waves can be extracted from them based on the Weyl scalar <span class="math inline">\(\Psi_4 = C_{abcd} m^a m^b n^c n^d\)</span>, where <span class="math inline">\(m\)</span> and <span class="math inline">\(n\)</span> are component vectors of a null tetrad while <span class="math inline">\(C\)</span> is the Weyl tensor. At large separations from the binary, this is related to the gravitational time-domain polarizations <span class="math inline">\(h_+ - i h_\times\)</span> by</p>
+<p><span class="math display">\[ -\Psi_4 = \ddot{h}_+ - i \ddot{h}_\times\,,
+\]</span></p>
+<p>so this scalar must be computed at the edges of the simulation, integrated twice in the time variable, and then decomposed into spherical harmonics <span class="citation" data-cites="lofflerEinsteinToolkitCommunity2012">(<a href="../references.html#ref-lofflerEinsteinToolkitCommunity2012" role="doc-biblioref">Löffler et al. 2012</a>)</span>.</p>
+<p>We will focus on the Post-Newtonian (<a href="#sec-post-newtonian" class="quarto-xref"><span>Section 5.5.1</span></a>) and Effective One Body (<a href="#sec-eob" class="quarto-xref"><span>Section 5.5.2</span></a>) approaches to waveform generation; we also note the existence of Numerical Relativity surrogates (<em>e.g.</em> <code>NRSur7dq4</code>, presented by <span class="citation" data-cites="varmaSurrogateModelsPrecessing2019">Varma et al. (<a href="../references.html#ref-varmaSurrogateModelsPrecessing2019" role="doc-biblioref">2019</a>)</span>) and phenomenological models (<em>e.g.</em> <code>IMRPHenomXHM</code>, presented by <span class="citation" data-cites="garcia-quirosIMRPhenomXHMMultimodeFrequencydomain2020">García-Quirós et al. (<a href="../references.html#ref-garcia-quirosIMRPhenomXHMMultimodeFrequencydomain2020" role="doc-biblioref">2020</a>)</span>) for comparable mass binaries, and the gravitational self-force formalism for extreme mass ratios (<em>e.g.</em> the second-order self-force calculations presented by <span class="citation" data-cites="poundSecondOrderSelfForceCalculation2020">Pound et al. (<a href="../references.html#ref-poundSecondOrderSelfForceCalculation2020" role="doc-biblioref">2020</a>)</span> and implemented in the Fast EMRI Waveforms software package <span class="citation" data-cites="katzFastEMRIWaveformsNewTools2021">(<a href="../references.html#ref-katzFastEMRIWaveformsNewTools2021" role="doc-biblioref">Katz et al. 2021</a>)</span>).</p>
+<section id="sec-post-newtonian" class="level3" data-number="5.5.1">
+<h3 data-number="5.5.1" class="anchored" data-anchor-id="sec-post-newtonian"><span class="header-section-number">5.5.1</span> Post-Newtonian</h3>
+<p>Post-Newtonian waveforms are obtained by analytically expanding Einstein’s equations in powers of <span class="math inline">\(v/c\)</span>. Thanks to the stationary phase approximation, this can lead to an analytical expression for the amplitude and phase as a function of frequency.</p>
+<p>These models are generally only accurate for a description of the early inspiral.</p>
+<p><span class="citation" data-cites="buonannoComparisonPostNewtonianTemplates2009">Buonanno et al. (<a href="../references.html#ref-buonannoComparisonPostNewtonianTemplates2009" role="doc-biblioref">2009</a>)</span> give a comparison of some commonly used Post-Newtonian waveform approximants, including the frequency-domain one <code>TaylorF2</code>, whose frequency-domain waveforms read <span class="citation" data-cites="messinaQuasi55PNTaylorF2Approximant2019">(<a href="../references.html#ref-messinaQuasi55PNTaylorF2Approximant2019" role="doc-biblioref">Messina et al. 2019</a>)</span>: <span class="math display">\[
+\tilde{h}(f) = \sqrt{ \frac{5}{24} }\frac{c}{\pi^{2/3} d_{L}}
+\left( \frac{G\mathcal{M}}{c^{3}} \right)^{5/6}  f^{-7/6}
+\left( 1 + \sum_{n=2}^{n_\text{max}} A_{n} \left( \pi M f \right) ^{n}
+\right)  e^{i \Psi(f)}\,,
+\]</span> where the phase <span class="math inline">\(\Psi\)</span> is in the form reported in <a href="#eq-post-newtonian-phase-generic" class="quarto-xref">Equation&nbsp;<span>5.1</span></a>.</p>
+<p>Post-Newtonian approximants including eccentricity also exist, though their validity is limited to the small-eccentricity regime.</p>
+</section>
+<section id="sec-eob" class="level3" data-number="5.5.2">
+<h3 data-number="5.5.2" class="anchored" data-anchor-id="sec-eob"><span class="header-section-number">5.5.2</span> Effective One Body</h3>
+<p>Effective One Body waveforms are obtained by mapping the relativistic two body problem to the motion of a test particle in a deformed metric. The following description will mainly describe the components of the <code>TEOBResumS</code> family of models, though similar considerations also apply to other models, such as those in the <code>SEOB</code> family.</p>
+<p>The problem is described in a Hamiltonian setting, in terms of the dimensionless variables <span class="math inline">\((r, p_{r}, \varphi, p_{\varphi})\)</span>, which are rescaled relative polar coordinates in the orbital plane.</p>
+<p>The effective Hamiltonian of the problem is given by <span class="citation" data-cites="nagarTimedomainEffectiveonebodyGravitational2018">(<a href="../references.html#ref-nagarTimedomainEffectiveonebodyGravitational2018" role="doc-biblioref">Nagar et al. 2018</a>)</span>: <span class="math display">\[
+\hat{H} = \frac{H}{\mu} = \frac{1}{\nu} \sqrt{ 1 + 2 \nu (\hat{H}_\text{eff} - 1) }
+\]</span> where the effective Hamiltonian contains a plethora of physical effects and Post-Newtonian contributions. For the <code>TEOBResumS</code> model, it is given by <span class="math display">\[
+\hat{H}_{\text{eff}} = \sqrt{ p_{r_{*}}^{2} + A \left( 1 + \frac{p_\varphi^{2}}{r_c^{2}} + 2 \nu (4-3\nu) \frac{p_{r_{*}}^{4}}{r_{c}^{2}} \right)  }
++ p_{\varphi}(G_{S} \hat{S} + G_{S_{*}}\hat{S}_{*})\,,
+\]</span> where the following quantities appear:</p>
+<ul>
+<li>the potential <span class="math inline">\(A\)</span> is a generalization of the <span class="math inline">\(1 - 2 GM / r c^{2}\)</span> term in the Schwarzschild metric, which can also include corrections due to e.g.&nbsp;tidal effects; though it does not explicitly feature here, the Hamiltonian also depends on the <span class="math inline">\(B\)</span> potential, which at leading order reads <span class="math inline">\(1 + 2 GM / r c^{2}\)</span>;</li>
+<li>the radial momentum <span class="math inline">\(p_{r_{*}}\)</span> expressed with respect to the tortoise coordinate <span class="math inline">\(r_{*} = \int \sqrt{ B /A } \text{d}r\)</span>;</li>
+<li>the centrifugal radius <span class="math inline">\(r_{c}\)</span>, introduced in <span class="citation" data-cites="damourNewEffectiveonebodyDescription2014">Damour &amp; Nagar (<a href="../references.html#ref-damourNewEffectiveonebodyDescription2014" role="doc-biblioref">2014</a>)</span>;</li>
+<li>a spin term, which depends on the variables <span class="math inline">\(\hat{S} = (S_{1} + S_{2}) / M^{2}\)</span> and <span class="math inline">\(\hat{S}_{*} = ( q S_{1} + S_{2} / q) /M^{2}\)</span>;</li>
+</ul>
+<p>The potentials <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are computed with Padé resummation in order to improve stability where the Taylor approximant would diverge.</p>
+<p>Since we are working within General Relativity the equations of motion are not conservative: they include <em>radiation reaction</em> terms which affect the evolution of the momenta. These terms also need to be computed to high order and Padé-resummed.</p>
+<div id="nte-pade-approximant" class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note&nbsp;5.2: Padé approximation
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>A <span class="math inline">\((n, m)\)</span> Padé approximant <span class="citation" data-cites="padeRepresentationApprocheeDune1892">(<a href="../references.html#ref-padeRepresentationApprocheeDune1892" role="doc-biblioref">Padé 1892</a>)</span> to a function <span class="math inline">\(f(x)\)</span> is a ratio of polynomials, in the form: <span class="math display">\[
+P_m^n(x) = \frac{\sum _{i=0}^{n} a_{i} x^{i}}{1+\sum _{i=1}^{m} b_{i} x^{i}},
+\]</span></p>
+<p>where the coefficients are determined such that they agree with the Taylor series: <span class="math display">\[
+\frac{\text{d}^{r}}{\text{d}x^{r}} f(0) = \frac{\text{d}^{r}}{\text{d}x^{r}} P_{m}^{n} (0)
+\]</span> for all <span class="math inline">\(r \leq n+m\)</span>. In fact, a Taylor series is a special case of a Padé approximant with <span class="math inline">\(m=0\)</span>.</p>
+<p>One advantage of using Padé approximants is that, for large values of <span class="math inline">\(x\)</span>, they have a lower asymptotic order, and thus tend towards less “extreme” behavior, as <a href="#fig-pade-approximant" class="quarto-xref">Figure&nbsp;<span>5.8</span></a> shows.</p>
+<div id="cell-fig-pade-approximant" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Source code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.interpolate <span class="im">import</span> pade</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.special <span class="im">import</span> factorial</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> plt</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>sine_taylor_coefficients <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span><span class="op">/</span>factorial(<span class="dv">3</span>), <span class="dv">0</span>, <span class="op">+</span><span class="dv">1</span><span class="op">/</span>factorial(<span class="dv">5</span>), <span class="dv">0</span>]</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>p, q <span class="op">=</span> pade(sine_taylor_coefficients, <span class="dv">4</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>pade_sine <span class="op">=</span> np.vectorize(<span class="kw">lambda</span> x : p(x) <span class="op">/</span> q(x))</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>taylor_sine <span class="op">=</span> np.poly1d(<span class="bu">list</span>(<span class="bu">reversed</span>(sine_taylor_coefficients)))</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">10</span>, <span class="dv">10</span>, num<span class="op">=</span><span class="dv">1000</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>plt.plot(x, np.sin(x), label<span class="op">=</span><span class="st">'$</span><span class="er">\</span><span class="st">sin(x)$'</span>, c<span class="op">=</span><span class="st">'black'</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>plt.plot(x, taylor_sine(x), label<span class="op">=</span><span class="st">'Taylor series to order 7'</span>, ls<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>plt.plot(x, pade_sine(x), label<span class="op">=</span><span class="st">'Padé $(3, 4)$ approximant'</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="op">-</span><span class="dv">10</span>, <span class="dv">10</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'$x$'</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-pade-approximant" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pade-approximant-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="intrinsic_files/figure-html/fig-pade-approximant-output-1.png" width="583" height="432" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pade-approximant-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.8: A Padé approximant for the sine function. Even when the approximation breaks down, the Padé approximant outputs values somewhat close to those of the actual function, while the Taylor series quickly diverges.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>The waveform obtained by computing a solution to the EOB dynamics is then completed with corrections for the “plunge” regime <span class="citation" data-cites="damourFaithfulEffectiveonebodyWaveforms2007">(<a href="../references.html#ref-damourFaithfulEffectiveonebodyWaveforms2007" role="doc-biblioref">Damour &amp; Nagar 2007</a>)</span>, and — for black hole binaries — a smooth connection to the ringdown <span class="citation" data-cites="damourIntroductoryLecturesEffective2008">(<a href="../references.html#ref-damourIntroductoryLecturesEffective2008" role="doc-biblioref">Damour 2008</a>)</span>, which is modelled as a superposition of quasi-normal modes as described in <a href="gw250114.html#sec-ringdown" class="quarto-xref"><span>Section 4.2</span></a>. The treatment for the post-merger regime of other compact objects such as neutron stars is significantly more complex, as the phenomenology is much more variable and not currently constrained by observational data. Nevertheless, approaches have been proposed to handle it <span class="citation" data-cites="breschiKilohertzGravitationalWaves2022">(<a href="../references.html#ref-breschiKilohertzGravitationalWaves2022" role="doc-biblioref">Breschi et al. 2022</a>)</span>.</p>
+<p>A numerical solution to the EOB evolution equations is not always necessary: <span class="citation" data-cites="nagarRushInspiralEfficient2019">Nagar &amp; Rettegno (<a href="../references.html#ref-nagarRushInspiralEfficient2019" role="doc-biblioref">2019</a>)</span> showed that a post-adiabatic approximation allows for the analytic solution to these equations. <span class="citation" data-cites="gambaFastFaithfulFrequencydomain2020">Gamba, Bernuzzi &amp; Nagar (<a href="../references.html#ref-gambaFastFaithfulFrequencydomain2020" role="doc-biblioref">2020</a>)</span> further applied a stationary phase approximation (SPA, see <a href="extrinsic.html#sec-stationary-phase-approximation" class="quarto-xref"><span>Section 6.2</span></a>) to these waveforms, allowing for direct generation in the frequency domain.</p>
+<p>The SPA approach is not always feasible: for example, eccentric-hyperbolic binaries do not satisfy the requirements for the SPA, and their waveforms need to be computed in the time domain <span class="citation" data-cites="nagarEffectiveonebodyWaveformModel2024 gambaRevisitingGW150914Nonplanar2025">(<a href="../references.html#ref-gambaRevisitingGW150914Nonplanar2025" role="doc-biblioref">Gamba et al. 2025</a>, <a href="../references.html#ref-nagarEffectiveonebodyWaveformModel2024" role="doc-biblioref">Nagar et al. 2024</a>)</span>.</p>
+<p>The EOB approach is also amenable to being extended with beyond-GR parameters, see e.g. <span class="citation" data-cites="chiaramelloParametrizedModelGravitational2025">Chiaramello et al. (<a href="../references.html#ref-chiaramelloParametrizedModelGravitational2025" role="doc-biblioref">2025</a>)</span>.</p>
+</section>
+<section id="sec-mlgw-bns" class="level3" data-number="5.5.3">
+<h3 data-number="5.5.3" class="anchored" data-anchor-id="sec-mlgw-bns"><span class="header-section-number">5.5.3</span> Surrogate models: the <code>mlgw_bns</code> example</h3>
+<p>The evaluation of gravitational waveform models is commonly a bottleneck for the likelihood, therefore significant efforts have been devoted to the development of <em>surrogate models</em>, which reproduce the results from a computationally expensive model.</p>
+<p>As an example, we show results from <code>mlgw_bns</code> <span class="citation" data-cites="tissinoCombiningEffectiveonebodyAccuracy2023">(<a href="../references.html#ref-tissinoCombiningEffectiveonebodyAccuracy2023" role="doc-biblioref">Tissino et al. 2023</a>)</span>, a surrogate of the frequency-domain inspiral-only model <code>TEOBResumSPA</code> <span class="citation" data-cites="gambaFastFaithfulFrequencydomain2020">(<a href="../references.html#ref-gambaFastFaithfulFrequencydomain2020" role="doc-biblioref">Gamba, Bernuzzi &amp; Nagar 2020</a>)</span> for aligned-spin neutron star binaries with tidal effects — a 5-dimensional parameter space, with parameters <span class="math inline">\((q, \chi_1, \chi_2, \Lambda_1, \Lambda_2)\)</span>, since all other parameters can be modeled analytically.</p>
+<p>As a surrogate, it is trained on the base model, which can be evaluated at arbitrary points in the parameter space. The surrogate’s accuracy depends on the number of training data points, and it is measured in terms of the mismatch <span id="eq-mismatch"><span class="math display">\[
+\bar{\mathcal{F}} = 1 - \max_{t_{0}, \phi_{0}} \frac{(h_\text{true}| h _\text{surr}(t_0, \phi_0))}{\sqrt{ (h _\text{true}| h _\text{true}) (h _\text{surr}| h _\text{surr})}}
+\tag{5.4}\]</span></span> where the scalar products are computed as in equation <a href="../data-analysis/likelihood.html#eq-noise-weighted-inner-product" class="quarto-xref">Equation&nbsp;<span>3.3</span></a>, and generally maximized over reference time and coalescence phase — this is equivalent to allowing the surrogate model to have a different parameterization for timing and phase than its baseline. This is generally acceptable, since timing and phase have no astrophysical meaning.</p>
+<div id="fig-mlgw-bns-accuracy" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mlgw-bns-accuracy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/mlgw_bns/fig06.webp" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mlgw-bns-accuracy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.9: Reconstruction accuracy for <code>mlgw_bns</code> as a function of the number of training waveforms N.
+</figcaption>
+</figure>
+</div>
+<p>Whereas the mismatch is a global metric, reconstruction accuracy can also be locally measured by directly comparing the predictions with those of the base model. We show this in <a href="#fig-mlgw-bns-reconstruction-fd" class="quarto-xref">Figure&nbsp;<span>5.10</span></a>: the high accuracy achieved at low frequencies is by construction, as the model is constructed by incorporating an analytic Post-Newtonian baseline and only fitting the residual error.</p>
+<div id="fig-mlgw-bns-reconstruction-fd" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mlgw-bns-reconstruction-fd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/mlgw_bns/fig07.webp" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mlgw-bns-reconstruction-fd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.10: Reconstruction accuracy for <code>mlgw_bns</code> in the frequency domain.
+</figcaption>
+</figure>
+</div>
+<p>The surrogate model should also be faster to evaluate: this is indeed the case, as <a href="#fig-mlgw-bns-compared-timing" class="quarto-xref">Figure&nbsp;<span>5.11</span></a> shows. The number of grid points in frequency has a significant impact on the evaluation time for all models, as is inevitable given the increased number of floating point operations. Therefore, we separate out the constant-time contribution to the evaluation time from the one scaling with the number of grid points.</p>
+<div id="fig-mlgw-bns-compared-timing" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mlgw-bns-compared-timing-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/mlgw_bns/fig12.webp" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mlgw-bns-compared-timing-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.11: Evaluation time for <code>mlgw_bns</code> compared to its reference model <code>TEOBResumSPA</code> and some others. For every model, we also show a fit of the waveform evaluation time <span class="math inline">\(t\)</span> with a linear function of the number of frequency grid points <span class="math inline">\(N\)</span>, so that <span class="math inline">\(t = a + bN\)</span>.
+</figcaption>
+</figure>
+</div>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-abacScienceEinsteinTelescope2026" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1088/1475-7516/2026/03/081"><span class="nocase">Abac A, Abramo R, Albanesi S, Albertini A, Agapito A, et al.</span> 2026. <em>J. Cosmol. Astropart. Phys.</em> 2026(03):081</a>
+</div>
+<div id="ref-abacGW250114TestingHawkings2025" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/kw5g-d732">Abac AG, Abouelfettouh I, Acernese F, Ackley K, Adamcewicz C, et al. 2025. <em>Phys. Rev. Lett.</em> 135(11):111403</a>
+</div>
+<div id="ref-albanesiEffectiveonebodyModelingGeneric2025" class="csl-entry" role="listitem">
+Albanesi S, Gamba R, Bernuzzi S, Fontbuté J, Gonzalez A, Nagar A. 2025. <em>Effective-one-body modeling for generic compact binaries with arbitrary orbits</em>. <a href="http://arxiv.org/abs/2503.14580">http://arxiv.org/abs/2503.14580</a>
+</div>
+<div id="ref-andres-carcasonaNoLoveBlack2025" class="csl-entry" role="listitem">
+Andrés-Carcasona M, Santoro GC. 2025. <em>No <span>Love</span> for black holes: Tightest constraints on tidal <span>Love</span> numbers of black holes from <span>GW250114</span></em>. <a href="http://arxiv.org/abs/2512.01918">http://arxiv.org/abs/2512.01918</a>
+</div>
+<div id="ref-blanchetPostNewtonianTheoryGravitational2024" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1007/s41114-024-00050-z">Blanchet L. 2024. <em>Living Rev. Relativ.</em> 27(1):4</a>
+</div>
+<div id="ref-boninoInferringEccentricityEvolution2022" class="csl-entry" role="listitem">
+Bonino A, Gamba R, Schmidt P, Nagar A, Pratten G, et al. 2022. <em>Inferring eccentricity evolution from observations of coalescing binary black holes</em>. <a href="http://arxiv.org/abs/2207.10474">http://arxiv.org/abs/2207.10474</a>
+</div>
+<div id="ref-boyleGeometricApproachPrecession2011" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.84.124011">Boyle M, Owen R, Pfeiffer HP. 2011. <em>Phys. Rev. D</em>. 84(12):124011</a>
+</div>
+<div id="ref-breschiKilohertzGravitationalWaves2024" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.109.064009">Breschi M, Bernuzzi S, Chakravarti K, Camilletti A, Prakash A, Perego A. 2024. <em>Phys. Rev. D</em>. 109(6):064009</a>
+</div>
+<div id="ref-breschiKiloHertzGravitationalWaves2019" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.100.104029">Breschi M, Bernuzzi S, Zappa F, Agathos M, Perego A, et al. 2019. <em>Phys. Rev. D</em>. 100(10):104029</a>
+</div>
+<div id="ref-breschiKilohertzGravitationalWaves2022" class="csl-entry" role="listitem">
+Breschi M, Gamba R, Borhanian S, Carullo G, Bernuzzi S. 2022. <em>Kilohertz <span>Gravitational Waves</span> from <span>Binary Neutron Star Mergers</span>: <span>Inference</span> of <span>Postmerger Signals</span> with the <span>Einstein Telescope</span></em>. <a href="http://arxiv.org/abs/2205.09979">http://arxiv.org/abs/2205.09979</a>
+</div>
+<div id="ref-brouckeNoteRelationsTrue1973" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1007/BF01227859">Broucke R, Cefola P. 1973. <em>Celest. Mech.</em> 7:388–89</a>
+</div>
+<div id="ref-buonannoComparisonPostNewtonianTemplates2009" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.80.084043">Buonanno A, Iyer B, Ochsner E, Pan Y, Sathyaprakash BS. 2009. <em>Phys. Rev. D</em>. 80(8):084043</a>
+</div>
+<div id="ref-chiaramelloParametrizedModelGravitational2025" class="csl-entry" role="listitem">
+Chiaramello D, Cibrario N, Lange J, Chandra K, Gamba R, et al. 2025
+</div>
+<div id="ref-clarkeUniversalFrameworkIdentify2026" class="csl-entry" role="listitem">
+Clarke TA, Romero-Shaw IM, Hoy C, Stegmann J, Lasky PD, Thrane E. 2026. <em>A universal framework to identify eccentric binary mergers: <span>GW200105</span> case study</em>. <a href="https://ui.adsabs.harvard.edu/abs/2026arXiv260518742C">https://ui.adsabs.harvard.edu/abs/2026arXiv260518742C</a>
+</div>
+<div id="ref-theligoscientificcollaborationPropertiesBinaryNeutron2019" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevX.9.011001"><span class="nocase">Collaboration TLS, the Virgo Collaboration, Abbott BP, Abbott R, Abbott TD, et al.</span> 2019. <em>Phys. Rev. X</em>. 9(1):011001</a>
+</div>
+<div id="ref-cunhaAsteroseismologyInterferometry2007" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1007/s00159-007-0007-0">Cunha MS, Aerts C, Christensen-Dalsgaard J, Baglin A, Bigot L, et al. 2007. <em>Astron. Astrophys. Rev.</em> 14(3):217–360</a>
+</div>
+<div id="ref-damourIntroductoryLecturesEffective2008" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1142/S0217751X08039992">Damour T. 2008. <em>Int. J. Mod. Phys. A</em>. 23(08):1130–48</a>
+</div>
+<div id="ref-damourFaithfulEffectiveonebodyWaveforms2007" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.76.064028">Damour T, Nagar A. 2007. <em>Phys. Rev. D</em>. 76(6):064028</a>
+</div>
+<div id="ref-damourNewEffectiveonebodyDescription2014" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.90.044018">Damour T, Nagar A. 2014. <em>Phys. Rev. D</em>. 90(4):044018</a>
+</div>
+<div id="ref-dupletsaValidatingPriorinformedFishermatrix2025" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.111.024036">Dupletsa U, Harms J, Ng KKY, Tissino J, Santoliquido F, Cozzumbo A. 2025. <em>Phys. Rev. D</em>. 111(2):024036</a>
+</div>
+<div id="ref-favataGravitationalwaveMemoryEccentric2011" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.84.124013">Favata M. 2011. <em>Phys. Rev. D</em>. 84(12):124013</a>
+</div>
+<div id="ref-flanaganConstrainingNeutronStar2008" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.77.021502">Flanagan EE, Hinderer T. 2008. <em>Phys. Rev. D</em>. 77(2):021502</a>
+</div>
+<div id="ref-fumagalliResidualEccentricitySystematic2024" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.110.063012">Fumagalli G, Romero-Shaw I, Gerosa D, De Renzis V, Kritos K, Olejak A. 2024. <em>Phys. Rev. D</em>. 110(6):063012</a>
+</div>
+<div id="ref-gambaResonantTidesBinary2023" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.107.044014">Gamba R, Bernuzzi S. 2023. <em>Phys. Rev. D</em>. 107(4):044014</a>
+</div>
+<div id="ref-gambaFastFaithfulFrequencydomain2020" class="csl-entry" role="listitem">
+<a href="http://arxiv.org/abs/2012.00027">Gamba R, Bernuzzi S, Nagar A. 2020. <em>ArXiv201200027 Astro-Ph Physicsgr-Qc</em></a>
+</div>
+<div id="ref-gambaRevisitingGW150914Nonplanar2025" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1088/1361-6382/adfe50">Gamba R, Lange J, Chiaramello D, Tissino J, Tibrewal S. 2025. <em>Class. Quantum Gravity</em>. 42(17):175014</a>
+</div>
+<div id="ref-garcia-quirosIMRPhenomXHMMultimodeFrequencydomain2020" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.102.064002">García-Quirós C, Colleoni M, Husa S, Estellés H, Pratten G, et al. 2020. <em>Phys. Rev. D</em>. 102(6):064002</a>
+</div>
+<div id="ref-gerosaWhichWhichIdentification2025" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevLett.134.121402">Gerosa D, De Renzis V, Tettoni F, Mould M, Vecchio A, Pacilio C. 2025. <em>Phys. Rev. Lett.</em> 134(12):121402</a>
+</div>
+<div id="ref-gourgoulhon3+1FormalismBases2007" class="csl-entry" role="listitem">
+<a href="http://arxiv.org/abs/gr-qc/0703035">Gourgoulhon E. 2007. <em>ArXivgr-Qc0703035</em></a>
+</div>
+<div id="ref-jimenez-fortezaImpactHighorderTidal2018" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.98.124014">Jimenez-Forteza X, Abdelsalhin T, Pani P, Gualtieri L. 2018. <em>Phys. Rev. D</em>. 98(12):124014</a>
+</div>
+<div id="ref-karttunenCelestialMechanics2017" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1007/978-3-662-53045-0_6">Karttunen H, Kröger P, Oja H, Poutanen M, Donner KJ. 2017. In <em>Fundamental <span>Astronomy</span></em>, ed H Karttunen, P Kröger, H Oja, M Poutanen, KJ Donner, pp. 123–40. Berlin, Heidelberg: Springer</a>
+</div>
+<div id="ref-katzFastEMRIWaveformsNewTools2021" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.104.064047">Katz ML, Chua AJK, Speri L, Warburton N, Hughes SA. 2021. <em>Phys. Rev. D</em>. 104(6):064047</a>
+</div>
+<div id="ref-laiResonantOscillationsTidal1994" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1093/mnras/270.3.611">Lai D. 1994. <em>Mon. Not. R. Astron. Soc.</em> 270(3):611–29</a>
+</div>
+<div id="ref-langeRapidAccurateParameter2018" class="csl-entry" role="listitem">
+Lange J, O’Shaughnessy R, Rizzo M. 2018
+</div>
+<div id="ref-lofflerEinsteinToolkitCommunity2012" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1088/0264-9381/29/11/115001">Löffler F, Faber J, Bentivegna E, Bode T, Diener P, et al. 2012. <em>Class. Quantum Gravity</em>. 29(11):115001</a>
+</div>
+<div id="ref-maggioreGravitationalWavesVolume2007" class="csl-entry" role="listitem">
+Maggiore M. 2007. <em>Gravitational <span>Waves</span>: <span>Volume</span> 1: <span>Theory</span> and <span>Experiments</span></em>. Oxford: Oxford University Press. 576 p. 1st edition eds.
+</div>
+<div id="ref-messinaQuasi55PNTaylorF2Approximant2019" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.99.124051">Messina F, Dudi R, Nagar A, Bernuzzi S. 2019. <em>Phys. Rev. D</em>. 99(12):124051</a>
+</div>
+<div id="ref-misnerGravitation1973" class="csl-entry" role="listitem">
+Misner CW, Thorne KS, Wheeler JA. 1973. <em>Gravitation</em>. W.H. Freeman &amp; Co.
+</div>
+<div id="ref-nagarTimedomainEffectiveonebodyGravitational2018" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.98.104052">Nagar A, Bernuzzi S, Del Pozzo W, Riemenschneider G, Akcay S, et al. 2018. <em>ArXiv180601772 Gr-Qc</em></a>
+</div>
+<div id="ref-nagarEffectiveonebodyWaveformModel2024" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.110.084001">Nagar A, Gamba R, Rettegno P, Fantini V, Bernuzzi S. 2024. <em>Phys. Rev. D</em>. 110(8):084001</a>
+</div>
+<div id="ref-nagarRushInspiralEfficient2019" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.99.021501">Nagar A, Rettegno P. 2019. <em>ArXiv180503891 Gr-Qc</em></a>
+</div>
+<div id="ref-padeRepresentationApprocheeDune1892" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.24033/asens.378">Padé H. 1892. <em>Ann. Sci. LÉcole Norm. Supér.</em> 9:3–93</a>
+</div>
+<div id="ref-petersGravitationalRadiationPoint1963" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRev.131.435">Peters PC, Mathews J. 1963. <em>Phys. Rev.</em> 131(1):435–40</a>
+</div>
+<div id="ref-poundSecondOrderSelfForceCalculation2020" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevLett.124.021101">Pound A, Wardell B, Warburton N, Miller J. 2020. <em>Phys. Rev. Lett.</em> 124(2):021101</a>
+</div>
+<div id="ref-prattenComputationallyEfficientModels2021" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.103.104056">Pratten G, García-Quirós C, Colleoni M, Ramos-Buades A, Estellés H, et al. 2021. <em>Phys. Rev. D</em>. 103(10):104056</a>
+</div>
+<div id="ref-pretoriusEvolutionBinaryBlack2005" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevLett.95.121101">Pretorius F. 2005. <em>Phys. Rev. Lett.</em> 95(12):121101</a>
+</div>
+<div id="ref-ripleyConstraintDissipativeTidal2024" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1038/s41550-024-02323-7">Ripley JL, Hegade K. R. A, Chandramouli RS, Yunes N. 2024. <em>Nat. Astron</em>. 8(10):1277–83</a>
+</div>
+<div id="ref-romero-shawBayesianInferenceCompact2020" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1093/mnras/staa2850">Romero-Shaw IM, Talbot C, Biscoveanu S, D’Emilio V, Ashton G, et al. 2020. <em>Mon. Not. R. Astron. Soc.</em> 499(3):3295–3319</a>
+</div>
+<div id="ref-shaikhDefiningEccentricityGravitational2023" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.108.104007">Shaikh MA, Varma V, Pfeiffer HP, Ramos-Buades A, van de Meent M. 2023. <em>Phys. Rev. D</em>. 108(10):104007</a>
+</div>
+<div id="ref-steinhoffSpinEffectsNeutron2021" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevResearch.3.033129">Steinhoff J, Hinderer T, Dietrich T, Foucart F. 2021. <em>Phys. Rev. Res.</em> 3(3):033129</a>
+</div>
+<div id="ref-takatsyObservabilityDynamicalTides2024" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.110.103043">Takátsy J, Kocsis B, Kovács P. 2024. <em>Phys. Rev. D</em>. 110(10):103043</a>
+</div>
+<div id="ref-tissinoCombiningEffectiveonebodyAccuracy2023" class="csl-entry" role="listitem">
+<a href="https://journals.aps.org/prd/abstract/10.1103/PhysRevD.107.084037">Tissino J, Carullo G, Breschi M, Gamba R, Schmidt S, Bernuzzi S. 2023. <em>Phys. Rev. D</em>. 107(8):084037</a>
+</div>
+<div id="ref-toubianaParameterEstimationStellarmass2020" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.102.124037">Toubiana A, Marsat S, Babak S, Baker J, Dal Canton T. 2020. <em>Phys. Rev. D</em>. 102(12):124037</a>
+</div>
+<div id="ref-varmaSurrogateModelsPrecessing2019" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevResearch.1.033015">Varma V, Field SE, Scheel MA, Blackman J, Gerosa D, et al. 2019. <em>Phys. Rev. Res.</em> 1(3):033015</a>
+</div>
+<div id="ref-wadeSystematicStatisticalErrors2014" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.89.103012">Wade L, Creighton JDE, Ochsner E, Lackey BD, Farr BF, et al. 2014. <em>Phys. Rev. D</em>. 89(10):103012</a>
+</div>
+<div id="ref-zhaoUniversalRelationsNeutron2022" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.106.123002">Zhao T, Lattimer JM. 2022. <em>Phys. Rev. D</em>. 106(12):123002</a>
+</div>
+</div>
+</section>
+</section>
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../chapters/anatomy/gw250114.html" class="pagination-link" aria-label="Tests of General Relativity with GW250114">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Tests of General Relativity with GW250114</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../chapters/anatomy/extrinsic.html" class="pagination-link" aria-label="Extrinsic parameters and signal projection">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Extrinsic parameters and signal projection</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/jacopok/thesis/edit/main/chapters/anatomy/intrinsic.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/jacopok/thesis/blob/main/chapters/anatomy/intrinsic.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/jacopok/thesis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

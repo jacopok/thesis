@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>7&nbsp; Einstein Telescope – Fast analysis of long gravitational wave signals</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../chapters/multibanding/lgwa.html" rel="next">
+<link href="../../chapters/anatomy/extrinsic.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-c71eceede3f2eb087ba4b04b2c08e04b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-08acc1423be4a5388acf6193547677cb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-c71eceede3f2eb087ba4b04b2c08e04b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating slimcontent quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/multibanding/einstein-telescope.html">Future gravitational wave detectors</a></li><li class="breadcrumb-item"><a href="../../chapters/multibanding/einstein-telescope.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Einstein Telescope</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Fast analysis of long gravitational wave signals</a> 
+        <div class="sidebar-tools-main tools-wide">
+    <a href="https://github.com/jacopok/thesis" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="../../Fast-analysis-of-long-gravitational-wave-signals.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Parameter estimation and model selection</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/data-analysis/pe-methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Statistical methods</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/data-analysis/likelihood.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Gravitational wave parameter estimation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Anatomy of a gravitational wave signal</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/anatomy/gw250114.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Tests of General Relativity with GW250114</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/anatomy/intrinsic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Intrinsic parameters and waveform modeling</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/anatomy/extrinsic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Extrinsic parameters and signal projection</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Future gravitational wave detectors</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/multibanding/einstein-telescope.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Einstein Telescope</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/multibanding/lgwa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lunar Gravitational Wave Antenna</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../conclusions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Conclusions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#detector-concept" id="toc-detector-concept" class="nav-link active" data-scroll-target="#detector-concept"><span class="header-section-number">7.1</span> Detector concept</a></li>
+  <li><a href="#sec-einstein-telescope-challenges" id="toc-sec-einstein-telescope-challenges" class="nav-link" data-scroll-target="#sec-einstein-telescope-challenges"><span class="header-section-number">7.2</span> Data analysis challenges</a>
+  <ul class="collapse">
+  <li><a href="#sec-gw250114-et" id="toc-sec-gw250114-et" class="nav-link" data-scroll-target="#sec-gw250114-et"><span class="header-section-number">7.2.1</span> GW250114 as seen by a triangular Einstein Telescope</a></li>
+  </ul></li>
+  <li><a href="#neural-posterior-estimation-for-high-mass-black-holes" id="toc-neural-posterior-estimation-for-high-mass-black-holes" class="nav-link" data-scroll-target="#neural-posterior-estimation-for-high-mass-black-holes"><span class="header-section-number">7.3</span> Neural posterior estimation for high-mass black holes</a>
+  <ul class="collapse">
+  <li><a href="#sec-et-delta" id="toc-sec-et-delta" class="nav-link" data-scroll-target="#sec-et-delta"><span class="header-section-number">7.3.1</span> <span class="math inline">\(\Delta\)</span> shape</a></li>
+  <li><a href="#sec-et-2l" id="toc-sec-et-2l" class="nav-link" data-scroll-target="#sec-et-2l"><span class="header-section-number">7.3.2</span> 2L shape</a></li>
+  <li><a href="#statistical-validation" id="toc-statistical-validation" class="nav-link" data-scroll-target="#statistical-validation"><span class="header-section-number">7.3.3</span> Statistical validation</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/jacopok/thesis/edit/main/chapters/multibanding/einstein-telescope.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/jacopok/thesis/blob/main/chapters/multibanding/einstein-telescope.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/jacopok/thesis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/multibanding/einstein-telescope.html">Future gravitational wave detectors</a></li><li class="breadcrumb-item"><a href="../../chapters/multibanding/einstein-telescope.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Einstein Telescope</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-einstein-telescope" class="quarto-section-identifier"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Einstein Telescope</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In this chapter, we outline the concept for the Einstein Telescope detector, summarizing some main aspects related to the “Blue Book” we recently published <span class="citation" data-cites="abacScienceEinsteinTelescope2026">(<a href="../references.html#ref-abacScienceEinsteinTelescope2026" role="doc-biblioref"><span class="nocase">Abac et al.</span> 2026</a>)</span>, especially related to the challenges of accurate parameter estimation.</p>
+<p>Then, we discuss in detail an injection performed for a high-SNR GW250114-like signal (<a href="#sec-gw250114-et" class="quarto-xref"><span>Section 7.2.1</span></a>), which we presented in <span class="citation" data-cites="tissinoGeometryLunarGravitational2026">Tissino et al. (<a href="../references.html#ref-tissinoGeometryLunarGravitational2026" role="doc-biblioref">2026</a>)</span>. Finally, we present the results of population-scale analyses comparing the <span class="math inline">\(\Delta\)</span> and 2L configurations, that we presented in <span class="citation" data-cites="santoliquidoFastAccurateParameter2025">Santoliquido et al. (<a href="../references.html#ref-santoliquidoFastAccurateParameter2025" role="doc-biblioref">2025a</a>)</span> and <span class="citation" data-cites="santoliquidoComparingNextgenerationDetector2026">Santoliquido et al. (<a href="../references.html#ref-santoliquidoComparingNextgenerationDetector2026" role="doc-biblioref">2026</a>)</span>.</p>
+<section id="detector-concept" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="detector-concept"><span class="header-section-number">7.1</span> Detector concept</h2>
+<p>The Einstein Telescope <span class="citation" data-cites="punturoEinsteinTelescopeThirdgeneration2010">(<a href="../references.html#ref-punturoEinsteinTelescopeThirdgeneration2010" role="doc-biblioref">Punturo et al. 2010</a>)</span> is a planned next-generation (XG) gravitational wave detector in Europe. It will consist of interferometers, like current detectors, but with several improvements enabling a ten-fold improvement in sensitivity <span class="citation" data-cites="hildSensitivityStudiesThirdgeneration2011">(<a href="../references.html#ref-hildSensitivityStudiesThirdgeneration2011" role="doc-biblioref">Hild et al. 2011</a>)</span>:</p>
+<ul>
+<li>it will be built underground, allowing for a significant reduction in seismic and anthropogenic noise;</li>
+<li>it will have a xylophone design: each detector will consist of two colocated interferometers, one operating cryogenically with low laser power to be sensitive at low frequencies, and one operating at room temperature at higher power to be sensitive at high frequencies;</li>
+<li>it will have longer arms, of 10km or more in length depending on the design.</li>
+</ul>
+<p>There are currently two main proposed designs. One option is a set of three interferometers, each with an aperture angle of 60 degrees, forming an equilateral triangle. This is called ET-<span class="math inline">\(\Delta\)</span>. The alternative consists of two L-shaped detectors, each with an aperture angle of 90 degrees, in two different locations within Europe, with a distance of little more than 1000km. These two detectors may be aligned, like the two LIGO detectors, or misaligned — the choice between these configurations involves, among other considerations, a trade-off between sensitivity to compact binary sources and stochastic backgrounds <span class="citation" data-cites="branchesiScienceEinsteinTelescope2023">(<a href="../references.html#ref-branchesiScienceEinsteinTelescope2023" role="doc-biblioref">Branchesi et al. 2023</a>)</span>.</p>
+<p>There are different sites which may, as of this writing, host the Einstein Telescope within Europe <span class="citation" data-cites="serraLUSATIAOFFICIALLYTHIRD2025">(<a href="../references.html#ref-serraLUSATIAOFFICIALLYTHIRD2025" role="doc-biblioref">Serra 2025</a>)</span>:</p>
+<ul>
+<li>the Sos Enattos mine in the northeast of Sardinia, Italy, near the villages of Bitti, Onanì and Lula — we depict this in <a href="#fig-einstein-telescope-location" class="quarto-xref">Figure&nbsp;<span>7.1</span></a>;</li>
+<li>the Euregio Meuse-Rhine (EMR) at the border of Luxembourg, Belgium and Germany, near the towns of Maastricht and Liège;</li>
+<li>the Lusatia region in Saxony, Germany.</li>
+</ul>
+<div id="fig-einstein-telescope-location" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-einstein-telescope-location-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/einstein-telescope/ET-map.webp" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-einstein-telescope-location-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.1: Sardinian candidate site for the Einstein Telescope, the configuration used for the simulations discussed in <a href="#sec-gw250114-et" class="quarto-xref"><span>Section 7.2.1</span></a>.
+</figcaption>
+</figure>
+</div>
+<p>The scientific potential for the Einstein Telescope is extremely wide, including CBC population studies, precision cosmology, multimessenger observations, and tests of general relativity. A full description is beyond the scope of this thesis, and we refer the reader to some among the many works which describe it in detail <span class="citation" data-cites="branchesiScienceEinsteinTelescope2023 abacScienceEinsteinTelescope2026 ronchiniPerspectivesMultimessengerAstronomy2022">(<a href="../references.html#ref-abacScienceEinsteinTelescope2026" role="doc-biblioref"><span class="nocase">Abac et al.</span> 2026</a>, <a href="../references.html#ref-branchesiScienceEinsteinTelescope2023" role="doc-biblioref">Branchesi et al. 2023</a>, <a href="../references.html#ref-ronchiniPerspectivesMultimessengerAstronomy2022" role="doc-biblioref">Ronchini et al. 2022</a>)</span>.</p>
+<p>In a similar time frame, a detector dubbed Cosmic Explorer is planned in the United States <span class="citation" data-cites="reitzeCosmicExplorerUS2019">(<a href="../references.html#ref-reitzeCosmicExplorerUS2019" role="doc-biblioref"><span class="nocase">Reitze et al.</span> 2019</a>)</span>. While it shares many similarities with the Einstein Telescope, there are some major design differences between the two. Cosmic Explorer’s planned arm length is 40km, significantly longer than any of the designs for the Einstein Telescope, and it will not use cryogenics. Hence, its sensitivity is expected to be better at high frequencies, but worse at low frequencies.</p>
+<p>In the remainder of this chapter we shall discuss the challenges which come when trying to perform parameter estimation with a very sensitive detector, and how some recent advancements in these techniques are allowing for systematic forecasting studies, which can help in informing the urgent choices that need to be made regarding the construction of this instrument. While some of the results presented here are generally applicable to any sensitive ground-based interferometer, we also shall explore some challenges specific to the candidate geometries for the Einstein Telescope.</p>
+</section>
+<section id="sec-einstein-telescope-challenges" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="sec-einstein-telescope-challenges"><span class="header-section-number">7.2</span> Data analysis challenges</h2>
+<p>This section will give a brief summary of the primary challenges that remain unsolved in the data analysis of compact binary signals with the Einstein Telescope. They are described in significantly more detail in chapters 8 and 10 of <span class="citation" data-cites="abacScienceEinsteinTelescope2026"><span class="nocase">Abac et al.</span> (<a href="../references.html#ref-abacScienceEinsteinTelescope2026" role="doc-biblioref">2026</a>)</span>, which also outlines some problems we will not consider here, such as the detection of CBCs and the analysis of different types of signals like continuous waves or stochastic backgrounds.</p>
+<p>The main differences between the analyses performed with the Einstein Telescope, compared to current detectors, are as follows.</p>
+<ul>
+<li>The noise is overall lower, by approximately an order of magnitude, which leads to
+<ul>
+<li>more detected signals, approximately <span class="math inline">\(10^{5}\)</span> black hole and neutron star binaries per year in total,</li>
+<li>higher signal-to-noise ratios for the closest events, reaching the level of <span class="math inline">\(\rho \approx 10^{3}\)</span>.</li>
+</ul></li>
+<li>The sensitive band extends to both higher and lower frequencies than current detectors.
+<ul>
+<li>At lower frequencies and for low-mass binaries, this leads to them being in-band for several hours, which makes the effect of the Earth’s rotation on the angles between detector and source non-negligible.</li>
+<li>At higher frequencies, the improved sensitivity combined with the longer arm length leads to the necessity of considering a frequency-dependent antenna pattern as discussed in <a href="../anatomy/extrinsic.html#sec-antenna-patterns" class="quarto-xref"><span>Section 6.4</span></a>.</li>
+</ul></li>
+</ul>
+<p>Including time and frequency dependence in the antenna patterns is not an issue <em>per se</em>, as the way to account for these effects computationally is well-known. These effects significantly increase the complexity of the space of possible waveforms which may reach the detector, and can in fact be beneficial by making signals with different parameters more distinguishable. However, some of the current approaches for faster parameter estimation significantly suffer from their inclusion <span class="citation" data-cites="bakerSignificantChallengesAstrophysical2025">(<a href="../references.html#ref-bakerSignificantChallengesAstrophysical2025" role="doc-biblioref">Baker et al. 2025</a>)</span>: the computational footprint for a reduced order model (<a href="../data-analysis/likelihood.html#sec-reduced-order-quadrature" class="quarto-xref"><span>Section 3.4.2</span></a>), which guarantees accuracy for any point in a given prior space, dramatically increases when the antenna patterns are measurably time- and frequency-dependent.</p>
+<p>The number of signals being much larger poses some issues of its own, besides the obvious one of requiring a proportionally larger amount of computational resources. With the current generation of detectors, it can generally be assumed that the time before and after any given signal only contains noise, which allows for <em>off-source</em> noise characterization. This will not be true anymore, especially in the presence of many long-lived, low-mass sources.</p>
+<p>Furthermore, some of these signals may overlap <span class="citation" data-cites="janquartAnalysesOverlappingGravitational2023">(see <em>e.g.</em> <a href="../references.html#ref-janquartAnalysesOverlappingGravitational2023" role="doc-biblioref">Janquart et al. 2023</a>)</span>; this breaks another common assumption in gravitational wave analysis, that of only one signal being present in the data segment being analyzed.</p>
+<p>Finally the high SNRs of the best-measured signals, while being crucial for many parts of the Einstein Telescope’s science case (multimessenger science, tests of GR and so forth) significantly challenges several aspects of the current infrastructure, with waveform modelling likely being the most affected. We can draw an approximate relation, based on a Fisher matrix argument, between the maximum mismatch (<a href="../anatomy/intrinsic.html#eq-mismatch" class="quarto-xref">Equation&nbsp;<span>5.4</span></a>) which is expected not to bias parameter estimation at a given SNR <span class="math inline">\(\rho\)</span> <span class="citation" data-cites="bairdDegeneracyMassSpin2013">(<a href="../references.html#ref-bairdDegeneracyMassSpin2013" role="doc-biblioref">Baird et al. 2013</a>)</span>: <span class="math display">\[
+\mathcal{\bar{F}} \lesssim \frac{\chi^2_D(1-p)}{2 \rho^{2}}\,,
+\]</span> where <span class="math inline">\(\chi^2_D(p)\)</span> denotes the inverse CDF of a chi-square variable with <span class="math inline">\(D\)</span> degrees of freedom, where <span class="math inline">\(D\approx 15\)</span> is the number of waveform model parameters.</p>
+<div id="86a24018" class="cell" data-execution_count="2">
+<details class="code-fold">
+<summary>Source code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Markdown</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> astropy.units <span class="im">as</span> u</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="fl">.9</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>D <span class="op">=</span> <span class="dv">15</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>rho <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>chi2 <span class="op">=</span> stats.chi2.ppf(p, D)<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>constraint <span class="op">=</span> chi2 <span class="op">/</span> rho<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> u.dimensionless_unscaled</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>Markdown(<span class="ss">f'For example, at a </span><span class="sc">{</span><span class="dv">100</span><span class="op">*</span>p<span class="sc">:.0f}</span><span class="er">\</span><span class="ss">% credible level with </span><span class="sc">{</span>D<span class="sc">}</span><span class="ss"> parameters, the constraint is $</span><span class="er">\</span><span class="ss">mathcal</span><span class="ch">{{\\</span><span class="ss">bar</span><span class="ch">{{</span><span class="ss">F</span><span class="ch">}}}}</span><span class="ss"> </span><span class="er">\</span><span class="ss">lesssim </span><span class="sc">{</span>chi2<span class="sc">:.2f}</span><span class="ss"> / </span><span class="ch">\\</span><span class="ss">rho^2$; '</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="ss">f'at an SNR of </span><span class="sc">{</span>rho<span class="sc">}</span><span class="ss">, this translates to $</span><span class="er">\</span><span class="ss">mathcal</span><span class="ch">{{\\</span><span class="ss">bar</span><span class="ch">{{</span><span class="ss">F</span><span class="ch">}}}}</span><span class="ss"> </span><span class="er">\</span><span class="ss">lesssim$ </span><span class="sc">{</span>constraint<span class="sc">.</span>to_string(precision<span class="op">=</span><span class="dv">2</span>, <span class="bu">format</span><span class="op">=</span><span class="st">"latex_inline"</span>)<span class="sc">}</span><span class="ss">.'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="1">
+<p>For example, at a 90% credible level with 15 parameters, the constraint is <span class="math inline">\(\mathcal{\bar{F}} \lesssim 11.15 / \rho^2\)</span>; at an SNR of 1000, this translates to <span class="math inline">\(\mathcal{\bar{F}} \lesssim\)</span> <span class="math inline">\(1.1 \times 10^{-5} \; \mathrm{}\)</span>.</p>
+</div>
+</div>
+<p>This level of accuracy is currently beyond the reach of any waveform model; the situation is better for low spin and eccentricity, but outside of this regime biases are already observable with <em>current</em> detectors <span class="citation" data-cites="abacGW231123BinaryBlack2025">(<a href="../references.html#ref-abacGW231123BinaryBlack2025" role="doc-biblioref">Abac et al. 2025</a>)</span>.</p>
+<p>Overall, significant work remains to be done in the next decade in order to prepare for the fast and unbiased analysis of Einstein Telescope data.</p>
+<section id="sec-gw250114-et" class="level3" data-number="7.2.1">
+<h3 data-number="7.2.1" class="anchored" data-anchor-id="sec-gw250114-et"><span class="header-section-number">7.2.1</span> GW250114 as seen by a triangular Einstein Telescope</h3>
+<p>We inject a waveform corresponding to the maximum likelihood point from the LVK analysis of the gravitational wave event GW250114 into the data of a triangular Einstein Telescope. We analyze the data using the software <a href="https://github.com/bilby-dev/bilby"><code>bilby</code></a> <span class="citation" data-cites="ashtonBilbyUserfriendlyBayesian2019">(<a href="../references.html#ref-ashtonBilbyUserfriendlyBayesian2019" role="doc-biblioref">Ashton et al. 2019</a>)</span> combined with the sampler <a href="https://github.com/mj-will/nessai"><code>nessai</code></a> <span class="citation" data-cites="williamsNestedSamplingNormalising2021">(<a href="../references.html#ref-williamsNestedSamplingNormalising2021" role="doc-biblioref">Williams, Veitch &amp; Messenger 2021</a>)</span>. Our analysis does not include time- nor frequency-dependent antenna patterns. We summarize the priors we adopt, as well as the injected values for various parameter, in <a href="#tbl-priors-et-gw250114" class="quarto-xref">Table&nbsp;<span>7.1</span></a>.</p>
+<div class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Source code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> data_path</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Markdown</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>string <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="st">| Parameter                                         |   Injected value | Unit      | Prior function              | Prior range             |</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="st">|:----------------|------------------------:|:----------|:----------------------------|:------------------------|</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="st">| $</span><span class="er">\</span><span class="st">mathcal</span><span class="sc">{M}</span><span class="st">$                                     |     31.3      | $M_</span><span class="er">\</span><span class="st">odot$ | Uniform                     | [30, 32]                |</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="st">| $q$                                               |      0.98    |           | Uniform                     | [0.95, 0.99]            |</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="st">| $</span><span class="er">\</span><span class="st">chi_1$                                          |     -0.05   |           | Aligned spin (@eq-aligned-spin-prior-uniform-in-magnitude)                | [-0.9, 0.9]             |</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="st">| $</span><span class="er">\</span><span class="st">chi_2$                                          |      0.01   |           | Aligned spin (@eq-aligned-spin-prior-uniform-in-magnitude)                | [-0.9, 0.9]             |</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="st">| $d_L$                                             |    414       | Mpc       | Uniform in the source frame (@eq-uniform-source-frame-volume) | [400, 450]              |</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="st">| $</span><span class="ch">\\</span><span class="st">theta_</span><span class="sc">{JN}</span><span class="st">$                                     |      0.7    | rad       | Sine                        | [0, $</span><span class="er">\</span><span class="st">pi$]              |</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="st">| $</span><span class="er">\</span><span class="st">Delta t_{</span><span class="er">\</span><span class="st">mathrm</span><span class="sc">{merger}</span><span class="st">}^{</span><span class="er">\</span><span class="st">mathrm</span><span class="sc">{geocenter}</span><span class="st">}$ |      0 |  s         | Uniform                     | [-0.10, 0.10]           |</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="st">| $</span><span class="er">\</span><span class="st">mathrm</span><span class="sc">{RA}</span><span class="st">$                                     |      2.3     | rad       | Uniform                     | [0, 2$</span><span class="er">\</span><span class="st">pi$]             |</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="st">| $</span><span class="er">\</span><span class="st">mathrm</span><span class="sc">{DEC}</span><span class="st">$                                    |      0.2    | rad       | Cosine                      | [$-</span><span class="er">\</span><span class="st">pi / 2$, $</span><span class="er">\</span><span class="st">pi / 2$] |</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="st">| $</span><span class="er">\</span><span class="st">psi$                                            |      1.3     | rad       | Uniform                     | [0, $</span><span class="er">\</span><span class="st">pi$]              |</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="st">| $</span><span class="er">\</span><span class="st">phi$                                          |      1.6     | rad          | Uniform                     | [0, 2$</span><span class="er">\</span><span class="st">pi$]             |</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="st">| $m_1$                                             |     36.3      | $M_</span><span class="er">\</span><span class="st">odot$ | Constraint                  | [35, 37]                |</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="st">| $m_2$                                             |     35.5      | $M_</span><span class="er">\</span><span class="st">odot$ | Constraint                  | [34, 36]                |</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>Markdown(string)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div id="tbl-priors-et-gw250114" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="3">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-priors-et-gw250114-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;7.1: Priors and injected values for our GW250114-like injection with the Einstein Telescope. The timing parameter <span class="math inline">\(\Delta t\)</span> represents a deviation from the injected value, a GPS time for the merger of 1420878141.24 seconds, as measured at the geocenter.
+</figcaption>
+<div aria-describedby="tbl-priors-et-gw250114-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="2">
+<table class="cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 23%">
+<col style="width: 10%">
+<col style="width: 27%">
+<col style="width: 23%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: right;">Injected value</th>
+<th style="text-align: left;">Unit</th>
+<th style="text-align: left;">Prior function</th>
+<th style="text-align: left;">Prior range</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mathcal{M}\)</span></td>
+<td style="text-align: right;">31.3</td>
+<td style="text-align: left;"><span class="math inline">\(M_\odot\)</span></td>
+<td style="text-align: left;">Uniform</td>
+<td style="text-align: left;">[30, 32]</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(q\)</span></td>
+<td style="text-align: right;">0.98</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Uniform</td>
+<td style="text-align: left;">[0.95, 0.99]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\chi_1\)</span></td>
+<td style="text-align: right;">-0.05</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Aligned spin (<a href="../anatomy/intrinsic.html#eq-aligned-spin-prior-uniform-in-magnitude" class="quarto-xref">Equation&nbsp;<span>5.2</span></a>)</td>
+<td style="text-align: left;">[-0.9, 0.9]</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\chi_2\)</span></td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Aligned spin (<a href="../anatomy/intrinsic.html#eq-aligned-spin-prior-uniform-in-magnitude" class="quarto-xref">Equation&nbsp;<span>5.2</span></a>)</td>
+<td style="text-align: left;">[-0.9, 0.9]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(d_L\)</span></td>
+<td style="text-align: right;">414</td>
+<td style="text-align: left;">Mpc</td>
+<td style="text-align: left;">Uniform in the source frame (<a href="../anatomy/extrinsic.html#eq-uniform-source-frame-volume" class="quarto-xref">Equation&nbsp;<span>6.5</span></a>)</td>
+<td style="text-align: left;">[400, 450]</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\theta_{JN}\)</span></td>
+<td style="text-align: right;">0.7</td>
+<td style="text-align: left;">rad</td>
+<td style="text-align: left;">Sine</td>
+<td style="text-align: left;">[0, <span class="math inline">\(\pi\)</span>]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\Delta t_{\mathrm{merger}}^{\mathrm{geocenter}}\)</span></td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">s</td>
+<td style="text-align: left;">Uniform</td>
+<td style="text-align: left;">[-0.10, 0.10]</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mathrm{RA}\)</span></td>
+<td style="text-align: right;">2.3</td>
+<td style="text-align: left;">rad</td>
+<td style="text-align: left;">Uniform</td>
+<td style="text-align: left;">[0, 2<span class="math inline">\(\pi\)</span>]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mathrm{DEC}\)</span></td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: left;">rad</td>
+<td style="text-align: left;">Cosine</td>
+<td style="text-align: left;">[<span class="math inline">\(-\pi / 2\)</span>, <span class="math inline">\(\pi / 2\)</span>]</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\psi\)</span></td>
+<td style="text-align: right;">1.3</td>
+<td style="text-align: left;">rad</td>
+<td style="text-align: left;">Uniform</td>
+<td style="text-align: left;">[0, <span class="math inline">\(\pi\)</span>]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\phi\)</span></td>
+<td style="text-align: right;">1.6</td>
+<td style="text-align: left;">rad</td>
+<td style="text-align: left;">Uniform</td>
+<td style="text-align: left;">[0, 2<span class="math inline">\(\pi\)</span>]</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(m_1\)</span></td>
+<td style="text-align: right;">36.3</td>
+<td style="text-align: left;"><span class="math inline">\(M_\odot\)</span></td>
+<td style="text-align: left;">Constraint</td>
+<td style="text-align: left;">[35, 37]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(m_2\)</span></td>
+<td style="text-align: right;">35.5</td>
+<td style="text-align: left;"><span class="math inline">\(M_\odot\)</span></td>
+<td style="text-align: left;">Constraint</td>
+<td style="text-align: left;">[34, 36]</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>This signal would have an SNR of approximately 680 when combining the three detectors. Accordingly, the constraints on the source’s intrinsic parameters are quite tight; we shall show some of them in <a href="lgwa.html#sec-lgwa-intrinsic-parameter-constraints" class="quarto-xref"><span>Section 8.2.3.3</span></a>, with a comparison to the Lunar Gravitational Wave Antenna.</p>
+<p>Here, instead, we shall focus on a peculiar feature of the posterior distribution. In <a href="#sec-et-delta" class="quarto-xref"><span>Section 7.3.1</span></a> we describe how short signals are typically expected to exhibit an 8-fold multimodality in the sky. We only observe two modes in the sky for this injection, symmetrically across the local horizon, as shown in <a href="#fig-bimodal-sky-gw250114-et" class="quarto-xref">Figure&nbsp;<span>7.2</span></a>. Specifically, about 5% of the posterior mass is in this mode, which also features a significantly different geocentric time, as well as inclination and polarization angles peaking at <span class="math inline">\(\pi\)</span> minus their injected value.</p>
+<div id="fig-bimodal-sky-gw250114-et" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bimodal-sky-gw250114-et-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/einstein-telescope/et_gw250114_sky.webp" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bimodal-sky-gw250114-et-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.2: Posterior distribution on the sky position for our GW250114 injection. We show individual posterior samples with a scatter plot, and color them by the corresponding estimated geocentric time, quantified as a deviation from its injected value. We mark the injected position with a white cross.
+</figcaption>
+</figure>
+</div>
+<p>The antenna pattern symmetry leading to this mode can be understood analytically; see also equation 63 in <span class="citation" data-cites="marsatExploringBayesianParameter2021">Marsat, Baker &amp; Canton (<a href="../references.html#ref-marsatExploringBayesianParameter2021" role="doc-biblioref">2021</a>)</span>. Why the posterior distribution is not perfectly symmetric, and why the other 6 modes are not present, are not clear from the discussion in that work, as for this injection we employed the long wavelength approximation (LWA).</p>
+<p>What those authors do not discuss (as it is not relevant in the LISA case) are the features of posterior distributions obtained in the LWA, but accounting for the separation between beamsplitters. In our simulation, the Einstein Telescope consists of three detectors separated by 10km each which, due to the long-wavelength approximation, are effectively point-like. The temporal resolution for the arrival time of the signal at each them is so precise, on the scale of tens of microseconds, that is allows (our simulation of) the ET to <em>triangulate</em> the signal, despite its extremely short baseline of <span class="math inline">\(33 \upmu \text{s} \times c\)</span>. In order to show this, in <a href="#fig-arrival-times-gw250114-et" class="quarto-xref">Figure&nbsp;<span>7.3</span></a> we show the posterior distribution on the arrival time of the merger at the three beamsplitters. The three arrival times are well-measured on the scale of tens of microseconds, thus the time delays between detectors can inform the sky localization.</p>
+<div id="fig-arrival-times-gw250114-et" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-arrival-times-gw250114-et-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/arrival_times_Delta.webp" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-arrival-times-gw250114-et-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.3: Posterior distribution on the arrival times at the three ET beamsplitters in our GW250114 injection. From <span class="citation" data-cites="tissinoGeometryLunarGravitational2026">Tissino et al. (<a href="../references.html#ref-tissinoGeometryLunarGravitational2026" role="doc-biblioref">2026</a>)</span>.
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="neural-posterior-estimation-for-high-mass-black-holes" class="level2 page-columns page-full" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="neural-posterior-estimation-for-high-mass-black-holes"><span class="header-section-number">7.3</span> Neural posterior estimation for high-mass black holes</h2>
+<p>In order to investigate the possible configurations for the Einstein Telescope, we <span class="citation" data-cites="santoliquidoFastAccurateParameter2025 santoliquidoComparingNextgenerationDetector2025">(<a href="../references.html#ref-santoliquidoFastAccurateParameter2025" role="doc-biblioref">Santoliquido et al. 2025a</a>,<a href="../references.html#ref-santoliquidoComparingNextgenerationDetector2025" role="doc-biblioref">b</a>)</span> performed several injection campaigns with neural posterior estimation (<a href="../data-analysis/pe-methods.html#sec-neural-posterior-estimation" class="quarto-xref"><span>Section 2.3.2</span></a>), which provide full parameter estimation results for each of the sources. With the current technology, this is possible for a population of high-mass black holes at high redshift, which last for a short time in the detector band and have generally low SNRs. Though we inject sources in the chirp mass and distance ranges <span class="math inline">\(\mathcal{M} \in [40, 1100] M_{\odot}\)</span> and <span class="math inline">\(d_{L} \in [5, 500] \text{Gpc}\)</span>, we are forced to discard most sources with chirp masses <span class="math inline">\(\mathcal{M} \lesssim 150 M_{\odot}\)</span> and distances <span class="math inline">\(d_{L} \lesssim 6 \text{Gpc}\)</span>, due to their low sample efficiency, shown in <a href="#fig-sample-efficiency-et" class="quarto-xref">Figure&nbsp;<span>7.4</span></a>. Specifically, we discard any source for which the sample efficiency, defined in <a href="../data-analysis/pe-methods.html#sec-importance-sampling" class="quarto-xref"><span>Section 2.3.3</span></a>, is lower than <span class="math inline">\(10^{-2}\)</span>.</p>
+<div id="fig-sample-efficiency-et" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sample-efficiency-et-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/einstein-telescope/SNR_vs_sample_efficiency_cropped.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sample-efficiency-et-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.4: Sample efficiency for the sources considered by <span class="citation" data-cites="santoliquidoComparingNextgenerationDetector2025">Santoliquido et al. (<a href="../references.html#ref-santoliquidoComparingNextgenerationDetector2025" role="doc-biblioref">2025b</a>)</span> as a function of SNR, for all detector configurations. We observe little variation across configurations. For SNRs higher than 100, we generally observe low sample efficiencies: as long as that is the case, the usage of NPE does not present a computational advantage for these sources compared to stochastic methods.
+</figcaption>
+</figure>
+</div>
+<p>Sources similar to these are expected to constitute the majority of black holes observed by the Einstein Telescope. Black holes are expected to form at high redshift from several processes, among them the collapse of the nearly metal-free first generation of stars (Population III). <span class="citation" data-cites="santoliquidoBinaryBlackHole2023">Santoliquido et al. (<a href="../references.html#ref-santoliquidoBinaryBlackHole2023" role="doc-biblioref">2023</a>)</span> investigated their formation history, highlighting the uncertainties in our understanding of these early stars. Constraining the properties of these black holes thus has interesting astrophysical implications.</p>
+<p>While an investigation including only a specific kind of source can only provide partial information, it can still highlight some important characteristics of each detector network’s capabilities.</p>
+<div id="fig-einstein-telescope-design-comparison-statistics" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-einstein-telescope-design-comparison-statistics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/einstein-telescope/Big_Panel.webp" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-einstein-telescope-design-comparison-statistics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.5: Summary statistics for source position constraints by various configurations. The information gain (<a href="../data-analysis/pe-methods.html#sec-information-gain" class="quarto-xref"><span>Section 2.2.6</span></a>) encodes the global volumetric compression between prior and posterior. We see variations of one to two orders of magnitude across configurations for the sky localization area, fractional distance uncertainty and comoving volume constraints. This is driven by network geometry, as we can see from the fact that the distribution of SNRs is similar for all configurations. From <span class="citation" data-cites="santoliquidoComparingNextgenerationDetector2025">Santoliquido et al. (<a href="../references.html#ref-santoliquidoComparingNextgenerationDetector2025" role="doc-biblioref">2025b</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>In <a href="#fig-einstein-telescope-design-comparison-statistics" class="quarto-xref">Figure&nbsp;<span>7.5</span></a> we provide some summary statistics for several configurations of Einstein Telescope, also combining it with other detectors.</p>
+<p>We will focus specifically on three configurations, which involve the Einstein telescope alone:</p>
+<ul>
+<li>ET - <span class="math inline">\(\Delta\)</span>, with 10 km arms, which we will discuss in more detail in <a href="#sec-et-delta" class="quarto-xref"><span>Section 7.3.1</span></a>;</li>
+<li>ET - 2L, with 15 km arms, in two configurations: aligned and misaligned by 45 degrees, discussed in <a href="#sec-et-2l" class="quarto-xref"><span>Section 7.3.2</span></a>. The two detectors are assumed to be in the EMR and Sardinia respectively. The aligned and misaligned configurations are labelled “2L A” and “2L MisA” respectively.</li>
+</ul>
+<p>The comparison also includes other options with additional detectors, as follows:</p>
+<ul>
+<li>2L MisA + LHI involves two misaligned L-shaped Einstein Telescope detectors, as in the “ET-2L MisA” configuration, paired with a network of the LIGO detectors at Hanford and Livingston plus LIGO India, with all three latter operating at their mid-2030s “A#” sensitivity;</li>
+<li>1L + CE: an L-shaped Einstein telescope in Sardinia combined with a 40 km Cosmic Explorer located near Hanford;</li>
+<li><span class="math inline">\(\Delta\)</span> + CE: a triangular Einstein Telescope in Sardinia combined with a 40 km Cosmic Explorer located near Hanford;</li>
+<li>2L MisA + CE: two Einstein Telescopes in Sardinia and the EMR region, each with 15 km arms, combined with a 40 km Cosmic Explorer located near Hanford.</li>
+</ul>
+<p>Including a distant detector improves the baseline of the measurement, hence these configurations are typically better at localizing than Einstein Telescope alone. In any case, the focus of the following discussion will be a comparison of Einstein Telescope designs.</p>
+<p>For the analysis of the events in our sample, the misaligned 2L configuration is generally more informative about the signals, though the <span class="math inline">\(\Delta\)</span> configuration typically constrains their distance more precisely. The misaligned 2L configuration is better at constraining sky position, which translates to smaller values of the comoving localization volume.</p>
+<p>We started from the extrinsic parameters — distance and sky position — as they are the most dependent on detector configuration. As we see in <a href="#fig-einstein-telescope-design-comparison-statistics-intrinsic" class="quarto-xref">Figure&nbsp;<span>7.6</span></a>, the errors in most intrinsic parameters obtained with different configurations are quite stable, as they depend on the source SNR alone. This can also be understood from the correlation structure of the posterior distributions: see <a href="../data-analysis/pe-methods.html#sec-correlation-structure" class="quarto-xref"><span>Section 2.4.1.3</span></a>.</p>
+<div id="fig-einstein-telescope-design-comparison-statistics-intrinsic" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-einstein-telescope-design-comparison-statistics-intrinsic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/einstein-telescope/Big_Panel_appendix.webp" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-einstein-telescope-design-comparison-statistics-intrinsic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.6: Summary statistics for intrinsic parameter constraints by various configurations. From <span class="citation" data-cites="santoliquidoComparingNextgenerationDetector2025">Santoliquido et al. (<a href="../references.html#ref-santoliquidoComparingNextgenerationDetector2025" role="doc-biblioref">2025b</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>The only parameter for which we see significant differences in <a href="#fig-einstein-telescope-design-comparison-statistics-intrinsic" class="quarto-xref">Figure&nbsp;<span>7.6</span></a> is the inclination angle, which depends on the amplitudes observed by different detectors, and is therefore generally correlated with luminosity distance.</p>
+<section id="sec-et-delta" class="level3 page-columns page-full" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="sec-et-delta"><span class="header-section-number">7.3.1</span> <span class="math inline">\(\Delta\)</span> shape</h3>
+<p>The <span class="math inline">\(\Delta\)</span> design for the Einstein Telescope consists of three co-located interferometers, the arms of each are two sides of an equilateral triangle. These three interferometers are labelled ET-1, ET-2 and ET-3. This detector design has the unique property of being able to “self-localize”, that is, determine the position of a gravitational wave source with high precision without making use of travel-time measurements between detectors.</p>
+<p>For the many CBC sources, though, this precise localization is sullied by an eight-fold multimodality <span class="citation" data-cites="santoliquidoFastAccurateParameter2025">(<a href="../references.html#ref-santoliquidoFastAccurateParameter2025" role="doc-biblioref">Santoliquido et al. 2025a</a>)</span>, which was also previously highlighted in the context of LISA <span class="citation" data-cites="marsatExploringBayesianParameter2021">(<a href="../references.html#ref-marsatExploringBayesianParameter2021" role="doc-biblioref">Marsat, Baker &amp; Canton 2021</a>)</span>, which shares the triangular geometry. An example of this multimodality is shown in <a href="#fig-einstein-telescope-delta-sky-time" class="quarto-xref">Figure&nbsp;<span>7.7</span></a>.</p>
+<div id="fig-einstein-telescope-delta-sky-time" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-einstein-telescope-delta-sky-time-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/einstein-telescope/5_skymap_252_geocent_ET-1.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-einstein-telescope-delta-sky-time-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.7: Sky position posterior, colored by arrival time at geocenter, for a massive black hole injection as observed by a triangular Einstein Telescope. The posterior is shown in an altitude-azimuth coordinate frame centered at the Einstein Telescope’s location. From <span class="citation" data-cites="santoliquidoFastAccurateParameter2025">Santoliquido et al. (<a href="../references.html#ref-santoliquidoFastAccurateParameter2025" role="doc-biblioref">2025a</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>These degeneracies are driven by symmetries in the antenna patterns, and they are expected to be present as long as no effect is able to make some modes preferred over others. The following effects could do so:</p>
+<ul>
+<li>Modulation driven by the Earth’s rotation for a long signal. The precise threshold for this will depend on many specifics, but we can expect it to be on the scale of an hour in duration.<br>
+</li>
+<li>Observation with another detector, not co-located with the triangular Einstein Telescope.</li>
+<li>Very high SNRs, which make the non-point-like nature of the detector appreciable, as in <a href="#sec-gw250114-et" class="quarto-xref"><span>Section 7.2.1</span></a>, though this aspect remains under investigation.</li>
+</ul>
+<p>We now turn to the geometric reasoning behind the multimodalities. In terms of the local azimuth <span class="math inline">\(\lambda\)</span>, altitude <span class="math inline">\(\beta\)</span>, and the polarization angle <span class="math inline">\(\psi\)</span> of the incoming gravitational wave, the antenna pattern functions read <span class="citation" data-cites="regimbauMockDataChallenge2012">(<a href="../references.html#ref-regimbauMockDataChallenge2012" role="doc-biblioref">Regimbau et al. 2012</a>)</span>:<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> <span class="math display">\[
+\begin{aligned}
+F_{+}^{\text{ET-1}}(\beta, \lambda, \psi) &amp;= - \frac{\sqrt{ 3 }}{4}[(1+\cos ^{2}\beta)\sin 2\lambda \cos 2 \psi + 2 \cos \beta \cos 2 \lambda \sin 2 \psi] \\
+F_{\times}^{\text{ET-1}}(\beta, \lambda, \psi) &amp;= + \frac{\sqrt{ 3 }}{4}[(1+\cos ^{2}\beta)\sin 2\lambda \sin 2 \psi + 2 \cos \beta \cos 2 \lambda \cos 2 \psi]\,.
+\end{aligned}
+\]</span></p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;In <span class="citation" data-cites="santoliquidoFastAccurateParameter2025">Santoliquido et al. (<a href="../references.html#ref-santoliquidoFastAccurateParameter2025" role="doc-biblioref">2025a</a>)</span> the labels “altitude” and “azimuth” are inverted when defining these antenna patterns.</p></div></div><p>The antenna patterns for ET-2 and ET-3 are obtained with the transformation <span class="math inline">\(\lambda \to \lambda \pm 2 \pi / 3\)</span>.</p>
+<p>These are all symmetric under a reflection across the local horizon (<span class="math inline">\(\beta\to-\beta\)</span>), rotation around the locally vertical direction by half a turn (<span class="math inline">\(\lambda\to\lambda+\pi\)</span>) and simultaneous rotation of the azimuth and polarization angle by a quarter of a turn (<span class="math inline">\(\lambda\to\lambda+\pi /2\)</span>, <span class="math inline">\(\psi \to \psi + \pi / 2\)</span>).</p>
+<p>These symmetries can be combined in any way, leading to an eight-fold degeneracy in the sky position of any source, with four equally-spaced modes above the local horizon, and four below it.</p>
+<p>This also leads to a bimodality in time at the geocenter, if that is used as a parameter. Arrival time at the detector is directly measured, and to convert it to time at the geocenter we must add a term <span class="math inline">\(\hat{n} \cdot \vec{r} _\text{ET} / c\)</span>, which also equals <span class="math inline">\((\lvert \vec{r}_\text{ET} \rvert /c)\cos \beta\)</span>. The bimodality in <span class="math inline">\(\beta\)</span>, then, is propagated to geocentric time. This can be seen in <a href="#fig-einstein-telescope-delta-sky-time" class="quarto-xref">Figure&nbsp;<span>7.7</span></a>, which shows the posterior distribution on the sky position in local altitude/azimuth angular coordinates colored by geocentric time.</p>
+<div id="fig-einstein-telescope-sky-multimodality" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-einstein-telescope-sky-multimodality-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/einstein-telescope/number_of_modes_90perc_v3.webp" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-einstein-telescope-sky-multimodality-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.8: Number of modes in the sky for a selection of Einstein Telescope configurations and other detectors. From <span class="citation" data-cites="santoliquidoComparingNextgenerationDetector2025">Santoliquido et al. (<a href="../references.html#ref-santoliquidoComparingNextgenerationDetector2025" role="doc-biblioref">2025b</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>In <a href="#fig-einstein-telescope-sky-multimodality" class="quarto-xref">Figure&nbsp;<span>7.8</span></a> we summarize the number of modes in the sky location posterior distribution for the various configurations considered. A noticeable fraction of sources exhibits eight-fold multimodality with the <span class="math inline">\(\Delta\)</span> configuration. Not all of them do, since in some cases the posterior may be broad enough not to qualify as “multimodal” with the clustering algorithm we are using even if it is symmetric; alternatively, for sources close to the local horizon the modes with positive and negative <span class="math inline">\(\beta\)</span> may not be distinguishable, leading to a 4-fold multimodality.</p>
+<p>The effect we discussed in <a href="#sec-gw250114-et" class="quarto-xref"><span>Section 7.2.1</span></a>, on the other hand, with the travel time between beamsplitters enabling the exclusion of certain modes, is not observed at the lower SNRs considered here.</p>
+</section>
+<section id="sec-et-2l" class="level3" data-number="7.3.2">
+<h3 data-number="7.3.2" class="anchored" data-anchor-id="sec-et-2l"><span class="header-section-number">7.3.2</span> 2L shape</h3>
+<p>While the 2L configuration does not exhibit the eight-fold multimodalities we see with the <span class="math inline">\(\Delta\)</span>, it is not free from them, as is apparent from <a href="#fig-einstein-telescope-sky-multimodality" class="quarto-xref">Figure&nbsp;<span>7.8</span></a>.</p>
+<p>The baseline between the two sites is <span class="math inline">\(|\Delta \vec{r}| = 1166\text{km} \approx 3.9 \text{ms} \times c\)</span>. If <span class="math inline">\(\Delta \vec{r} \cdot \hat{m}\)</span>, where <span class="math inline">\(\hat{m}\)</span> is the source direction, is significantly longer than the uncertainty on the arrival time of the signal at our detectors <span class="math inline">\(\sigma_{t}\)</span>, the time delay can inform the sky localization of the source. If this is not the case, the only information available to this end comes from comparing the amplitude of the observed waveform at the various detectors. For the high-mass black holes in our sample, the timing uncertainties are generally large, and therefore we typically find ourselves in this scenario.</p>
+<p>The amplitude of the signal, however, is also affected by its distance and inclination angle. This can lead to correlated multimodalities in the joint posterior distribution of sky position and distance, as illustrated in <a href="#fig-einstein-telescope-2l-sky" class="quarto-xref">Figure&nbsp;<span>7.9</span></a>.</p>
+<div id="fig-einstein-telescope-2l-sky" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-einstein-telescope-2l-sky-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/einstein-telescope/skymap_dL_hist_colorbar_manualspacing.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-einstein-telescope-2l-sky-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.9: Sky and distance posteriors for an injection in the 2L, misaligned case, compared to a triangular Einstein Telescope. We show results obtained with stochastic sampling (“Bilby”): they perfectly overlap with those obtained with NPE. The 2L configuration, in this case, yields a multimodal posterior distribution for both distance and sky position. From <span class="citation" data-cites="santoliquidoComparingNextgenerationDetector2025">Santoliquido et al. (<a href="../references.html#ref-santoliquidoComparingNextgenerationDetector2025" role="doc-biblioref">2025b</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>The example in <a href="#fig-einstein-telescope-2l-sky" class="quarto-xref">Figure&nbsp;<span>7.9</span></a> also helps in building an intuition for the interpretation of multimodalities. It is tempting, when presented with an asymmetric multimodal posterior distribution, to assume that the true value will lie in the higher mode. Of course, as long as our analysis is unbiased, the probability mass contained in each mode is precisely the probability that the true value will be contained in that mode. In this example, the true value is contained in the less-probable mode.</p>
+<p>Multimodalities in distance are observed for a significant fraction of the sources in our sample, for all configurations except for the <span class="math inline">\(\Delta\)</span>, as shown in <a href="#fig-einstein-telescope-distance-multimodalities" class="quarto-xref">Figure&nbsp;<span>7.10</span></a>.</p>
+<div id="fig-einstein-telescope-distance-multimodalities" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-einstein-telescope-distance-multimodalities-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/einstein-telescope/unimodal_dL.webp" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-einstein-telescope-distance-multimodalities-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.10: Multimodality in the distance posteriors for all configurations. From <span class="citation" data-cites="santoliquidoComparingNextgenerationDetector2025">Santoliquido et al. (<a href="../references.html#ref-santoliquidoComparingNextgenerationDetector2025" role="doc-biblioref">2025b</a>)</span>.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="statistical-validation" class="level3" data-number="7.3.3">
+<h3 data-number="7.3.3" class="anchored" data-anchor-id="statistical-validation"><span class="header-section-number">7.3.3</span> Statistical validation</h3>
+<p>In order to verify that our results are robust, we perform some statistical consistency tests.</p>
+<div id="fig-einstein-telescope-pp-plots" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-einstein-telescope-pp-plots-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/einstein-telescope/all_pp-plots.webp" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-einstein-telescope-pp-plots-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.11: Results of a pp-plot test for all configurations considered by <span class="citation" data-cites="santoliquidoComparingNextgenerationDetector2025">Santoliquido et al. (<a href="../references.html#ref-santoliquidoComparingNextgenerationDetector2025" role="doc-biblioref">2025b</a>)</span>. For all parameters and all configurations, we confirm the statistical self-consistency of our approach.
+</figcaption>
+</figure>
+</div>
+<p>The first among them is a <span class="math inline">\(p\)</span>-<span class="math inline">\(p\)</span> test (<a href="../data-analysis/pe-methods.html#sec-pp-plot" class="quarto-xref"><span>Section 2.1.2</span></a>), shown in <a href="#fig-einstein-telescope-pp-plots" class="quarto-xref">Figure&nbsp;<span>7.11</span></a>. Furthermore, we perform full parameter estimation with nested sampling (<a href="../data-analysis/pe-methods.html#sec-nested-sampling" class="quarto-xref"><span>Section 2.2</span></a>) for a selection of sources, and directly compare the posterior distribution to that obtained with neural posterior estimation.</p>
+<p>We measure their differences through the Jensen-Shannon Divergence, which is defined as a symmetrized version of the Kullbach-Leibler divergence (<a href="../data-analysis/pe-methods.html#sec-information-gain" class="quarto-xref"><span>Section 2.2.6</span></a>): <span class="math display">\[
+\text{JSD}(p, q) = \frac{1}{2} \left( \text{KL}(p||q) + \text{KL}(q||p) \right)\,.
+\]</span></p>
+<p>This distance ranges in value from <span class="math inline">\(0\)</span> to <span class="math inline">\(\log_{b}2\)</span>, where <span class="math inline">\(b\)</span> is the base in which the logarithms in the KL divergence are computed.</p>
+<p>The JSD between two sets of sample is commonly used to assess whether they originate from the same distribution. In order to do so, we need to determine what values of estimated JSD are compatible with statistical fluctuations, <em>i.e.</em> their null distribution. We determine this in a data-driven way: since we can easily sample from the NPE distribution, we draw 100 realizations of the full posterior and compare them with the JSD, in all <span class="math inline">\(100 \times (100-1) / 2 =4950\)</span> combinations. This gives us a distribution of Jensen-Shannon divergences under the null hypothesis, which we can compare to the observed divergence with the nested sampling run.</p>
+<p>The test confirms that the two distributions are statistically consistent <span class="citation" data-cites="santoliquidoComparingNextgenerationDetector2025">(<a href="../references.html#ref-santoliquidoComparingNextgenerationDetector2025" role="doc-biblioref">Santoliquido et al. 2025b</a>)</span>; as far as we are able to check, the inference we are performing is unbiased.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-abacScienceEinsteinTelescope2026" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1088/1475-7516/2026/03/081"><span class="nocase">Abac A, Abramo R, Albanesi S, Albertini A, Agapito A, et al.</span> 2026. <em>J. Cosmol. Astropart. Phys.</em> 2026(03):081</a>
+</div>
+<div id="ref-abacGW231123BinaryBlack2025" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.3847/2041-8213/ae0c9c">Abac AG, Abouelfettouh I, Acernese F, Ackley K, Adamcewicz C, et al. 2025. <em>Astrophys. J. Lett.</em> 993(1):L25</a>
+</div>
+<div id="ref-ashtonBilbyUserfriendlyBayesian2019" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.3847/1538-4365/ab06fc">Ashton G, Hübner M, Lasky PD, Talbot C, Ackley K, et al. 2019. <em>Astrophys. J. Suppl. Ser.</em> 241(2):27</a>
+</div>
+<div id="ref-bairdDegeneracyMassSpin2013" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.87.024035">Baird E, Fairhurst S, Hannam M, Murphy P. 2013. <em>Phys. Rev. D</em>. 87(2):024035</a>
+</div>
+<div id="ref-bakerSignificantChallengesAstrophysical2025" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/n6t6-5wn3">Baker AM, Lasky PD, Thrane E, Golomb J. 2025. <em>Phys. Rev. D</em>. 112(10):102004</a>
+</div>
+<div id="ref-branchesiScienceEinsteinTelescope2023" class="csl-entry" role="listitem">
+Branchesi M, Maggiore M, Alonso D, Badger C, Banerjee B, et al. 2023. <em>Science with the <span>Einstein Telescope</span>: A comparison of different designs</em>. <a href="http://arxiv.org/abs/2303.15923">http://arxiv.org/abs/2303.15923</a>
+</div>
+<div id="ref-hildSensitivityStudiesThirdgeneration2011" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1088/0264-9381/28/9/094013">Hild S, Abernathy M, Acernese F, Amaro-Seoane P, Andersson N, et al. 2011. <em>Class. Quantum Gravity</em>. 28(9):094013</a>
+</div>
+<div id="ref-janquartAnalysesOverlappingGravitational2023" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1093/mnras/stad1542">Janquart J, Baka T, Samajdar A, Dietrich T, Van Den Broeck C. 2023. <em>Mon. Not. R. Astron. Soc.</em> 523(2):1699–1710</a>
+</div>
+<div id="ref-marsatExploringBayesianParameter2021" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.103.083011">Marsat S, Baker JG, Canton TD. 2021. <em>Phys. Rev. D</em>. 103(8):083011</a>
+</div>
+<div id="ref-punturoEinsteinTelescopeThirdgeneration2010" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1088/0264-9381/27/19/194002">Punturo M, Abernathy M, Acernese F, Allen B, Andersson N, et al. 2010. <em>Class. Quantum Gravity</em>. 27(19):194002</a>
+</div>
+<div id="ref-regimbauMockDataChallenge2012" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.86.122001">Regimbau T, Dent T, Del Pozzo W, Giampanis S, Li TGF, et al. 2012. <em>Phys. Rev. D</em>. 86(12):122001</a>
+</div>
+<div id="ref-reitzeCosmicExplorerUS2019" class="csl-entry" role="listitem">
+<span class="nocase">Reitze D et al.</span> 2019. <em>Bull. Am. Astron. Soc.</em> 51(7):035
+</div>
+<div id="ref-ronchiniPerspectivesMultimessengerAstronomy2022" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1051/0004-6361/202243705">Ronchini S, Branchesi M, Oganesyan G, Banerjee B, Dupletsa U, et al. 2022. <em>Astron. Astrophys.</em> 665:A97</a>
+</div>
+<div id="ref-santoliquidoBinaryBlackHole2023" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1093/mnras/stad1860">Santoliquido F, Mapelli M, Iorio G, Costa G, Glover SCO, et al. 2023. <em>Mon. Not. R. Astron. Soc.</em> 524(1):307–24</a>
+</div>
+<div id="ref-santoliquidoFastAccurateParameter2025" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/wf1k-p5cl">Santoliquido F, Tissino J, Dupletsa U, Branchesi M, Harms J, et al. 2025a. <em>Phys. Rev. D</em>. 112(10):103015</a>
+</div>
+<div id="ref-santoliquidoComparingNextgenerationDetector2025" class="csl-entry" role="listitem">
+Santoliquido F, Tissino J, Dupletsa U, Branchesi M, Harms J. 2025b. <em>Comparing next-generation detector configurations for high-redshift gravitational wave sources with neural posterior estimation</em>. <a href="http://arxiv.org/abs/2512.20699">http://arxiv.org/abs/2512.20699</a>
+</div>
+<div id="ref-santoliquidoComparingNextgenerationDetector2026" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1051/0004-6361/202558828">Santoliquido F, Tissino J, Dupletsa U, Branchesi M, Harms J. 2026. <em>Astron. Astrophys.</em> 708:A175</a>
+</div>
+<div id="ref-serraLUSATIAOFFICIALLYTHIRD2025" class="csl-entry" role="listitem">
+Serra M. 2025. <em><span>LUSATIA IS OFFICIALLY THE THIRD CANDIDATE SITE FOR THE EINSTEIN TELESCOPE</span></em>. <a href="https://www.einstein-telescope.it/en/2025/10/21/lusatia-is-officially-the-third-candidate-site-for-the-einstein-telescope/">https://www.einstein-telescope.it/en/2025/10/21/lusatia-is-officially-the-third-candidate-site-for-the-einstein-telescope/</a>
+</div>
+<div id="ref-tissinoGeometryLunarGravitational2026" class="csl-entry" role="listitem">
+Tissino J, Santoliquido F, Iacovelli F, Dupletsa U, Canton TD, et al. 2026. <em>The geometry of lunar gravitational wave detection</em>. <a href="http://arxiv.org/abs/2606.04918">http://arxiv.org/abs/2606.04918</a>
+</div>
+<div id="ref-williamsNestedSamplingNormalising2021" class="csl-entry" role="listitem">
+<a href="https://doi.org/10.1103/PhysRevD.103.103006">Williams MJ, Veitch J, Messenger C. 2021. <em>Phys. Rev. D</em>. 103(10):103006</a>
+</div>
+</div>
+</section>
+</section>
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../chapters/anatomy/extrinsic.html" class="pagination-link" aria-label="Extrinsic parameters and signal projection">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Extrinsic parameters and signal projection</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../chapters/multibanding/lgwa.html" class="pagination-link" aria-label="Lunar Gravitational Wave Antenna">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lunar Gravitational Wave Antenna</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/jacopok/thesis/edit/main/chapters/multibanding/einstein-telescope.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/jacopok/thesis/blob/main/chapters/multibanding/einstein-telescope.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/jacopok/thesis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
