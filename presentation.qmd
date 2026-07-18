@@ -2,7 +2,7 @@
 title: "Fast analysis"
 subtitle: "of long gravitational wave signals"
 author: "Jacopo Tissino"
-date: "2026-07-15"
+date: "2026-07-20"
 
 format:
   revealjs: 
@@ -14,6 +14,16 @@ format:
     lightbox: false
 
 ---
+
+## Outline
+
+::: {.incremental}
+- GW250114: what we learned from the best$^*$ black hole binary ever;
+- the Lunar Gravitational Wave Antenna;
+  - a technical diversion;
+- the Einstein Telescope;
+  - multimodalities.
+:::
 
 # GW250114: the clearest signal yet
 
@@ -42,12 +52,16 @@ LIGO, J. Tissino, R. Hurt (Caltech-IPAC).
 
 ![](chapters/anatomy/figures/Figure_1_simplified.webp){width="100%"}
 
+::::: footer
+Adapted from @abacGW250114TestingHawkings2025
+:::::
+
+
 ## How we modelled it
 
 ![](chapters/anatomy/figures/Figure_1.png){width="100%"}
 
 ::::: footer
-
 [@abacGW250114TestingHawkings2025]
 :::::
 
@@ -59,7 +73,7 @@ Bayesian inference, accounting for our uncertainty on:
 - source location $(\alpha, \delta)$ and distance $d_L$;
 - source inclination $\theta_{\text{JN}}$ and polarization $\psi$;
 - coalescence phase $\phi_c$ and merger time $t_c$;
-- eccentricity $e$ and mean anomaly $\zeta$;
+- eccentricity $e$ and eccentric anomaly $\zeta$;
 - detector calibration.
 
 ## How we interpreted it
@@ -106,8 +120,8 @@ A superposition of damped sinusoids: _quasinormal modes_.
 
 $$
 \begin{aligned}
-h_{+}(t)-ih_{\times}(t) &\approx \sum_{\ell=2}^{\infty} \sum_{m=-\ell}^{\ell} \sum_{n=0}^{\infty} h_{\ell m n} \, ^{(-2)}Y_{\ell mn}  \\
-h_{\ell m n} &= A_{\ell mn} \exp(i(\omega_{\ell mn}(t-t_\text{ref})+\phi^{x}_{\ell mn})) \\
+h_{+}(t)-ih_{\times}(t) &\approx \sum_{\ell=2}^{\infty} \sum_{m=-\ell}^{\ell} \sum_{n=0}^{\infty} h_{\ell m n} \, ^{(-2)}Y_{\ell m}  \\
+h_{\ell m n} &= A_{\ell mn} \exp\left[i(\omega_{\ell mn}(t-t_\text{ref})+\phi^{x}_{\ell mn})\right] \\
 \omega_{\ell mn} &= 2 \pi f_{\ell mn} + i / \tau _{\ell mn}
 \end{aligned}
 $$
@@ -156,19 +170,30 @@ Hawking's area theorem implies:
 $$ \mathcal{A_i} = \mathcal{A}_1 + \mathcal{A}_2 < \mathcal{A_f}
 $$
 
+. . . 
+
+We tested this __ignoring__ the __strong-field__ portion of the signal. 
+
+
 ## Testing Hawking's area theorem
 
 :::: {layout="[ 50, 50 ]"}
 
 ::: {#first-column}
 
+:::::: {.incremental}
 - Data before $t_<$ leads to $(1+z)^2 \mathcal{A_i}$.
 - Data after $t_>$ leads to $(1+z)^2 \mathcal{A_f}$.
+::::::
+
+:::::: {.fragment}
 
 A violation of the theorem would be
 
-$$ \frac{\mathcal{A_f} - \mathcal{A_i}}{\mathcal{A_i}} < 0
+$$ \frac{\mathcal{A_f} - \mathcal{A_i}}{\mathcal{A_i}} < 0.
 $$
+
+::::::
 
 :::
 
@@ -180,6 +205,15 @@ $$
 
 ::::
 
+--- 
+
+::: {.center style="text-align: center; justify-content: center; align-items: center;"}
+
+[We'll come back to GW250114.]{.fragment }
+
+[To get _long_ gravitational wave signals, we need lower frequencies, which require a quiet place.]{.fragment}
+
+:::
 
 # Lunar Gravitational Wave Antenna
 
@@ -324,9 +358,9 @@ New approach:
 
 |   Likelihood evaluations  |   Sampling time [min] |   Timing uncertainty [s] |   Prior width [s]  | Origin   |
 |-------------------------:|----------------------:|-------------------------:|------------------:|:---------|
-|                        $9\times 10^5$ |                   3.0   |                  0.075 |               0.5 | shifted  |
-|                       $10\times 10^5$ |                   3.6 |                    0.075 |              27   | shifted  |
-|                       $65\times 10^5$ |                  16.7 |                    4.733 |              27   | SSB      |
+|                        $0.8\times 10^6$ |                   17   |                  0.075 |               0.5 | shifted  |
+|                       $1.5\times 10^6$ |                   33 |                    0.075 |              27   | shifted  |
+|                       $9.1\times 10^6$ |                  199 |                    4.733 |              27   | SSB      |
 
 :::::
 
@@ -365,16 +399,16 @@ and reframe this as $\vec{r}_{\text{opt}}(t)$ using the signal's $t(f)$.
 ## Main caveats
 
 ::: {.incremental}
-- A known lunar response $L(f)$;
-- no data gaps;
-- stationary noise;
-- a simple geometry for seismic wave propagation;
+- Assuming a known lunar response $L(f)$;
+- assuming no data gaps;
+- assuming stationary noise;
+- assuming a simple geometry for seismic wave propagation;
 - working directly in the frequency domain with a heterodyned likelihood;
 - only considering the dominant, $\ell |m| = 22$ mode of GW emission with a Post-Newtonian model;
-- zero-noise injections.
+- performing zero-noise injections.
 :::
 
-# Einstein Telescope
+# Multi-band with the Einstein Telescope
 
 ## The multi-band concept
 
@@ -465,6 +499,40 @@ We compare:
 
 ::::
 
+## Bimodality: a closer look
+
+![](chapters/multibanding/figures/et_gw250114_sky.png)
+
+## Symmetry in the antenna patterns
+
+The GW signal is obtained as 
+
+$$ h(t) = F_+ h_+(t) + F_{\times} h_{\times}(t)
+$$
+
+::: {.fragment fragment-index=1}
+
+The antenna patterns $F_{+ / \times}^{\text{ET-}\Delta}$, a function of the 
+local sky coordinates, altitude $\beta$ and azimuth $\lambda$, 
+are symmetric[^1] under:
+
+- $\beta \to - \beta$,
+- $\lambda \to \lambda + \pi / 2$.
+
+:::
+
+
+[^1]: [Other parameters need to change simultaneously: $t_{\text{geo}}$, $\theta_{\text{JN}}$, $\phi$, $\psi$. ]{.fragment fragment-index=2}
+
+
+## Massive BBH: sky posterior
+
+![](chapters/multibanding/figures/einstein-telescope/5_skymap_252_geocent_ET-1.png){width=80%} 
+
+::: footer
+[@santoliquidoFastAccurateParameter2025]
+:::
+
 ## Massive BBH: multimodalities
 
 :::: {layout="[ 40, 60 ]"}
@@ -488,16 +556,29 @@ and distant ($D_L \gtrsim 6 \text{Gpc}$) BBH.
 
 ::::
 
-## Massive BBH: sky posterior
+## How to resolve these multimodalities?
 
-![[@santoliquidoFastAccurateParameter2025].](chapters/multibanding/figures/einstein-telescope/5_skymap_252_geocent_ET-1.png){width=80%} 
+::: {.incremental}
+- imprint of the rotation of the Earth;
+- imprint of frequency-dependent antenna patterns;
+- short-baseline triangulation;
+- other detectors.
+::: 
 
 ## GW250114: arrival times at the vertices 
 
 ![](chapters/multibanding/figures/arrival_times_Delta.webp) 
 
-## GW250114: multimodality
+## Summary
 
+::: {.incremental}
+- The Kerr metric and Hawking's area law still hold;
+- the LGWA could have measured GW250114 and provided strong constraints;
+- the Einstein Telescope could have exquisitely measured GW250114, 
+  - but in its $\Delta$ configuration it would have exhibited a multimodality.
+:::
+
+# Extra slides
 
 
 
