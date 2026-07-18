@@ -207,3 +207,4 @@ _manuscript/chapters/*
 
 !data/covariance_170817.txt
 site_libs/*
+!chapters/data-analysis/figures/pp-test.webp
