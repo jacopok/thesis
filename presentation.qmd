@@ -11,6 +11,7 @@ format:
       buttons: false
     preview-links: auto
     theme: dark
+    lightbox: false
 
 ---
 
@@ -256,13 +257,13 @@ $$
 $$ L(f) = \frac{\text{seismic displacement}}{\text{GW strain}}
 $$
 
-## The multi-band horizon
-
-![](chapters/multibanding/figures/horizon_IMBH_with_GW250114.png){width="80%"}
-
 ## GW250114 with the LGWA
 
 ![](chapters/multibanding/figures/lgwa_ppd_fb.webp){width="80%"}
+
+::::: footer
+[@tissinoGeometryLunarGravitational2026]
+:::::
 
 ## When did the signal arrive?
 
@@ -280,50 +281,110 @@ where $\vec{r}$ connects the origin and the detector's position, and $\hat{n}$ p
 $$ t _{\text{ref}} = \text{time when a reference event reaches the origin}
 $$
 
-## What reference event?
-
-![](chapters/multibanding/figures/illustration_timing_parameterization.png){width="100%"}
-
 ## What origin? 
 
 Standard approaches:
 
-- ground-based detectors: the center of the Earth
+::: {.incremental}
 - space-based detectors: the Solar System Barycenter (SSB)
+- ground-based detectors: the center of the Earth
+  - only valid assuming a short observation such that $\vec{r}_{\text{Earth}} \approx \vec{r}_0 + \vec{v} t$
+:::
+
+. . .
 
 New approach: 
 
-- SSB + a constant shift of origin
+- SSB with a constant shift of origin
 
-## Why does it matter?
+## Why does it matter? An experiment
 
+::: {.incremental}
+- correlations between $t_{\text{ref}}$ and sky position lead to:
+  - increased uncertainty on $t_{\text{ref}}$ (requires a larger prior)
+  - a more complex likelihood surface (difficult sampling)
+:::
+
+. . .
 
 ::::: {style="font-size: 80%;"}
 
-|   Likelihood evaluations [$\times 10^5$] |   Sampling time [min] |   Timing uncertainty [s] |   Prior width [s]  | Origin   |
+|   Likelihood evaluations  |   Sampling time [min] |   Timing uncertainty [s] |   Prior width [s]  | Origin   |
 |-------------------------:|----------------------:|-------------------------:|------------------:|:---------|
-|                        9 |                   3   |                    0.075 |               0.5 | shifted  |
-|                       10 |                   3.6 |                    0.075 |              27   | shifted  |
-|                       65 |                  16.7 |                    4.733 |              27   | SSB      |
+|                        $9\times 10^5$ |                   3.0   |                  0.075 |               0.5 | shifted  |
+|                       $10\times 10^5$ |                   3.6 |                    0.075 |              27   | shifted  |
+|                       $65\times 10^5$ |                  16.7 |                    4.733 |              27   | SSB      |
 
 :::::
 
-The 
 
-<!-- ![](chapters/multibanding/figures/timing_constraint_by_frequency_GW250114.png){width=80%} -->
+## What reference event?
+
+![](chapters/multibanding/figures/illustration_timing_parameterization.png){width="100%"}
+
+## Impact of a different reference event
+
+![](chapters/multibanding/figures/timing_constraint_by_frequency_GW250114_simplified.png){width="100%"}
+
+## Recap: combining the two
+
+Uncertainty on $t_{\text{ref}}$ is a proxy for sampling efficiency.
+
+. . .
+
+It depends on origin position $\vec{r}_0$ and reference frequency $f$.
+
+. . .
+
+As a function of $f$, we can compute 
+
+$$ \vec{r}_{\text{opt}}(f) = \text{argmin}_{\vec{r}_0} \text{var} [t_{\text{ref}}(\vec{r}_0, f)]
+$$
+
+. . .
+
+and reframe this as $\vec{r}_{\text{opt}}(t)$ using the signal's $t(f)$.
 
 ## Uncertainty minimum motion
 
 {{< video https://www.youtube.com/watch?v=51Ny4vtj-As width="100%" height="100%" >}}
 
-## Effect on sampling time
+## Main caveats
 
+::: {.incremental}
+- A known lunar response $L(f)$;
+- no data gaps;
+- stationary noise;
+- a simple geometry for seismic wave propagation;
+- working directly in the frequency domain with a heterodyned likelihood;
+- only considering the dominant, $\ell |m| = 22$ mode of GW emission with a Post-Newtonian model;
+- zero-noise injections.
+:::
 
 # Einstein Telescope
 
----
+## The multi-band concept
 
-:::: {layout="[ 40, 60 ]"}
+![](chapters/multibanding/figures/horizon_IMBH_with_GW250114.png){width="80%"}
+
+## The multi-band horizon
+
+![](chapters/multibanding/figures/horizon_IMBH_with_GW250114.png){width="80%"}
+
+::::: footer
+[@ajithLunarGravitationalwaveAntenna2025]
+:::::
+
+## Einstein Telescope configurations
+
+::: {.incremental}
+- ET-$\Delta$: equilateral triangle with 10km sides;
+- ET-2L: 
+:::
+
+## Intrinsic constraints
+
+:::: {layout="[ 50, 50 ]"}
 
 ::: {#first-column}
 
@@ -331,7 +392,7 @@ Intrinsic parameters:
 
 - extremely precise on $\mathcal{M}$;
 - complementary with ET;
-- more precise than LVK on effective spin.
+- LGWA more precise than LVK on effective spin.
 
 ::::: footer
 
@@ -348,13 +409,11 @@ Intrinsic parameters:
 
 ::::
 
----
+## Extrinsic constraints
 
-:::: {layout="[ 40, 60 ]"}
+:::: {layout="[ 50, 50 ]"}
 
 ::: {#first-column}
-
-Extrinsic parameters:
 
 - LGWA localization tighter and "rounder" than LVK;
 - inclination not well constrained by LGWA;
@@ -418,4 +477,7 @@ and distant ($D_L \gtrsim 6 \text{Gpc}$) BBH.
     - $\psi = \pi - \psi^{\text{inj}}$.
     - $t_{\text{geo}} = t_{\text{geo}}^{\text{inj}} - 2 \vec{r}_{\text{ET}} \cdot \hat{k}_{\text{inj}} / c$.
 
+
+
 ## References
+
