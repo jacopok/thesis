@@ -257,6 +257,19 @@ $$
 $$ L(f) = \frac{\text{seismic displacement}}{\text{GW strain}}
 $$
 
+## Sensitivity curve
+
+![](chapters/multibanding/figures/Detector_strains.png)
+
+## The deci-Hertz band
+
+![](figures/fig-time-to-merger-lgwa-output-1.png)
+
+::::: footer
+Adapted from @cozzumboOpportunitiesLimitsLunar2024
+:::::
+
+
 ## GW250114 with the LGWA
 
 ![](chapters/multibanding/figures/lgwa_ppd_fb.webp){width="80%"}
@@ -365,7 +378,11 @@ and reframe this as $\vec{r}_{\text{opt}}(t)$ using the signal's $t(f)$.
 
 ## The multi-band concept
 
-![](chapters/multibanding/figures/horizon_IMBH_with_GW250114.png){width="80%"}
+![](chapters/multibanding/figures/Multiband_concept.png){width="80%"}
+
+::::: footer
+[@ajithLunarGravitationalwaveAntenna2025]
+:::::
 
 ## The multi-band horizon
 
@@ -378,21 +395,34 @@ and reframe this as $\vec{r}_{\text{opt}}(t)$ using the signal's $t(f)$.
 ## Einstein Telescope configurations
 
 ::: {.incremental}
-- ET-$\Delta$: equilateral triangle with 10km sides;
-- ET-2L: 
+- ET-$\Delta$: equilateral triangle with 10km arms;
+  - location: EMR region.
+- ET-2L: two L-shaped detectors with 15km arms;
+  - locations: Sardinia and Saxony; 
+  - misaligned arms by $45^\circ$.
 :::
 
-## Intrinsic constraints
+## GW250114, now and in the future
+
+We compare:
+
+::: {.incremental}
+- The LVK detection of GW250114 (SNR 77--80);
+- a zero-noise injection with the LGWA (SNR 35);
+- a zero-noise injection with ET-$\Delta$ (SNR 682);
+- a zero-noise injection with ET-2L (SNR 835).
+:::
+
+
+## Intrinsic parameters
 
 :::: {layout="[ 50, 50 ]"}
 
 ::: {#first-column}
 
-Intrinsic parameters:
-
-- extremely precise on $\mathcal{M}$;
-- complementary with ET;
+- LGWA complementary with ET on mass;
 - LGWA more precise than LVK on effective spin.
+- ET extremely precise on mass ratio and spin.
 
 ::::: footer
 
@@ -409,7 +439,7 @@ Intrinsic parameters:
 
 ::::
 
-## Extrinsic constraints
+## Extrinsic parameters
 
 :::: {layout="[ 50, 50 ]"}
 
@@ -418,7 +448,7 @@ Intrinsic parameters:
 - LGWA localization tighter and "rounder" than LVK;
 - inclination not well constrained by LGWA;
 - ET-2L: tight, near Gaussian.
-- ET-$\Delta$: tight, bimodal.
+- ET-$\Delta$: tight, bimodal!
 
 ::::: footer
 
@@ -447,7 +477,6 @@ Sky localization modes for high mass
 and distant ($D_L \gtrsim 6 \text{Gpc}$) BBH.
 
 ::::: footer
-
 [@santoliquidoComparingNextgenerationDetector2026]
 :::::
 
@@ -469,13 +498,6 @@ and distant ($D_L \gtrsim 6 \text{Gpc}$) BBH.
 
 ## GW250114: multimodality
 
-- SNR: 682 for ET-$\Delta$, 835 for ET-2L, 35 for LGWA;
-- 6 sky modes excluded by the arrival time discrepancy;
-- ~5% of the posterior mass in a mode with 
-    - $\beta = - \beta_{\text{inj}}$, 
-    - $\theta_{JN} = \pi - \theta_{JN}^{\text{inj}}$,
-    - $\psi = \pi - \psi^{\text{inj}}$.
-    - $t_{\text{geo}} = t_{\text{geo}}^{\text{inj}} - 2 \vec{r}_{\text{ET}} \cdot \hat{k}_{\text{inj}} / c$.
 
 
 
