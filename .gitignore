@@ -180,6 +180,7 @@ thesis.tar
 thesis/*
 
 QTDublinIrish.otf
+# QTDublinIrish.otf
 
 **/cell-*
 chapters/multibanding/presentations/*
