@@ -1821,7 +1821,7 @@ wheels = [
 [[package]]
 name = "lgwa-response"
 version = "0.1.0"
-source = { editable = "../Documents/lgwa-response" }
+source = { git = "https://github.com/jacopok/lgwa-response#29cb0c6ffa24968565957f2c3bfe6cdafcf3635b" }
 dependencies = [
     { name = "bilby" },
     { name = "lunarsky" },
@@ -1830,30 +1830,6 @@ dependencies = [
     { name = "numdifftools" },
     { name = "numpy" },
     { name = "tqdm" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "bilby", specifier = ">=2.3.0" },
-    { name = "lunarsky", specifier = ">=0.2.1" },
-    { name = "matplotlib", specifier = ">=3.9.2" },
-    { name = "numba", specifier = ">=0.60.0" },
-    { name = "numdifftools", specifier = ">=0.9.41" },
-    { name = "numpy", specifier = ">=1.26.4" },
-    { name = "tqdm", specifier = ">=4.67.1" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "healpy", specifier = ">=1.18.1" },
-    { name = "hypothesis", specifier = ">=6.140.2" },
-    { name = "ipython", specifier = ">=9.6.0" },
-    { name = "pyqt6", specifier = ">=6.9.1" },
-    { name = "pytest", specifier = ">=8.4.0" },
-]
-test = [
-    { name = "hypothesis", specifier = ">=6.140.2" },
-    { name = "pytest", specifier = ">=8.4.0" },
 ]
 
 [[package]]
@@ -2558,7 +2534,7 @@ name = "pexpect"
 version = "4.9.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "ptyprocess" },
+    { name = "ptyprocess", marker = "sys_platform != 'emscripten' and sys_platform != 'win32'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/42/92/cc564bf6381ff43ce1f4d06852fc19a2f11d180f23dc32d9588bee2f149d/pexpect-4.9.0.tar.gz", hash = "sha256:ee7d41123f3c9911050ea2c2dac107568dc43b2d3b0c7557a33212c398ead30f", size = 166450, upload-time = "2023-11-25T09:07:26.339Z" }
 wheels = [
@@ -3818,7 +3794,7 @@ requires-dist = [
     { name = "ipython", specifier = ">=8.18.1" },
     { name = "jupyter", specifier = ">=1.1.1" },
     { name = "jupyter-cache", specifier = ">=1.0.1" },
-    { name = "lgwa-response", editable = "../Documents/lgwa-response" },
+    { name = "lgwa-response", git = "https://github.com/jacopok/lgwa-response" },
     { name = "lunarsky", specifier = ">=0.2.1" },
     { name = "matplotlib", specifier = "<3.11.0" },
     { name = "numba", specifier = ">=0.60.0" },
