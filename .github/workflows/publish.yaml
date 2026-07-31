@@ -31,7 +31,8 @@ jobs:
           echo "Adding $TINYTEX_BIN to PATH"
           echo "$TINYTEX_BIN" >> $GITHUB_PATH
       - name: Install extra tex packages
-        run: tlmgr install type1cm cm-super      - name: Render and Publish
+        run: tlmgr install type1cm cm-super      
+      - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2
         with:
           target: gh-pages
