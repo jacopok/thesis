@@ -33,7 +33,7 @@ function Image(elem)
     -- If WebP doesn't exist or the PDF is newer, convert PDF to WebP
     if not webp_time or (pdf_time and pdf_time > webp_time) then
       local ok, exit_type, code = os.execute(string.format(
-        'magick -density 600 -colorspace RGB "%s" "%s"', elem.src, webp_src))
+        'convert -density 600 -colorspace RGB "%s" "%s"', elem.src, webp_src))
       if not ok or not file_exists(webp_src) then
         error(string.format("Failed to convert %s to WebP (exit: %s)", elem.src, tostring(code)))
       end
