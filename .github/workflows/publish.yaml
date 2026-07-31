@@ -33,7 +33,7 @@ jobs:
       - name: Install extra tex packages
         run: |
           tlmgr update --self
-          tlmgr install type1cm cm-super
+          tlmgr install type1cm cm-super underscore
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2
         with:
