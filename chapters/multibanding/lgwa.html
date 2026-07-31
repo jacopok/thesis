@@ -101,9 +101,9 @@ div.csl-indent {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-c71eceede3f2eb087ba4b04b2c08e04b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-08acc1423be4a5388acf6193547677cb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-c71eceede3f2eb087ba4b04b2c08e04b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-514c3c5c645fecdfd9acb6a6b9a944a6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-e41741aeba58b143338a75c4b0508339.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-514c3c5c645fecdfd9acb6a6b9a944a6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -604,7 +604,7 @@ Figure&nbsp;8.4: LGWA station diagram from <span class="citation" data-cites="va
 S_\text{thermal}(\omega) = \frac{4 k_{B}T \omega_{0}^{2}  / Q}{m \omega \left[ (\omega_{0}^{2}- \omega^{2})^{2}  + \omega_{0}^{4} / Q^{2} \right] }\,,
 \]</span> where <span class="math inline">\(\omega\)</span> is the angular frequency, <span class="math inline">\(\omega_{0}\)</span> is its resonance value, <span class="math inline">\(k_{B}\)</span> is the Boltzmann constant, <span class="math inline">\(T\)</span> is the temperature, while <span class="math inline">\(Q\)</span> is the mechanical quality factor <span class="citation" data-cites="ajithLunarGravitationalwaveAntenna2025">(<a href="../references.html#ref-ajithLunarGravitationalwaveAntenna2025" role="doc-biblioref">Ajith et al. 2025</a>, eq. 2.1)</span>.</p>
 <p>At higher frequency, readout noise starts to dominate; its specific spectral shape depends on the specific readout scheme adopted to measure relative displacement between ground and test mass. <a href="#fig-lgwa-station" class="quarto-xref">Figure&nbsp;<span>8.4</span></a> schematically depicts a SQUID readout, which makes use of superconducting magnets. In <a href="#fig-lgwa-displacement-noise" class="quarto-xref">Figure&nbsp;<span>8.5</span></a> we compare this choice with another candidate: laser-interferometric readout.</p>
-<div class="cell" data-layout="[[47,-6,47],[47,-6,47]]" data-execution_count="2">
+<div class="cell" data-layout="[[47,-6,47],[47,-6,47]]" data-execution_count="1">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> <span class="op">*</span></span>
@@ -818,7 +818,7 @@ F_{+} &amp;= (n\cdot u)(b\cdot u)-(n\cdot v)(b\cdot v) \\
 F_{\times} &amp;= (n\cdot u)(b\cdot v)+(n\cdot v)(b\cdot u)\,.
 \end{aligned}
 \]</span></p>
-<div id="cell-fig-response-functions-of-time" class="cell" data-execution_count="3">
+<div id="cell-fig-response-functions-of-time" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lgwa_response.likelihood <span class="im">import</span> LunarLikelihood</span>
@@ -898,7 +898,7 @@ Note&nbsp;8.3: The position of the LGWA
 <li>compute the error in the scalar products, <span class="math inline">\(|u \cdot (n^{\text{interp}}(t) - n^{\text{true}}(t)|\)</span> and similarly for <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>.</li>
 </ul>
 <p>As figure <a href="#fig-response-interpolation-errors" class="quarto-xref">Figure&nbsp;<span>8.9</span></a> shows, we can achieve errors on the scale of <span class="math inline">\(10^{-4}\)</span> on the scalar products with only <span class="math inline">\(10^{4}\)</span> points, which take about a minute to compute, and adding more as required is easy. Linear interpolation is sufficient to achieve this level of accuracy.</p>
-<div id="cell-fig-response-interpolation-errors" class="cell" data-execution_count="4">
+<div id="cell-fig-response-interpolation-errors" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lgwa_response.lunar_coordinates <span class="im">import</span> make_response_interpolation_plot</span>
@@ -922,7 +922,7 @@ Figure&nbsp;8.9: Errors in scalar products computed with an interpolated version
 </div>
 <p>In order to compute the strain in <a href="#eq-lgwa-strain-projection-spa" class="quarto-xref">Equation&nbsp;<span>8.1</span></a> we also need the detector position. We apply the interpolation approach here as well, pre-computing the position on an equally spaced grid, and we can run a similar test to that in <a href="#fig-response-interpolation-errors" class="quarto-xref">Figure&nbsp;<span>8.9</span></a> to determine how fine the interpolation grid needs to be.</p>
 <p>The results in figure <a href="#fig-position-interpolation-errors" class="quarto-xref">Figure&nbsp;<span>8.10</span></a> show that in order to achieve an error of <span class="math inline">\(10^{-4}\)</span> radians we need as many as 160 thousand interpolation points for the 10-year span we are considering. We compute the maximum phase error by comparing the position error to the angular wavelength corresponding to the smallest angular wavelength in the LGWA band (i.e.&nbsp;the highest frequency): <span class="math inline">\(c/(2 \pi \times 3 \mathrm{Hz}) \approx 1.6 \times 10^7 \mathrm{m}\)</span>. This is the worst-case scenario, as to achieve it we would need a source at the upper edge of the detector’s band to also be perfectly aligned with the position error vector <span class="math inline">\(\vec{r} _\text{interp} - \vec{r}_\text{true}\)</span>.</p>
-<div id="cell-fig-position-interpolation-errors" class="cell" data-execution_count="5">
+<div id="cell-fig-position-interpolation-errors" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lgwa_response.lunar_coordinates <span class="im">import</span> make_position_interpolation_plot</span>
@@ -946,7 +946,7 @@ Figure&nbsp;8.10: Interpolation errors in position as a function of the number o
 </div>
 <p>The position interpolation requires about 10 times more points to achieve a comparable level of accuracy, but each evaluation of the position of the detector is roughly 10 times faster than an evaluation of the basis vectors.</p>
 <p>In <a href="#fig-position-function-of-time" class="quarto-xref">Figure&nbsp;<span>8.11</span></a> we illustrate how the position vector encodes several “epicycles”: motion of the Earth-Moon system around the Sun, of the Moon around the Earth, and finally of the detector location from the lunar center.</p>
-<div id="cell-fig-position-function-of-time" class="cell" data-execution_count="6">
+<div id="cell-fig-position-function-of-time" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lgwa_response.likelihood <span class="im">import</span> LunarLikelihood</span>
@@ -1019,7 +1019,7 @@ Figure&nbsp;8.11: Position of the detector as a function of time over 4 months. 
 t_\text{lowest order}(f) = - \frac{5}{256 \pi^{8/3}} \frac{1}{\mathcal{M}_{c}^{5/3}} \frac{1}{f^{8/3}}\,.
 \]</span></p>
 <p>The next-order correction to this expression for the phase comes with a factor of <span class="math inline">\(v^{2}\propto f^{2/3}\)</span>, which carries over during the differentiation, leading to the leading term in the error scaling with <span class="math inline">\(f^{-2}\)</span>. In figure <a href="#fig-time-to-merger-error" class="quarto-xref">Figure&nbsp;<span>8.12</span></a> we show the error in time we get by only looking at the leading order: it can reach several hours to days in the deci-Hertz band for a light source.</p>
-<div id="cell-fig-time-to-merger-error" class="cell" data-execution_count="7">
+<div id="cell-fig-time-to-merger-error" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> plt</span>
@@ -1093,7 +1093,7 @@ Figure&nbsp;8.13: Upper panel: Posterior Predictive Distribution and injected wa
 </figure>
 </div>
 <p>The phase of the response is more difficult to visualize, as it spans thousands of cycles during an observation. We illustrate one aspect of its variation by computing the ratio of two waveforms computed with identical parameters — again, the injection ones for GW250114 — but with a difference in 1 degree in right ascension. In the upper panel of <a href="#fig-projected-lgwa-waveforms-ratio" class="quarto-xref">Figure&nbsp;<span>8.14</span></a> we see the ratio of amplitudes for both channels, with a periodicity of one month. The phase, on the other hand, primarily exhibits variation with a slower period, which corresponds to the yearly modulation driven by the lunar orbit around the Sun.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
-<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;The phase is computed in a frame centered close to the Moon’s location at merger — for the details, see <a href="#sec-lgwa-reference-frames" class="quarto-xref"><span>Section 8.3</span></a>.</p></div></div><div id="cell-fig-projected-lgwa-waveforms-ratio" class="cell" data-execution_count="8">
+<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;The phase is computed in a frame centered close to the Moon’s location at merger — for the details, see <a href="#sec-lgwa-reference-frames" class="quarto-xref"><span>Section 8.3</span></a>.</p></div></div><div id="cell-fig-projected-lgwa-waveforms-ratio" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lgwa_response.likelihood <span class="im">import</span> LunarLikelihood</span>
@@ -1183,7 +1183,7 @@ Figure&nbsp;8.14: Ratio of projected waveforms, each compatible with GW250114, b
 <section id="compact-binaries" class="level4 page-columns page-full">
 <h4 class="anchored" data-anchor-id="compact-binaries">Compact binaries</h4>
 <p>The range of gravitational wave sources observable in the most sensitive band for the LGWA, <span class="math inline">\([0.05, 2]\text{Hz}\)</span>, is quite wide. Compact binaries are a natural candidate: they are significant emitters of gravitational waves, and their study is a blossoming field due to the wealth of data from ground-based observations.</p>
-<div id="cell-fig-time-to-merger-lgwa" class="cell" data-execution_count="9">
+<div id="cell-fig-time-to-merger-lgwa" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts.plot_signals <span class="im">import</span> time_to_merger, chirp_mass</span>
@@ -1324,7 +1324,7 @@ S_{n}^{\text{LGWA}}(f) = \frac{S_{n}^{\text{displacement}}(f)}{L(f)}\,.
 <li>prior distributions and interfacing across modules are handled through <a href="https://github.com/bilby-dev/bilby"><code>bilby</code></a> <span class="citation" data-cites="ashtonBilbyUserfriendlyBayesian2019">(<a href="../references.html#ref-ashtonBilbyUserfriendlyBayesian2019" role="doc-biblioref">Ashton et al. 2019</a>)</span>;</li>
 <li>for sampling we use <a href="https://github.com/mj-will/nessai"><code>nessai</code></a> <span class="citation" data-cites="williamsNestedSamplingNormalising2021">(<a href="../references.html#ref-williamsNestedSamplingNormalising2021" role="doc-biblioref">Williams, Veitch &amp; Messenger 2021</a>)</span>.</li>
 </ul>
-<div class="cell" data-execution_count="10">
+<div class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> data_path</span>
@@ -1348,7 +1348,7 @@ S_{n}^{\text{LGWA}}(f) = \frac{S_{n}^{\text{displacement}}(f)}{L(f)}\,.
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>Markdown(string)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div id="tbl-priors-full-analysis" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="10">
+<div id="tbl-priors-full-analysis" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="9">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-priors-full-analysis-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;8.1: Priors and injected values for our GW250114-like injection. The notation <span class="math inline">\([a, b] + c\)</span> represents the interval <span class="math inline">\([a+c, b+c]\)</span>. The timing parameter <span class="math inline">\(\Delta t\)</span> represents a deviation from the injected value, a GPS time for the merger of 1420878140.0 seconds, as measured at the location of the LGWA at this time. Phase is not included in this list as we do not explicitly sample over it, but by using a phase-marginalized likelihood we implicitly employ a uniform prior in <span class="math inline">\([0, 2 \pi]\)</span>.
@@ -1466,7 +1466,7 @@ Table&nbsp;8.1: Priors and injected values for our GW250114-like injection. The 
 </div>
 <p>For more details, see <span class="citation" data-cites="tissinoGeometryLunarGravitational2026">Tissino et al. (<a href="../references.html#ref-tissinoGeometryLunarGravitational2026" role="doc-biblioref">2026</a>)</span> and the attached data release <span class="citation" data-cites="tissinoGeometryLunarGravitational2026a">(<a href="../references.html#ref-tissinoGeometryLunarGravitational2026a" role="doc-biblioref">Tissino &amp; Santoliquido 2026</a>)</span>.</p>
 <p>In <a href="#tbl-priors-full-analysis-gw170817" class="quarto-xref">Table&nbsp;<span>8.2</span></a> we outline the injected parameters for our GW170817-like binary neutron star injection. In this case, the posterior distribution occupies a significantly smaller volume; for computational efficiency, therefore, we perform these injections with restricted priors in several parameters, including the sky location. This is risky, since it may lead us to miss a mode in the posterior distribution on the sky location; while we expect no such additional modes to exist due to the structure of the Doppler modulation in the observed waveform, this remains a potential systematic bias in our analysis. Future work will be required to relax this assumption.</p>
-<div class="cell" data-execution_count="11">
+<div class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> data_path</span>
@@ -1492,7 +1492,7 @@ Table&nbsp;8.1: Priors and injected values for our GW250114-like injection. The 
 <span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>Markdown(string)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div id="tbl-priors-full-analysis-gw170817" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="11">
+<div id="tbl-priors-full-analysis-gw170817" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="10">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-priors-full-analysis-gw170817-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;8.2: Priors and injected values for our GW170817-like injection. The notation is the same as in <a href="#tbl-priors-full-analysis" class="quarto-xref">Table&nbsp;<span>8.1</span></a>, though for this injection we explicitly sample over phase.
@@ -1764,7 +1764,7 @@ Figure&nbsp;8.26: Boxplot comparing several summary statistics obtained with the
 <h2 data-number="8.3" class="anchored" data-anchor-id="sec-lgwa-reference-frames"><span class="header-section-number">8.3</span> Reference frames for long observations</h2>
 <p>In <a href="../anatomy/extrinsic.html#sec-timing-general" class="quarto-xref"><span>Section 6.1.4</span></a> we introduced the problem of choosing a reference frame to perform the analysis in. LGWA observations of stellar mass binaries are generally at least a month long, therefore the curvature of the lunar orbit around the Sun is non-negligible: a frame centered on the Earth or Moon would be measurably accelerated compared to the source.</p>
 <p>This would seem to indicate that we should analyze our signals from the Solar System Barycenter frame; however, that is not actually necessary. We need a frame that is <em>comoving</em> with the SSB, but not necessarily <em>centered</em> there, and this is an important distinction for the LGWA. Let us consider again the example from <a href="#fig-projected-lgwa-waveforms-ratio" class="quarto-xref">Figure&nbsp;<span>8.14</span></a>, only now we shall compare the phases in two different reference frames: one centered at the SSB, and one comoving with the SSB, but centered close to the Moon’s location when it receive the merger. For clarity, we also switch to a linear scale in frequency.</p>
-<div id="cell-fig-projected-lgwa-waveforms-ratio-ssb" class="cell" data-execution_count="12">
+<div id="cell-fig-projected-lgwa-waveforms-ratio-ssb" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lgwa_response.likelihood <span class="im">import</span> LunarLikelihood</span>
@@ -1839,7 +1839,7 @@ h(t) = \int \text{d}f A(f) e^{i(\phi(f) + xf) - 2 \pi i f t} =
 t _\text{merger} - t_{22}(f;\theta) = - \frac{1}{2\pi} \frac{\text{d}\phi_{22}(f;\theta)}{\text{d}f}\,.
 \]</span></p>
 <p>Then, we can parameterize our waveforms based on <span class="math inline">\(t_{22}(f_{0}; \theta)\)</span> as opposed to the merger time.</p>
-<div id="cell-fig-different-reference-frequency-illustration" class="cell" data-execution_count="13">
+<div id="cell-fig-different-reference-frequency-illustration" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -1899,7 +1899,7 @@ t_{i}^{f, r} = t_{i}^{\text{mrg}, r_0}
 \]</span></p>
 <p>where <span class="math inline">\(\hat{n}\)</span> is a unit vector pointing toward the source.</p>
 <p>This gives us a new set of samples for the time, whose variance may be higher or lower than the baseline depending on the specifics of the signal. The timing uncertainty is a function of four variables (<span class="math inline">\(\vec{r}\)</span>, <span class="math inline">\(f\)</span>), which we can visualize in a few different ways, using the injection with GW250114 described in <a href="#sec-lgwa-pe-stellar" class="quarto-xref"><span>Section 8.2.3</span></a> as our reference example.</p>
-<div class="cell" data-execution_count="14">
+<div class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Markdown</span>
@@ -1915,7 +1915,7 @@ t_{i}^{f, r} = t_{i}^{\text{mrg}, r_0}
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="cf">|</span><span class="vs"> Earth </span><span class="cf">|</span><span class="vs"> </span><span class="dv">$</span><span class="vs">f_</span><span class="op">{22}</span><span class="vs">=0</span><span class="dv">.</span><span class="vs">03</span><span class="dv">$</span><span class="vs"> Hz </span><span class="cf">|</span><span class="vs"> 238 s </span><span class="cf">|</span></span>
 <span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="vs">"""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div id="tbl-uncertainty-by-frequency-and-location" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="14">
+<div id="tbl-uncertainty-by-frequency-and-location" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="13">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-uncertainty-by-frequency-and-location-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;8.3: Timing uncertainty for some choices of reference frame and evolutionary stage, for our GW250114-like injection. By “Earth” and “Moon” we refer to their location at a given time, our reference frames are always comoving with the Solar System Barycenter.
@@ -2167,7 +2167,7 @@ Figure&nbsp;8.36: Top panel: scaling of the geometric and statistical areas <spa
 <p>Demonstrating this requires us to perform at least one parameter estimation run with a suboptimal frame. As we shall shortly show, this entails a significant computational multiplier: doing so for the complete injection, which requires a good amount of resources even with a close-to-optimal frame, would be wasteful and lengthy. Therefore, we consider a simplified scenario, still based on the GW250114-like injection discussed in <a href="#sec-lgwa-pe-stellar" class="quarto-xref"><span>Section 8.2.3</span></a>. We employ a phase-marginalized likelihood (<a href="../data-analysis/likelihood.html#sec-analytic-marginalization-phase" class="quarto-xref"><span>Section 3.5.1</span></a>) and only sample over sky position and time. We adopt a uniform prior in the sky, and a uniform prior in the timing parameter, whose width is <em>a posteriori</em> chosen to be approximately 6 times wider than the 90% credible interval, and centered at the true value, to ensure a fair comparison.</p>
 <p>We compare two reference frame centers: one at the SSB, and one at the optimal location, as computed through a timing uncertainty minimization procedure. The required prior width on the timing parameter in these two cases is significantly different. Being able to use a narrower prior is part of the reason why sampling is faster in the optimal frame, but it is not the major contributor: to demonstrate this, we include an intermediate scenario where we sample based on the optimal frame, but with the same wide prior that would be required for the SSB frame.</p>
 <p>Finally, since this comparison is about sampler performance, we compare two different samplers: <code>dynesty</code> <span class="citation" data-cites="speagleDYNESTYDynamicNested2020">(<a href="../references.html#ref-speagleDYNESTYDynamicNested2020" role="doc-biblioref">Speagle 2020</a>)</span> and <code>nessai</code> <span class="citation" data-cites="williamsNestedSamplingNormalising2021">(<a href="../references.html#ref-williamsNestedSamplingNormalising2021" role="doc-biblioref">Williams, Veitch &amp; Messenger 2021</a>)</span>. Both are commonly used in gravitational wave science. The proposals are obtained through a decomposition of the live points into ellipses with the former, and through a normalizing flow with the latter.</p>
-<div class="cell" data-execution_count="15">
+<div class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> data_path</span>
@@ -2196,7 +2196,7 @@ Figure&nbsp;8.36: Top panel: scaling of the geometric and statistical areas <spa
 <span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span><span class="va">False</span>, </span>
 <span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div id="tbl-sampling-time-reference-frame" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="15">
+<div id="tbl-sampling-time-reference-frame" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="14">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sampling-time-reference-frame-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;8.4: Variation in computational cost for different choices of reference frame center and sampler.

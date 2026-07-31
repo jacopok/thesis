@@ -101,9 +101,9 @@ div.csl-indent {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-c71eceede3f2eb087ba4b04b2c08e04b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-08acc1423be4a5388acf6193547677cb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-c71eceede3f2eb087ba4b04b2c08e04b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-514c3c5c645fecdfd9acb6a6b9a944a6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-e41741aeba58b143338a75c4b0508339.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-514c3c5c645fecdfd9acb6a6b9a944a6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -558,7 +558,7 @@ Figure&nbsp;7.1: Sardinian candidate site for the Einstein Telescope, the config
 <p>Finally the high SNRs of the best-measured signals, while being crucial for many parts of the Einstein Telescope’s science case (multimessenger science, tests of GR and so forth) significantly challenges several aspects of the current infrastructure, with waveform modelling likely being the most affected. We can draw an approximate relation, based on a Fisher matrix argument, between the maximum mismatch (<a href="../anatomy/intrinsic.html#eq-mismatch" class="quarto-xref">Equation&nbsp;<span>5.4</span></a>) which is expected not to bias parameter estimation at a given SNR <span class="math inline">\(\rho\)</span> <span class="citation" data-cites="bairdDegeneracyMassSpin2013">(<a href="../references.html#ref-bairdDegeneracyMassSpin2013" role="doc-biblioref">Baird et al. 2013</a>)</span>: <span class="math display">\[
 \mathcal{\bar{F}} \lesssim \frac{\chi^2_D(1-p)}{2 \rho^{2}}\,,
 \]</span> where <span class="math inline">\(\chi^2_D(p)\)</span> denotes the inverse CDF of a chi-square variable with <span class="math inline">\(D\)</span> degrees of freedom, where <span class="math inline">\(D\approx 15\)</span> is the number of waveform model parameters.</p>
-<div id="86a24018" class="cell" data-execution_count="2">
+<div id="01b95b29" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Markdown</span>
@@ -584,7 +584,7 @@ Figure&nbsp;7.1: Sardinian candidate site for the Einstein Telescope, the config
 <section id="sec-gw250114-et" class="level3" data-number="7.2.1">
 <h3 data-number="7.2.1" class="anchored" data-anchor-id="sec-gw250114-et"><span class="header-section-number">7.2.1</span> GW250114 as seen by a triangular Einstein Telescope</h3>
 <p>We inject a waveform corresponding to the maximum likelihood point from the LVK analysis of the gravitational wave event GW250114 into the data of a triangular Einstein Telescope. We analyze the data using the software <a href="https://github.com/bilby-dev/bilby"><code>bilby</code></a> <span class="citation" data-cites="ashtonBilbyUserfriendlyBayesian2019">(<a href="../references.html#ref-ashtonBilbyUserfriendlyBayesian2019" role="doc-biblioref">Ashton et al. 2019</a>)</span> combined with the sampler <a href="https://github.com/mj-will/nessai"><code>nessai</code></a> <span class="citation" data-cites="williamsNestedSamplingNormalising2021">(<a href="../references.html#ref-williamsNestedSamplingNormalising2021" role="doc-biblioref">Williams, Veitch &amp; Messenger 2021</a>)</span>. Our analysis does not include time- nor frequency-dependent antenna patterns. We summarize the priors we adopt, as well as the injected values for various parameter, in <a href="#tbl-priors-et-gw250114" class="quarto-xref">Table&nbsp;<span>7.1</span></a>.</p>
-<div class="cell" data-execution_count="3">
+<div class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> data_path</span>
@@ -610,7 +610,7 @@ Figure&nbsp;7.1: Sardinian candidate site for the Einstein Telescope, the config
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>Markdown(string)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div id="tbl-priors-et-gw250114" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="3">
+<div id="tbl-priors-et-gw250114" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="2">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-priors-et-gw250114-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;7.1: Priors and injected values for our GW250114-like injection with the Einstein Telescope. The timing parameter <span class="math inline">\(\Delta t\)</span> represents a deviation from the injected value, a GPS time for the merger of 1420878141.24 seconds, as measured at the geocenter.

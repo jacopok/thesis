@@ -101,9 +101,9 @@ div.csl-indent {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-c71eceede3f2eb087ba4b04b2c08e04b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-08acc1423be4a5388acf6193547677cb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-c71eceede3f2eb087ba4b04b2c08e04b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-514c3c5c645fecdfd9acb6a6b9a944a6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-e41741aeba58b143338a75c4b0508339.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-514c3c5c645fecdfd9acb6a6b9a944a6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -775,7 +775,7 @@ M_{d} = (1+z) M_{s}\,.
 <p>In an expanding Universe, the equivalent requirement is for the prior to be uniform in comoving volume as well as source frame time; this leads to <span class="citation" data-cites="romero-shawBayesianInferenceCompact2020">(<a href="../references.html#ref-romero-shawBayesianInferenceCompact2020" role="doc-biblioref">Romero-Shaw et al. 2020</a>)</span>: <span id="eq-uniform-source-frame-volume"><span class="math display">\[
 \pi(d_{L}) = \frac{1}{1+z} \frac{\text{d}V_{c}}{\text{d}z} \frac{\text{d}z}{\text{d}d_{L}}\,.
 \tag{6.5}\]</span></span></p>
-<div id="cell-fig-luminosity-distance-priors" class="cell" data-execution_count="2">
+<div id="cell-fig-luminosity-distance-priors" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -963,7 +963,7 @@ F_{+ / \times} = D_{ij} e_{ij}^{+ / \times}\,.
 \frac{\delta L }{L} = \frac{\delta L_{x}- \delta L_{y}}{L} = \underbrace{ \frac{1}{2} (l_{i}^{x} l_{j}^{x} - l_{i}^{y} l_{j}^{y}) }_{ D_{ij} } h_{ij}\,.
 \]</span></p>
 <p>For high-frequency observations performed with next generation detectors, the long wavelength approximation starts to break down. <a href="#fig-long-wavelength-essick" class="quarto-xref">Figure&nbsp;<span>6.5</span></a> illustrates this: already at a few kHz, ignoring this effect would correspond to a bias of tens of degrees in phase for the Einstein Telescope. <span class="citation" data-cites="essickFrequencydependentResponsesThird2017">Essick, Vitale &amp; Evans (<a href="../references.html#ref-essickFrequencydependentResponsesThird2017" role="doc-biblioref">2017</a>)</span> have pointed out that, for sources localized by a network of detectors, neglecting this effect would lead to a bias in the estimate of the arrival time at the detectors, which would in turn bias sky localization.</p>
-<div id="cell-fig-long-wavelength-essick" class="cell" data-execution_count="3">
+<div id="cell-fig-long-wavelength-essick" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> <span class="op">*</span></span>

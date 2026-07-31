@@ -101,9 +101,9 @@ div.csl-indent {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-c71eceede3f2eb087ba4b04b2c08e04b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-08acc1423be4a5388acf6193547677cb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-c71eceede3f2eb087ba4b04b2c08e04b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-514c3c5c645fecdfd9acb6a6b9a944a6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-e41741aeba58b143338a75c4b0508339.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-514c3c5c645fecdfd9acb6a6b9a944a6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -617,7 +617,7 @@ w(T-t) &amp; 0 \leq t \leq T
 \end{cases}
 \]</span></p>
 <p>It significantly decreases spectral leakage compared to the rectangular window, as seen in <a href="#fig-window-functions" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>, despite leaving the central <span class="math inline">\(1-\alpha\)</span> seconds of the data unchanged.</p>
-<div id="cell-fig-window-functions" class="cell" data-execution_count="2">
+<div id="cell-fig-window-functions" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -687,7 +687,7 @@ Figure&nbsp;3.1: A comparison of a rectangular and Tukey window function in the 
 <li>rescaling the data by <span class="math inline">\(1 / \sqrt{ \beta }\)</span> brings about a small, but detectable, systematic bias in inference.</li>
 </ol>
 <div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;The precise requirement is as follows: let us define <span class="math inline">\(D_{w}\)</span> as the diagonal matrix which applies the whitening operation in the time domain, and the whitening filter <span class="math inline">\(\mathcal{W}\)</span>, written in terms of the noise covariance matrix <span class="math inline">\(C\)</span> as <span class="math inline">\(\mathcal{W}^{\top} \mathcal{W} = C^{-1}\)</span>. Then, the impact on inference is small as long as the two quantities <span class="math inline">\(\mathcal{W}h\)</span> and <span class="math inline">\(\mathcal{W}(1-D_{w})d\)</span> do not significantly intersect.</p></div></div><p>The second point was shown through a pp-plot. For a few thousand times, a signal was injected and recovered in a data segment, with or without the correction. The recovery was performed only varying the luminosity distance of the signals.</p>
-<div class="cell" data-layout="[[47,-6,47],[47,-6,47]]" data-execution_count="3">
+<div class="cell" data-layout="[[47,-6,47],[47,-6,47]]" data-execution_count="2">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> plt</span>

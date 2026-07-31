@@ -101,9 +101,9 @@ div.csl-indent {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-c71eceede3f2eb087ba4b04b2c08e04b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-08acc1423be4a5388acf6193547677cb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-c71eceede3f2eb087ba4b04b2c08e04b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-514c3c5c645fecdfd9acb6a6b9a944a6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-e41741aeba58b143338a75c4b0508339.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-514c3c5c645fecdfd9acb6a6b9a944a6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -521,7 +521,7 @@ window.Quarto = {
 </header>
 
 
-<div id="622adecb" class="cell" data-execution_count="2">
+<div id="f0f4e57a" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> <span class="op">*</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -556,7 +556,7 @@ p(\theta|d) \text{ computed at } \left\{ \theta_{k} = \theta_{k}^{0} \right\}_{k
 \,.
 \]</span></p>
 <p>Conditional distributions typically have less variance than their respective marginals, but unless we have a reason (such as a different observation) to specifically choose a given value for the other parameters, they are inaccessible in real parameter estimation.</p>
-<div id="cell-fig-marginalizing-vs-conditioning" class="cell" data-execution_count="3">
+<div id="cell-fig-marginalizing-vs-conditioning" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts.multivariate_normal <span class="im">import</span> MultivariateNormal</span>
@@ -660,7 +660,7 @@ p  \left( P (u) = \frac{k}{N_\text{inj}} \right) = {k\choose N_\text{inj}} u^{k}
 <p>Therefore we can easily compute its mean and variance: <span class="math inline">\(\langle P(u) \rangle =u\)</span> and <span class="math display">\[
 \langle (P(u) -u)^{2} \rangle = \frac{u(1-u)}{N_\text{inj}}\,.
 \]</span></p>
-<div id="cell-fig-pp-plot-theory" class="cell" data-execution_count="4">
+<div id="cell-fig-pp-plot-theory" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> pp_plot</span>
@@ -695,7 +695,7 @@ D_{\pm} = \sup_{u} \left[ \pm \left( P_{\text{emp}}(u) - u \right)  \right]\,.
 D = \sup_{u} \lvert  P_{\text{emp}}(u) - u  \rvert\,.
 \]</span></p>
 <p>We show both one-sided tests as opposed to the two-sided one, since their values can be used together to distinguish different types of misspecification, as we illustrate in <a href="#sec-pp-test-failure-modes" class="quarto-xref"><span>Section 2.1.3</span></a>. The density function of the K-S statistics under the null hypothesis is shown in <a href="#fig-kolmogorov-smirnov-distribution" class="quarto-xref">Figure&nbsp;<span>2.3</span></a>. The densities for the <span class="math inline">\(D_{\pm}\)</span> functions are identical - the transformation <span class="math inline">\(u \to 1-u\)</span> maps one to the other, and the null hypothesis is invariant under this reflection. The scenario <span class="math inline">\(D \approx 0\)</span> is unlikely, as it would require the draws to precisely align themselves in an equally spaced pattern. On the other hand, <span class="math inline">\(D_{\pm}\)</span> being close to zero is plausible, as it only requires the realization to mostly be above or below the uniform CDF.</p>
-<div id="cell-fig-kolmogorov-smirnov-distribution" class="cell" data-execution_count="5">
+<div id="cell-fig-kolmogorov-smirnov-distribution" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -743,7 +743,7 @@ Figure&nbsp;2.3: Distribution for the K-S statistics.
 p(\theta|d) = \mathcal{N}(\theta; \mu=n+0.2, \sigma=1)\,.
 \]</span></p>
 <p>The result is in <a href="#fig-pp-plot-bias-positive" class="quarto-xref">Figure&nbsp;<span>2.4</span></a>.</p>
-<div id="cell-fig-pp-plot-bias-positive" class="cell" data-execution_count="6">
+<div id="cell-fig-pp-plot-bias-positive" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> pp_plot</span>
@@ -773,7 +773,7 @@ Figure&nbsp;2.4: p-p plot in the scenario of an overestimation bias.
 <p><a href="#fig-pp-plot-bias-negative" class="quarto-xref">Figure&nbsp;<span>2.5</span></a> shows what happens if the bias is in the negative direction: <span class="math display">\[
 p(\theta|d) = \mathcal{N}(\theta; \mu=-0.2+n, \sigma=1)\,.
 \]</span></p>
-<div id="cell-fig-pp-plot-bias-negative" class="cell" data-execution_count="7">
+<div id="cell-fig-pp-plot-bias-negative" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> pp_plot</span>
@@ -804,7 +804,7 @@ Figure&nbsp;2.5: p-p plot in the scenario of an underestimation bias.
 <p>Now let us consider a different scenario: when the mean of the posterior distribution is correctly estimated, but its variance is not. If the variance is too high, we are <em>underconstraining</em> the parameter, assigning a higher uncertainty to our measurement than is warranted: for example, if <span class="math display">\[
 p(\theta|d) = \mathcal{N}(\mu=n, \sigma=1.2)\,.
 \]</span></p>
-<div id="cell-fig-pp-plot-bias-underconstrain" class="cell" data-execution_count="8">
+<div id="cell-fig-pp-plot-bias-underconstrain" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> pp_plot</span>
@@ -835,7 +835,7 @@ Figure&nbsp;2.6: p-p plot in the scenario of an underconstraining bias.
 <p><a href="#fig-pp-plot-bias-underconstrain" class="quarto-xref">Figure&nbsp;<span>2.6</span></a> shows the result. In the opposite scenario, we are <em>overconstraining</em> (<a href="#fig-pp-plot-bias-overconstrain" class="quarto-xref">Figure&nbsp;<span>2.7</span></a>), assigning a lower uncertainty to our measurement than is warranted: for example, <span class="math display">\[
 p(\theta|d) = \mathcal{N}(\mu=n, \sigma=0.8)\,.
 \]</span></p>
-<div id="cell-fig-pp-plot-bias-overconstrain" class="cell" data-execution_count="9">
+<div id="cell-fig-pp-plot-bias-overconstrain" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> pp_plot</span>
@@ -864,7 +864,7 @@ Figure&nbsp;2.7: p-p plot in the scenario of an overconstraining bias.
 </div>
 </div>
 <p>Finally, let us consider a distribution with the correct mean and variance, but the wrong shape. To this end we choose a generalized normal distribution, with a shape parameter <span class="math inline">\(\beta = 2.5\)</span>. The <span class="math inline">\(\beta = 2\)</span> case recovers the standard normal distribution.</p>
-<div id="cell-fig-generalized-normal" class="cell" data-execution_count="10">
+<div id="cell-fig-generalized-normal" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -900,7 +900,7 @@ Figure&nbsp;2.8: Generalized normal and normal distributions with the same varia
 </div>
 </div>
 <p>We rescale the distribution so that it has unit variance, as shown in figure <a href="#fig-generalized-normal" class="quarto-xref">Figure&nbsp;<span>2.8</span></a>. As this shift is harder to detect than the ones before, we need to raise the statistics.</p>
-<div id="cell-fig-pp-plot-bias-distributional" class="cell" data-execution_count="11">
+<div id="cell-fig-pp-plot-bias-distributional" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> pp_plot</span>
@@ -960,7 +960,7 @@ Note&nbsp;2.1: On the usage of odds
 \]</span> where we defined the <span class="math inline">\(\text{logit}\)</span> function, also shown in figure <a href="#fig-logit-function" class="quarto-xref">Figure&nbsp;<span>2.10</span></a>: <span class="math display">\[
 \text{logit}(p) = \log \frac{p}{1-p}\,.
 \]</span></p>
-<div id="cell-fig-logit-function" class="cell" data-execution_count="12">
+<div id="cell-fig-logit-function" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> <span class="op">*</span></span>
@@ -1049,7 +1049,7 @@ Note&nbsp;2.2: On the beta distribution
 \frac{\text{d}p}{\text{d}\log t} = t\frac{\text{d}p}{\text{d}t} = k t^{k} = k e^{k \log t}
 \]</span></p>
 <p>This distribution is shown in <a href="#fig-nested-sampling-volume-compression-distribution" class="quarto-xref">Figure&nbsp;<span>2.11</span></a>.</p>
-<div id="cell-fig-nested-sampling-volume-compression-distribution" class="cell" data-execution_count="13">
+<div id="cell-fig-nested-sampling-volume-compression-distribution" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.ticker <span class="im">import</span> FixedLocator, FixedFormatter</span>
@@ -1124,7 +1124,7 @@ Figure&nbsp;2.11: Volume compression
 \log X_{i} = \sum_{j\leq i} \log t_{j} \approx -\frac{i}{k} \pm \frac{\sqrt{ i }}{k}\,.
 \]</span></p>
 <p>The prior is compressed exponentially, which is desirable since the typical set for the posterior is often several orders of magnitude smaller than the prior. For a visualization of this compression see <a href="#fig-nested-sampling-volume-compression-iteration" class="quarto-xref">Figure&nbsp;<span>2.12</span></a>.</p>
-<div id="cell-fig-nested-sampling-volume-compression-iteration" class="cell" data-execution_count="14">
+<div id="cell-fig-nested-sampling-volume-compression-iteration" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -1257,7 +1257,7 @@ g(u) = [\text{CDF}^{-1}_{\pi_{i}}(u_{i})]_{i}
 <p>In order to illustrate the process of model comparison, let us define a simple problem: suppose we have a set of data points <span class="math inline">\((x_{i}, y_{i})\)</span> with constant, known and Gaussian uncertainties <span class="math inline">\(\sigma_{y}\)</span> on the <span class="math inline">\(y\)</span> values.</p>
 <p>We will compare two simple <em>nested</em> models, namely a parabolic one with <span class="math inline">\(y = f(x; a, b, c) = a x^{2}+bx+c\)</span> and a linear one with <span class="math inline">\(y = f(x; b, c) = bx+c\)</span>. Model comparison can also be performed for non-nested models, but the nested case has some nice properties we will showcase later.</p>
 <p><a href="#fig-parameter-estimation-parabolic-data" class="quarto-xref">Figure&nbsp;<span>2.13</span></a> shows the set of data we will use, which comes from the parabolic model.</p>
-<div id="cell-fig-parameter-estimation-parabolic-data" class="cell" data-execution_count="15">
+<div id="cell-fig-parameter-estimation-parabolic-data" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -1313,7 +1313,7 @@ Figure&nbsp;2.13: Toy model, with data coming from a parabolic function and Gaus
 <p>The log-likelihood will be <span class="math display">\[
 \log \mathcal{L}(\text{data} | \theta, \text{model}) = - \frac{1}{2}  \sum_{i=1}^{n} \frac{(y_{i} - f(x_{i}; \theta))^{2}}{\sigma_{y}^{2}} - \frac{n}{2} \log (2 \pi \sigma_{y}^{2}).
 \]</span></p>
-<div id="35b9307b" class="cell" data-execution_count="16">
+<div id="ba970cbf" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dynesty <span class="im">import</span> DynamicNestedSampler</span>
@@ -1344,7 +1344,7 @@ Figure&nbsp;2.13: Toy model, with data coming from a parabolic function and Gaus
 <span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>    sampler_parabola.save(<span class="bu">str</span>(fname))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="0b32f378" class="cell" data-execution_count="17">
+<div id="da71d766" class="cell" data-execution_count="16">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>fname <span class="op">=</span> data_path <span class="op">/</span> <span class="st">'cache'</span> <span class="op">/</span> <span class="st">'linear_model.pkl'</span></span>
@@ -1364,7 +1364,7 @@ Figure&nbsp;2.13: Toy model, with data coming from a parabolic function and Gaus
 \underbrace{ \frac{p(M_\text{parabola} | d)}{P(M_\text{line}| d)} }_{ \text{posterior odds} }
 = \text{BF}^{\text{parabola}}_{\text{line}} \underbrace{ \frac{p(M_{\text{parabola}})}{p(M_{\text{line}})} }_{ \text{prior odds} }\,.
 \]</span></p>
-<div id="52514df6" class="cell" data-execution_count="18">
+<div id="40478e87" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Markdown</span>
@@ -1388,7 +1388,7 @@ Figure&nbsp;2.13: Toy model, with data coming from a parabolic function and Gaus
 \]</span></p>
 <p>One might then think that, at least in this type of scenario, going through the evidence computation with a powerful tool such as Nested Sampling was unnecessary: the posterior distribution can be computed for cheaper, after all. However, as we show in <a href="#fig-savage-dickey" class="quarto-xref">Figure&nbsp;<span>2.14</span></a>, computing the value for the posterior density distribution at the point <span class="math inline">\(a=0\)</span> is not easy.</p>
 <p>We can approximate the posterior density based on the samples with tools like a histogram or a kernel density estimate, but any such method will suffer from low statistics if we need to explore the edges of the distribution, as we see here: we would need an enormous amount of posterior samples to reach the same accuracy on the ratio of the distributions we get with Nested Sampling.</p>
-<div id="cell-fig-savage-dickey" class="cell" data-execution_count="19">
+<div id="cell-fig-savage-dickey" class="cell" data-execution_count="18">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> gaussian_kde</span>
@@ -1459,7 +1459,7 @@ C = 3 \times 10^{-2} \begin{pmatrix}
 \]</span></li>
 </ul>
 <p>We use 400 live points, and stop iterating when the contribution to the integral from a single iteration reaches <span class="math inline">\(\Delta \log Z_{i} &lt; 0.01\)</span>. We use the <code>dynesty</code> sampler <span class="citation" data-cites="speagleDYNESTYDynamicNested2020">(<a href="../references.html#ref-speagleDYNESTYDynamicNested2020" role="doc-biblioref">Speagle 2020</a>)</span>.</p>
-<div id="74eca144" class="cell" data-execution_count="20">
+<div id="a7b94556" class="cell" data-execution_count="19">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -1504,7 +1504,7 @@ C = 3 \times 10^{-2} \begin{pmatrix}
 <li>the posterior mass <span class="math inline">\(w_i L_i / Z\)</span>, which increases and then decreases: first, the likelihood’s increase dominates, but at some point its values start tapering, and the decrease in prior volume <span class="math inline">\(w_i\)</span> dominates;</li>
 <li>the accumulation of evidence, with a corresponding error estimated as discussed in <a href="#sec-information-gain" class="quarto-xref"><span>Section 2.2.6</span></a>.</li>
 </ul>
-<div id="cell-fig-nested-sampling-runplot" class="cell" data-execution_count="21">
+<div id="cell-fig-nested-sampling-runplot" class="cell" data-execution_count="20">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dynesty <span class="im">import</span> plotting <span class="im">as</span> dyplot</span>
@@ -1531,7 +1531,7 @@ Figure&nbsp;2.15: A run plot, illustrating the progress of a nested sampling run
 <p>In <a href="#fig-nested-sampling-traceplot" class="quarto-xref">Figure&nbsp;<span>2.16</span></a> we show a <em>trace plot</em>, which relates the evolution in prior compression to the actual values of the parameters. For each parameter, we get a scatter plot of its value as a function of the prior compression, and we can see its range shrink as we reach higher and higher values of the likelihood.</p>
 <p>More specifically, this plot is showing the locations of the <em>dead points</em>, i.e.&nbsp;the lowest-likelihood points that get discarded at each iteration. When one of them gets replaced, it will be assigned a new likelihood in the range <span class="math inline">\([L_{i}, L_\text{max}]\)</span>, and after a certain number of iterations it will be replaced again. This is what the red lines are showing; they should be moving “randomly” across the parameter space, if we were to see them remain in a given region in the parameter space we would have an indication that our replacement algorithm is not performing properly.</p>
 <p>The points are colored by their importance weights, <span class="math inline">\(w_{i}L_{i} / Z\)</span>, and to the right we see a density estimate plot for the posterior distribution of each parameter together with a 95% confidence interval.</p>
-<div id="cell-fig-nested-sampling-traceplot" class="cell" data-execution_count="22">
+<div id="cell-fig-nested-sampling-traceplot" class="cell" data-execution_count="21">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> dyplot.traceplot(</span>
@@ -1562,7 +1562,7 @@ Figure&nbsp;2.16: A trace plot, illustrating the parameter constraints for a nes
 <section id="corner-plot" class="level4">
 <h4 class="anchored" data-anchor-id="corner-plot">Corner plot</h4>
 <p>The <em>corner plot</em> (<a href="#fig-nested-sampling-cornerplot" class="quarto-xref">Figure&nbsp;<span>2.17</span></a>) is a great tool to extract physical understanding about our model. It shows the marginal density plot for all our parameters, as well as for each pair of parameters.</p>
-<div id="cell-fig-nested-sampling-cornerplot" class="cell" data-execution_count="23">
+<div id="cell-fig-nested-sampling-cornerplot" class="cell" data-execution_count="22">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> dyplot.cornerplot(</span>
@@ -1602,7 +1602,7 @@ p(y_\text{pred} | y _\text{obs}, M) &amp;= \int p(y_\text{pred}, \theta|y_\text{
 \end{aligned}
 \]</span></p>
 <p>We can show this in different ways; an easy one to implement is by drawing samples from the posterior and plotting the model realization corresponding to each of them. The ensemble of curves will follow the posterior predictive distribution, as shown in <a href="#fig-nested-sampling-ppd" class="quarto-xref">Figure&nbsp;<span>2.18</span></a>.</p>
-<div id="cell-fig-nested-sampling-ppd" class="cell" data-execution_count="24">
+<div id="cell-fig-nested-sampling-ppd" class="cell" data-execution_count="23">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dynesty <span class="im">import</span> DynamicNestedSampler</span>
@@ -1715,7 +1715,7 @@ H \sim \text{\# active components in the data} \times \log\text{(signal-to-noise
 - \int_{\mathbb{R}^{d}} f(\theta) \log f(\theta) \ \text{d}^{d}\theta = \frac{d}{2}\log(2 \pi e) + \log \det C \,.
 \]</span></p>
 <p>The integral we need to compute <span class="math inline">\(H\)</span> is very similar. The sign is opposite, and instead of being over <span class="math inline">\(\mathbb{R}^{2}\)</span> it is only over <span class="math inline">\([0, 1]^{2}\)</span>. The region outside of this box is, however, more than <span class="math inline">\(10\sigma\)</span> from the mean, therefore its contribution is negligible.</p>
-<div id="cf5bee4d" class="cell" data-execution_count="25">
+<div id="5cefaba8" class="cell" data-execution_count="24">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Markdown</span>
@@ -1732,7 +1732,7 @@ H \sim \text{\# active components in the data} \times \log\text{(signal-to-noise
 <section id="algorithm-termination" class="level4">
 <h4 class="anchored" data-anchor-id="algorithm-termination">Algorithm termination</h4>
 <p>The nested sampling algorithm we described above could continue forever, with ever-smaller compression <span class="math inline">\(\log X\)</span>. However, if the likelihood function is bounded, after a certain number of iterations the prior volume will be concentrated around its maximum value, with all the live points having similar likelihood values, as <a href="#fig-nested-sampling-termination" class="quarto-xref">Figure&nbsp;<span>2.19</span></a> shows.</p>
-<div id="cell-fig-nested-sampling-termination" class="cell" data-execution_count="26">
+<div id="cell-fig-nested-sampling-termination" class="cell" data-execution_count="25">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> plt</span>
@@ -1913,7 +1913,7 @@ q(\theta|d) = \mathcal{N}(\theta|\mu=\mu_0, \sigma=1)\,.
 \]</span></p>
 <p>In order to illustrate the impact of effective sample size, we choose two different values for the offset: 2.5 and 0.3. In <a href="#fig-importance-sampling-example" class="quarto-xref">Figure&nbsp;<span>2.20</span></a> we can see the impact of effective sample size on the evidence estimate.</p>
 <p>Besides the decreasing accuracy in evidence estimation, a low efficiency (low effective sample size) also leads to inaccurate estimates on the error of the estimate itself. Visually, this is not surprising: with the higher value of the offset, the left side of the posterior is completely unexplored.</p>
-<div id="cell-fig-importance-sampling-example" class="cell" data-execution_count="27">
+<div id="cell-fig-importance-sampling-example" class="cell" data-execution_count="26">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> <span class="op">*</span></span>
@@ -2066,7 +2066,7 @@ h(\theta) = h(\theta_{0}) + \delta\theta_{i} \frac{\partial h}{\partial \theta_{
 <p>We can validate this by computing the Pearson correlation matrix of a full parameter estimation run: <span class="math display">\[ \rho_{ij} = \frac{C_{ij}}{\sigma_i \sigma_j} \,,
 \]</span> where <span class="math inline">\(C_{ij}\)</span> is the empirical covariance matrix computed from the posterior samples, while <span class="math inline">\(\sigma_i = \sqrt{C_{ii}}\)</span> is the standard deviation of parameter <span class="math inline">\(i\)</span>.</p>
 <p>Each entry <span class="math inline">\(\rho_{ij}\)</span> will lie between -1 and 1, with values near these extremes representing near-perfect (anti)correlation, while values near 0 represent uncorrelated variables. This only captures <em>linear</em> correlations, so it does not tell the whole story, but it is still quite useful.</p>
-<div id="cell-fig-correlation-matrix" class="cell" data-execution_count="28">
+<div id="cell-fig-correlation-matrix" class="cell" data-execution_count="27">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we start from the covariance matrix for an analysis of GW170817</span></span>
