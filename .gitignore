@@ -223,3 +223,10 @@ referee_reply.pdf
 chapters/multibanding/calibration.pdf
 chapters/data-analysis/nested-sampling-seminar.pdf
 chapters/data-analysis/nested-importance-sampling-note.pdf
+!data/cache/lunar_position_interpolation_10000_20000_40000_80000_160000_320000.npy
+!data/cache/lunar_response_interpolation_1250_2500_5000_10000_20000.npy
+!data/cache/gw250114_eccentricity_extrapolation_loguniform.npy
+!data/cache/gw250114_eccentricity_extrapolation.npy
+!data/cache/parabolic_data_x.npy
+!data/cache/parabolic_data_y.npy
+!data/cache/relbin_data.npy
