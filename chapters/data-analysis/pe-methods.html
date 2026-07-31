@@ -521,7 +521,7 @@ window.Quarto = {
 </header>
 
 
-<div id="637838e1" class="cell" data-execution_count="1">
+<div id="a04834d3" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thesis_scripts <span class="im">import</span> <span class="op">*</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1313,7 +1313,7 @@ Figure&nbsp;2.13: Toy model, with data coming from a parabolic function and Gaus
 <p>The log-likelihood will be <span class="math display">\[
 \log \mathcal{L}(\text{data} | \theta, \text{model}) = - \frac{1}{2}  \sum_{i=1}^{n} \frac{(y_{i} - f(x_{i}; \theta))^{2}}{\sigma_{y}^{2}} - \frac{n}{2} \log (2 \pi \sigma_{y}^{2}).
 \]</span></p>
-<div id="6ff32714" class="cell" data-execution_count="15">
+<div id="576462e1" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dynesty <span class="im">import</span> DynamicNestedSampler</span>
@@ -1344,7 +1344,7 @@ Figure&nbsp;2.13: Toy model, with data coming from a parabolic function and Gaus
 <span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>    sampler_parabola.save(<span class="bu">str</span>(fname))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="148c6eff" class="cell" data-execution_count="16">
+<div id="f3d7b77f" class="cell" data-execution_count="16">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>fname <span class="op">=</span> data_path <span class="op">/</span> <span class="st">'cache'</span> <span class="op">/</span> <span class="st">'linear_model.pkl'</span></span>
@@ -1364,7 +1364,7 @@ Figure&nbsp;2.13: Toy model, with data coming from a parabolic function and Gaus
 \underbrace{ \frac{p(M_\text{parabola} | d)}{P(M_\text{line}| d)} }_{ \text{posterior odds} }
 = \text{BF}^{\text{parabola}}_{\text{line}} \underbrace{ \frac{p(M_{\text{parabola}})}{p(M_{\text{line}})} }_{ \text{prior odds} }\,.
 \]</span></p>
-<div id="9a90a108" class="cell" data-execution_count="17">
+<div id="4592d529" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Markdown</span>
@@ -1459,7 +1459,7 @@ C = 3 \times 10^{-2} \begin{pmatrix}
 \]</span></li>
 </ul>
 <p>We use 400 live points, and stop iterating when the contribution to the integral from a single iteration reaches <span class="math inline">\(\Delta \log Z_{i} &lt; 0.01\)</span>. We use the <code>dynesty</code> sampler <span class="citation" data-cites="speagleDYNESTYDynamicNested2020">(<a href="../references.html#ref-speagleDYNESTYDynamicNested2020" role="doc-biblioref">Speagle 2020</a>)</span>.</p>
-<div id="2ea2f1fe" class="cell" data-execution_count="19">
+<div id="94b19559" class="cell" data-execution_count="19">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -1678,7 +1678,7 @@ p(y_\text{pred} | y _\text{obs}, M) &amp;= \int p(y_\text{pred}, \theta|y_\text{
 <div id="fig-nested-sampling-ppd" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-nested-sampling-ppd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="pe-methods_files/figure-html/fig-nested-sampling-ppd-output-1.png" width="583" height="427" class="figure-img">
+<img src="pe-methods_files/figure-html/fig-nested-sampling-ppd-output-1.png" width="583" height="430" class="figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nested-sampling-ppd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2.18: A posterior predictive density plot, sketching the posterior densities by plotting 100 curves sampled from the posterior.
@@ -1715,7 +1715,7 @@ H \sim \text{\# active components in the data} \times \log\text{(signal-to-noise
 - \int_{\mathbb{R}^{d}} f(\theta) \log f(\theta) \ \text{d}^{d}\theta = \frac{d}{2}\log(2 \pi e) + \log \det C \,.
 \]</span></p>
 <p>The integral we need to compute <span class="math inline">\(H\)</span> is very similar. The sign is opposite, and instead of being over <span class="math inline">\(\mathbb{R}^{2}\)</span> it is only over <span class="math inline">\([0, 1]^{2}\)</span>. The region outside of this box is, however, more than <span class="math inline">\(10\sigma\)</span> from the mean, therefore its contribution is negligible.</p>
-<div id="3f03378a" class="cell" data-execution_count="24">
+<div id="d6a210fa" class="cell" data-execution_count="24">
 <details class="code-fold">
 <summary>Source code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Markdown</span>
