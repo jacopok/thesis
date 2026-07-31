@@ -32,10 +32,12 @@ function Image(elem)
 
     -- If WebP doesn't exist or the PDF is newer, convert PDF to WebP
     if not webp_time or (pdf_time and pdf_time > webp_time) then
-      -- Run the ImageMagick command to convert PDF to WebP
-      os.execute(string.format('magick -density 600 -colorspace RGB "%s" "%s"', elem.src, webp_src))
+      local ok, exit_type, code = os.execute(string.format(
+        'magick -density 600 -colorspace RGB "%s" "%s"', elem.src, webp_src))
+      if not ok or not file_exists(webp_src) then
+        error(string.format("Failed to convert %s to WebP (exit: %s)", elem.src, tostring(code)))
+      end
     end
-
     -- Update image source to the new or existing WebP file
     elem.src = webp_src
   end
