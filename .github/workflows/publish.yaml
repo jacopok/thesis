@@ -26,13 +26,12 @@ jobs:
         uses: quarto-dev/quarto-actions/setup@v2
       - name: Install tinytex
         run: |
-          quarto install tinytex --update-path
+          quarto install tinytex
           TINYTEX_BIN=$(dirname "$(find "$HOME/.TinyTeX/bin" -name pdflatex | head -n 1)")
           echo "Adding $TINYTEX_BIN to PATH"
-          echo "$TINYTEX_BIN" >> $GITHUB_PATH      
-      - name: Debug tex path
-        run: which latex pdflatex
-      - name: Render and Publish
+          echo "$TINYTEX_BIN" >> $GITHUB_PATH
+      - name: Install extra tex packages
+        run: tlmgr install type1cm cm-super      - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2
         with:
           target: gh-pages
