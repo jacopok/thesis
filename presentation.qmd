@@ -3,31 +3,34 @@ title: "Fast analysis"
 subtitle: "of long gravitational wave signals"
 author: "Jacopo Tissino"
 date: "2026-07-20"
+institute: GSSI
 
 format:
   revealjs: 
-    slide-number: true
-    chalkboard: 
-      buttons: false
+    slide-number: h.v
+    # chalkboard: 
+    #   buttons: false
     preview-links: auto
-    theme: dark
+    theme: default
     lightbox: false
+    embed-resources: true
+    progress: true
 
 ---
 
 ## Outline
 
 ::: {.incremental}
-- GW250114: what we learned from the best$^*$ black hole binary ever;
-- the Lunar Gravitational Wave Antenna;
-  - a technical diversion;
-- the Einstein Telescope;
-  - multimodalities.
+- GW250114: what we learned from the best$^*$ black hole coalescence ever;
+- as seen by the Lunar Gravitational Wave Antenna:
+  - the arrival time problem;
+- as seen by the Einstein Telescope:
+  - multimodalities and configuration comparison.
 :::
 
 # GW250114: the clearest signal yet
 
-## 10 years ago: GW150914
+## 11 years ago: GW150914
 
 ![](figures/gw150914.png){width="65%"}
 
@@ -44,8 +47,6 @@ format:
 
 LIGO, J. Tissino, R. Hurt (Caltech-IPAC).
 :::::
-
-
 
 
 ## What the detectors saw
@@ -65,17 +66,6 @@ Adapted from @abacGW250114TestingHawkings2025
 [@abacGW250114TestingHawkings2025]
 :::::
 
-## How we analyzed it 
-
-Bayesian inference, accounting for our uncertainty on:
-
-- source masses $m_i$ and spins $\vec{\chi}_i$;
-- source location $(\alpha, \delta)$ and distance $d_L$;
-- source inclination $\theta_{\text{JN}}$ and polarization $\psi$;
-- coalescence phase $\phi_c$ and merger time $t_c$;
-- eccentricity $e$ and eccentric anomaly $\zeta$;
-- detector calibration.
-
 ## How we interpreted it
 
 :::: {layout="[ 50, 50 ]"}
@@ -87,7 +77,7 @@ $m_1 = 33.6_{-0.8}^{+1.2} M_{\odot}$ and
 $m_2 = 32.2_{-1.3}^{+0.8} M_{\odot}$.
 
 Small spins $|\chi_{1, 2}| \leq 0.26$, 
-negligible eccentricity $e \leq 0.03$. 
+negligible eccentricity $e_{13 \text{Hz}} \leq 0.03$. 
 
 :::
 
@@ -107,6 +97,18 @@ negligible eccentricity $e \leq 0.03$.
 :::::
 
 
+## How we analyzed it 
+
+Bayesian inference, accounting for our uncertainty on:
+
+- source masses $m_i$ and spins $\vec{\chi}_i$;
+- source location $(\alpha, \delta)$ and distance $d_L$;
+- source inclination $\theta_{\text{JN}}$ and polarization $\psi$;
+- coalescence phase $\phi_c$ and merger time $t_c$;
+- eccentricity $e$ and eccentric anomaly $\zeta$;
+- detector calibration.
+
+
 ## The observed ringdown
 
 ![](chapters/anatomy/figures/overlapped_strains.webp){width="100%"}
@@ -120,7 +122,7 @@ A superposition of damped sinusoids: _quasinormal modes_.
 
 $$
 \begin{aligned}
-h_{+}(t)-ih_{\times}(t) &\approx \sum_{\ell=2}^{\infty} \sum_{m=-\ell}^{\ell} \sum_{n=0}^{\infty} h_{\ell m n} \, ^{(-2)}Y_{\ell m}  \\
+h_{+}(t)-ih_{\times}(t) &\approx \sum_{\ell=2}^{\infty} \sum_{m=-\ell}^{\ell} \sum_{n=0}^{\infty} h_{\ell m n} S_{\ell mn}  \\
 h_{\ell m n} &= A_{\ell mn} \exp\left[i(\omega_{\ell mn}(t-t_\text{ref})+\phi^{x}_{\ell mn})\right] \\
 \omega_{\ell mn} &= 2 \pi f_{\ell mn} + i / \tau _{\ell mn}
 \end{aligned}
@@ -132,7 +134,7 @@ For earlier signals, $\ell mn = 220$ was sufficient.
 
 ## Testing the Kerr hypothesis
 
-For GW250114, the overtone $\ell mn = 221$ was required to explain the data.
+For GW250114, the overtone $\ell mn = 221$ was also required to explain the data.
 
 . . .
 
@@ -155,55 +157,6 @@ $$
 [@abacGW250114TestingHawkings2025]
 :::::
 
-## Testing Hawking's area theorem
-
-The area of a black hole is:
-
-$$
-\mathcal{A}(M, \chi) = 8 \pi \left(  \frac{GM}{c^{2}} \right)^{2} \left( 1+\sqrt{ 1-\chi^{2} } \right)
-$$
-
-. . .
-
-Hawking's area theorem implies:
-
-$$ \mathcal{A_i} = \mathcal{A}_1 + \mathcal{A}_2 < \mathcal{A_f}
-$$
-
-. . . 
-
-We tested this __ignoring__ the __strong-field__ portion of the signal. 
-
-
-## Testing Hawking's area theorem
-
-:::: {layout="[ 50, 50 ]"}
-
-::: {#first-column}
-
-:::::: {.incremental}
-- Data before $t_<$ leads to $(1+z)^2 \mathcal{A_i}$.
-- Data after $t_>$ leads to $(1+z)^2 \mathcal{A_f}$.
-::::::
-
-:::::: {.fragment}
-
-A violation of the theorem would be
-
-$$ \frac{\mathcal{A_f} - \mathcal{A_i}}{\mathcal{A_i}} < 0.
-$$
-
-::::::
-
-:::
-
-::: {#second-column .fragment}
-
-![](chapters/anatomy/figures/area_law_plot_combined.webp){width="100%"}
-
-:::
-
-::::
 
 --- 
 
@@ -276,7 +229,7 @@ along two axes.
 
 The displacement measured at the detector is 
 
-$$ s(t _{\text{det}}; f) = h_{ij}(t; f) D_{ij}(t _{\text{det}}) L(f)
+$$ s(t _{\text{det}}; f) = h_{ij}(t; f) D_{ij}(t _{\text{det}}) L(f) + \text{noise}
 $$
 
 . . .
@@ -288,12 +241,17 @@ $$
 
 . . .
 
-$$ L(f) = \frac{\text{seismic displacement}}{\text{GW strain}}
+$$ L(f) = \frac{\text{ground displacement}}{\text{GW strain}}
 $$
 
 ## Sensitivity curve
 
 ![](chapters/multibanding/figures/Detector_strains.png)
+
+::::: footer
+[@ajithLunarGravitationalwaveAntenna2025]
+:::::
+
 
 ## The deci-Hertz band
 
@@ -303,7 +261,6 @@ $$
 Adapted from @cozzumboOpportunitiesLimitsLunar2024
 :::::
 
-
 ## GW250114 with the LGWA
 
 ![](chapters/multibanding/figures/lgwa_ppd_fb.webp){width="80%"}
@@ -311,6 +268,8 @@ Adapted from @cozzumboOpportunitiesLimitsLunar2024
 ::::: footer
 [@tissinoGeometryLunarGravitational2026]
 :::::
+
+# The signal's arrival time
 
 ## When did the signal arrive?
 
@@ -321,11 +280,14 @@ Detector motion causes a nonlinear relation between source-frame and detector-fr
 $$ t _{\text{det}} = t + t_0 - \frac{\hat{n} \cdot \vec{r}(t _{\text{det}})}{c}\,,
 $$
 
-where $\vec{r}$ connects the origin and the detector's position, and $\hat{n}$ points to the GW source.
+- $\vec{r}$ connects the origin and the detector's position, 
+- $\hat{n}$ points to the GW source.
 
 . . .
 
-$$ t _{\text{ref}} = \text{time when a reference event reaches the origin}
+The timing parameter is:
+
+$$ t _{\text{ref}} = \text{time when a reference event reaches the origin}\,.
 $$
 
 ## What origin? 
@@ -333,16 +295,16 @@ $$
 Standard approaches:
 
 ::: {.incremental}
-- space-based detectors: the Solar System Barycenter (SSB)
-- ground-based detectors: the center of the Earth
-  - only valid assuming a short observation such that $\vec{r}_{\text{Earth}} \approx \vec{r}_0 + \vec{v} t$
+- space-based detectors: the Solar System Barycenter (SSB),
+- ground-based detectors: the center of the Earth,
+  - only valid assuming a short observation, such that $\vec{r}_{\text{Earth}} \approx \vec{r}_0 + \vec{v} t$.
 :::
 
 . . .
 
 New approach: 
 
-- SSB with a constant shift of origin
+- SSB with a constant shift of origin.
 
 ## Why does it matter? An experiment
 
@@ -392,21 +354,9 @@ $$
 
 and reframe this as $\vec{r}_{\text{opt}}(t)$ using the signal's $t(f)$.
 
-## Uncertainty minimum motion
+---
 
-{{< video https://www.youtube.com/watch?v=51Ny4vtj-As width="100%" height="100%" >}}
-
-## Main caveats
-
-::: {.incremental}
-- Assuming a known lunar response $L(f)$;
-- assuming no data gaps;
-- assuming stationary noise;
-- assuming a simple geometry for seismic wave propagation;
-- working directly in the frequency domain with a heterodyned likelihood;
-- only considering the dominant, $\ell |m| = 22$ mode of GW emission with a Post-Newtonian model;
-- performing zero-noise injections.
-:::
+![](figures/3d_motion.mp4){width="90%"}
 
 # Multi-band with the Einstein Telescope
 
@@ -459,12 +409,10 @@ We compare:
 - ET extremely precise on mass ratio and spin.
 
 ::::: footer
-
 [@tissinoGeometryLunarGravitational2026]
 :::::
 
 :::
-
 
 ::: {#second-column}
 
@@ -499,9 +447,16 @@ We compare:
 
 ::::
 
-## Bimodality: a closer look
+# Multimodalities with Einstein Telescope
+
+## GW250114 with ET-$\Delta$
 
 ![](chapters/multibanding/figures/et_gw250114_sky.png)
+
+::::: footer
+Adapted from @tissinoGeometryLunarGravitational2026
+:::::
+
 
 ## Symmetry in the antenna patterns
 
@@ -523,7 +478,6 @@ are symmetric[^1] under:
 
 
 [^1]: [Other parameters need to change simultaneously: $t_{\text{geo}}$, $\theta_{\text{JN}}$, $\phi$, $\psi$. ]{.fragment fragment-index=2}
-
 
 ## Massive BBH: sky posterior
 
@@ -572,15 +526,153 @@ and distant ($D_L \gtrsim 6 \text{Gpc}$) BBH.
 ## Summary
 
 ::: {.incremental}
-- The Kerr metric and Hawking's area law still hold;
-- the LGWA could have measured GW250114 and provided strong constraints;
-- the Einstein Telescope could have exquisitely measured GW250114, 
+- The Kerr metric is still compatible with observations;
+- the LGWA could have measured GW250114 and provided strong constraints:
+  - standard analysis assumptions need to be revised for deci-Hertz observations;
+- the Einstein Telescope could have exquisitely measured GW250114:
   - but in its $\Delta$ configuration it would have exhibited a multimodality.
 :::
 
-# Extra slides
+# Extra information
+
+## Ask me about 
+
+- Hawking's area theorem constrained with GW250114;
+- caveats to LGWA analyses;
+- the LGWA's localization capabilities;
+- the variation of timing uncertainty with position.
+
+The thesis is available as a website at [https://jacopok.github.io/thesis](https://jacopok.github.io/thesis).
+
+## Testing Hawking's area theorem
+
+The area of a black hole is:
+
+$$
+\mathcal{A}(M, \chi) = 8 \pi \left(  \frac{GM}{c^{2}} \right)^{2} \left( 1+\sqrt{ 1-\chi^{2} } \right)
+$$
+
+. . .
+
+Hawking's area theorem implies:
+
+$$ \mathcal{A_i} = \mathcal{A}_1 + \mathcal{A}_2 < \mathcal{A_f}
+$$
+
+. . . 
+
+We tested this __ignoring__ the __strong-field__ portion of the signal. 
 
 
+## Testing Hawking's area theorem
+
+:::: {layout="[ 50, 50 ]"}
+
+::: {#first-column}
+
+:::::: {.incremental}
+- Data before $t_<$ leads to $(1+z)^2 \mathcal{A_i}$.
+- Data after $t_>$ leads to $(1+z)^2 \mathcal{A_f}$.
+::::::
+
+:::::: {.fragment}
+
+A violation of the theorem would be
+
+$$ \frac{\mathcal{A_f} - \mathcal{A_i}}{\mathcal{A_i}} < 0.
+$$
+
+::::::
+
+:::
+
+::: {#second-column .fragment}
+
+![](chapters/anatomy/figures/area_law_plot_combined.webp){width="100%"}
+
+:::
+
+::::
+
+::::: footer
+[@abacGW250114TestingHawkings2025]
+:::::
+
+
+## Main caveats for LGWA
+
+::: {.incremental}
+- Assuming a known lunar response $L(f)$;
+- assuming no data gaps due to lunar events;
+- assuming stationary noise;
+- assuming a simple geometry for seismic wave propagation;
+- working directly in the frequency domain with a heterodyned likelihood;
+- only considering the dominant, $\ell |m| = 22$ mode of GW emission with a Post-Newtonian model;
+- performing zero-noise injections.
+:::
+
+
+## Moonquakes
+
+![](chapters/multibanding/figures/Moon_events.png)
+
+::::: footer
+[@ajithLunarGravitationalwaveAntenna2025]
+:::::
+
+## On the zero-noise assumption
+
+![](chapters/multibanding/figures/summary_boxplot_injections.webp)
+
+## On the zero-noise assumption
+
+![](chapters/multibanding/figures/distance_kdes.webp)
+
+## Analytical timing uncertainty
+
+Length scale of the timing uncertainty variation:
+
+$$ r \sim c \frac{\sigma_t}{\sigma_\theta}
+$$
+
+- $r$ is the displacement to get a doubling of the timing variance;
+- $\sigma_t$ is the minimal timing uncertainty;
+- $\sigma_\theta$ is the angular parameter uncertainty along a given axis.
+
+## Timing uncertainty ellipses
+
+![](chapters/multibanding/figures/time_std_solar_system.webp)
+
+::::: footer
+[@tissinoGeometryLunarGravitational2026]
+:::::
+
+## Analytical angular resolution
+
+$$ \Delta \Omega \approx \frac{c^{2}}{(f_0 \rho_{T})^{2} A_s(T)}
+$$
+
+$$ A_s(T)= 2\pi \sqrt{\mathrm{Var}(r_\theta)\mathrm{Var}(r_\phi)-\mathrm{Cov}^2(r_\theta,r_\phi)}
+$$
+
+- $f_0$ is the monochromatic signal's frequency
+- $\rho_T$ is the signal-to-noise ratio
+
+::::: footer
+[@wenGeometricalExpressionAngular2010], [@tissinoGeometryLunarGravitational2026]
+:::::
+
+## Validating the expression
+
+![](chapters/multibanding/figures/sky_loc_vs_theory.webp)
+
+## Trajectories and areas
+
+![](chapters/multibanding/figures/trajectories.png)
+
+::::: footer
+[@tissinoGeometryLunarGravitational2026]
+:::::
 
 ## References
 
