@@ -1,5 +1,6 @@
-My PhD thesis 
+## My PhD thesis --- read it at [this link](https://jacopok.github.io/thesis/)!
 
+--- 
 
 This thesis is written using quarto, documentation [here](https://quarto.org/docs/guide/).
 
